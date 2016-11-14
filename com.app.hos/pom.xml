@@ -7,6 +7,13 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>hos Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  
+  <properties>
+  	<spring.version>4.2.5.RELEASE</spring.version>
+  	<hibernate.version>5.1.0.Final</hibernate.version>
+  	<spring.security.version>4.0.4.RELEASE</spring.security.version>
+  </properties>
+  
   <dependencies>
     <dependency>
       	<groupId>junit</groupId>
@@ -20,8 +27,21 @@
     	<version>3.1.0</version>
     	<scope>provided</scope>
 	</dependency>
+	
+	<!-- Spring Core -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-web</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${spring.version}</version>
+    </dependency>
+    
   </dependencies>
   <build>
-    <finalName>hos</finalName>
+    <finalName>HOS</finalName>
   </build>
 </project>
