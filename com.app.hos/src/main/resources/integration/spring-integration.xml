@@ -3,13 +3,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+	xmlns:int-event="http://www.springframework.org/schema/integration/event"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd
-		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd">
+		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
+		http://www.springframework.org/schema/integration/event http://www.springframework.org/schema/integration/event/spring-integration-event.xsd">
 
 
+    <!-- CLIENT SIDE -->
+    
 	<int:gateway id="gw"
 		service-interface="com.app.hos.service.client.Gateway"
 		default-request-channel="input"/>
@@ -32,10 +36,10 @@
 		reply-timeout="10000"
 		/>
 
-	<!-- dataType attribute invokes the conversion service -->
 	<int:channel id="reply" datatype="java.lang.String" />
 
 	<!-- SERVER SIDE -->
+	
     <int-ip:tcp-connection-factory id="hosServer"
 	    type="server"
 	    port="14020"
@@ -47,8 +51,10 @@
 		error-channel="errorChannel"/>
 
 
-	<int:channel id="toServerChannel"/>
+	<int:channel id="toServerChannel" datatype="java.lang.String"/>
 
+	<int:channel id="errorChannel"/>
+	
 	<int:service-activator input-channel="toServerChannel"
 		ref="server"
 		method="serverTest"/>
@@ -58,5 +64,19 @@
 		
 	<bean id="connectionDeserialize" class="com.app.hos.service.server.Deserializer"/>
     
+	<!-- TCP EVENTS 
+	
+	<bean id="event"
+		class="com.app.hos.service.integration.Event" />
+	
+	<int:service-activator input-channel="eventChannel"
+		ref="event"
+		method="eventTest"/>
+	
+	<int-event:inbound-channel-adapter channel="eventChannel"
+           event-types="example.FooEvent,java.util.Date"/>
+	
+	<int:channel id="eventChannel"/> -->
+	
 </beans>
     
