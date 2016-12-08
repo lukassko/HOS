@@ -10,9 +10,35 @@
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd">
 
 
+	<int:gateway id="gw"
+		service-interface="com.app.hos.service.client.Gateway"
+		default-request-channel="input"/>
+
+	<int-ip:tcp-connection-factory id="client"
+		type="client"
+		host="localhost"
+		port="14020"
+		single-use="true"
+		so-timeout="10000"
+		/>
+
+	<int:channel id="input" />
+
+	<int-ip:tcp-outbound-gateway id="outGateway"
+		request-channel="input"
+		reply-channel="reply"
+		connection-factory="client"
+		request-timeout="10000"
+		reply-timeout="10000"
+		/>
+
+	<!-- dataType attribute invokes the conversion service -->
+	<int:channel id="reply" datatype="java.lang.String" />
+
+	<!-- SERVER SIDE -->
     <int-ip:tcp-connection-factory id="hosServer"
 	    type="server"
-	    port="13020"
+	    port="14020"
 	    using-nio="true"/>
     
     <int-ip:tcp-inbound-gateway id="inputHosGateway"
@@ -29,6 +55,8 @@
 	
     <bean id="server"
 		class="com.app.hos.service.server.Server" />
+		
+	<bean id="connectionDeserialize" class="com.app.hos.service.server.Deserializer"/>
     
 </beans>
     
