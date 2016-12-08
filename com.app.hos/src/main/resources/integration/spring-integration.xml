@@ -12,6 +12,15 @@
 		http://www.springframework.org/schema/integration/event http://www.springframework.org/schema/integration/event/spring-integration-event.xsd">
 
 
+    <bean id="integrationConversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.app.hos.service.integration.ByteArrayToStringConverter" />
+			</list>
+		</property>
+	</bean>
+
     <!-- CLIENT SIDE -->
     
 	<int:gateway id="gw"
