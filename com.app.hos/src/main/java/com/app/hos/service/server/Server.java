@@ -4,6 +4,7 @@ public class Server {
 	
 	public String serverTest(String input) {
 		System.out.println("Input: " + input);
-		return "OK";
+		return input;
 	}
+
 }

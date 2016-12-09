@@ -12,15 +12,6 @@
 		http://www.springframework.org/schema/integration/event http://www.springframework.org/schema/integration/event/spring-integration-event.xsd">
 
 
-    <bean id="integrationConversionService"
-		class="org.springframework.context.support.ConversionServiceFactoryBean">
-		<property name="converters">
-			<list>
-				<bean class="com.app.hos.service.integration.ByteArrayToStringConverter" />
-			</list>
-		</property>
-	</bean>
-
     <!-- CLIENT SIDE -->
     
 	<int:gateway id="gw"
@@ -49,9 +40,13 @@
 
 	<!-- SERVER SIDE -->
 	
+	<bean id="connectionSerializeDeserialize" class="com.app.hos.service.integration.ByteArrayToStringConverter"/>
+
     <int-ip:tcp-connection-factory id="hosServer"
 	    type="server"
 	    port="14020"
+	    serializer="connectionSerializeDeserialize"
+		deserializer="connectionSerializeDeserialize"
 	    using-nio="true"/>
     
     <int-ip:tcp-inbound-gateway id="inputHosGateway"
@@ -66,19 +61,13 @@
 	
 	<int:channel id="inputChannel" />
 	
-	<int:service-activator input-channel="inputChannel"
+	<int:service-activator input-channel="toServerChannel"
 		ref="server"
 		method="serverTest"/>
 	
     <bean id="server"
 		class="com.app.hos.service.server.Server" />
-		
-	<bean id="connectionDeserialize" class="com.app.hos.service.server.Deserializer"/>
-    
-    <int:transformer id="transformerBytes2String"
-                 input-channel="toServerChannel"
-                 output-channel="inputChannel"
-                 expression="new String(payload)"/>
+		    
                  
 	<!-- TCP EVENTS -->
 	
