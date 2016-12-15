@@ -28,8 +28,10 @@
 
 	<int:channel id="input" />
 
+	<int:channel id="transformChannel" />
+	
 	<int-ip:tcp-outbound-gateway id="outGateway"
-		request-channel="input"
+		request-channel="transformChannel"
 		reply-channel="reply"
 		connection-factory="client"
 		request-timeout="10000"
@@ -67,7 +69,13 @@
 	
     <bean id="server"
 		class="com.app.hos.service.server.Server" />
-		    
+		
+    <!-- TRANSFORMERS -->
+    <int:transformer id="testTransformer" ref="testTransformerBean" input-channel="input"
+             method="transform" output-channel="transformChannel"/>
+    
+	<bean id="testTransformerBean" class="com.app.hos.service.integration.Transformer" />
+
                  
 	<!-- TCP EVENTS -->
 	

@@ -5,8 +5,14 @@ import org.springframework.integration.ip.tcp.connection.TcpConnectionEvent;
 
 public class Event {
 
+	private String connectionId;
+	
 	public void eventTest (TcpConnectionEvent event) {
-		System.out.println("EVENT OCCURE!");
-
+		this.connectionId = event.getConnectionId();
+		System.out.println("EVENT OCCURE! connId: " + connectionId);
+	}
+	
+	public String getConncetionId () {
+		return this.connectionId;
 	}
 }
