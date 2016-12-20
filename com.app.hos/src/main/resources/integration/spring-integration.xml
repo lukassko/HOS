@@ -22,13 +22,14 @@
 		type="client"
 		host="localhost"
 		port="14020"
-		single-use="true"
+		single-use="false"
 		so-timeout="10000"
 		/>
 
 	<int:channel id="input" />
 
-	<int:channel id="transformChannel" />
+			
+	<!-- change gateway -->
 	
 	<int-ip:tcp-outbound-gateway id="outGateway"
 		request-channel="transformChannel"
@@ -37,8 +38,35 @@
 		request-timeout="10000"
 		reply-timeout="10000"
 		/>
+	
+	    
+    <int-ip:tcp-inbound-gateway id="inputHosGateway"
+		connection-factory="hosServer"
+		request-channel="toServerChannel"
+		error-channel="errorChannel"/>
 
+
+	
+	<int-ip:tcp-outbound-channel-adapter id="outboundClient"
+    	channel="transformChannel"
+    	connection-factory="hosServer"
+    	client-mode="true"/>
+	
+	<int-ip:tcp-inbound-gateway id="outGateway"
+		request-channel="transformChannel"
+        connection-factory="client"
+        />
+		
+
+	<int:channel id="transformChannel" />
+	
 	<int:channel id="reply" datatype="java.lang.String" />
+	
+	<!-- TRANSFORMERS -->
+    <int:transformer id="testTransformer" ref="testTransformerBean" input-channel="input"
+             method="transform" output-channel="transformChannel"/>
+    
+	<bean id="testTransformerBean" class="com.app.hos.service.integration.Transformer" />
 
 	<!-- SERVER SIDE -->
 	
@@ -50,11 +78,6 @@
 	    serializer="connectionSerializeDeserialize"
 		deserializer="connectionSerializeDeserialize"
 	    using-nio="true"/>
-    
-    <int-ip:tcp-inbound-gateway id="inputHosGateway"
-		connection-factory="hosServer"
-		request-channel="toServerChannel"
-		error-channel="errorChannel"/>
 
 
 	<int:channel id="toServerChannel"/>
@@ -70,12 +93,6 @@
     <bean id="server"
 		class="com.app.hos.service.server.Server" />
 		
-    <!-- TRANSFORMERS -->
-    <int:transformer id="testTransformer" ref="testTransformerBean" input-channel="input"
-             method="transform" output-channel="transformChannel"/>
-    
-	<bean id="testTransformerBean" class="com.app.hos.service.integration.Transformer" />
-
                  
 	<!-- TCP EVENTS -->
 	

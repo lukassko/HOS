@@ -9,7 +9,10 @@ public class Event {
 	
 	public void eventTest (TcpConnectionEvent event) {
 		this.connectionId = event.getConnectionId();
-		System.out.println("EVENT OCCURE! connId: " + connectionId);
+		System.out.println("!!!!!! EVENT !!!!!!");
+		System.out.println("SOURCE: " + event.getSource().toString());
+		System.out.println("FACTORY NAME: " + event.getConnectionFactoryName());
+		System.out.println("CONN_ID: " + connectionId);
 	}
 	
 	public String getConncetionId () {

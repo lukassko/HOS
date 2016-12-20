@@ -3,41 +3,32 @@ package com.app.hos.service.integration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
 public class ByteArrayToStringConverter implements Serializer<String>, Deserializer<String>{
 
-	private final int SIZE = 10;
 	public String deserialize(InputStream inputStream) throws IOException {
-		System.out.println("DESERIALIZE");
-		
 		String value = parseString(inputStream);
-		inputStream.close();
+		System.out.println("PARSED vaulue: " + value);
 		return value;
 	}
 
 	public void serialize(String arg, OutputStream outputStream) throws IOException {
 		System.out.println("SERIALIZE: " + arg);
-		byte[] number = arg.getBytes();
-		outputStream.write(number);
-		//outputStream.write("\r\n".getBytes());
+		byte[] bytes = arg.getBytes();
+		outputStream.write(bytes);
 		outputStream.flush();
 	}
 
 	private String parseString (InputStream stream) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		int c;
-		for (int i = 0; i<SIZE; i++) {
-			c = stream.read();
-			if (c == -1) 
-				break;
+		int c = stream.read();
+		while (c != 10) {
 			builder.append((char)c);
+			c = stream.read();
 		}
 		return builder.toString();
-		
 	}
 }
