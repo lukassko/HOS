@@ -23,8 +23,8 @@ public class ByteArrayToStringConverter implements Serializer<String>, Deseriali
 	public void serialize(String arg, OutputStream outputStream) throws IOException {
 		System.out.println("SERIALIZE: " + arg);
 		byte[] number = arg.getBytes();
+		
 		outputStream.write(number);
-		//outputStream.write("\r\n".getBytes());
 		outputStream.flush();
 	}
 
