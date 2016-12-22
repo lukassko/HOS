@@ -1,4 +1,4 @@
-package com.app.hos.service.integration;
+package com.app.hos.service.integration.converters;
 
 import java.io.IOException;
 import java.io.InputStream;
