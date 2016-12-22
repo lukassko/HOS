@@ -38,6 +38,8 @@
     
 	<bean id="testTransformerBean" class="com.app.hos.service.integration.converters.Transformer" />
 
+	<int:channel id="inputChannel" />
+	
 	<!-- SERVER SIDE -->
 	
 	<bean id="connectionSerializeDeserialize" class="com.app.hos.service.integration.converters.ByteArrayToStringConverter"/>
@@ -53,8 +55,6 @@
 	<int:channel id="toServerChannel"/>
 
 	<int:channel id="errorChannel"/>
-	
-	<int:channel id="inputChannel" />
 	
 	<int:service-activator input-channel="toServerChannel"
 		ref="server"
