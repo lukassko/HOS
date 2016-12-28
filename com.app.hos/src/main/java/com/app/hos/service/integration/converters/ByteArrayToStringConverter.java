@@ -2,6 +2,7 @@ package com.app.hos.service.integration.converters;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 
 import org.springframework.core.serializer.Deserializer;
@@ -10,9 +11,17 @@ import org.springframework.core.serializer.Serializer;
 public class ByteArrayToStringConverter implements Serializer<String>, Deserializer<String>{
 
 	public String deserialize(InputStream inputStream) throws IOException {
-		String value = parseString(inputStream);
-		System.out.println("PARSED vaulue: " + value);
-		return value;
+		ObjectInputStream ois = new ObjectInputStream(inputStream);
+		Object object = "TEST";
+		try {
+			object = ois.readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//String value = parseString(inputStream);
+		System.out.println("PARSED vaulue: " + object.toString());
+		return object.toString();
 	}
 
 	public void serialize(String arg, OutputStream outputStream) throws IOException {
