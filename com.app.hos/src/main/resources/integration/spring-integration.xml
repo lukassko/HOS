@@ -11,49 +11,23 @@
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
 		http://www.springframework.org/schema/integration/event http://www.springframework.org/schema/integration/event/spring-integration-event.xsd">
 
-
-    <!-- CLIENT SIDE -->
     
 	<int:gateway id="gw"
-		service-interface="com.app.hos.service.client.Gateway"
+		service-interface="com.app.hos.service.integration.server.Gateway"
 		default-request-channel="input"/>
-
-	<int-ip:tcp-connection-factory id="client"
-		type="client"
-		host="localhost"
-		port="14020"
-		single-use="false"
-		so-timeout="10000"
-		/>
 
 	<int:channel id="input" />
 
-			
-	<!-- change gateway -->
-	
-	<int-ip:tcp-outbound-gateway id="outHosGateway"
-		request-channel="transformChannel"
-		reply-channel="reply"
-		connection-factory="client"
-		request-timeout="10000"
-		reply-timeout="10000"
-		/>
-	
-	    
-    <int-ip:tcp-inbound-gateway id="inputHosGateway"
-		connection-factory="hosServer"
-		request-channel="toServerChannel"
-		error-channel="errorChannel"/>
-
-	
 	<int-ip:tcp-outbound-channel-adapter id="outboundChannel"
     	channel="transformChannel"
-    	connection-factory="client"/>
+    	connection-factory="hosServer" />
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundChannel"
 		channel="toServerChannel"
-        connection-factory="client" />
-		
+        connection-factory="hosServer"
+        />
+	
+
 
 	<int:channel id="transformChannel" />
 	
@@ -63,13 +37,13 @@
     <int:transformer id="testTransformer" ref="testTransformerBean" input-channel="input"
              method="transform" output-channel="transformChannel"/>
     
-	<bean id="testTransformerBean" class="com.app.hos.service.integration.Transformer" />
+	<bean id="testTransformerBean" class="com.app.hos.service.integration.converters.Transformer" />
 
 	<int:channel id="inputChannel" />
 	
 	<!-- SERVER SIDE -->
 	
-	<bean id="connectionSerializeDeserialize" class="com.app.hos.service.integration.ByteArrayToStringConverter"/>
+	<bean id="connectionSerializeDeserialize" class="com.app.hos.service.integration.converters.ByteArrayToStringConverter"/>
 
     <int-ip:tcp-connection-factory id="hosServer"
 	    type="server"
@@ -78,7 +52,7 @@
 		deserializer="connectionSerializeDeserialize"
 	    using-nio="true"/>
 
-
+    
 	<int:channel id="toServerChannel"/>
 
 	<int:channel id="errorChannel"/>
@@ -88,7 +62,7 @@
 		method="serverTest"/>
 	
     <bean id="server"
-		class="com.app.hos.service.server.Server" />
+		class="com.app.hos.service.integration.server.Server" />
 		
                  
 	<!-- TCP EVENTS -->
@@ -98,7 +72,7 @@
 		method="eventTest"/>
 		
 	<bean id="event"
-		class="com.app.hos.service.integration.Event" />
+		class="com.app.hos.service.integration.TcpEvent" />
 		
 	<int:channel id="eventChannel"/>
 	

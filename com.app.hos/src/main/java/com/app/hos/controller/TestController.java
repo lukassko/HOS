@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.app.hos.service.client.Gateway;
+import com.app.hos.service.integration.server.Gateway;
 
 @Controller
 public class TestController {
