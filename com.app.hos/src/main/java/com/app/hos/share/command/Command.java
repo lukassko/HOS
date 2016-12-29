@@ -1,12 +1,14 @@
-package com.app.hos.model.command;
+package com.app.hos.share.command;
 
 import java.io.Serializable;
 
 public class Command implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private final String clientId;
 	private final String clientName;
-	private String comandType;
+	private String commandType;
 	private String result;
 	
 	public Command(String clientId, String clientName) {
@@ -22,12 +24,12 @@ public class Command implements Serializable{
 		return clientName;
 	}
 	
-	public String getComandType() {
-		return comandType;
+	public String getCommandType() {
+		return commandType;
 	}
 	
-	public void setComandType(String comandType) {
-		this.comandType = comandType;
+	public void setCommandType(String commandType) {
+		this.commandType = commandType;
 	}
 	
 	public String getResult() {

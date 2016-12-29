@@ -1,4 +1,4 @@
-package com.app.hos.model.command;
+package com.app.hos.share.command;
 
 abstract class CommandBuilder {
 
