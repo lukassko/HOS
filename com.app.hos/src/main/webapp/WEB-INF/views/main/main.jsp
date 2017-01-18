@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -19,24 +20,10 @@
 		    	var page = $(this).attr("data-target");
 		    	
 		    	$.get(page, function(data){
-				    //alert(data);
-				    $('#container').load(data);
+				    $('#container').html(data);
 				});
 		    });
 		});
-		
-		$('#test').on("click", function () {
-			var page = "/WEB-INF/views/services/weather.jsp";
-			alert("OK");
-			//$("#container").load({
-            //    url: "../WEB-INF/views/services/weather.jsp",
-            //    complete: function(){
-            //        alert("completed");
-            //    }
-            //});
-		    $('#container').load("SIEAAAA");
-		});
-		
 		
 	});
 	</script>
@@ -52,15 +39,15 @@
         <div class="menu-list">
   
             <ul id="menu-content" class="menu-content collapse out">
-                <li>
+                <li class="active">
                   <a id="test" href="#"><i class="fa fa-dashboard fa-lg"></i> Dashboard</a>
                 </li>
 
-                <li data-toggle="collapse" data-target="#products" class="collapsed active">
+                <li data-toggle="collapse" data-target="#products" class="collapsed">
                   <a href="#"><i class="fa fa-android fa-lg"></i> System Elements <span class="arrow"></span></a>
                 </li>
                 <ul class="sub-menu collapse" id="products">
-                    <li class="active"><a href="#">General</a></li>
+                    <li><a href="#">General</a></li>
                     <li><a href="#">Connected Devices</a></li>
                 </ul>
 
