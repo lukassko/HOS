@@ -11,6 +11,7 @@
   <properties>
   	<spring.version>4.2.5.RELEASE</spring.version>
   	<spring.integration.version>4.3.5.RELEASE</spring.integration.version>
+  	<spring.ws.version>2.4.0.RELEASE</spring.ws.version>
   </properties>
   
   <dependencies>
@@ -64,15 +65,45 @@
 		<artifactId>spring-integration-ip</artifactId>
 		<version>${spring.integration.version}</version>
 	</dependency>
-	
 	<dependency>
 	    <groupId>org.springframework.integration</groupId>
 	    <artifactId>spring-integration-event</artifactId>
 	    <version>${spring.integration.version}</version>
 	</dependency>
 
+	<!-- WebServices dependencies -->
+	<dependency>
+        <groupId>org.springframework.ws</groupId>
+        <artifactId>spring-ws-core</artifactId>
+        <version>${spring.ws.version}</version>
+	</dependency>
+
   </dependencies>
   <build>
     <finalName>HOS</finalName>
+    <plugins>
+	   <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.11.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+                    <generateDirectory>src/main/java</generateDirectory>
+                    <generatePackage>com.app.hos.service.webservices.wsdl</generatePackage>
+                    <schemas>
+                        <schema>
+                            <url>http://www.webservicex.net/globalweather.asmx?WSDL</url>
+                        </schema>
+                    </schemas>
+                </configuration>
+            </plugin>
+	 </plugins>
   </build>
 </project>
