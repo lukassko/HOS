@@ -4,9 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import com.app.hos.service.webservices.WeatherClient;
-@
-Configuration
+import com.app.hos.service.webservices.RestClient;
+import com.app.hos.service.webservices.SoapClient;
+
+@Configuration
 public class WeatherWsConfid {
 
 	@Bean
@@ -17,12 +18,17 @@ public class WeatherWsConfid {
 	}
 
 	@Bean
-	public WeatherClient quoteClient(Jaxb2Marshaller marshaller) {
-		WeatherClient client = new WeatherClient();
+	public SoapClient quoteClient(Jaxb2Marshaller marshaller) {
+		SoapClient client = new SoapClient();
 		client.setDefaultUri("http://www.webservicex.net/globalweather.asmx");
 		client.setMarshaller(marshaller);
 		client.setUnmarshaller(marshaller);
 		return client;
+	}
+	
+	@Bean
+	public RestClient restClient() {
+		return new RestClient();
 	}
 	
 }
