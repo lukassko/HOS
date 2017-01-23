@@ -1,5 +1,8 @@
 package com.app.hos.service.webservices.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Data {
 
 	private String location;
@@ -9,8 +12,6 @@ public class Data {
 	private String wind;
 	private String date;
 	private String day;
-	
-	public Data() {};
 	
 	public String getLocation() {
 		return location;

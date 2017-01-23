@@ -1,11 +1,12 @@
 package com.app.hos.service.webservices.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MainClass {
 
 	private String apiVersion;
 	private Data data;
-	
-	public MainClass(){};
 	
 	public String getApiVersion() {
 		return apiVersion;

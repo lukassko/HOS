@@ -10,7 +10,7 @@ public class RestClient {
 	
 	public MainClass getData(String arg) {
 		RestTemplate restTemplate = new RestTemplate();
-		MainClass mainClass = restTemplate.getForObject("http://weathers.co/api.php", MainClass.class);
+		MainClass mainClass = restTemplate.getForObject("http://weathers.co/api.php?city=Krakow", MainClass.class);
 		return mainClass;
 	}
 }
