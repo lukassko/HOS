@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.hos.service.webservices.RestClient;
 import com.app.hos.service.webservices.rest.MainClass;
+import com.app.hos.service.webservices.rest.Quote;
 
 @Controller
 public class MainController {
@@ -23,7 +24,9 @@ public class MainController {
 	
 	@RequestMapping(value = "/weather", method=RequestMethod.GET)
 	public String getWeather() {
-		rest.getData("Krakow");
+		Quote q = rest.getData("Krakow");
+		System.out.println(q.getType());
+		System.out.println(q.getValue().getQuote());
 		return "services/weather";
 	}
 }

@@ -1,8 +1,12 @@
 package com.app.hos.config;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.client.RestTemplate;
@@ -32,7 +36,12 @@ public class WeatherWsConfid {
 	public RestTemplate restTemplate() {
 		//return builder.build();
 		 RestTemplate restTemplate =  new RestTemplate();
-		 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		 StringHttpMessageConverter converter = new StringHttpMessageConverter();
+		 converter.setSupportedMediaTypes(Arrays.asList(new MediaType("text", "html", 
+                 Charset.forName("UTF-8"))));
+		 
+		 restTemplate.getMessageConverters()
+	        .add(0, converter);
 		 return restTemplate;
 	}
 
