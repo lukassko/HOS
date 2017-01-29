@@ -14,7 +14,7 @@ import com.app.hos.service.webservices.RestClient;
 import com.app.hos.service.webservices.SoapClient;
 
 @Configuration
-public class WeatherWsConfid {
+public class WeatherWsConfig {
 
 	@Bean
 	public Jaxb2Marshaller marshaller() {
