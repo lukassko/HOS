@@ -24,9 +24,32 @@ public class MainController {
 	
 	@RequestMapping(value = "/weather", method=RequestMethod.GET)
 	public String getWeather() {
-		Quote q = rest.getData("Krakow");
-		System.out.println(q.getType());
-		System.out.println(q.getValue().getQuote());
 		return "services/weather";
 	}
+	
+	@RequestMapping(value = "/dashboard", method=RequestMethod.GET)
+	public String getDashboard() {
+		return "main/dashboard";
+	}
+	
+	@RequestMapping(value = "/general", method=RequestMethod.GET)
+	public String getSystem() {
+		return "system/general";
+	}
+	
+	@RequestMapping(value = "/devices", method=RequestMethod.GET)
+	public String getDevices() {
+		return "system/devices";
+	}
+	
+	@RequestMapping(value = "/profile", method=RequestMethod.GET)
+	public String getProfile() {
+		return "users/profile";
+	}
+	
+	@RequestMapping(value = "/users", method=RequestMethod.GET)
+	public String getUsers() {
+		return "users/users";
+	}
+	
 }

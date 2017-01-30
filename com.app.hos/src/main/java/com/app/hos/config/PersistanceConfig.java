@@ -16,10 +16,10 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration
-@EnableTransactionManagement
-@PropertySource({ "classpath:persistance/mysql.properties" })
-@ComponentScan({ "com.app.hos.persistance" })
+//@Configuration
+//@EnableTransactionManagement
+//@PropertySource({ "classpath:persistance/mysql.properties" })
+//@ComponentScan({ "com.app.hos.persistance" })
 public class PersistanceConfig {
 
 	@Autowired

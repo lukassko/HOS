@@ -14,20 +14,22 @@
 	$(document).ready(function() {
 		
 		$('ul.collapse li').not('li.collapsed').each(function() {
+			var page = $(this).attr("data-target");
 		    $(this).on("click", function() {
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
-		    	
 		    	$.get(page, function(data){
 				    $('#container').html(data);
 				});
+		    	var title = $(this).text();
+		    	$('#active-page').text(title);
 		    });
 		});
 		
 	});
 	</script>
-
+	<title>HOS</title>
 </head>
 <body>
 
@@ -39,44 +41,50 @@
         <div class="menu-list">
   
             <ul id="menu-content" class="menu-content collapse out">
-                <li class="active">
+                <li class="active" data-target="dashboard">
                   <a id="test" href="#"><i class="fa fa-dashboard fa-lg"></i> Dashboard</a>
                 </li>
 
-                <li data-toggle="collapse" data-target="#products" class="collapsed">
+                <li data-toggle="collapse" data-target="#system" class="collapsed">
                   <a href="#"><i class="fa fa-android fa-lg"></i> System Elements <span class="arrow"></span></a>
                 </li>
-                <ul class="sub-menu collapse" id="products">
-                    <li><a href="#">General</a></li>
-                    <li><a href="#">Connected Devices</a></li>
-                </ul>
-
+                <ul class="sub-menu collapse" id="system">
+                    <li data-target="general"><a href="#">General</a></li>
+                    <li data-target="devices"><a href="#">Connected Devices</a></li>
+				</ul>
 
                 <li data-toggle="collapse" data-target="#service" class="collapsed">
                   <a href="#"><i class="fa fa-globe fa-lg"></i> Services <span class="arrow"></span></a>
                 </li>  
                 <ul class="sub-menu collapse" id="service">
                   <li data-target="weather">Weather</li>
-                  <li data-target="soccer">Soccer Results</li>
                 </ul>
 
-                 <li>
-                  <a href="#">
+                 <li data-target="profile">
+                  <a href="#profile">
                   <i class="fa fa-user fa-lg"></i> Profile
                   </a>
                   </li>
 
-                 <li>
-                  <a href="#">
+                 <li data-target="users">
+                  <a href="#users">
                   <i class="fa fa-users fa-lg"></i> Users
                   </a>
                 </li>
             </ul>
      </div>
 </div>
-<div id="container" class="main-container">
-	Hello WORLD
+
+<div class="main-panel">
+	<div id="user-bar" class="user-bar">
+		<span> Active page: </span>
+		<span id="active-page"> Dashboard </span>
+	</div>
+	<div id="container" class="main-container">
+		Hello WORLD
+	</div>
 </div>
+
 
 
 </body>
