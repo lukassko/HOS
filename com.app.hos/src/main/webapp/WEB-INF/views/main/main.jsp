@@ -42,34 +42,30 @@
   
             <ul id="menu-content" class="menu-content collapse out">
                 <li class="active" data-target="dashboard">
-                  <a id="test" href="#"><i class="fa fa-dashboard fa-lg"></i> Dashboard</a>
+                  <i class="fa fa-dashboard fa-lg"></i> Dashboard
                 </li>
 
                 <li data-toggle="collapse" data-target="#system" class="collapsed">
-                  <a href="#"><i class="fa fa-android fa-lg"></i> System Elements <span class="arrow"></span></a>
+                  <i class="fa fa-android fa-lg"></i> System Elements <span class="arrow"></span>
                 </li>
                 <ul class="sub-menu collapse" id="system">
-                    <li data-target="general"><a href="#">General</a></li>
-                    <li data-target="devices"><a href="#">Connected Devices</a></li>
+                    <li data-target="general">General</li>
+                    <li data-target="devices">Connected Devices</li>
 				</ul>
 
                 <li data-toggle="collapse" data-target="#service" class="collapsed">
-                  <a href="#"><i class="fa fa-globe fa-lg"></i> Services <span class="arrow"></span></a>
+                  <i class="fa fa-globe fa-lg"></i> Services <span class="arrow"></span>
                 </li>  
                 <ul class="sub-menu collapse" id="service">
                   <li data-target="weather">Weather</li>
                 </ul>
 
                  <li data-target="profile">
-                  <a href="#profile">
                   <i class="fa fa-user fa-lg"></i> Profile
-                  </a>
                   </li>
 
                  <li data-target="users">
-                  <a href="#users">
                   <i class="fa fa-users fa-lg"></i> Users
-                  </a>
                 </li>
             </ul>
      </div>

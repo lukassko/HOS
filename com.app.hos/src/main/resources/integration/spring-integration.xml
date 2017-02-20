@@ -27,8 +27,6 @@
         connection-factory="hosServer"
         />
 	
-
-
 	<int:channel id="transformChannel" />
 	
 	<int:channel id="reply" datatype="java.lang.String" />
@@ -41,15 +39,16 @@
 
 	<int:channel id="inputChannel" />
 	
-	<!-- SERVER SIDE -->
-	
 	<bean id="connectionSerializeDeserialize" class="com.app.hos.service.integration.converters.ByteArrayToStringConverter"/>
+	
+	<bean id="ipMappper" class="com.app.hos.service.integration.converters.IpTcpMessageMapper" />
+
+	<!-- SERVER SIDE -->
 
     <int-ip:tcp-connection-factory id="hosServer"
 	    type="server"
 	    port="14020"
-	    serializer="connectionSerializeDeserialize"
-		deserializer="connectionSerializeDeserialize"
+		mapper="ipMappper"
 	    using-nio="true"/>
 
     
@@ -59,7 +58,7 @@
 	
 	<int:service-activator input-channel="toServerChannel"
 		ref="server"
-		method="serverTest"/>
+		method="receiveMessage"/>
 	
     <bean id="server"
 		class="com.app.hos.service.integration.server.Server" />
@@ -67,17 +66,17 @@
                  
 	<!-- TCP EVENTS -->
 	
-	<int:service-activator input-channel="eventChannel"
-		ref="event"
-		method="eventTest"/>
+	<int:service-activator input-channel="closeConnectionChannel"
+		ref="closeTcpConnection"
+		method="closeConnection"/>
 		
-	<bean id="event"
-		class="com.app.hos.service.integration.TcpEvent" />
+	<bean id="closeTcpConnection"
+		class="com.app.hos.service.integration.CloseTcpConnectionEvent" />
 		
-	<int:channel id="eventChannel"/>
+	<int:channel id="closeConnectionChannel"/>
 	
-	<int-event:inbound-channel-adapter channel="eventChannel"
-					event-types="org.springframework.integration.ip.tcp.connection.TcpConnectionEvent"/>
+	<int-event:inbound-channel-adapter channel="closeConnectionChannel"
+					event-types="org.springframework.integration.ip.tcp.connection.TcpConnectionCloseEvent"/>
 	
 	
 </beans>

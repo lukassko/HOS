@@ -1,10 +1,12 @@
 package com.app.hos.persistance.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@Entity
+//@Entity
 public class BaseEntity {
 
+	@Id
 	private int id;
 
 	public int getId() {

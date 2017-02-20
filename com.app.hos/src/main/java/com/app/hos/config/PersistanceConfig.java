@@ -7,24 +7,36 @@ import javax.sql.DataSource;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //@Configuration
-//@EnableTransactionManagement
-//@PropertySource({ "classpath:persistance/mysql.properties" })
-//@ComponentScan({ "com.app.hos.persistance" })
+@EnableTransactionManagement
+@PropertySource({ "classpath:persistance/mysql.properties" })
+@ComponentScan({ "com.app.hos.persistance" })
 public class PersistanceConfig {
 
 	@Autowired
 	private Environment env;
+	
+	@Value("classpath:persistance/initDB.sql")
+	private Resource schemaScript;
 
+	//@Value("classpath:com/foo/sql/db-test-data.sql")
+	//private Resource dataScript;
+
+	
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
 	   LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -52,6 +64,21 @@ public class PersistanceConfig {
 	   txManager.setSessionFactory(sessionFactory);
 	
 	   return txManager;
+	}
+
+	@Bean
+	public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
+	    final DataSourceInitializer initializer = new DataSourceInitializer();
+	    initializer.setDataSource(dataSource);
+	    initializer.setDatabasePopulator(databasePopulator());
+	    return initializer;
+	}
+
+	private DatabasePopulator databasePopulator() {
+	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+	    populator.addScript(schemaScript);
+	    //populator.addScript(dataScript);
+	    return populator;
 	}
 	
 	Properties hibernateProperties() {
