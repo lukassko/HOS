@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 public class Device extends BaseEntity {
 
 	@Transient 
-	private String serial;
+	private String connectionId;
 	
 	private String hostname;
 	
@@ -17,19 +17,19 @@ public class Device extends BaseEntity {
 	
 	private DateTime connectionTime;
 	
-	public Device(String serial, String name, String ip, String port, DateTime connectionTime) {
-		this.serial = serial;
+	public Device(String connectionId, String name, String ip, String port, DateTime connectionTime) {
+		this.connectionId = connectionId;
 		this.hostname = name;
 		this.ip = ip;
 		this.remotePort = port;
 		this.connectionTime = connectionTime;
 	}
 	
-	public String getSerial() {
-		return serial;
+	public String getConnectionId() {
+		return connectionId;
 	}
-	public void setSerial(String serial) {
-		this.serial = serial;
+	public void setConnectionId(String serial) {
+		this.connectionId = serial;
 	}
 	public String getName() {
 		return hostname;
@@ -64,7 +64,7 @@ public class Device extends BaseEntity {
 		result = prime * result + ((hostname == null) ? 0 : hostname.hashCode());
 		result = prime * result + ((ip == null) ? 0 : ip.hashCode());
 		result = prime * result + ((remotePort == null) ? 0 : remotePort.hashCode());
-		result = prime * result + ((serial == null) ? 0 : serial.hashCode());
+		result = prime * result + ((connectionId == null) ? 0 : connectionId.hashCode());
 		return result;
 	}
 
@@ -97,10 +97,10 @@ public class Device extends BaseEntity {
 				return false;
 		} else if (!remotePort.equals(other.remotePort))
 			return false;
-		if (serial == null) {
-			if (other.serial != null)
+		if (connectionId == null) {
+			if (other.connectionId != null)
 				return false;
-		} else if (!serial.equals(other.serial))
+		} else if (!connectionId.equals(other.connectionId))
 			return false;
 		return true;
 	}

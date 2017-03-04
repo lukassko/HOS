@@ -1,6 +1,8 @@
 package com.app.hos.controller;
 
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +56,16 @@ public class MainController {
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
 		Set<Device> devices = this.taskManager.getConnectedDevices();
+		List<String> devicesAsJson = new LinkedList<String>();
+		ObjectMapper mapper = new ObjectMapper(); 
 		for (Device device : devices) {
 			try {
-				ObjectMapper mapper = new ObjectMapper(); 
-				String json = mapper.writeValueAsString(device);
-				model.addAttribute(device.getSerial(), json);
+				devicesAsJson.add(mapper.writeValueAsString(device));
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
 		}
-			
+		model.addAttribute("devices", devicesAsJson);
 		return "system/devices";
 	}
 	
