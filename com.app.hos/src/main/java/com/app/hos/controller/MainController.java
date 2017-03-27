@@ -10,27 +10,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.hos.persistance.models.Device;
-import com.app.hos.service.manager.TaskManager;
+import com.app.hos.service.managers.device.DeviceInformation;
 import com.app.hos.service.webservices.RestClient;
-import com.app.hos.service.webservices.rest.MainClass;
-import com.app.hos.service.webservices.rest.Quote;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class MainController {
 	
-	@Autowired
-	private RestClient rest;
+	//private RestClient rest;
 	
-	private TaskManager taskManager;
+	private DeviceInformation deviceManager;
 	
 	@Autowired
-	public MainController(TaskManager taskManager) {
-		this.taskManager = taskManager;
+	public MainController(DeviceInformation deviceManager) {
+		this.deviceManager = deviceManager;
 	}
 	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
@@ -55,7 +51,7 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
-		Set<Device> devices = this.taskManager.getConnectedDevices();
+		Set<Device> devices = this.deviceManager.getConnectedDevices();
 		List<String> devicesAsJson = new LinkedList<String>();
 		ObjectMapper mapper = new ObjectMapper(); 
 		for (Device device : devices) {

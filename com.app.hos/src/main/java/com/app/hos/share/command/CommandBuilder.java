@@ -1,22 +1,25 @@
 package com.app.hos.share.command;
 
-abstract class CommandBuilder {
+import com.app.hos.share.command.builder.AbstractCommandBuilder;
+import com.app.hos.share.command.builder.Command;
 
-	protected Command command;
+public class CommandBuilder {
+
+	private AbstractCommandBuilder commandBuilder;
 	
-	public Command getCommand() {
-		return this.command;
+	public void setCommandBuilder(AbstractCommandBuilder commandBuilder) {
+		this.commandBuilder = commandBuilder; 
 	}
 	
-	public void createCommand (String clientId, String clientName) {
-		this.command = new Command(clientId,clientName);
+	public Command getCommand() { 
+		return commandBuilder.getCommand(); 
 	}
-	
-	public void setClinetName () {
-		
-	}
-	
-	public void setClientId () {
-		
+	  
+	public void createCommand () {
+		String clientId = "SERVER_01";
+		String clientName = "MAIN_SERVER";
+		commandBuilder.createCommand(clientId, clientName);
+		commandBuilder.setCommandType();
+		commandBuilder.setResult();
 	}
 }

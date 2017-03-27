@@ -3,7 +3,7 @@ package com.app.hos.service.integration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.tcp.connection.TcpConnectionCloseEvent;
 
-import com.app.hos.service.manager.CloseConnection;
+import com.app.hos.service.managers.connection.CloseConnection;
 
 public class CloseTcpConnectionEvent {
 
@@ -12,7 +12,7 @@ public class CloseTcpConnectionEvent {
 	
 	public void closeConnection (TcpConnectionCloseEvent event) {
 		String connectionId = event.getConnectionId();
-		server.removeConnection(connectionId);
+		server.closeConnection(connectionId);
 	}
 	
 }

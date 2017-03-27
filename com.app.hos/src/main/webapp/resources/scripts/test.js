@@ -1,8 +1,8 @@
 (function () {
 	
 	var Progress = function( element ) {
-		this.canvas = document.getElementById('bar');
-		//this.canvas = element;
+		this.canvas = element;
+		$('#parent').data( 'progressCircle', this );
 	    this.width = this.canvas.width;
 	    this.height = this.canvas.height;
 		this.init();
@@ -10,6 +10,7 @@
 	
 	Progress.prototype = {
 		init: function () {
+			alert('INIT');
 			var ctx = this.canvas.getContext('2d');
 			ctx.lineWidth = 45;
 			ctx.strokeStyle = '#0099ff';
@@ -38,16 +39,17 @@
 			this.context.arc(this.x, this.y, 120, this.start, draw_to, false);
 			this.context.stroke();
 			this.curr++;
+			var self = this;
 			if (this.curr < this.finish + 1) {
 			    requestAnimationFrame(function () {
-			    	progressBar.animate(progressBar.circum * progressBar.curr / 100 + progressBar.start);
+			    	progressBar.animate(self.circum * self.curr / 100 + self.start);
 				});
 			}
 		}
 	};
-
 	var bars = document.querySelectorAll('#bar');
-	var progressBar = new Progress(bars[0]);
+	var tmpBar = bars[0];
+	var progressBar = new Progress(tmpBar);
 	//for (var i = 0; i < bars.length; i++) {
 	//	var progressBar = new Progress(bars[i]);
 		//alert('OK');

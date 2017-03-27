@@ -10,7 +10,6 @@
 	<!-- attach other css classes and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<link rel="stylesheet" href="<c:url value="/resources/css/components.css" />">
-	<script src="<c:url value="/resources/scripts/progress.js" />"></script>
 	<script src="<c:url value="/resources/scripts/test.js" />"></script>
 	<!-- bootstrap -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -40,7 +39,7 @@
 			if( bars.length > 0 ) {
 				var obj = bars[0];
 				alert(obj + ' | '+ bars.length);
-				if ( obj.data('progress')) {
+				if ( $('#parent').data('progressCircle')) {
 					alert('YES');
 				} else {
 					alert('NO');
@@ -64,7 +63,7 @@
 	<div style="height: 30%; width:100%; margin: 5px;">
 		<div class="device-detail"></div>
 		<div class="device-detail" style="width: 250px;"></div>
-		<div class="device-detail" style="width: 300px;height:300px ">
+		<div id="parent" class="device-detail" style="width: 300px;height:300px ">
 			<div class="my-progress">
 			 	<canvas id="bar" width="300" height="300"></canvas>
 			</div>
