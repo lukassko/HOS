@@ -1,6 +1,5 @@
 package com.app.hos.persistance.models;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
 //@Entity

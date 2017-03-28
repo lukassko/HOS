@@ -2,69 +2,54 @@ package com.app.hos.persistance.models;
 
 import javax.persistence.Transient;
 
-import org.joda.time.DateTime;
+
 
 public class Device extends BaseEntity {
 
 	@Transient 
-	private String connectionId;
+	private Connection connection;
 	
-	private String hostname;
+	private String name;
 	
-	private String ip;
-	
-	private String remotePort;
-	
-	private DateTime connectionTime;
-	
-	public Device(String connectionId, String name, String ip, String port, DateTime connectionTime) {
-		this.connectionId = connectionId;
-		this.hostname = name;
-		this.ip = ip;
-		this.remotePort = port;
-		this.connectionTime = connectionTime;
+	private String serial;
+
+	public Device(Connection connection, String name, String serial) {
+		this.connection = connection;
+		this.name = name;
+		this.serial = serial;
 	}
-	
-	public String getConnectionId() {
-		return connectionId;
+
+	public Connection getConnection() {
+		return connection;
 	}
-	public void setConnectionId(String serial) {
-		this.connectionId = serial;
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
+
 	public String getName() {
-		return hostname;
+		return name;
 	}
+
 	public void setName(String name) {
-		this.hostname = name;
+		this.name = name;
 	}
-	public String getIp() {
-		return ip;
+
+	public String getSerial() {
+		return serial;
 	}
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-	public String getPort() {
-		return remotePort;
-	}
-	public void setPort(String port) {
-		this.remotePort = port;
-	}
-	public DateTime getConnectionTime() {
-		return connectionTime;
-	}
-	public void setConnectionTime(DateTime connectionTime) {
-		this.connectionTime = connectionTime;
+
+	public void setSerial(String serial) {
+		this.serial = serial;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((connectionTime == null) ? 0 : connectionTime.hashCode());
-		result = prime * result + ((hostname == null) ? 0 : hostname.hashCode());
-		result = prime * result + ((ip == null) ? 0 : ip.hashCode());
-		result = prime * result + ((remotePort == null) ? 0 : remotePort.hashCode());
-		result = prime * result + ((connectionId == null) ? 0 : connectionId.hashCode());
+		result = prime * result + ((connection == null) ? 0 : connection.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((serial == null) ? 0 : serial.hashCode());
 		return result;
 	}
 
@@ -77,33 +62,24 @@ public class Device extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Device other = (Device) obj;
-		if (connectionTime == null) {
-			if (other.connectionTime != null)
+		if (connection == null) {
+			if (other.connection != null)
 				return false;
-		} else if (!connectionTime.equals(other.connectionTime))
+		} else if (!connection.equals(other.connection))
 			return false;
-		if (hostname == null) {
-			if (other.hostname != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!hostname.equals(other.hostname))
+		} else if (!name.equals(other.name))
 			return false;
-		if (ip == null) {
-			if (other.ip != null)
+		if (serial == null) {
+			if (other.serial != null)
 				return false;
-		} else if (!ip.equals(other.ip))
-			return false;
-		if (remotePort == null) {
-			if (other.remotePort != null)
-				return false;
-		} else if (!remotePort.equals(other.remotePort))
-			return false;
-		if (connectionId == null) {
-			if (other.connectionId != null)
-				return false;
-		} else if (!connectionId.equals(other.connectionId))
+		} else if (!serial.equals(other.serial))
 			return false;
 		return true;
 	}
+	
 	
 	
 }

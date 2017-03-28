@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
 import com.app.hos.share.command.builder.CommandType;
-import com.app.hos.share.command.builder.Result;
-import com.app.hos.share.command.builder.ResultUsage;
-import com.app.hos.share.command.builder.ResultUsage.UsageType;
+import com.app.hos.share.command.result.Result;
+import com.app.hos.share.command.result.DeviceStatus;
+import com.app.hos.share.command.result.DeviceStatus.UsageType;
 
 public class StatusCommandBuilder extends AbstractCommandBuilder {
 
@@ -26,10 +26,10 @@ public class StatusCommandBuilder extends AbstractCommandBuilder {
 	}
 	
 	private Result getCpuUsage() {
-		return new ResultUsage(UsageType.RAM, 12.3);
+		return new DeviceStatus(UsageType.RAM, 12.3);
 	}
 	
 	private Result getRamUsage() {
-		return new ResultUsage(UsageType.CPU, 67.1);
+		return new DeviceStatus(UsageType.CPU, 67.1);
 	}
 }

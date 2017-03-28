@@ -11,7 +11,7 @@ public abstract class AbstractCommandBuilder {
 		return this.command;
 	}
 	
-	public void createCommand (String clientId, String clientName) {
+	public void createCommand () {
 		String serverName;
 		try {
 			InetAddress localMachine = java.net.InetAddress.getLocalHost();
@@ -20,7 +20,7 @@ public abstract class AbstractCommandBuilder {
 			serverName = "Unknown";
 		}
 		this.command = new Command();
-		command.setClientName(serverName);
+		command.setSerial(serverName);
 	}
 	
 	public abstract void setCommandType ();

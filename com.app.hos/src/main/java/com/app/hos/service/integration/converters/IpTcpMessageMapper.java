@@ -1,8 +1,6 @@
 package com.app.hos.service.integration.converters;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.integration.ip.tcp.connection.TcpConnection;
@@ -28,6 +26,5 @@ public class IpTcpMessageMapper extends TcpMessageMapper {
 	
 	private void deserialize(Object data) throws IOException, ClassNotFoundException {
 	    Command cmd = (Command)data;
-	    System.out.println(cmd.getClientName());
 	}
 }

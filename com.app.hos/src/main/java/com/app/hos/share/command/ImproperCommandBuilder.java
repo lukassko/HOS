@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
 import com.app.hos.share.command.builder.CommandType;
-import com.app.hos.share.command.builder.Result;
+import com.app.hos.share.command.result.Result;
 
 public class ImproperCommandBuilder extends AbstractCommandBuilder {
 

@@ -2,7 +2,7 @@ package com.app.hos.share.command.builder;
 
 public enum CommandType {
 	
-	HELLO(true),
+	HELLO(false),
 	MY_STATUS(false),
 	BAD_CONVERSION(false);
 	

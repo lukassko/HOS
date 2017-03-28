@@ -1,10 +1,8 @@
-package com.app.hos.share.command.builder;
-
-import com.app.hos.share.command.builder.Result;
+package com.app.hos.share.command.result;
 
 import java.io.Serializable;
 
-public class ResultUsage implements Result,Serializable {
+public class DeviceStatus implements Result,Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -15,7 +13,7 @@ public class ResultUsage implements Result,Serializable {
         CPU,RAM,
     }
 
-    public ResultUsage (UsageType type, double usage) {
+    public DeviceStatus (UsageType type, double usage) {
         this.type = type;
         this.usage = usage;
     }

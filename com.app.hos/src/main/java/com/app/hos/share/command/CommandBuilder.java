@@ -16,9 +16,7 @@ public class CommandBuilder {
 	}
 	  
 	public void createCommand () {
-		String clientId = "SERVER_01";
-		String clientName = "MAIN_SERVER";
-		commandBuilder.createCommand(clientId, clientName);
+		commandBuilder.createCommand();
 		commandBuilder.setCommandType();
 		commandBuilder.setResult();
 	}
