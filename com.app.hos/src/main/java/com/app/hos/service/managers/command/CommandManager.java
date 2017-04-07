@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
-import com.app.hos.service.managers.device.DeviceCreator;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandType;
+import com.app.hos.share.command.result.DeviceStatus;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.task.TaskExecutor;
 import com.app.hos.share.command.task.TaskStrategy;
@@ -44,13 +45,20 @@ public class CommandManager implements CommandExecutor {
 			
 			
 		} else {
-			//List<Result> commandResults = command.getResult();
-			if (CommandType.HELLO == type) {
-				
-			} else {
-				
+			List<Result> commandResults = command.getResult();
+			for (Result result : commandResults) {
+			//	getCommandResult(result);
 			}
 		}
+	}
+	
+	private <T extends DeviceStatus & Result> void getCommandResult(T result) {
 		
 	}
+	
+	private <T extends NewDevice & Result> void getCommandResult(T result) {
+		
+	}
+	
+	
 }

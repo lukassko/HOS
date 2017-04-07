@@ -24,25 +24,21 @@
 			var devId = device.connectionId
 			var deviceContainer = '<div id="device' + devId +'" class="device"><i class="fa fa-desktop fa-3x"></i> '+ name +'</div>'
 			$('.device-container').append(deviceContainer);
-			
 			var devId = '#device' + devId
 			$(devId).css('cursor','pointer');
 			$('.device-container').on('click', devId, function(){
 				$('.device-container div.activeDevice').removeClass('activeDevice');
 		    	$(this).addClass('activeDevice');
-		    	callDevice(88);
-		    	
 			});
 		};
-		function callDevice(value) {
+		function callDevice() {
 			var bars = document.querySelectorAll('#bar');
 			if( bars.length > 0 ) {
 				var obj = bars[0];
-				alert(obj + ' | '+ bars.length);
-				if ( $('#parent').data('progressCircle')) {
-					alert('YES');
-				} else {
-					alert('NO');
+				if ( $('.my-progress').data('progress')) {
+	          		var bar =  $('.my-progress').data('progress');
+	         		var tmpValue = $('#setValue').val();
+	         		bar.draw(tmpValue);
 				};
 			}
 		};
