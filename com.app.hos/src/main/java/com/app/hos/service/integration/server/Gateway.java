@@ -1,7 +1,11 @@
 package com.app.hos.service.integration.server;
 
+import org.springframework.messaging.Message;
+
+import com.app.hos.share.command.builder.Command;
+
 public interface Gateway {
 	
-	public void send(String text);
+	public void send(Message<Command> message);
 
 }

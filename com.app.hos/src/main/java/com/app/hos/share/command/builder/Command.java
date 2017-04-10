@@ -1,43 +1,40 @@
 package com.app.hos.share.command.builder;
 
+import com.app.hos.share.command.result.Result;
+
 import java.io.Serializable;
 import java.util.List;
 
-import com.app.hos.share.command.result.Result;
-import com.app.hos.share.command.task.TaskExecutor;
 
-public class Command implements Serializable, TaskExecutor {
+// GENERIC TYPE -> public class Command<T extends Serializable> implements Serializable {...}
+public class Command implements Serializable{
 
-	private static final long serialVersionUID = 1L;
-	
-	private String serial;
-	private String commandType;
-	private List<Result> result;
+    private static final long serialVersionUID = 1L;
 
-	public void setSerial (String serial) {
-		this.serial = serial;
-	}
-	
-	public String getSerial() {
-		return serial;
-	}
-	
-	public String getCommandType() {
-		return commandType;
-	}
-	
-	public void setCommandType(String commandType) {
-		this.commandType = commandType;
-	}
-	
-	public List<Result> getResult() {
-		return result;
-	}
-	public void setResult(List<Result> result) {
-		this.result = result;
-	}
+    private String clientName;
+    private String commandType;
+    private List<Result> result;
 
-	public boolean executeTask() {
-		return false;
-	}
+    public void setClientName (String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public String getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(String commandType) {
+        this.commandType = commandType;
+    }
+
+    public List<Result> getResult() {
+        return result;
+    }
+    public void setResult(List<Result> result) {
+        this.result = result;
+    }
 }

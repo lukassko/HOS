@@ -10,7 +10,7 @@
 	<!-- attach other css classes and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<link rel="stylesheet" href="<c:url value="/resources/css/components.css" />">
-	<script src="<c:url value="/resources/scripts/test.js" />"></script>
+	<script src="<c:url value="/resources/scripts/progress.js" />"></script>
 	<!-- bootstrap -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
@@ -16,11 +15,14 @@ import com.app.hos.share.command.ImproperCommandBuilder;
 import com.app.hos.share.command.builder.Command;
 
 public class ByteArrayToCommandConverter implements Serializer<Command>, Deserializer<Command>{
-
+	
+	private ObjectInputStream ois = null;
+	private ObjectOutputStream oos = null;
 	private CommandBuilder commandBuilder = new CommandBuilder();
 	
 	public Command deserialize(InputStream inputStream) throws IOException {
-		ObjectInputStream ois = new ObjectInputStream(inputStream);
+		if (ois == null)
+			ois = new ObjectInputStream(inputStream);
 		Command cmd = null;
 		try {
 			cmd = (Command) ois.readObject();
@@ -28,15 +30,17 @@ public class ByteArrayToCommandConverter implements Serializer<Command>, Deseria
 			commandBuilder.setCommandBuilder(new ImproperCommandBuilder());
 			cmd = commandBuilder.getCommand();
 		} catch (InvalidClassException e) {
+			commandBuilder.setCommandBuilder(new ImproperCommandBuilder());
 			cmd = commandBuilder.getCommand();
 		}
 		return cmd;
 	}
 
 	public void serialize(Command arg, OutputStream outputStream) throws IOException {
-		ObjectOutputStream objStream = new ObjectOutputStream(outputStream);
-		objStream.writeObject(new Command());
-		objStream.flush();
+		if (oos == null)
+			oos =  new ObjectOutputStream(outputStream);
+		oos.writeObject(arg);
+		oos.flush();
 	}
 
 

@@ -14,12 +14,14 @@
     
 	<int:gateway id="gw"
 		service-interface="com.app.hos.service.integration.server.Gateway"
-		default-request-channel="input"/>
+		default-request-channel="output"/>
 
+	<int:channel id="output" />
+	
 	<int:channel id="input" />
 
 	<int-ip:tcp-outbound-channel-adapter id="outboundChannel"
-    	channel="transformChannel"
+    	channel="output"
     	connection-factory="hosServer" />
 	
 	<int-ip:tcp-inbound-channel-adapter id="inboundChannel"

@@ -5,18 +5,23 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.integration.ip.tcp.connection.AbstractConnectionFactory;
 import org.springframework.stereotype.Component;
 
+import com.app.hos.service.managers.device.DeviceManager;
+
+
 @Component
 public class ConnectionManager implements CloseConnection {
 
 	private ApplicationContext appContext;
+	private DeviceManager deviceManager;
 	
 	@Autowired
-	public ConnectionManager(ApplicationContext appContext) {
+	public ConnectionManager(ApplicationContext appContext, DeviceManager deviceManager) {
+		this.deviceManager = deviceManager;
 		this.appContext = appContext;
 	}
 	
 	public void closeConnection(String connectionId) {
-		//server.removeConnection(connectionId);
+		deviceManager.removeConnectedDevice(connectionId);
 		closeTcpConnection(connectionId);
 	}
 
@@ -24,4 +29,5 @@ public class ConnectionManager implements CloseConnection {
 		AbstractConnectionFactory connectionFActory = (AbstractConnectionFactory)appContext.getBean("hosServer");
 		return connectionFActory.closeConnection(connectionId);
 	}
+
 }

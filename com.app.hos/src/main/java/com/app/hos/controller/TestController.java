@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.service.integration.server.Gateway;
+import com.app.hos.share.command.CommandBuilder;
+import com.app.hos.share.command.HelloAbstractCommandBuilder;
+import com.app.hos.share.command.builder.Command;
 
 @Controller
 public class TestController {
-
+	private CommandBuilder commandBuilder = new CommandBuilder();
 	private Gateway gateway;
 	
 	@Autowired
@@ -25,6 +28,9 @@ public class TestController {
 	@RequestMapping(value = "/sendMessage", method=RequestMethod.GET)
 	public void sendMessage() {
 		System.out.println("SEND MESSAGE");
-		gateway.send("Working!");
+		commandBuilder.setCommandBuilder(new HelloAbstractCommandBuilder());
+        commandBuilder.createCommand();
+        Command cmd = commandBuilder.getCommand();
+		//gateway.send(cmd);
 	}
 }
