@@ -8,15 +8,12 @@ public class Device extends BaseEntity {
 
 	@Transient 
 	private Connection connection;
-	
 	private String name;
-	
 	private String serial;
 
-	public Device(Connection connection, String name, String serial) {
+	public Device(Connection connection, String name) {
 		this.connection = connection;
 		this.name = name;
-		this.serial = serial;
 	}
 
 	public Connection getConnection() {

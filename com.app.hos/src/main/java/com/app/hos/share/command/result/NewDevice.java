@@ -1,20 +1,20 @@
 package com.app.hos.share.command.result;
 
-public class NewDevice implements Result {
+import java.io.Serializable;
 
-	private String name;
+public class NewDevice implements Result, Serializable {
 
-	public NewDevice(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
-	}
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public NewDevice(String name) {
+        this.name = name;
+    }
 
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

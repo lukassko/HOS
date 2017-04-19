@@ -3,6 +3,7 @@ package com.app.hos.share.command.builder;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+
 public abstract class AbstractCommandBuilder {
 
     protected Command command;
@@ -10,7 +11,7 @@ public abstract class AbstractCommandBuilder {
     public Command getCommand() {
         return this.command;
     }
-
+    
     public void createCommand (String clientId, String clientName) {
         String serverName;
         try {
@@ -20,7 +21,7 @@ public abstract class AbstractCommandBuilder {
             serverName = "Unknown";
         }
         this.command = new Command();
-        command.setClientName(serverName);
+        command.setSerialId(serverName);
     }
 
     public abstract void setCommandType ();

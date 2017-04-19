@@ -50,7 +50,6 @@
 		serializer="connectionSerializeDeserialize"
 		deserializer="connectionSerializeDeserialize"
 	    using-nio="true"/>
-
     
 	<int:channel id="toServerChannel"/>
 
@@ -65,7 +64,7 @@
 		
                  
 	<!-- TCP EVENTS -->
-	<!-- 
+	<!-- -->
 	<int:service-activator input-channel="closeConnectionChannel"
 		ref="closeTcpConnection"
 		method="closeConnection"/>
@@ -77,7 +76,7 @@
 	
 	<int-event:inbound-channel-adapter channel="closeConnectionChannel"
 					event-types="org.springframework.integration.ip.tcp.connection.TcpConnectionCloseEvent"/>
-	-->
+	
 	
 </beans>
     

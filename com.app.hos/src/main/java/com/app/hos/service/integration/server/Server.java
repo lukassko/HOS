@@ -9,7 +9,7 @@ import org.springframework.messaging.MessageHeaders;
 import com.app.hos.service.integration.converters.ConnectionIdTransforner;
 import com.app.hos.service.managers.command.CommandExecutor;
 import com.app.hos.share.command.CommandBuilder;
-import com.app.hos.share.command.HelloAbstractCommandBuilder;
+import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
 
 public class Server {
@@ -29,10 +29,9 @@ public class Server {
 		Command command = message.getPayload();
 		commandExecutor.executeCommand(message.getHeaders(),command);
 		
-		commandBuilder.setCommandBuilder(new HelloAbstractCommandBuilder());
+		commandBuilder.setCommandBuilder(new HelloCommandBuilder());
         commandBuilder.createCommand();
         Command cmd = commandBuilder.getCommand();
-        System.out.println(cmd.getCommandType());
 		MessageHeaders h = message.getHeaders();
 		Message<Command> tmp = MessageBuilder.withPayload(cmd)
 		        .setHeader(IpHeaders.CONNECTION_ID, h.get(IpHeaders.CONNECTION_ID))

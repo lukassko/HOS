@@ -10,17 +10,16 @@ import java.util.List;
 public class Command implements Serializable{
 
     private static final long serialVersionUID = 1L;
-
-    private String clientName;
+    private String serialId;
     private String commandType;
     private List<Result> result;
 
-    public void setClientName (String clientName) {
-        this.clientName = clientName;
+    public void setSerialId (String serialId) {
+        this.serialId = serialId;
     }
 
-    public String getClientName() {
-        return clientName;
+    public String getSerialId() {
+        return serialId;
     }
 
     public String getCommandType() {

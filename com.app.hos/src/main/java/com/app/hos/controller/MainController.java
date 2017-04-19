@@ -5,14 +5,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.service.managers.device.DeviceInformation;
+import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.webservices.RestClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,12 +27,22 @@ public class MainController {
 	
 	//private RestClient rest;
 	
-	private DeviceInformation deviceManager;
+	private DeviceManager deviceManager;
 	
 	@Autowired
-	public MainController(DeviceInformation deviceManager) {
+	public MainController(DeviceManager deviceManager) {
 		this.deviceManager = deviceManager;
 	}
+	
+	// TESTING WESOCKETS
+	
+	@MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Connection greeting(String message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return new Connection("123123", "ELO", "192.168", "3", new DateTime());
+    }
+	
 	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
 	public String showMainPage() {

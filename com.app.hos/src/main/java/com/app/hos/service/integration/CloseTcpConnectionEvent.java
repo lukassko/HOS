@@ -11,8 +11,9 @@ public class CloseTcpConnectionEvent {
 	private CloseConnection server;
 	
 	public void closeConnection (TcpConnectionCloseEvent event) {
+		System.out.println("close connection");
 		String connectionId = event.getConnectionId();
-		server.closeConnection(connectionId);
+		//server.closeConnection(connectionId);
 	}
 	
 }

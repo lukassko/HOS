@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.service.integration.server.Gateway;
 import com.app.hos.share.command.CommandBuilder;
-import com.app.hos.share.command.HelloAbstractCommandBuilder;
+import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
 
 @Controller
@@ -28,7 +28,7 @@ public class TestController {
 	@RequestMapping(value = "/sendMessage", method=RequestMethod.GET)
 	public void sendMessage() {
 		System.out.println("SEND MESSAGE");
-		commandBuilder.setCommandBuilder(new HelloAbstractCommandBuilder());
+		commandBuilder.setCommandBuilder(new HelloCommandBuilder());
         commandBuilder.createCommand();
         Command cmd = commandBuilder.getCommand();
 		//gateway.send(cmd);
