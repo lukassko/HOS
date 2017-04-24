@@ -7,17 +7,23 @@
 	<%@ page isELIgnored="false" %>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
-	<!-- attach other css classes and script -->
-	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
-	<link rel="stylesheet" href="<c:url value="/resources/css/components.css" />">
-	<script src="<c:url value="/resources/scripts/progress.js" />"></script>
-	<!-- bootstrap -->
+	<!-- WebSockets -->
+	<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+	<!-- bootstrap / jQuery -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+	<!-- attach other css classes and script -->
+	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
+	<link rel="stylesheet" href="<c:url value="/resources/css/controls.css" />">
+	<script src="<c:url value="/resources/scripts/progressCircle.js" />"></script>
+	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
 	<script>
+	
 		function addDevice(dev) {
 			var device = JSON.parse(dev);
 			var name = device.name;
@@ -31,17 +37,44 @@
 		    	$(this).addClass('activeDevice');
 			});
 		};
+		
+		var ramProgress;
+		var cpuPorgress;
+		
+		function setProgress(type,value2) {
+			var bars = document.querySelectorAll('.my-progress');
+			bars.forEach(function (bar,index) {
+				var data = $(bar).attr('data-usage-type');
+				if (type === data) {
+					var tmpBar = $(bar).attr('progress');
+					if (tmpBar) {
+						alert(tmpBar);
+						var value = "45"
+						tmpBar.draw(value);
+					} else {
+						alert('NO');
+					}
+				}
+			})
+		};
+
 		function callDevice() {
-			var bars = document.querySelectorAll('#bar');
+			var bars = document.querySelectorAll('.my-progress');
 			if( bars.length > 0 ) {
-				var obj = bars[0];
 				if ( $('.my-progress').data('progress')) {
-	          		var bar =  $('.my-progress').data('progress');
-	         		var tmpValue = $('#setValue').val();
+	          		var bar =  $('.my-progress').attr('progress');
 	         		bar.draw(tmpValue);
 				};
 			}
 		};
+		
+		(function () {
+			var bars = progressBars.getProgresBarArray;
+			$('.my-progress').each(function( index ) {
+				$(this).attr('progress', bars[index]);
+			});
+		})();
+		
 	</script>
 </head>
 <body>
@@ -58,15 +91,20 @@
 <div class="device-panel">
 	<div style="height: 30%; width:100%; margin: 5px;">
 		<div class="device-detail"></div>
-		<div class="device-detail" style="width: 250px;"></div>
-		<div id="parent" class="device-detail" style="width: 300px;height:300px ">
-			<div class="my-progress">
-			 	<canvas id="bar" width="300" height="300"></canvas>
+		<div class="device-detail" style="width: 200px;height:200px ">
+			<div class="my-progress" data-usage-type="cpu">
+			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
+			</div>
+		</div>
+		<div id="parent" class="device-detail" style="width: 200px;height:200px ">
+			<div class="my-progress" data-usage-type="ram">
+			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
 	</div>
 	<div style="height: 75%; width:100%; margin: 20px;">
-		
+		 <button onclick="setProgress('ram',67)">RAM</button> 
+		  <button onclick="setProgress('cpu',56)">CPU</button> 
 	</div>
 </div>
 

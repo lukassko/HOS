@@ -36,11 +36,11 @@ public class MainController {
 	
 	// TESTING WESOCKETS
 	
-	@MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Connection greeting(String message) throws Exception {
+	@MessageMapping("/device-broker")
+    @SendTo("/topic/device-info")
+    public String greeting(String message) throws Exception {
         Thread.sleep(1000); // simulated delay
-        return new Connection("123123", "ELO", "192.168", "3", new DateTime());
+        return new String("NO_SIEMA");
     }
 	
 	

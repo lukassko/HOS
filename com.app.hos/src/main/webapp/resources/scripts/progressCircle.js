@@ -1,4 +1,7 @@
-(function () {
+var progressBars = (function () {
+	
+	var arrayBars = new Array();
+    
 	var Progress = function( element ) {
 		this.canvas = element;
 	 	this.width = this.canvas.width;
@@ -9,18 +12,18 @@
 	Progress.prototype = {
 		init: function () {
 			var ctx = this.canvas.getContext('2d');
-			ctx.lineWidth = 45;
-			ctx.font = "80px Arial";
+			ctx.lineWidth = 20;
+			ctx.font = "40px Arial";
 			ctx.textAlign="center"; 
 			ctx.strokeStyle = '#0099ff';
 			ctx.shadowOffsetX = 0;
 			ctx.shadowOffsetY = 0;
 			ctx.shadowBlur = 10;
-			ctx.shadowColor = '#0099ff';
+			ctx.shadowColor = '#d19b3d';
 			this.context = ctx;
 			this.x = this.width / 2;
 			this.y = this.height / 2;
-			this.finish = 66; 
+			this.finish = 0; 
 			this.curr = 0; 
 			this.circum =Math.PI * 2;
 			this.start = Math.PI / -2;
@@ -50,9 +53,9 @@
 	    animate: function(draw_to) {
 	    	this.context.clearRect(0, 0, this.width, this.height);
 			this.context.beginPath();
-			this.context.arc(this.x, this.y, 120, this.start, draw_to, false);
+			this.context.arc(this.x, this.y, 60, this.start, draw_to, false);
 			var percent = this.finish + "%";
-			this.context.fillText(percent,150,175);
+			this.context.fillText(percent,75,90);
 			this.context.stroke();
 	    },
 	    incrAnimate: function(draw_to) {
@@ -77,9 +80,15 @@
 	    }
 	};
 
-	var bars = document.querySelectorAll('#bar');
-	var tmpBar = bars[0];
-	var progressBar = new Progress(tmpBar);
-	$('.my-progress').data('progress', progressBar);
+	var bars = document.querySelectorAll('.my-progress > canvas');
+	bars.forEach(function (bar,index) {
+		var progressBar = new Progress(bar);
+		arrayBars.push(progressBar);
+	})
+	//$('.my-progress').data('progress', progressBar);
+	
+	return {
+        getProgresBarArray : arrayBars
+    }
 })();
 
