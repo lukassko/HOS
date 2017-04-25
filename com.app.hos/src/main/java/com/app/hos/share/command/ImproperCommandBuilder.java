@@ -17,7 +17,7 @@ public class ImproperCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public void setResult() {
-		command.setResult(new LinkedList<Result>());
+		command.setResult(null);
 	}
 
 }

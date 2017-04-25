@@ -24,6 +24,8 @@
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
 	<script>
 	
+		var progressMap = new Object();
+		
 		function addDevice(dev) {
 			var device = JSON.parse(dev);
 			var name = device.name;
@@ -37,8 +39,7 @@
 		    	$(this).addClass('activeDevice');
 			});
 		};
-		
-		var progressMap = new Object()
+
 		
 		function setProgress(type,value) {
 			var bars = document.querySelectorAll('.my-progress');
@@ -50,23 +51,12 @@
 				}
 			})
 		};
-
-		function callDevice() {
-			var bars = document.querySelectorAll('.my-progress');
-			if( bars.length > 0 ) {
-				if ( $('.my-progress').data('progress')) {
-	          		var bar =  $('.my-progress').attr('progress');
-	         		bar.draw(tmpValue);
-				};
-			}
-		};
 		
 		(function () {
 			var bars = progressBars.getProgresBarArray;
 			$('.my-progress').each(function( index ) {
 				var data = $(this).attr('data-usage-type');
 				progressMap[data] = bars[index];
-				//$(this).attr('progress', bars[index]);
 			});
 		})();
 		

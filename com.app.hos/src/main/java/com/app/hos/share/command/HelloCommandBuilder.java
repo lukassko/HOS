@@ -20,10 +20,8 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 
 	    @Override
 	    public void setResult() {
-	    	List<Result> result = new LinkedList<Result>();
 	    	NewDevice newDevice = new NewDevice(getName());
-	    	result.add(newDevice);
-	        command.setResult(result);
+	        command.setResult(newDevice);
 	    }
 
 	    private String getName() {

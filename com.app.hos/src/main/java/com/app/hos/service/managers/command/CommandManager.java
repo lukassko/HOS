@@ -29,10 +29,10 @@ public class CommandManager implements CommandExecutor {
 			if (CommandType.BAD_CONVERSION == type) {
 				System.out.println("BAD CONVERSION");
 			} else if (CommandType.HELLO == type) {
-				NewDevice device = (NewDevice)command.getResult().get(0);
+				NewDevice device = (NewDevice)command.getResult();
 				getCommandResult(headers,device,command.getSerialId());
 			} else if (CommandType.MY_STATUS == type) {
-				DeviceStatus status = (DeviceStatus)command.getResult().get(0);
+				DeviceStatus status = (DeviceStatus)command.getResult();
 				getCommandResult(status);
 			} 
 		}
@@ -40,7 +40,7 @@ public class CommandManager implements CommandExecutor {
 	
 	
 	private void getCommandResult(DeviceStatus result) {
-		System.out.println("STATUS: " + result.getType() + " " + result.getUsage());
+		System.out.println("STATUS: " + result.getCpuUsage());
 	}
 	
 	private void getCommandResult(MessageHeaders headers,NewDevice newDevice, String serialId) {

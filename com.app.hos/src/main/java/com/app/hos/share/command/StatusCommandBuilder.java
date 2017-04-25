@@ -7,7 +7,6 @@ import com.app.hos.share.command.builder.AbstractCommandBuilder;
 import com.app.hos.share.command.builder.CommandType;
 import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.result.DeviceStatus;
-import com.app.hos.share.command.result.DeviceStatus.UsageType;
 
 public class StatusCommandBuilder extends AbstractCommandBuilder {
 
@@ -19,17 +18,10 @@ public class StatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public void setResult() {
-		List<Result> results = new LinkedList<Result>();
-		results.add(getCpuUsage());
-		results.add(getRamUsage());
-		command.setResult(results);
+		command.setResult(getResult());
 	}
 	
-	private Result getCpuUsage() {
-		return new DeviceStatus(UsageType.RAM, 12.3);
-	}
-	
-	private Result getRamUsage() {
-		return new DeviceStatus(UsageType.CPU, 67.1);
+	private Result getResult() {
+		return new DeviceStatus(12.6, 12.3);
 	}
 }
