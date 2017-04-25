@@ -38,22 +38,15 @@
 			});
 		};
 		
-		var ramProgress;
-		var cpuPorgress;
+		var progressMap = new Object()
 		
-		function setProgress(type,value2) {
+		function setProgress(type,value) {
 			var bars = document.querySelectorAll('.my-progress');
 			bars.forEach(function (bar,index) {
 				var data = $(bar).attr('data-usage-type');
 				if (type === data) {
-					var tmpBar = $(bar).attr('progress');
-					if (tmpBar) {
-						alert(tmpBar);
-						var value = "45"
-						tmpBar.draw(value);
-					} else {
-						alert('NO');
-					}
+					var progressBar = progressMap[data];
+					progressBar.draw(value);
 				}
 			})
 		};
@@ -71,7 +64,9 @@
 		(function () {
 			var bars = progressBars.getProgresBarArray;
 			$('.my-progress').each(function( index ) {
-				$(this).attr('progress', bars[index]);
+				var data = $(this).attr('data-usage-type');
+				progressMap[data] = bars[index];
+				//$(this).attr('progress', bars[index]);
 			});
 		})();
 		
