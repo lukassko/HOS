@@ -12,17 +12,15 @@ import org.springframework.stereotype.Component;
 
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
+import com.app.hos.share.command.result.DeviceStatus;
 
 
 @Component
 public class DeviceManager {
 	
 	private Map<String,Device> connectedDevices = new HashMap<String,Device>();
+	private Map<Device,DeviceStatus> deviceStatuses = new HashMap<Device,DeviceStatus>();
 	
-	public Device getDeviceStatus() {
-		return null;
-	}
-
 	public void createDevice(MessageHeaders messageHeaders, String name, String serial) {
 		String connectionId = messageHeaders.get(IpHeaders.CONNECTION_ID).toString();
 		if (isDeviceConnected(connectionId)) {
@@ -38,9 +36,33 @@ public class DeviceManager {
 	    }
 		return devicesList;
 	}
+
+	public Map<Device, DeviceStatus> getDeviceStatuses() {
+		return deviceStatuses;
+	}
+	
+	public void addDeviceStatus(String serialId, DeviceStatus deviceStatus) {
+		Device device = getDeviceBySerialId(serialId);
+		if (device == null) {
+			return;
+		}
+		deviceStatuses.put(device, deviceStatus);
+	}
 	
 	public void removeConnectedDevice(String connectionId){
+		Device device = connectedDevices.get(connectionId);
+		deviceStatuses.remove(device);
 		connectedDevices.remove(connectionId);
+	}
+	
+	private Device getDeviceBySerialId(String serialId) {
+		for(Map.Entry<String, Device> entry : connectedDevices.entrySet()) {
+		    Device device = entry.getValue();
+		    if (device.getSerial().equals(serialId)) {
+		    	return device;
+		    }
+		}
+		return null;
 	}
 	
 	private boolean isDeviceConnected(String connectionId) {
@@ -59,4 +81,5 @@ public class DeviceManager {
 		Connection connection = new Connection(connectionId, hostname, ip, remotePort, connectionTime);
 		return new Device(connection, name);
 	}
+
 }

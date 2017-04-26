@@ -33,14 +33,14 @@ public class CommandManager implements CommandExecutor {
 				getCommandResult(headers,device,command.getSerialId());
 			} else if (CommandType.MY_STATUS == type) {
 				DeviceStatus status = (DeviceStatus)command.getResult();
-				getCommandResult(status);
+				getCommandResult(command.getSerialId(), status);
 			} 
 		}
 	}
-	
-	
-	private void getCommandResult(DeviceStatus result) {
-		System.out.println("STATUS: " + result.getCpuUsage());
+
+	private void getCommandResult(String serialId, DeviceStatus deviceStatus) {
+		System.out.println("STATUS: " + deviceStatus.getCpuUsage() + " Time: " + deviceStatus.getTime());
+		deviceManager.addDeviceStatus(serialId, deviceStatus);
 	}
 	
 	private void getCommandResult(MessageHeaders headers,NewDevice newDevice, String serialId) {
