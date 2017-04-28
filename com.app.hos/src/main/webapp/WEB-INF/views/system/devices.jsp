@@ -75,13 +75,54 @@
 
 <div class="device-panel">
 	<div style="height: 30%; width:100%; margin: 5px;">
-		<div class="device-detail"></div>
+		<div class="device-detail" style="width: 35%;height:200px">
+		  <table class="device-table">
+		      <tr>
+		        <td>
+		          KEY1
+		        </td>
+		        <td>
+		          VALUE1
+		        </td>
+		      </tr>
+		       <tr>
+		        <td>
+		          KEY2
+		        </td>
+		        <td>
+		          VALUE2
+		        </td>
+		      </tr>
+		       <tr>
+		        <td>
+		          KEY3
+		        </td>
+		        <td>
+		          VALUE3
+		        </td>
+		      </tr>
+		       <tr>
+		        <td>
+		          KEY4
+		        </td>
+		        <td>
+		          VALUE4
+		        </td>
+		      </tr>
+      	  </table>
+		</div>
 		<div class="device-detail" style="width: 200px;height:200px ">
+			<div class="usage-info">
+	        	CPU
+	        </div>
 			<div class="my-progress" data-usage-type="cpu">
 			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
 		<div id="parent" class="device-detail" style="width: 200px;height:200px ">
+			<div class="usage-info">
+	        	RAM
+	        </div>
 			<div class="my-progress" data-usage-type="ram">
 			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
 			</div>

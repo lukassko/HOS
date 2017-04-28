@@ -1,12 +1,20 @@
-
 .my-progress {
   position: relative;
+  top: 40px;
+  width: 150px;
+  margin: auto;
+}
+
+.my-progress:before {
+  content: "";
+  display: block;
   width: 150px;
   height: 150px;
-  display: block;
   border: 30px solid #444;
   border-radius: 50%;
 }
 
 .bar {
+  position: absolute;
+  top: 0px;
 }
