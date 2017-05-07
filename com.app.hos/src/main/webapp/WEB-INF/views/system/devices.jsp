@@ -19,99 +19,125 @@
 
 	<!-- attach other css classes and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
-	<link rel="stylesheet" href="<c:url value="/resources/css/controls.css" />">
+	<link rel="stylesheet" href="<c:url value="/resources/css/progress.css" />">
 	<script src="<c:url value="/resources/scripts/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
 	<script>
 	
-		var progressMap = new Object();
-		
-		function addDevice(dev) {
-			var device = JSON.parse(dev);
-			var name = device.name;
-			var devId = device.connectionId
-			var deviceContainer = '<div id="device' + devId +'" class="device"><i class="fa fa-desktop fa-3x"></i> '+ name +'</div>'
-			$('.device-container').append(deviceContainer);
-			var devId = '#device' + devId
-			$(devId).css('cursor','pointer');
-			$('.device-container').on('click', devId, function(){
-				$('.device-container div.activeDevice').removeClass('activeDevice');
-		    	$(this).addClass('activeDevice');
-			});
-		};
-
-		
-		function setProgress(type,value) {
-			var bars = document.querySelectorAll('.my-progress');
-			bars.forEach(function (bar,index) {
-				var data = $(bar).attr('data-usage-type');
-				if (type === data) {
-					var progressBar = progressMap[data];
-					progressBar.draw(value);
-				}
-			})
-		};
-		
-		(function () {
+		var deviceManager = (function() {
+			
+			var progressMap = new Object();
+			var deviceMap = new Map();
+			var selectedDeivce = null;
+			
 			var bars = progressBars.getProgresBarArray;
+			
 			$('.my-progress').each(function( index ) {
 				var data = $(this).attr('data-usage-type');
 				progressMap[data] = bars[index];
 			});
+			
+			function addDevices(devices) {
+				var devices = JSON.parse(devices);
+				for (var device of devices) { 
+					addDevice(device);
+				}
+			};
+			
+			function addDevice(device) {
+				var name = device.name;
+				var id= device.id;
+				var connectionId= device.connectionId;
+				createDeviceButton(id,name,connectionId);
+				var devId = '#device' + id;
+				$(devId).css('cursor','pointer');
+				$('.device-container').on('click', devId, function(){
+					$('.device-container div.activeDevice').removeClass('activeDevice');
+			    	$(this).addClass('activeDevice'); 
+			    	selectedDeivce = id;
+				});
+			};
+	
+			function createDeviceButton (devId,devName,devConnectionId) {
+				var deviceButton = '<div id="device' + devId +
+					'" class="device"><i class="fa fa-desktop fa-2x device-icon-text"></i> '+
+					'<div class="device-icon-text">' + devName + '</div></div>';
+				
+				$('.device-container').append(deviceButton);
+			};
+			
+			function setDeviceStatus(id,status) {
+				myMap.set(id,status);
+			};
+			
+			function setProgress(type,value) {
+				var bars = document.querySelectorAll('.my-progress');
+				bars.forEach(function (bar,index) {
+					var data = $(bar).attr('data-usage-type');
+					if (type === data) {
+						var progressBar = progressMap[data];
+						progressBar.draw(value);
+					}
+				});
+			};
+			
+			return {
+				setProgress: setProgress,
+				addDevices: addDevices,
+				setDeviceStatus: setDeviceStatus
+			}
 		})();
-		
+
 	</script>
 </head>
 <body>
 
-<div class="device-container">
-	<c:forEach var="device" items="${devices}">
-		<script>
-			var device = '${device}';
-			addDevice(device);
-        </script>
-	</c:forEach>
+<div class="device-container device-prop">
+	<script>
+		var devices ='${devices}';
+		deviceManager.addDevices(devices);
+    </script>
 </div>
 
 <div class="device-panel">
 	<div style="height: 30%; width:100%; margin: 5px;">
-		<div class="device-detail" style="width: 35%;height:200px">
+		<div class="device-detail device-prop" style="width: 35%;height:200px">
 		  <table class="device-table">
 		      <tr>
 		        <td>
-		          KEY1
+		          Device name
 		        </td>
-		        <td>
-		          VALUE1
-		        </td>
-		      </tr>
-		       <tr>
-		        <td>
-		          KEY2
-		        </td>
-		        <td>
-		          VALUE2
+		        <td id="device-name">
+		          Gateway_1
 		        </td>
 		      </tr>
 		       <tr>
 		        <td>
-		          KEY3
+		          Serial number
 		        </td>
-		        <td>
-		          VALUE3
+		        <td id="device-serial">
+		          123bfhg5662
 		        </td>
 		      </tr>
 		       <tr>
 		        <td>
-		          KEY4
+		          IP address
 		        </td>
+		        <td id="device-ip">
+		          192.168.0.167:1389
+		        </td>
+		      </tr>
+		       <tr>
 		        <td>
-		          VALUE4
+		          Last activity
+		        </td>
+		        <td id="device-time"> 
+		          2017-05-05 12:06:33
 		        </td>
 		      </tr>
       	  </table>
 		</div>
-		<div class="device-detail" style="width: 200px;height:200px ">
+		<div class="device-detail device-prop" style="width: 200px;height:200px ">
 			<div class="usage-info">
 	        	CPU
 	        </div>
@@ -119,7 +145,7 @@
 			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
-		<div id="parent" class="device-detail" style="width: 200px;height:200px ">
+		<div id="parent" class="device-detail device-prop" style="width: 200px;height:200px ">
 			<div class="usage-info">
 	        	RAM
 	        </div>
@@ -129,8 +155,8 @@
 		</div>
 	</div>
 	<div style="height: 75%; width:100%; margin: 20px;">
-		 <button onclick="setProgress('ram',67)">RAM</button> 
-		  <button onclick="setProgress('cpu',56)">CPU</button> 
+		 <button onclick="deviceManager.setProgress('ram',67)">RAM</button> 
+		 <button onclick="deviceManager.setProgress('cpu',56)">CPU</button> 
 	</div>
 </div>
 

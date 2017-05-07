@@ -6,7 +6,25 @@ import java.io.ObjectInputStream;
 
 import org.hibernate.type.SerializationException;
 
-public class HosSerialization {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Utils {
+
+	
+    public static String getJsonObject(Object object) {
+    	if (object == null) {
+            throw new IllegalArgumentException("Object to serialization cannot be null");
+        }
+    	ObjectMapper mapper = new ObjectMapper(); 
+		String devicesAsJson;
+		try {
+			devicesAsJson = mapper.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			devicesAsJson = "";
+		}
+        return devicesAsJson;
+    }
 
     public static Object deserialize(InputStream inputStream) {
         if (inputStream == null) {
@@ -32,5 +50,4 @@ public class HosSerialization {
             }
         }
     }
-
 }

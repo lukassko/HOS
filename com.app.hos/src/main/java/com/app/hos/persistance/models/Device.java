@@ -11,9 +11,10 @@ public class Device extends BaseEntity {
 	private String name;
 	private String serial;
 
-	public Device(Connection connection, String name) {
+	public Device(Connection connection, String name, String serial) {
 		this.connection = connection;
 		this.name = name;
+		this.serial = serial;
 	}
 
 	public Connection getConnection() {

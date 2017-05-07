@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
-import com.app.hos.service.managers.device.DeviceInformation;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.service.webservices.RestClient;
+import com.app.hos.utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class MainController {
 	
 	//private RestClient rest;
-	
+	@Autowired
 	private DeviceManager deviceManager;
 	
 	@Autowired
@@ -66,17 +63,11 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
+		System.out.println("GET DEV");
 		Set<Device> devices = this.deviceManager.getConnectedDevices();
-		List<String> devicesAsJson = new LinkedList<String>();
-		ObjectMapper mapper = new ObjectMapper(); 
-		for (Device device : devices) {
-			try {
-				devicesAsJson.add(mapper.writeValueAsString(device));
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-		}
-		model.addAttribute("devices", devicesAsJson);
+		String jsonDevices = Utils.getJsonObject(devices);
+		System.out.println(jsonDevices);
+		model.addAttribute("devices", jsonDevices);
 		return "system/devices";
 	}
 	

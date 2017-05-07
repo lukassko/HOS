@@ -8,14 +8,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.share.command.result.DeviceStatus;
 
-public class DeviceStatusSenderThread implements Runnable {
+public class DeviceStatusSender implements Runnable {
 
 	@Autowired
     private SimpMessagingTemplate template;
 	
 	private DeviceManager deviceManager;
 	
-	public DeviceStatusSenderThread(DeviceManager deviceManager) {
+	public DeviceStatusSender(DeviceManager deviceManager) {
 		this.deviceManager = deviceManager;
 	}
 	

@@ -127,9 +127,14 @@
     display: block;
   }
 }
+
 body {
   margin: 0px;
   padding: 0px;
+  font-family: font-family: Verdana,Geneva,sans-serif; 
+  font-size: 20px;
+  color: #efffff;
+  background-color: #23282e;
 }
 
 .main-container {
@@ -151,12 +156,13 @@ body {
 /* CONNECTED DEVICES */
 
 .device-container {
-	width: 200px; 
+	width:11%; 
 	overflow: auto; 
 	position: fixed; 
 	height: 100%;
 	padding: 10px;
-	background-color: #e6e6e6;
+	margin: 10px;
+	background-color: #2e353d; 
 	border-right: 2px solid #2e353d;
 }
 
@@ -165,63 +171,78 @@ body {
 	height: 60px;
     margin: 5px auto;
     padding: 5px;
-    border: 1px solid #cccccc;
-    background-color: #f7f7f7;
+    background-color: #020203;
+    border-radius: 10px;
+    display: table;
+    border: 2px solid #020203;
 }
 
 div.device:hover {
-    background-color: #cccccc;
-    -webkit-transition: background-color 500ms linear;
-    -ms-transition: background-color 500ms linear;
-    transition: background-color 500ms linear;
+    background-color: #23282e;
+    border: 2px solid #d19b3d;
+    -webkit-transition: background-color 500ms linear,border 500ms linear;
+    -ms-transition: background-color 500ms linear,border 500ms linear;
+    transition: background-color 500ms linear,border 500ms linear;
 }
 
+.device-icon-text {
+	display: table-cell;
+    vertical-align: middle;
+}
 .device-container .activeDevice {
-	background-color: #cccccc;
+	background-color: #23282e;
+	border: 2px solid #d19b3d;
 }
 
 .device-panel { 
-	margin-right: auto; 
-	margin-left: 200px; 
-	width:100%; 
+	margin-left: 12%; 
+	width:89%; 
 	position: fixed; 
 	height: 100%; 
-	background-color: #f2f2f2;
+	background-color: #23282e;
+}
+
+.device-prop {
+  background-color: #2e353d; 
+  border-radius: 15px;
 }
 
 .device-detail {
+	position: relative;
 	display: inline-block; 
 	margin: 5px;  
 	height: 100%;
 	width: 300px;
-	background-color: #cccccc; 
-	border-radius: 15px;
 }
-
+/*
+table.device-table tr:not(:last-child) {
+  border-bottom:1px solid #cdcdcd;
+}
+*/
 table.device-table td {
+  height:25%;
 }
 
-table.device-table td:nth-child(even) {
+table.device-table td:first-child {
+  width: 30%;
+  padding: 10px;
+}
+
+table.device-table td:last-child {
+  font-size: 18px;
   text-align:center; 
-}
-
-table.device-table td:nth-child(odd) {
-  width: 100px; 
+  width: 70%;
 }
 
 table.device-table {
   width: 100%;
+  height: 100%;
 }
 
 .usage-info {
   position: absolute;
   top: 0px;
-  background-color: #444;
   width: 100%;
   height: 30px;
-  color: #e6e6e6;
-  font: 2rem "Open Sans", sans-serif;
   text-align: center;
-  border-radius: 15px 15px 0px 0px; 
 }
-
