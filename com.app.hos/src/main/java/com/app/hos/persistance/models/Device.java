@@ -1,14 +1,21 @@
 package com.app.hos.persistance.models;
 
+import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.NotEmpty;
 
 
+@Entity
 public class Device extends BaseEntity {
 
 	@Transient 
 	private Connection connection;
+	
+	@NotEmpty
 	private String name;
+	
+	@NotEmpty
 	private String serial;
 
 	public Device(Connection connection, String name, String serial) {
@@ -78,6 +85,11 @@ public class Device extends BaseEntity {
 		return true;
 	}
 	
-	
+	//@JsonValue
+	@Override
+	public String toString() {
+		return Integer.toString(getId());
+	}
+
 	
 }

@@ -8,9 +8,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	
 	<!-- WebSockets -->
-	<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
+	<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
+	<!--<script src="resources/sockjs-0.3.4.js"></script>
+    <script src="resources/stomp.js"></script>-->
+    
 	<!-- bootstrap / jQuery -->
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -22,72 +24,13 @@
 	<link rel="stylesheet" href="<c:url value="/resources/css/progress.css" />">
 	<script src="<c:url value="/resources/scripts/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
+	<script src="<c:url value="/resources/scripts/devicesManager.js" />"></script>
 	<script>
-	
-		var deviceManager = (function() {
-			
-			var progressMap = new Object();
-			var deviceMap = new Map();
-			var selectedDeivce = null;
-			
-			var bars = progressBars.getProgresBarArray;
-			
-			$('.my-progress').each(function( index ) {
-				var data = $(this).attr('data-usage-type');
-				progressMap[data] = bars[index];
-			});
-			
-			function addDevices(devices) {
-				var devices = JSON.parse(devices);
-				for (var device of devices) { 
-					addDevice(device);
-				}
-			};
-			
-			function addDevice(device) {
-				var name = device.name;
-				var id= device.id;
-				var connectionId= device.connectionId;
-				createDeviceButton(id,name,connectionId);
-				var devId = '#device' + id;
-				$(devId).css('cursor','pointer');
-				$('.device-container').on('click', devId, function(){
-					$('.device-container div.activeDevice').removeClass('activeDevice');
-			    	$(this).addClass('activeDevice'); 
-			    	selectedDeivce = id;
-				});
-			};
-	
-			function createDeviceButton (devId,devName,devConnectionId) {
-				var deviceButton = '<div id="device' + devId +
-					'" class="device"><i class="fa fa-desktop fa-2x device-icon-text"></i> '+
-					'<div class="device-icon-text">' + devName + '</div></div>';
-				
-				$('.device-container').append(deviceButton);
-			};
-			
-			function setDeviceStatus(id,status) {
-				myMap.set(id,status);
-			};
-			
-			function setProgress(type,value) {
-				var bars = document.querySelectorAll('.my-progress');
-				bars.forEach(function (bar,index) {
-					var data = $(bar).attr('data-usage-type');
-					if (type === data) {
-						var progressBar = progressMap[data];
-						progressBar.draw(value);
-					}
-				});
-			};
-			
-			return {
-				setProgress: setProgress,
-				addDevices: addDevices,
-				setDeviceStatus: setDeviceStatus
-			}
-		})();
 
+		setTimeout(function(){ 
+			hosWebsocket.connect();
+		}, 500);
+		
 	</script>
 </head>
 <body>

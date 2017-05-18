@@ -1,18 +1,27 @@
 package com.app.hos.persistance.models;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
-public class Connection {
+//@Entity
+//@Table(name = "connections")
+public class Connection extends BaseEntity {
 
+	@NotEmpty
 	private String connectionId;
 	
 	private String hostname;
 	
+	@NotEmpty
 	private String ip;
 	
+	@NotEmpty
 	private String remotePort;
 	
+	@NotEmpty
 	private DateTime connectionTime;
 
 	

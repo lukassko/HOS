@@ -1,5 +1,6 @@
 package com.app.hos.service.managers.device;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,16 +24,13 @@ public class DeviceManager {
 	
 	public void createDevice(MessageHeaders messageHeaders, String name, String serial) {
 		String connectionId = messageHeaders.get(IpHeaders.CONNECTION_ID).toString();
-		System.out.println(connectionId);
 		if (!isDeviceConnected(connectionId)) {
-			System.out.println("ADD EV wit serial " + serial);
 			Device device = createNewDevice(messageHeaders,name,serial);
 			connectedDevices.put(connectionId, device);
 		}
 	}
 
 	public Set<Device> getConnectedDevices() {
-		System.out.println("GET DEVIE CONNECTED");
 		Set<Device> devicesList = new HashSet<Device>();
 		for (Device value : connectedDevices.values()) {
 			devicesList.add(value);
@@ -57,12 +55,10 @@ public class DeviceManager {
 		deviceStatuses.remove(device);
 		connectedDevices.remove(connectionId);
 	}
-	
+
 	private Device getDeviceBySerialId(String serialId) {
 		for(Map.Entry<String, Device> entry : connectedDevices.entrySet()) {
 			Device device = entry.getValue();
-			System.out.println("SERIAL "+device.getSerial());
-			System.out.println("SERIAL received "+serialId);
 		    if (device.getSerial().equals(serialId)) {
 		    	return device;
 		    }
@@ -71,16 +67,9 @@ public class DeviceManager {
 	}
 	
 	private boolean isDeviceConnected(String connectionId) {
-		System.out.println(connectedDevices.size());
-		for(Map.Entry<String, Device> entry : connectedDevices.entrySet()) {
-		    String key = entry.getKey();
-		    System.out.println(key);
-		}
 		if (connectedDevices.containsKey(connectionId)) {
-			System.out.println("OK");
 			return true;
 		}
-		System.out.println("NOK");
 		return false;
 	}
 	

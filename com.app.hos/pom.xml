@@ -9,23 +9,36 @@
   <url>http://maven.apache.org</url>
   
   <properties>
-  	<spring.version>4.3.0.RELEASE</spring.version>
+  	<spring.version>4.3.8.RELEASE</spring.version>
   	<spring.integration.version>4.3.5.RELEASE</spring.integration.version>
   	<spring.ws.version>2.4.0.RELEASE</spring.ws.version>
   	<jackson.version>2.8.6</jackson.version>
   	<gson.version>2.8.0</gson.version>
+  	<test.junit.version>4.12</test.junit.version>
+  	<test.spring.version>4.3.8.RELEASE</test.spring.version>
+  	<hibernate.version>5.1.0.Final</hibernate.version>
   </properties>
   
   <dependencies>
   
-  	<!-- Java/JEE dependencies -->
+  	<!-- Testing dependencies -->
     <dependency>
       	<groupId>junit</groupId>
       	<artifactId>junit</artifactId>
-      	<version>3.8.1</version>
-      	<scope>test</scope>
+      	<version>${test.junit.version}</version>
     </dependency>
+    <dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-test</artifactId>
+	    <version>${test.spring.version}</version>
+	</dependency>
     
+    <!-- Testing database dependencies -->
+    <dependency>
+	    <groupId>org.hsqldb</groupId>
+	    <artifactId>hsqldb</artifactId>
+	    <version>2.3.4</version>
+	</dependency>
 	
 	<!-- Spring MVC dependencies-->
 	<dependency>
@@ -107,14 +120,32 @@
 	<dependency>
 	   <groupId>org.hibernate</groupId>
 	   <artifactId>hibernate-core</artifactId>
-	   <version>4.3.6.Final</version>
+	   <version>${hibernate.version}</version>
 	</dependency>
 	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+<!-- 	
+	<dependency>
+	    <groupId>org.hibernate.javax.persistence</groupId>
+	    <artifactId>hibernate-jpa-2.0-api</artifactId>
+	    <version>1.0.1.Final</version>
+	</dependency> -->
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+		<version>${hibernate.version}</version>
+	</dependency>
+	
+<!-- 	<dependency>
 	   <groupId>org.javassist</groupId>
 	   <artifactId>javassist</artifactId>
 	   <version>3.18.2-GA</version>
-	</dependency>
+	</dependency> -->
 	
+<!-- MySQL support -->
 	<dependency>
 	   <groupId>mysql</groupId>
 	   <artifactId>mysql-connector-java</artifactId>
@@ -131,15 +162,16 @@
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-orm</artifactId>
-	    <version>4.3.6.RELEASE</version>
+	    <version>${spring.version}</version>
 	</dependency>
 	
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-tx</artifactId>
-	    <version>4.3.6.RELEASE</version>
+	    <version>${spring.version}</version>
 	</dependency>
 
+    
 	<!-- WebSockets -->
 	
 	<dependency>
@@ -159,30 +191,24 @@
 	   <artifactId>tomcat-embed-websocket</artifactId>
 	   <version>7.0.52</version>
 	</dependency>
-	<!--  
+ 
 	<dependency>
 	  <groupId>org.webjars</groupId>
 	  <artifactId>sockjs-client</artifactId>
 	  <version>1.0.2</version>
 	</dependency>
-	
+		
 	<dependency>
 	  <groupId>org.webjars</groupId>
 	  <artifactId>stomp-websocket</artifactId>
 	  <version>2.3.3</version>
 	</dependency>
--->
+<!-- -->
 	<!--TOOLS -->
 	<dependency>
 	    <groupId>joda-time</groupId>
 	    <artifactId>joda-time</artifactId>
 	    <version>2.9.7</version>
-	</dependency>
-	
-	<dependency>
-	    <groupId>commons-io</groupId>
-	    <artifactId>commons-io</artifactId>
-	    <version>2.5</version>
 	</dependency>
 
   </dependencies>

@@ -1,4 +1,4 @@
-package com.app.hos.config;
+package com.app.hos.tests.config;
 
 import java.util.Properties;
 
@@ -14,13 +14,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@PropertySource({ "classpath:persistance/mysql.properties" })
+@PropertySource({ "classpath:persistance/hsqldb.properties" })
 @Configuration
 @EnableTransactionManagement
 public class PersistanceConfig {
@@ -58,7 +57,7 @@ public class PersistanceConfig {
 	   dataSource.setPassword(env.getProperty("jdbc.pass"));
 	   return dataSource;
 	}
-	 
+
 	@Bean
     JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

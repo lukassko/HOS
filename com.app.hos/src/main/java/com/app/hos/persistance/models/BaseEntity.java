@@ -1,12 +1,16 @@
 package com.app.hos.persistance.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-//@Entity
+@MappedSuperclass
 public class BaseEntity {
 
 	@Id
-	private int id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 
 	public int getId() {
 		return id;
@@ -16,4 +20,7 @@ public class BaseEntity {
 		this.id = id;
 	}
 	
+	public boolean isNew() {
+		return (this.id==null);
+	}
 }

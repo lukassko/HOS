@@ -1,8 +1,5 @@
 package com.app.hos.controller;
 
-
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.utils.Utils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class MainController {
 	
 	//private RestClient rest;
-	@Autowired
 	private DeviceManager deviceManager;
 	
 	@Autowired
@@ -63,10 +57,8 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
-		System.out.println("GET DEV");
 		Set<Device> devices = this.deviceManager.getConnectedDevices();
 		String jsonDevices = Utils.getJsonObject(devices);
-		System.out.println(jsonDevices);
 		model.addAttribute("devices", jsonDevices);
 		return "system/devices";
 	}

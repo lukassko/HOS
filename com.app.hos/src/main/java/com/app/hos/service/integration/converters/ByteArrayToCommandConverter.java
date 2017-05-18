@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
