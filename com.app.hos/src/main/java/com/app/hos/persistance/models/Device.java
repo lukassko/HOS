@@ -1,25 +1,28 @@
 package com.app.hos.persistance.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-
+@Table(name = "devices")
 @Entity
 public class Device extends BaseEntity {
 
-	@Transient 
-	private Connection connection;
-	
 	@NotEmpty
 	private String name;
 	
 	@NotEmpty
 	private String serial;
-
-	public Device(Connection connection, String name, String serial) {
-		this.connection = connection;
+	
+	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL)
+	private Connection connection;
+	
+	public Device(){}
+	
+	public Device(String name, String serial) {
 		this.name = name;
 		this.serial = serial;
 	}

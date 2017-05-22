@@ -7,12 +7,13 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.share.command.result.DeviceStatus;
 
-@Component
+@Service
 public class DeviceWebSocket {
 
 	@Autowired

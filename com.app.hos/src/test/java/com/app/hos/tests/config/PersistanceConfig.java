@@ -10,7 +10,9 @@ import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -19,11 +21,23 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@PropertySource({ "classpath:persistance/hsqldb.properties" })
 @Configuration
+@ComponentScan("com.app.hos.persistance.*")
 @EnableTransactionManagement
 public class PersistanceConfig {
 
+	@Configuration
+	@Profile("test-hsqldb")
+	@PropertySource({ "classpath:persistance/properties/hsqldb.properties" })
+    static class Hsqldb
+    { }
+	
+	@Configuration
+	@Profile("test-sqlite")
+	@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
+    static class SQLite
+    { }
+	
 	@Autowired
 	private Environment env;
 	

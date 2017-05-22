@@ -3,12 +3,12 @@ package com.app.hos.service.managers.connection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.integration.ip.tcp.connection.AbstractConnectionFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.app.hos.service.managers.device.DeviceManager;
 
 
-@Component
+@Service
 public class ConnectionManager implements CloseConnection {
 
 	private ApplicationContext appContext;

@@ -11,21 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utils {
 
-	
-    public static String getJsonObject(Object object) {
-    	if (object == null) {
-            throw new IllegalArgumentException("Object to serialization cannot be null");
-        }
-    	ObjectMapper mapper = new ObjectMapper(); 
-		String devicesAsJson;
-		try {
-			devicesAsJson = mapper.writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			devicesAsJson = "";
-		}
-        return devicesAsJson;
-    }
-
     public static Object deserialize(InputStream inputStream) {
         if (inputStream == null) {
             throw new IllegalArgumentException("The InputStream must not be null");

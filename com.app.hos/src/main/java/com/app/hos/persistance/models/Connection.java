@@ -1,16 +1,20 @@
 package com.app.hos.persistance.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
-//@Entity
-//@Table(name = "connections")
+@Table(name = "connections")
+@Entity
 public class Connection extends BaseEntity {
 
 	@NotEmpty
+	@Column(name="connection_id")
 	private String connectionId;
 	
 	private String hostname;
@@ -19,13 +23,23 @@ public class Connection extends BaseEntity {
 	private String ip;
 	
 	@NotEmpty
-	private String remotePort;
+	@Column(name="remote_port")
+	private int remotePort;
 	
 	@NotEmpty
+	@Column(name="connection_time")
 	private DateTime connectionTime;
 
+	@Column(name="end_connection_time")
+	private DateTime endConnectionTime;
 	
-	public Connection(String connectionId, String hostname, String ip, String remotePort, DateTime connectionTime) {
+	@OneToOne
+	@JoinColumn(name="device_id")
+	private Device device;
+	
+	public Connection() {}
+	
+	public Connection(String connectionId, String hostname, String ip, int remotePort, DateTime connectionTime) {
 		this.connectionId = connectionId;
 		this.hostname = hostname;
 		this.ip = ip;
@@ -57,11 +71,11 @@ public class Connection extends BaseEntity {
 		this.ip = ip;
 	}
 
-	public String getRemotePort() {
+	public int getRemotePort() {
 		return remotePort;
 	}
 
-	public void setRemotePort(String remotePort) {
+	public void setRemotePort(int remotePort) {
 		this.remotePort = remotePort;
 	}
 
@@ -72,6 +86,23 @@ public class Connection extends BaseEntity {
 	public void setConnectionTime(DateTime connectionTime) {
 		this.connectionTime = connectionTime;
 	}
+	
+
+	public DateTime getEndConnectionTime() {
+		return endConnectionTime;
+	}
+
+	public void setEndConnectionTime(DateTime endConnectionTime) {
+		this.endConnectionTime = endConnectionTime;
+	}
+
+	public Device getDevice() {
+		return device;
+	}
+
+	public void setDevice(Device device) {
+		this.device = device;
+	}
 
 	@Override
 	public int hashCode() {
@@ -81,7 +112,7 @@ public class Connection extends BaseEntity {
 		result = prime * result + ((connectionTime == null) ? 0 : connectionTime.hashCode());
 		result = prime * result + ((hostname == null) ? 0 : hostname.hashCode());
 		result = prime * result + ((ip == null) ? 0 : ip.hashCode());
-		result = prime * result + ((remotePort == null) ? 0 : remotePort.hashCode());
+		result = prime * result + remotePort;
 		return result;
 	}
 
@@ -114,10 +145,10 @@ public class Connection extends BaseEntity {
 				return false;
 		} else if (!ip.equals(other.ip))
 			return false;
-		if (remotePort == null) {
-			if (other.remotePort != null)
+		if (remotePort == 0) {
+			if (other.remotePort != 0)
 				return false;
-		} else if (!remotePort.equals(other.remotePort))
+		} else if (remotePort != other.remotePort)
 			return false;
 		return true;
 	}

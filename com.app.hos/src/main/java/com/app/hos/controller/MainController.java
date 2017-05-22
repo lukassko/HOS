@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.persistance.models.Device;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.json.JsonConverter;
 
 @Controller
 public class MainController {
@@ -58,7 +58,7 @@ public class MainController {
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
 		Set<Device> devices = this.deviceManager.getConnectedDevices();
-		String jsonDevices = Utils.getJsonObject(devices);
+		String jsonDevices = JsonConverter.getJsonObject(devices);
 		model.addAttribute("devices", jsonDevices);
 		return "system/devices";
 	}

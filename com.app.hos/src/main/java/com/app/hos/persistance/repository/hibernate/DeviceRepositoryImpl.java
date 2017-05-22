@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,15 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		} else {
 			manager.merge(device);
 		}
+	}
+	
+	public Device findDeviceById(int id) {
+		return manager.find(Device.class, id);
+	}
+	
+	public Device findDeviceBySerialNumber(String serial) {
+		TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
+		return query.setParameter("serial", serial).getSingleResult();
 	}
 	
 	@SuppressWarnings("unchecked")

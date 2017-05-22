@@ -3,7 +3,6 @@ package com.app.hos.share.command.builder;
 import com.app.hos.share.command.result.Result;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 // GENERIC TYPE -> public class Command<T extends Serializable> implements Serializable {...}
