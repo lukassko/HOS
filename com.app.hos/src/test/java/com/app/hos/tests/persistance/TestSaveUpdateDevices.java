@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import org.joda.time.DateTime;
+import com.app.hos.share.utils.DateTime;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -106,16 +106,21 @@ public class TestSaveUpdateDevices {
     	deviceRepository.findDeviceBySerialNumber("98547kffff");
     }
     
-    //@Test
-    //@Rollback(false)
+    @Test
+    @Rollback(false)
     public void stage6_updateDeviceWithNewConnectionTest() {
     	Connection connection4 = new Connection("192.168.0.24:23454-09:oa9:sd4", 
     			"localhost4", "192.168.0.24", 23454, new DateTime());
     
     	Device device = deviceRepository.findDeviceById(1);
-    	device.getConnection();
-    	device.setConnection(connection4);
+    	Connection connection = device.getConnection();
+    	connection.setConnectionId(connection4.getConnectionId());
+    	connection.setHostname(connection4.getHostname());
+    	connection.setIp(connection4.getIp());
+    	connection.setRemotePort(connection4.getRemotePort());
+    	connection.setConnectionTime(connection4.getConnectionTime());
     	deviceRepository.save(device);
-    	Assert.assertNotNull(connection4);
+    	
+    	Assert.assertEquals(connection4.getConnectionId(),connection.getConnectionId());
     }
 }

@@ -2,6 +2,7 @@ package com.app.hos.persistance.repository;
 
 import java.util.Collection;
 
+import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 
 public interface DeviceRepository {
@@ -13,4 +14,5 @@ public interface DeviceRepository {
 	public Device findDeviceBySerialNumber(String serial);
 	
 	public Device findDeviceById(int id);
+
 }

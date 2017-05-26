@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -84,6 +85,8 @@ public class PersistanceConfig {
 	         {
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("hibernate.hbm2ddl.auto"));
+	            setProperty("hibernate.hbm2ddl.import_files",
+		  	              env.getProperty("hibernate.hbm2ddl.import_files"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
 	            setProperty("hibernate.globally_quoted_identifiers",

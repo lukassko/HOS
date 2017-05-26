@@ -2,7 +2,7 @@ package com.app.hos.share.command.result;
 
 import java.io.Serializable;
 
-import org.joda.time.DateTime;
+import com.app.hos.share.utils.DateTime;
 
 public class DeviceStatus implements Result,Serializable {
 

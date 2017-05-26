@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.command.CommandBuilder;
+import com.app.hos.share.command.CommandFactory;
 import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandType;
@@ -24,18 +25,16 @@ public class CommandManager implements CommandExecutor {
 	private DeviceManager deviceManager;
 
 	private Server server;
-	
-	private CommandBuilder commandBuilder = new CommandBuilder();
-	
+		
 	@Autowired
 	public CommandManager(DeviceManager DeviceManager,Server server) {
 		this.deviceManager = DeviceManager;
 		this.server = server;
 	}
 
-	public void sendCommand(String connectionId) {
+	public void sendCommand(String connectionId, CommandType type) {
 		if(connectionId != null) {
-			Message<Command> message = createMessage(connectionId);
+			Message<Command> message = createMessage(connectionId,type);
 			server.sendMessage(message);
 		}	
 	}
@@ -68,15 +67,12 @@ public class CommandManager implements CommandExecutor {
 		
 		// send command as a response
 		String connectionId = (String)headers.get(IpHeaders.CONNECTION_ID);
-		sendCommand(connectionId);
+		sendCommand(connectionId,CommandType.HELLO);
 	}	
 
-	//use factory pattern
-	private Message<Command> createMessage(String connectionId) {
-		commandBuilder.setCommandBuilder(new HelloCommandBuilder());
-        commandBuilder.createCommand();
-        Command cmd = commandBuilder.getCommand();
-		Message<Command> message = MessageBuilder.withPayload(cmd)
+	private Message<Command> createMessage(String connectionId, CommandType type) {
+		Command command = CommandFactory.getCommand(type);
+		Message<Command> message = MessageBuilder.withPayload(command)
 		        .setHeader(IpHeaders.CONNECTION_ID, connectionId)
 		        .build();		
 		return message;

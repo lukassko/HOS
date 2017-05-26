@@ -7,7 +7,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.DateTime;
+import com.app.hos.share.utils.DateTime;
 
 @Table(name = "connections")
 @Entity
