@@ -2,12 +2,16 @@ package com.app.hos.share.utils;
 
 import java.io.Serializable;
 
-import org.joda.time.field.FieldUtils;
+import com.app.hos.utils.json.JsonSerializer;
+import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@JsonSerializer(serializer = DateTimeJsonSerializer.class)
 public class DateTime implements Serializable {
 
 	private static final long serialVersionUID = 3L;
 
+	@JsonIgnore
 	private transient org.joda.time.DateTime dateTime;
 	private final Integer hour;
 	private final Integer minutes;

@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import com.app.hos.share.utils.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "connections")
 @Entity
@@ -33,6 +34,7 @@ public class Connection extends BaseEntity {
 	@Column(name="end_connection_time")
 	private DateTime endConnectionTime;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="device_id")
 	private Device device;

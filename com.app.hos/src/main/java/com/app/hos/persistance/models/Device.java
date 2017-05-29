@@ -7,6 +7,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity {

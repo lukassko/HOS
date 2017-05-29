@@ -20,7 +20,7 @@ public class TestDateTime {
 	@Test
 	public void jsonSerializationTest() {
 		DateTime dateTime = new DateTime();
-		String json = JsonConverter.getJson(dateTime, DateTime.class, new DateTimeJsonSerializer(DateTime.class));
+		String json = JsonConverter.getJson(dateTime, new DateTimeJsonSerializer(DateTime.class));
 		int year = dateTime.getYear();
 		int month = dateTime.getMonth();
 		int day = dateTime.getDay();
@@ -42,7 +42,7 @@ public class TestDateTime {
 	@Test
 	public void jsonDeserializationTest() {
 		DateTime dateTime = new DateTime();
-		String json = JsonConverter.getJson(dateTime, DateTime.class, new DateTimeJsonSerializer(DateTime.class));
+		String json = JsonConverter.getJson(dateTime, new DateTimeJsonSerializer(DateTime.class));
 		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class, new DateTimeJsonDeserializer(DateTime.class));
 		Assert.assertTrue(dateTime.equals(convertedTime));
 		Assert.assertEquals(dateTime.toString(),convertedTime.toString());
