@@ -13,12 +13,11 @@ public class Server {
 	//private ConnectionIdTransforner connectionIdTransformer;
 	private CommandExecutor commandExecutor;
 	private Gateway gateway;
-
 	
 	@Autowired
-	public Server(Gateway gateway, CommandExecutor commandExecutor) {
+	public Server(Gateway gateway) { //, CommandExecutor commandExecutor
 		this.gateway = gateway;
-		this.commandExecutor = commandExecutor;
+		//this.commandExecutor = commandExecutor;
 	}
 
 	public void receiveCommand(Message<Command> message) {

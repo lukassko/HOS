@@ -1,4 +1,4 @@
-package com.app.hos.config;
+package com.app.hos.config.repository;
 
 import java.util.Properties;
 
@@ -23,26 +23,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource({ "classpath:persistance/properties/mysql.properties" })
 @Configuration
 @EnableTransactionManagement
-public class PersistanceConfig {
+public class MysqlPersistanceConfig {
 
 	@Autowired
 	private Environment env;
-	
-	@Value("classpath:persistance/initDB.sql")
-	private Resource schemaScript;
-	
-    
+
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
-	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
+	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.repository.*" , "com.app.hos.persistance.models.*" });
 	   em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 	   em.setJpaProperties(hibernateProperties());
 	   em.afterPropertiesSet();
 	   return em.getObject();
 	}
-		
 	
 	@Bean
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
