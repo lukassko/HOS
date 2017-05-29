@@ -1,4 +1,4 @@
-package com.app.hos.tests.config;
+package com.app.hos.config.repository;
 
 import java.util.Properties;
 
@@ -7,38 +7,24 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
-import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
 @Configuration
-@ComponentScan("com.app.hos.persistance.*")
 @EnableTransactionManagement
-public class PersistanceConfig {
+public class SqlitePersistanceConfig {
 
-	@Configuration
-	@Profile("test-hsqldb")
-	@PropertySource({ "classpath:persistance/properties/hsqldb.properties" })
-    static class Hsqldb
-    { }
-	
-	@Configuration
-	@Profile("test-sqlite")
-	@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
-    static class SQLite
-    { }
-	
 	@Autowired
 	private Environment env;
 
@@ -46,13 +32,12 @@ public class PersistanceConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
-	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
+	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.logging.*" });
 	   em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 	   em.setJpaProperties(hibernateProperties());
 	   em.afterPropertiesSet();
 	   return em.getObject();
 	}
-		
 	
 	@Bean
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
@@ -68,7 +53,7 @@ public class PersistanceConfig {
 	   dataSource.setPassword(env.getProperty("jdbc.pass"));
 	   return dataSource;
 	}
-
+	 
 	@Bean
     JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

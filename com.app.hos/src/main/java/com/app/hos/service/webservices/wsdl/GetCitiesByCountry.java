@@ -3,8 +3,6 @@
 // See <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2017.05.29 at 06:50:49 PM CEST 
-//
-
 
 package com.app.hos.service.webservices.wsdl;
 
