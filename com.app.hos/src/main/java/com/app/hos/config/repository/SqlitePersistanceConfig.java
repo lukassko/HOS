@@ -8,9 +8,11 @@ import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -20,15 +22,15 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
-@Configuration
-@EnableTransactionManagement
+//@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
+//@Configuration
+//@EnableTransactionManagement
 public class SqlitePersistanceConfig {
 
 	@Autowired
 	private Environment env;
 
-	@Bean
+	@Bean(name = "sqliteEntityManagerFactory")
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
@@ -39,12 +41,12 @@ public class SqlitePersistanceConfig {
 	   return em.getObject();
 	}
 	
-	@Bean
-    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
+	@Bean(name = "sqliteEntityManager")
+    public EntityManager entityManager(@Qualifier("sqliteEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }
 	
-	@Bean
+	@Bean(name = "sqliteDataSource")
 	public DataSource dataSource() {
 	   BasicDataSource dataSource = new BasicDataSource();
 	   dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
@@ -54,8 +56,8 @@ public class SqlitePersistanceConfig {
 	   return dataSource;
 	}
 	 
-	@Bean
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+	@Bean(name = "sqliteJpaTransactionManager")
+    JpaTransactionManager transactionManager(@Qualifier("sqliteEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
@@ -67,7 +69,7 @@ public class SqlitePersistanceConfig {
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("hibernate.hbm2ddl.auto"));
 	            setProperty("hibernate.hbm2ddl.import_files",
-		  	              env.getProperty("hibernate.hbm2ddl.import_files"));
+		  	      env.getProperty("hibernate.hbm2ddl.import_files"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
 	            setProperty("hibernate.globally_quoted_identifiers",

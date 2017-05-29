@@ -8,13 +8,18 @@ import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -28,7 +33,11 @@ public class MysqlPersistanceConfig {
 	@Autowired
 	private Environment env;
 
-	@Bean
+	@Value("classpath:persistance/queries/mysql/initDB.sql")
+	private Resource schemaScript;
+
+	@Primary
+	@Bean(name = "mysqlEntityManagerFactory")
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
@@ -39,12 +48,14 @@ public class MysqlPersistanceConfig {
 	   return em.getObject();
 	}
 	
-	@Bean
-    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
+	@Primary
+	@Bean(name = "mysqlEntityManager")
+    public EntityManager entityManager(@Qualifier("mysqlEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }
 	
-	@Bean
+	@Primary
+	@Bean(name = "mysqlDataSource")
 	public DataSource dataSource() {
 	   BasicDataSource dataSource = new BasicDataSource();
 	   dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
@@ -54,13 +65,29 @@ public class MysqlPersistanceConfig {
 	   return dataSource;
 	}
 	 
-	@Bean
-    JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+	@Primary
+	@Bean(name = "mysqlJpaTransactionManager")
+    JpaTransactionManager transactionManager(@Qualifier("mysqlEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
 
+	private DatabasePopulator databasePopulator() {
+	    final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+	    populator.addScript(schemaScript);
+	    return populator;
+	}
+	
+	//@Primary	
+	//@Bean
+	public DataSourceInitializer dataSourceInitializer( @Qualifier("mysqlDataSource") final DataSource dataSource) {
+	    final DataSourceInitializer initializer = new DataSourceInitializer();
+	    initializer.setDataSource(dataSource);
+	    initializer.setDatabasePopulator(databasePopulator());
+	    return initializer;
+	}
+	
 	Properties hibernateProperties() {
 	      return new Properties() {
 	         {
