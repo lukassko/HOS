@@ -3,11 +3,13 @@ package com.app.hos.tests.persistance;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.app.hos.config.AspectConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
@@ -26,7 +28,7 @@ import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class})
+@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
 @ActiveProfiles("test-sqlite")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestSaveUpdateDevices {
