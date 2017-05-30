@@ -54,7 +54,7 @@ public class PersistanceConfig {
 	}
 		
 	
-	@Bean
+	@Bean(name = "testEntityManager")
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }

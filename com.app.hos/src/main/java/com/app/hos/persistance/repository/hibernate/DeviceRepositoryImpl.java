@@ -8,7 +8,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Device;
@@ -28,7 +30,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			manager.merge(device);
 		}
 	}
-	
+
 	public Device findDeviceById(int id) {
 		return manager.find(Device.class, id);
 	}

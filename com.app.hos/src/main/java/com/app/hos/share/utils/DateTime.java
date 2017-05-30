@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @JsonSerializer(serializer = DateTimeJsonSerializer.class)
 public class DateTime implements Serializable {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 
 	@JsonIgnore
 	private transient org.joda.time.DateTime dateTime;
