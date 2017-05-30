@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.persistance.TestPersistance;
 import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
@@ -20,7 +19,7 @@ public class TestDateTime {
 	@Test
 	public void jsonSerializationTest() {
 		DateTime dateTime = new DateTime();
-		String json = JsonConverter.getJson(dateTime, new DateTimeJsonSerializer(DateTime.class));
+		String json = JsonConverter.getJson(dateTime);
 		int year = dateTime.getYear();
 		int month = dateTime.getMonth();
 		int day = dateTime.getDay();
@@ -42,10 +41,18 @@ public class TestDateTime {
 	@Test
 	public void jsonDeserializationTest() {
 		DateTime dateTime = new DateTime();
-		String json = JsonConverter.getJson(dateTime, new DateTimeJsonSerializer(DateTime.class));
-		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class, new DateTimeJsonDeserializer(DateTime.class));
+		String json = JsonConverter.getJson(dateTime);
+		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class);
 		Assert.assertTrue(dateTime.equals(convertedTime));
 		Assert.assertEquals(dateTime.toString(),convertedTime.toString());
+	}
+	
+	@Test
+	public void getTimestampTest() {
+		DateTime dateTime = new DateTime();
+		String json = JsonConverter.getJson(dateTime);
+		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class);
+		Assert.assertEquals(dateTime.getTimestamp(),convertedTime.getTimestamp());
 	}
 	
 	@Test 

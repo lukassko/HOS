@@ -1,11 +1,10 @@
 package com.app.hos.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.ImportResource;
 
+import com.app.hos.persistance.logging.LoggingRepository;
 import com.app.hos.utils.aspect.LoggingAspect;
 import com.app.hos.utils.aspect.PersistanceAspect;
 
@@ -14,12 +13,12 @@ import com.app.hos.utils.aspect.PersistanceAspect;
 public class AspectConfig {
 
 	@Bean
-    public PersistanceAspect persistanceAspect() {
-        return new PersistanceAspect();
+    public PersistanceAspect persistanceAspect(LoggingRepository repository) {
+        return new PersistanceAspect(repository);
     }
 	
 	@Bean
-    public LoggingAspect loggingAspect() {
-        return new LoggingAspect();
+    public LoggingAspect loggingAspect(LoggingRepository repository) {
+        return new LoggingAspect(repository);
     }
 }

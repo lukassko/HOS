@@ -12,9 +12,6 @@ import com.app.hos.persistance.models.Device;
 import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
-import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
-import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class TestDevieceStatuses {
 	
@@ -36,7 +33,7 @@ public class TestDevieceStatuses {
 	@Test
 	public void serializeDeivceStatusesMapTest() {
 		String json = JsonConverter.getJson(deviceStatuses);
-		
+		System.out.println(json);
 		Assert.assertEquals(1, 1);
 	}
 }

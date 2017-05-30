@@ -20,6 +20,7 @@ public class DateTime implements Serializable {
 	private final Integer day;
 	private final Integer month;
 	private final Integer year;
+	private final Long timestamp;
 
 	public DateTime() {
 		this.dateTime = new org.joda.time.DateTime();
@@ -30,6 +31,19 @@ public class DateTime implements Serializable {
 		this.day = dateTime.getDayOfMonth();
 		this.month = dateTime.getMonthOfYear();
 		this.year = dateTime.getYear();
+		this.timestamp = dateTime.getMillis();
+	}
+	
+	public DateTime(long timestamp) {
+		this.dateTime = new org.joda.time.DateTime(timestamp); 
+		this.hour = dateTime.getHourOfDay();
+		this.minutes = dateTime.getMinuteOfHour();
+		this.seconds = dateTime.getSecondOfMinute();
+		this.millis = dateTime.getMillisOfSecond();
+		this.day = dateTime.getDayOfMonth();
+		this.month = dateTime.getMonthOfYear();
+		this.year = dateTime.getYear();
+		this.timestamp = dateTime.getMillis();
 	}
 	
 	public DateTime(int year,int month,int day,int hour,int minutes,int seconds, int millis) {
@@ -41,12 +55,13 @@ public class DateTime implements Serializable {
 		this.month = month;
 		this.year = year;
 		this.dateTime = new org.joda.time.DateTime(year, month, day, hour, minutes, seconds,millis); 
+		this.timestamp = dateTime.getMillis();
 	}
 
 	public org.joda.time.DateTime getDateTime () {
 		if (dateTime == null) {
 			this.dateTime = new org.joda.time.DateTime(this.year,this.month, this.day, 
-								this.hour, this.minutes, this.seconds,millis);  
+								this.hour, this.minutes, this.seconds,this.millis);  
 		}
 		return this.dateTime;
 	}
@@ -96,4 +111,7 @@ public class DateTime implements Serializable {
 		return millis;
 	}
 
+	public Long getTimestamp() {
+		return this.timestamp;
+	}
 }

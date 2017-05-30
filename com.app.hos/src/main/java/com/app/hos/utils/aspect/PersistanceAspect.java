@@ -1,18 +1,24 @@
 package com.app.hos.utils.aspect;
 
+import java.util.logging.Level;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
-@Aspect
-public class PersistanceAspect {
+import com.app.hos.persistance.logging.LoggingRepository;
 
-	//@Pointcut("within(com.app.hos.persistance.repository.hibernate.*)")  
-	//public void testPointcut(){};
-	
-	//com.xyz.someapp.ChildServiceInterface+
-	@Before("within(com.app.hos.persistance.repository.hibernate.DeviceRepository*)")
-	public void logTest(JoinPoint joinPoint) {
-		System.out.println("Before invoking repository methods: " + joinPoint.toString() );
+@Aspect
+public class PersistanceAspect extends Logger {
+
+	public PersistanceAspect(LoggingRepository repository) {
+		super(repository);
 	}
+	
+	@Before("within(com.app.hos.persistance.repository.hibernate.DeviceRepository*)")
+	public void logTest(JoinPoint point) {
+		logMessage(point, Level.INFO, point.toString());
+		saveLog(Level.INFO,point.toString());
+	}
+
 }
