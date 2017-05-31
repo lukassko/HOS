@@ -22,8 +22,8 @@
   	<hsqldb.version>2.3.4</hsqldb.version>
   	<sqlite.version>3.16.1</sqlite.version>
   	<aop.version>4.3.8.RELEASE</aop.version>
-  	<aspectjrt.version>1.5.4</aspectjrt.version>
-  	<aspectjweaver.version>1.5.4</aspectjweaver.version>
+  	<aspectjrt.version>1.7.0</aspectjrt.version>
+  	<aspectjweaver.version>1.7.0</aspectjweaver.version>
   </properties>
   
   <dependencies>

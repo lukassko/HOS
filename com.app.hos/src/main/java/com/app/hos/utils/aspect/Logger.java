@@ -15,15 +15,21 @@ public class Logger {
 		this.repository = repository;
 	}
 	
-	protected void logMessage(JoinPoint point, Level level, String message) {
-		getLogger(point).log(level, message);
+	protected void logAndSaveMessage(JoinPoint point, Level level, String message) {
+		logMessage(point,level,message);
+		saveLog(level,message);
 	}
 	
-	protected java.util.logging.Logger getLogger(JoinPoint point) {
-		return java.util.logging.Logger.getLogger(point.getTarget().getClass().getName());
+	protected void logMessage(JoinPoint point, Level level, String message) {
+		getLogger(point).log(level, message);
 	}
 
 	protected void saveLog(Level level, String message) {
 		repository.save(new DateTime().getTimestamp(), level.toString(), message);
 	}
+	
+	private java.util.logging.Logger getLogger(JoinPoint point) {
+		return java.util.logging.Logger.getLogger(point.getTarget().getClass().getName());
+	}
+
 }

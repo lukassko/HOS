@@ -57,14 +57,11 @@ public class CommandManager implements CommandExecutor {
 	}
 
 	private void getCommandResult(String serialId, DeviceStatus deviceStatus) {
-		System.out.println("STATUS: " + deviceStatus.getCpuUsage() + " Time: " + deviceStatus.getTime());
 		deviceManager.addDeviceStatus(serialId, deviceStatus);
 	}
 	
 	private void getCommandResult(MessageHeaders headers,NewDevice newDevice, String serialId) {
-		System.out.println(newDevice.getName()+" | "+serialId);
 		deviceManager.createDevice(headers, newDevice.getName(), serialId);
-		
 		// send command as a response
 		String connectionId = (String)headers.get(IpHeaders.CONNECTION_ID);
 		sendCommand(connectionId,CommandType.HELLO);

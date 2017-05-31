@@ -1,13 +1,12 @@
 package com.app.hos.persistance.models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "devices")
 @Entity
@@ -16,7 +15,7 @@ public class Device extends BaseEntity {
 	@NotEmpty
 	private String name;
 	
-	@NotEmpty
+	@Column(nullable = false)
 	private String serial;
 	
 	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL)

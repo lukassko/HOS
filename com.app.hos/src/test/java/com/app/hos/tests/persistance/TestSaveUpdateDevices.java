@@ -19,8 +19,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 
 import com.app.hos.share.utils.DateTime;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -76,10 +78,21 @@ public class TestSaveUpdateDevices {
     	Assert.assertFalse(deviceList.isEmpty());
     	Assert.assertEquals(device.getName(),deviceList.get(0).getName());
     }
-
+    
+    @Test(expected=PersistenceException.class)
+    @Rollback(true)
+    public void stage2_saveDeviceShouldThrowExceptionTest() {
+    	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
+    			"localhost1", "192.168.0.21", 23451, new DateTime());
+		Device device = new Device("DeviceTest", "98547kjyy1");
+		device.setSerial(null);
+		connection.setDevice(device);
+		deviceRepository.save(device);
+    }
+    
     @Test
     @Rollback(false)
-    public void stage2_saveDevicesTest() {
+    public void stage3_saveDevicesTest() {
     	deviceRepository.save(devicesList.get(0));
     	deviceRepository.save(devicesList.get(1));
     	deviceRepository.save(devicesList.get(2));
@@ -89,7 +102,7 @@ public class TestSaveUpdateDevices {
     }
     
     @Test
-    public void stage3_findDeviceByIdTest() {
+    public void stage4_findDeviceByIdTest() {
     	Device device1 = deviceRepository.findDeviceById(1);
     	Device device2 = deviceRepository.findDeviceById(10);
     	Assert.assertNotNull(device1);
@@ -97,19 +110,19 @@ public class TestSaveUpdateDevices {
     }
     
     @Test
-    public void stage4_findDeviceBySerialTest() {
+    public void stage5_findDeviceBySerialTest() {
     	Device device = deviceRepository.findDeviceBySerialNumber("98547kjyy2");
     	Assert.assertNotNull(device);
     }
     
     @Test(expected=NoResultException.class)
-    public void stage5_findDeviceBySerialShouldThrowExceptionTest() {
+    public void stage6_findDeviceBySerialShouldThrowExceptionTest() {
     	deviceRepository.findDeviceBySerialNumber("98547kffff");
     }
     
     @Test
     @Rollback(false)
-    public void stage6_updateDeviceWithNewConnectionTest() {
+    public void stage7_updateDeviceWithNewConnectionTest() {
     	Connection connection4 = new Connection("192.168.0.24:23454-09:oa9:sd4", 
     			"localhost4", "192.168.0.24", 23454, new DateTime());
     
