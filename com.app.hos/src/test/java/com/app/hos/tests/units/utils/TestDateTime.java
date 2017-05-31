@@ -1,4 +1,4 @@
-package com.app.hos.tests.utils;
+package com.app.hos.tests.units.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

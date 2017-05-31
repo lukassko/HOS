@@ -1,4 +1,4 @@
-package com.app.hos.tests.json;
+package com.app.hos.tests.units.json;
 
 import java.util.HashMap;
 import java.util.Map;

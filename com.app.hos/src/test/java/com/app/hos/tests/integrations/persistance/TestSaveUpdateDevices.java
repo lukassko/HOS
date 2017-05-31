@@ -1,4 +1,4 @@
-package com.app.hos.tests.persistance;
+package com.app.hos.tests.integrations.persistance;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import com.app.hos.config.AspectConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.tests.config.PersistanceConfig;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,6 +21,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.tests.integrations.config.PersistanceConfig;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;

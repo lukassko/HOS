@@ -1,4 +1,4 @@
-package com.app.hos.tests.config;
+package com.app.hos.tests.integrations.config;
 
 import java.util.Properties;
 
