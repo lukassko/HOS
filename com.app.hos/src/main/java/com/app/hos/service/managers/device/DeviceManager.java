@@ -66,10 +66,17 @@ public class DeviceManager {
 		deviceStatuses.remove(device);
 		connectedDevices.remove(connectionId);
 	}
+	
+	public Connection getConnectionBySerial(String serial) {
+		Device device = getDeviceBySerialId(serial);
+		if (device != null) {
+			return device.getConnection();
+		}
+		return null;
+	}
 
 	private Device findDevice(String serial) {
-		
-		return null;
+		return deviceRepository.findDeviceBySerialNumber(serial);
 	}
 	
 	private Device getDeviceBySerialId(String serialId) {

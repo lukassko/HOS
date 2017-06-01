@@ -13,7 +13,7 @@ import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
 
-public class TestDevieceStatuses {
+public class DevieceStatusesTest {
 	
 	private static Map<Device,DeviceStatus> deviceStatuses = new HashMap<Device,DeviceStatus>();
 	

@@ -12,7 +12,7 @@ import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-public abstract class TestPersistance {
+public abstract class PersistanceIT {
 	
 	//protected static EntityManagerFactory emf;
    // protected static EntityManager em;

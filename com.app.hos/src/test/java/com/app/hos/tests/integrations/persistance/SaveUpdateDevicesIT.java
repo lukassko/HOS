@@ -32,7 +32,7 @@ import org.junit.runners.MethodSorters;
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
 @ActiveProfiles("test-sqlite")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestSaveUpdateDevices {
+public class SaveUpdateDevicesIT {
 
 	private static List<Device> devicesList = new LinkedList<Device>();
 	

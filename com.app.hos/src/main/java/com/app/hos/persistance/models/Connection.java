@@ -26,7 +26,7 @@ public class Connection extends BaseEntity {
 	@NotEmpty
 	@Column(name="remote_port")
 	private int remotePort;
-	
+
 	@NotEmpty
 	@Column(name="connection_time")
 	private DateTime connectionTime;
@@ -154,5 +154,14 @@ public class Connection extends BaseEntity {
 			return false;
 		return true;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "Connection [connectionId=" + connectionId + ", hostname=" + hostname + ", ip=" + ip + ", remotePort="
+				+ remotePort + ", connectionTime=" + connectionTime + ", endConnectionTime=" + endConnectionTime
+				+ ", device=" + device + "]";
+	}
+
 	
 }

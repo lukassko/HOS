@@ -14,7 +14,7 @@ import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 
-public class TestDateTime {
+public class DateTimeTest {
 	
 	@Test
 	public void jsonSerializationTest() {
