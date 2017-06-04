@@ -1,28 +1,48 @@
 package com.app.hos.service.managers.connection;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.integration.ip.tcp.connection.AbstractConnectionFactory;
 import org.springframework.stereotype.Service;
 
+import com.app.hos.persistance.models.Connection;
 import com.app.hos.service.managers.device.DeviceManager;
 
 
 @Service
-public class ConnectionManager implements CloseConnection {
+public class ConnectionManager  {
 
-	private ApplicationContext appContext;
-	private DeviceManager deviceManager;
-	
 	@Autowired
-	public ConnectionManager(ApplicationContext appContext, DeviceManager deviceManager) {
-		this.deviceManager = deviceManager;
-		this.appContext = appContext;
+	private ApplicationContext appContext;
+	@Autowired
+	private DeviceManager deviceManager;
+
+	private Set<Connection> connections = new HashSet<Connection>();
+	
+	public ConnectionManager() {
+	}
+	
+	public void addConnection(Connection connection) {
+		System.out.println("ECECUTE! " + connection.toString());
+		connections.add(connection);
+	}
+	
+	public Connection getConnection(String connectionId) {
+		for(Connection connection : connections) {
+		    if (connection.getConnectionId().equals(connectionId)) {
+		    	return connection;
+		    }
+		}
+		return null;
 	}
 	
 	public void closeConnection(String connectionId) {
-		deviceManager.removeConnectedDevice(connectionId);
-		closeTcpConnection(connectionId);
+		System.out.println("CLOSE");
+		//deviceManager.removeConnectedDevice(connectionId);
+		//closeTcpConnection(connectionId);
 	}
 
 	private boolean closeTcpConnection(String connectionId) {

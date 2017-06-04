@@ -34,7 +34,7 @@ public class PersistanceConfig {
     { }
 	
 	@Configuration
-	@Profile("test-sqlite")
+	@Profile({"test-sqlite","integration-test"})
 	@PropertySource({ "classpath:persistance/properties/sqlite.properties" })
     static class SQLite
     { }

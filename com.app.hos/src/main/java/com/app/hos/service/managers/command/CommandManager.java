@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.share.command.CommandBuilder;
 import com.app.hos.share.command.CommandFactory;
 import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandType;
+import com.app.hos.share.command.builder.CommandBuilder;
 import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.command.result.NewDevice;
+import com.app.hos.share.command.type.CommandType;
 
 @Service
-public class CommandManager implements CommandExecutor {
+public class CommandManager {
 
 	//private TaskStrategy taskStrategy; inject
 	
@@ -48,19 +48,19 @@ public class CommandManager implements CommandExecutor {
 				
 			} else if (CommandType.HELLO == type) {
 				NewDevice device = (NewDevice)command.getResult();
-				getCommandResult(headers,device,command.getSerialId());
+				getHelloCommandResult(headers,device,command.getSerialId());
 			} else if (CommandType.MY_STATUS == type) {
 				DeviceStatus status = (DeviceStatus)command.getResult();
-				getCommandResult(command.getSerialId(), status);
+				getStatusCommandResult(command.getSerialId(), status);
 			} 
 		}
 	}
 
-	private void getCommandResult(String serialId, DeviceStatus deviceStatus) {
+	private void getStatusCommandResult(String serialId, DeviceStatus deviceStatus) {
 		deviceManager.addDeviceStatus(serialId, deviceStatus);
 	}
 	
-	private void getCommandResult(MessageHeaders headers,NewDevice newDevice, String serialId) {
+	private void getHelloCommandResult(MessageHeaders headers,NewDevice newDevice, String serialId) {
 		deviceManager.createDevice(headers, newDevice.getName(), serialId);
 		// send command as a response
 		String connectionId = (String)headers.get(IpHeaders.CONNECTION_ID);

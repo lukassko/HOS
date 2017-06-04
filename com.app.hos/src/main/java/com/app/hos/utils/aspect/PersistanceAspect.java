@@ -25,12 +25,14 @@ public class PersistanceAspect extends Logger {
 	
 	@Before("databaseUpdatingPointcut()")
 	public void logTest(JoinPoint point) {
-		logAndSaveMessage(point, Level.INFO, point.toString());
+		System.out.println("PERSISTANCE1");
+		//logAndSaveMessage(point, Level.INFO, point.toString());
 	}
 	
 	@AfterThrowing(pointcut="databaseExceptionPointcut()", throwing="exception")
 	public void logException(JoinPoint point, Throwable exception) {
-		logAndSaveMessage(point, Level.WARNING,exception.getMessage());
+		System.out.println("PERSISTANCE3");
+		//logAndSaveMessage(point, Level.WARNING,exception.getMessage());
 	}
 
 }

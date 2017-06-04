@@ -1,4 +1,4 @@
-package com.app.hos.share.command.builder;
+package com.app.hos.share.command.type;
 
 public enum CommandType {
 	

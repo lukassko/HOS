@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.service.integration.server.Gateway;
-import com.app.hos.share.command.CommandBuilder;
 import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder.CommandBuilder;
 
 @Controller
 public class TestController {

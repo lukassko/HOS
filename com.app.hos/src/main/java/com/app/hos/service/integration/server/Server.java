@@ -4,25 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.service.managers.command.CommandExecutor;
+import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder.Command;
 
 @Service 
 public class Server {
 	
 	//private ConnectionIdTransforner connectionIdTransformer;
-	private CommandExecutor commandExecutor;
+	private CommandManager commandManager;
 	private Gateway gateway;
 	
 	@Autowired
-	public Server(Gateway gateway) { //, CommandExecutor commandExecutor
+	public Server(Gateway gateway, CommandManager commandManager) { //, CommandExecutor commandExecutor
 		this.gateway = gateway;
-		//this.commandExecutor = commandExecutor;
+		this.commandManager = commandManager;
 	}
 
 	public void receiveCommand(Message<Command> message) {
 		Command command = message.getPayload();
-		commandExecutor.executeCommand(message.getHeaders(),command);
+		commandManager.executeCommand(message.getHeaders(),command);
 	}
 		
 	public void sendMessage(Message<Command> message) {

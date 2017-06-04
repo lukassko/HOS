@@ -1,7 +1,4 @@
-package com.app.hos.share.command;
-
-import com.app.hos.share.command.builder.AbstractCommandBuilder;
-import com.app.hos.share.command.builder.Command;
+package com.app.hos.share.command.builder;
 
 public class CommandBuilder {
 

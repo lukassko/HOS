@@ -1,7 +1,8 @@
 package com.app.hos.share.command;
 
 import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandType;
+import com.app.hos.share.command.builder.CommandBuilder;
+import com.app.hos.share.command.type.CommandType;
 
 public class CommandFactory {
 	

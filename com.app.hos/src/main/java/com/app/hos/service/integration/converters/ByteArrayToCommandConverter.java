@@ -10,9 +10,9 @@ import java.io.OutputStream;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
-import com.app.hos.share.command.CommandBuilder;
 import com.app.hos.share.command.ImproperCommandBuilder;
 import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder.CommandBuilder;
 
 public class ByteArrayToCommandConverter implements Serializer<Command>, Deserializer<Command>{
 	

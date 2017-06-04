@@ -159,8 +159,7 @@ public class Connection extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Connection [connectionId=" + connectionId + ", hostname=" + hostname + ", ip=" + ip + ", remotePort="
-				+ remotePort + ", connectionTime=" + connectionTime + ", endConnectionTime=" + endConnectionTime
-				+ ", device=" + device + "]";
+				+ remotePort + ", connectionTime=" + connectionTime;
 	}
 
 	

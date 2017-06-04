@@ -48,11 +48,13 @@ public class JsonConverter {
             Field[] valueFields = value.getClass().getDeclaredFields();
             ObjectNode keyNode = mapper.createObjectNode();
             for(Field field : keyFields){
-            	keyNode.put(field.getName(), getJson(field,key));
+            	//keyNode.put(field.getName(), getJson(field,key));
+				keyNode.putPOJO(field.getName(), getPOJOFromField(field, key));
             }
             ObjectNode valueNode = mapper.createObjectNode();
             for(Field field : valueFields){
-            	valueNode.put(field.getName(), getJson(field,value));
+            	//valueNode.put(field.getName(), getJson(field,value));
+				valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
             }
             node.set(getClassName(key), keyNode);
         	node.set(getClassName(value), valueNode);
@@ -66,18 +68,17 @@ public class JsonConverter {
 		}
     	return jsonFinal;
     }
-    
-    private static String getJson(Field field, Object object){
+        
+    private static Object getPOJOFromField (Field field, Object object) {
     	field.setAccessible(true);
     	Object fieldObject = null;
-    	String json = null;
     	try {
-    		fieldObject = field.get(object);
-    		json = getJson(fieldObject);
+			fieldObject = field.get(object);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return json;
+    	return fieldObject;
+    	
     }
     
     public static <T> T getObject(String json, Class<T> clazz) {

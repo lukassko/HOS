@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 
 // GENERIC TYPE -> public class Command<T extends Serializable> implements Serializable {...}
-public class Command implements Serializable{
+public class Command implements Serializable {
 
     private static final long serialVersionUID = 2L;
     private String serialId;
