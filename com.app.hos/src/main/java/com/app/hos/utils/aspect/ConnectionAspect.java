@@ -6,6 +6,9 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import com.app.hos.persistance.logging.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
@@ -28,12 +31,12 @@ public class ConnectionAspect extends Logger {
 	@Pointcut("execution(* com.app.hos.service.managers.connection.ConnectionManager.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
-	@Pointcut("within(com.app.hos.service.managers.connection.CloseConnection*)")
+	@Pointcut("within(com.app.hos.service.managers.connection.ConnectionManager*)")
 	public void test() {}
 
 	@Before("test()")
 	public void test(JoinPoint point) {
-		System.out.println("TEST");
+		System.out.println("TEST WOFRKING!");
 	}
 	
 	@Before("newConnectionPointcut(connection)")

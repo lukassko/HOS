@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.integration.ip.tcp.connection.AbstractConnectionFactory;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.app.hos.service.managers.device.DeviceManager;
 
 
 @Service
+@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class ConnectionManager  {
 
 	@Autowired

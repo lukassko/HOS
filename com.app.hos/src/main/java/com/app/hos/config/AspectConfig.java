@@ -9,7 +9,7 @@ import com.app.hos.utils.aspect.ConnectionAspect;
 import com.app.hos.utils.aspect.PersistanceAspect;
 
 @Configuration
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class AspectConfig {
 
 	@Bean
