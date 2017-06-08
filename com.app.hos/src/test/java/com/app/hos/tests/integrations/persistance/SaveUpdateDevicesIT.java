@@ -26,8 +26,10 @@ import com.app.hos.tests.integrations.config.PersistanceConfig;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
 @ActiveProfiles("test-sqlite")

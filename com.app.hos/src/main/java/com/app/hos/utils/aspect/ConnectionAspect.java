@@ -31,23 +31,13 @@ public class ConnectionAspect extends Logger {
 	@Pointcut("execution(* com.app.hos.service.managers.connection.ConnectionManager.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
-	@Pointcut("within(com.app.hos.service.managers.connection.ConnectionManager*)")
-	public void test() {}
-
-	@Before("test()")
-	public void test(JoinPoint point) {
-		System.out.println("TEST WOFRKING!");
-	}
-	
 	@Before("newConnectionPointcut(connection)")
 	public void newConnection(JoinPoint point, Connection connection) {
-		System.out.println("OK1 --------------");
 		logAndSaveMessage(point, Level.INFO, connection.getDevice().getSerial(), getConnectionLog(ConnectionEvent.OPEN,connection));
 	}
 
 	@Before("closeConnectionPointcut(connectionId)")
 	public void closeConnection(JoinPoint point, String connectionId) {
-		System.out.println("OK --------------");
 		Object target = point.getTarget();
 		if (target instanceof ConnectionManager) {
 			Connection connection = ((ConnectionManager)target).getConnection(connectionId);
@@ -60,8 +50,8 @@ public class ConnectionAspect extends Logger {
 	private String getConnectionLog(ConnectionEvent event, Connection connection) {
 		StringBuilder message = new StringBuilder();
 		message.append("Connection " + event.toString());
-		message.append(";IP " + connection.getIp());
-		message.append(";Port " + connection.getRemotePort());
+		message.append("; IP " + connection.getIp());
+		message.append("; Port " + connection.getRemotePort());
 		return message.toString();
 	}
 }

@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.service.managers.device.DeviceManager;
 
-
 @Service
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
-public class ConnectionManager  {
+public class ConnectionManager {
 
 	@Autowired
 	private ApplicationContext appContext;
@@ -25,11 +24,7 @@ public class ConnectionManager  {
 
 	private Set<Connection> connections = new HashSet<Connection>();
 	
-	public ConnectionManager() {
-	}
-	
 	public void addConnection(Connection connection) {
-		System.out.println("ECECUTE! " + connection.toString());
 		connections.add(connection);
 	}
 	
@@ -43,9 +38,8 @@ public class ConnectionManager  {
 	}
 	
 	public void closeConnection(String connectionId) {
-		System.out.println("CLOSE");
-		//deviceManager.removeConnectedDevice(connectionId);
-		//closeTcpConnection(connectionId);
+		deviceManager.removeConnectedDevice(connectionId);
+		closeTcpConnection(connectionId);
 	}
 
 	private boolean closeTcpConnection(String connectionId) {

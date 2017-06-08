@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 import com.app.hos.persistance.logging.LoggingRepository;
+import com.app.hos.persistance.models.Device;
 
 @Aspect
 public class PersistanceAspect extends Logger {
@@ -17,22 +18,19 @@ public class PersistanceAspect extends Logger {
 		super(repository);
 	}
 
-	@Pointcut("within(com.app.hos.persistance.repository.hibernate.DeviceRepository*)")
-	public void databaseUpdatingPointcut() {}
-	
-	@Pointcut("execution(* com.app.hos.persistance.repository.DeviceRepository.save(..))")
-	public void databaseExceptionPointcut() {}
-	
-	@Before("databaseUpdatingPointcut()")
-	public void logTest(JoinPoint point) {
-		System.out.println("PERSISTANCE1");
-		//logAndSaveMessage(point, Level.INFO, point.toString());
+	@Pointcut("execution(* com.app.hos.persistance.repository.DeviceRepository.save(..)) && args(device)")
+	public void addNewDevicePointcut(Device device) {}
+
+	@Before("addNewDevicePointcut(device)")
+	public void addNewDevice(JoinPoint point,Device device) {
+		if (device.isNew()) {
+			logAndSaveMessage(point, Level.INFO, device.getSerial(),"New device added");
+		} 
 	}
 	
-	@AfterThrowing(pointcut="databaseExceptionPointcut()", throwing="exception")
-	public void logException(JoinPoint point, Throwable exception) {
-		System.out.println("PERSISTANCE3");
-		//logAndSaveMessage(point, Level.WARNING,exception.getMessage());
-	}
+//	@AfterThrowing(pointcut="databaseExceptionPointcut()", throwing="exception")
+//	public void logException(JoinPoint point, Throwable exception) {
+//		//logAndSaveMessage(point, Level.WARNING,exception.getMessage());
+//	}
 
 }

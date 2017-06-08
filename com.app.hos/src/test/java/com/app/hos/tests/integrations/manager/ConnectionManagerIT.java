@@ -11,19 +11,27 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.AspectConfig;
+import com.app.hos.persistance.logging.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 import com.app.hos.tests.integrations.config.PersistanceConfig;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.jboss.logging.Logger.Level;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -40,8 +48,12 @@ public class ConnectionManagerIT {
 	private static Device device;
 	private static Connection connection;
 	
+	@Autowired
+    private LoggingRepository loggingRepository;
+	
+	@Autowired
 	@InjectMocks
-	private ConnectionManager manager = new ConnectionManager();
+	private ConnectionManager manager;
 	
 	@Mock
 	private DeviceManager deviceManager;
@@ -62,18 +74,21 @@ public class ConnectionManagerIT {
 		
 		testDevice.setConnection(testConnection);
 		testConnection.setDevice(testDevice);
-		
-	
+
 		device = testDevice;
 		connection = testConnection;
 		
     }
     
     @Test
+    @Rollback(false)
     public void stage1_addNewDeviceMethodShouldAddEntryToDatabseLog() {
     	manager.addConnection(connection);
-    	
-    	manager.closeConnection("");
-    	Assert.assertEquals(true, true);
+    	Collection<String> logsRows = loggingRepository.findAll();
+    	List<String> logs = new LinkedList<String>(logsRows);
+    	Assert.assertTrue(logs.size() == 1);
+    	logsRows = loggingRepository.findLogForLevel(Level.INFO.toString());
+    	logs = new LinkedList<String>(logsRows);
+    	Assert.assertTrue(logs.size() == 1);
     }
 }
