@@ -3,13 +3,18 @@ package com.app.hos.share.command.result;
 import java.io.Serializable;
 
 import com.app.hos.share.utils.DateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DeviceStatus implements Result,Serializable {
 
+	@JsonIgnore
 	private static final long serialVersionUID = 2L;
 	
 	private DateTime time;
+	@JsonProperty("ram")
     private double ramUsage;
+	@JsonProperty("cpu")
     private double cpuUsage;
     
 	public DeviceStatus( double ramUsage, double cpuUsage) {

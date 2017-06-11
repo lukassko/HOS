@@ -11,14 +11,11 @@ import com.app.hos.share.command.builder.Command;
 public class Server {
 	
 	//private ConnectionIdTransforner connectionIdTransformer;
+	@Autowired
 	private CommandManager commandManager;
+	@Autowired
 	private Gateway gateway;
 	
-	@Autowired
-	public Server(Gateway gateway, CommandManager commandManager) { //, CommandExecutor commandExecutor
-		this.gateway = gateway;
-		this.commandManager = commandManager;
-	}
 
 	public void receiveCommand(Message<Command> message) {
 		Command command = message.getPayload();

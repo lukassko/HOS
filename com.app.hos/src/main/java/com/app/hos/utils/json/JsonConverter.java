@@ -1,12 +1,16 @@
 package com.app.hos.utils.json;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,13 +52,14 @@ public class JsonConverter {
             Field[] valueFields = value.getClass().getDeclaredFields();
             ObjectNode keyNode = mapper.createObjectNode();
             for(Field field : keyFields){
-            	//keyNode.put(field.getName(), getJson(field,key));
-				keyNode.putPOJO(field.getName(), getPOJOFromField(field, key));
+            	if(isNotIgnored(field))
+            		keyNode.putPOJO(field.getName(), getPOJOFromField(field, key));
             }
             ObjectNode valueNode = mapper.createObjectNode();
             for(Field field : valueFields){
-            	//valueNode.put(field.getName(), getJson(field,value));
-				valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
+            	getJsonFieldName(field);
+            	if(isNotIgnored(field))
+					valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
             }
             node.set(getClassName(key), keyNode);
         	node.set(getClassName(value), valueNode);
@@ -68,7 +73,40 @@ public class JsonConverter {
 		}
     	return jsonFinal;
     }
-        
+    
+    private static String getJsonFieldName(Field field) {
+    	if (isAnnotatedWith(JsonProperty.class,field)) {
+    		Annotation annotation = field.getDeclaredAnnotation(JsonProperty.class);
+    		Class clazz = annotation.annotationType();
+    		try {
+				Method annotationMethod = clazz.getMethod("value");
+				String name = annotationMethod.getName();
+				System.out.println(name);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+     	return null;
+    }
+    
+    private static boolean isNotIgnored(Field field) {
+    	return isAnnotatedWith(JsonIgnore.class,field);
+    }
+    
+    private static boolean isAnnotatedWith(Class<? extends Annotation> clazz,Field field) {
+    	Annotation[] annotations = field.getDeclaredAnnotations();
+    	for (Annotation annotation : annotations) {
+    		if (annotation.annotationType().equals(clazz)) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
     private static Object getPOJOFromField (Field field, Object object) {
     	field.setAccessible(true);
     	Object fieldObject = null;

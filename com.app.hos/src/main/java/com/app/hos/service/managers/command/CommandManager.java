@@ -21,16 +21,10 @@ import com.app.hos.share.command.type.CommandType;
 public class CommandManager {
 
 	//private TaskStrategy taskStrategy; inject
-	
-	private DeviceManager deviceManager;
-
-	private Server server;
-		
 	@Autowired
-	public CommandManager(DeviceManager DeviceManager,Server server) {
-		this.deviceManager = DeviceManager;
-		this.server = server;
-	}
+	private DeviceManager deviceManager;
+	@Autowired
+	private Server server;
 
 	public void sendCommand(String connectionId, CommandType type) {
 		if(connectionId != null) {
