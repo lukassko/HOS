@@ -128,6 +128,14 @@
   }
 }
 
+html {
+  height: 100%;
+  width: 100%;
+  padding:0px;
+  margin:0px;
+}
+
+
 body {
   margin: 0px;
   padding: 0px;
@@ -135,17 +143,16 @@ body {
   font-size: 20px;
   color: #efffff;
   background-color: #23282e;
+  width: 100%;
+  height: 100%;
 }
 
 .main-container {
-	margin-right: auto;
-	margin-left: 300px;
  	height: 100%;
 }
 
 .user-bar {
 	color: white;
-	padding-left: 310px;
 	background-color: #2e353d;
 	line-height: 50px;
 	display: block;
@@ -156,7 +163,7 @@ body {
 /* CONNECTED DEVICES */
 
 .device-container {
-	width:11%; 
+	width:180px; 
 	overflow: auto; 
 	position: fixed; 
 	height: 100%;
@@ -195,8 +202,8 @@ div.device:hover {
 }
 
 .device-panel { 
-	margin-left: 12%; 
-	width:89%; 
+	margin-left: 190px; 
+	width:100%; 
 	position: fixed; 
 	height: 100%; 
 	background-color: #23282e;
@@ -212,7 +219,6 @@ div.device:hover {
 	display: inline-block; 
 	margin: 5px;  
 	height: 100%;
-	width: 300px;
 }
 /*
 table.device-table tr:not(:last-child) {

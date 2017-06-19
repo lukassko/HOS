@@ -34,74 +34,76 @@
 	</script>
 </head>
 <body>
-
-<div class="device-container device-prop">
-	<script>
-		var devices ='${devices}';
-		deviceManager.addDevices(devices);
-    </script>
-</div>
-
-<div class="device-panel">
-	<div style="height: 30%; width:100%; margin: 5px;">
-		<div class="device-detail device-prop" style="width: 35%;height:200px">
-		  <table class="device-table">
-		      <tr>
-		        <td>
-		          Device name
-		        </td>
-		        <td id="device-name">
-		          Gateway_1
-		        </td>
-		      </tr>
-		       <tr>
-		        <td>
-		          Serial number
-		        </td>
-		        <td id="device-serial">
-		          123bfhg5662
-		        </td>
-		      </tr>
-		       <tr>
-		        <td>
-		          IP address
-		        </td>
-		        <td id="device-ip">
-		          192.168.0.167:1389
-		        </td>
-		      </tr>
-		       <tr>
-		        <td>
-		          Last activity
-		        </td>
-		        <td id="device-time"> 
-		          2017-05-05 12:06:33
-		        </td>
-		      </tr>
-      	  </table>
-		</div>
-		<div class="device-detail device-prop" style="width: 200px;height:200px ">
-			<div class="usage-info">
-	        	CPU
-	        </div>
-			<div class="my-progress" data-usage-type="cpu">
-			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
+<div>
+	<div class="device-container device-prop">
+		<script>
+			var devices ='${devices}';
+			deviceManager.addDevices(devices);
+	    </script>
+	</div>
+	
+	<div class="device-panel">
+		<div style="height: 25%" class="container">
+			<div class="row" style="height:100%">
+				<div class="device-detail device-prop col-md-6">
+				  <table class="device-table">
+				      <tr>
+				        <td>
+				          Device name
+				        </td>
+				        <td id="device-name">
+				          Gateway_1
+				        </td>
+				      </tr>
+				       <tr>
+				        <td>
+				          Serial number
+				        </td>
+				        <td id="device-serial">
+				          123bfhg5662
+				        </td>
+				      </tr>
+				       <tr>
+				        <td>
+				          IP address
+				        </td>
+				        <td id="device-ip">
+				          192.168.0.167:1389
+				        </td>
+				      </tr>
+				       <tr>
+				        <td>
+				          Last activity
+				        </td>
+				        <td id="device-time"> 
+				          2017-05-05 12:06:33
+				        </td>
+				      </tr>
+		      	  </table>
+				</div>
+				<div class="device-detail device-prop col-md-2">
+					<div class="usage-info">
+			        	CPU
+			        </div>
+					<div class="my-progress" data-usage-type="cpu">
+					 	<canvas id="bar-cpu" class = "bar"></canvas>
+					</div>
+				</div>
+				<div class="device-detail device-prop col-md-2">
+					<div class="usage-info">
+			        	RAM
+			        </div>
+					<div class="my-progress" data-usage-type="ram">
+					 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div id="parent" class="device-detail device-prop" style="width: 200px;height:200px ">
-			<div class="usage-info">
-	        	RAM
-	        </div>
-			<div class="my-progress" data-usage-type="ram">
-			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
-			</div>
+		<div style="height: 75%; width:100%; margin: 20px;">
+			 <button onclick="deviceManager.setProgress('ram',67)">RAM</button> 
+			 <button onclick="deviceManager.setProgress('cpu',56)">CPU</button> 
 		</div>
 	</div>
-	<div style="height: 75%; width:100%; margin: 20px;">
-		 <button onclick="deviceManager.setProgress('ram',67)">RAM</button> 
-		 <button onclick="deviceManager.setProgress('cpu',56)">CPU</button> 
-	</div>
 </div>
-
 </body>
 </html>
