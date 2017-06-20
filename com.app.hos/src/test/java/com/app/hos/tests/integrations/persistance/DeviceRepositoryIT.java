@@ -29,12 +29,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
 @ActiveProfiles("test-sqlite")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SaveUpdateDevicesIT {
+public class DeviceRepositoryIT {
 
 	private static List<Device> devicesList = new LinkedList<Device>();
 	
@@ -138,5 +138,15 @@ public class SaveUpdateDevicesIT {
     	deviceRepository.save(device);
     	
     	Assert.assertEquals(connection4.getConnectionId(),connection.getConnectionId());
+    }
+    
+    @Test
+    public void stage8_saveDeviceShouldThrowExceptionWithValidationTest() {
+    	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
+    			"localhost1", "192.168.0.21", 23451, new DateTime());
+		Device device = new Device("", "");
+		connection.setDevice(device);
+		deviceRepository.save(device);
+		//Assert.assertEquals(1, 2);
     }
 }

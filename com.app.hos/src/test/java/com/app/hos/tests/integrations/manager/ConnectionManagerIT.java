@@ -3,6 +3,7 @@ package com.app.hos.tests.integrations.manager;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -38,7 +39,7 @@ import org.junit.Before;
 /**
 Test ConnectionManager class with Aspects and SQLite database
 */
-
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("test-sqlite")

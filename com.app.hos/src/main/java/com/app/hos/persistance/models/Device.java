@@ -6,13 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity {
-
-	@NotEmpty
+	
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(nullable = false)
