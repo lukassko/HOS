@@ -1,9 +1,13 @@
 package com.app.hos.service.managers.device;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.persistence.NoResultException;
 
 import com.app.hos.share.utils.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +54,18 @@ public class DeviceManager {
 	}
 
 	public Map<Device, DeviceStatus> getDeviceStatuses() {
-		return deviceStatuses;
+		Map<Device,DeviceStatus> allDevicesesStatuses = new HashMap<Device,DeviceStatus>();
+		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
+		for (Device device : devices) {
+			System.out.println(": "+device.toString());
+			DeviceStatus status = deviceStatuses.get(device);
+			if (status == null) {
+				status = new DeviceStatus(0, 0);
+				status.setTime(new DateTime(0));
+			}
+			allDevicesesStatuses.put(device, status);
+		}
+		return allDevicesesStatuses;
 	}
 	
 	public void addDeviceStatus(String serialId, DeviceStatus deviceStatus) {
@@ -76,7 +91,11 @@ public class DeviceManager {
 	}
 
 	private Device findDevice(String serial) {
-		return deviceRepository.findDeviceBySerialNumber(serial);
+		try {
+			return deviceRepository.findDeviceBySerialNumber(serial);
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 	
 	private Device getDeviceBySerialId(String serialId) {

@@ -2,12 +2,12 @@ package com.app.hos.persistance.repository;
 
 import java.util.Collection;
 
-import com.app.hos.persistance.models.Connection;
+import com.app.hos.persistance.models.HistoryConnection;
 
 public interface ConnectionRepository {
 
-	public void save(Connection connection);
+	public void save(HistoryConnection connection);
 	
-	public Collection<Connection> findAllConnectionsByDeviceId(int id); 
+	public Collection<HistoryConnection> findAllConnectionsByDeviceId(int id); 
 	
 }

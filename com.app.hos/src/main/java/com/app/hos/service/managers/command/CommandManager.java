@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.command.CommandFactory;
-import com.app.hos.share.command.HelloCommandBuilder;
 import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandBuilder;
 import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
@@ -25,13 +23,6 @@ public class CommandManager {
 	private DeviceManager deviceManager;
 	@Autowired
 	private Server server;
-
-	public void sendCommand(String connectionId, CommandType type) {
-		if(connectionId != null) {
-			Message<Command> message = createMessage(connectionId,type);
-			server.sendMessage(message);
-		}	
-	}
 	
 	public void executeCommand(MessageHeaders headers, Command command) {
 		CommandType type = CommandType.valueOf(command.getCommandType());
@@ -60,6 +51,14 @@ public class CommandManager {
 		String connectionId = (String)headers.get(IpHeaders.CONNECTION_ID);
 		sendCommand(connectionId,CommandType.HELLO);
 	}	
+	
+
+	public void sendCommand(String connectionId, CommandType type) {
+		if(connectionId != null) {
+			Message<Command> message = createMessage(connectionId,type);
+			server.sendMessage(message);
+		}	
+	}
 
 	private Message<Command> createMessage(String connectionId, CommandType type) {
 		Command command = CommandFactory.getCommand(type);

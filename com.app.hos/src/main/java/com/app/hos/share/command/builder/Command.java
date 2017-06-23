@@ -1,6 +1,7 @@
 package com.app.hos.share.command.builder;
 
 import com.app.hos.share.command.result.Result;
+import com.app.hos.share.command.type.CommandType;
 
 import java.io.Serializable;
 
@@ -32,7 +33,12 @@ public class Command implements Serializable {
     public Result getResult() {
         return result;
     }
+    
     public void setResult(Result result) {
         this.result = result;
+    }
+    
+    public CommandType getEnumeratedCommandType() {
+    	return CommandType.valueOf(commandType);
     }
 }
