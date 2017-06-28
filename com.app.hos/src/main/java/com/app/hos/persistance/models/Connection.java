@@ -2,12 +2,14 @@ package com.app.hos.persistance.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "connections")
@@ -35,7 +37,7 @@ public class Connection extends BaseEntity {
 	private DateTime endConnectionTime;
 	
 	@JsonIgnore
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="device_id")
 	private Device device;
 	
@@ -162,5 +164,18 @@ public class Connection extends BaseEntity {
 				+ remotePort + ", connectionTime=" + connectionTime;
 	}
 
+	public HistoryConnection createHistoryConnection() throws HistoryConnectionException {
+		if (endConnectionTime == null) 
+			throw new HistoryConnectionException();
+
+		HistoryConnection connection = new HistoryConnection();
+		connection.setConnectionTime(connectionTime.getTimestamp());
+		connection.setEndConnectionTime(endConnectionTime.getTimestamp());
+		connection.setDeviceId(device.getId());
+		connection.setIp(ip);
+		connection.setRemotePort(remotePort);
+		
+		return connection;
+	}
 	
 }

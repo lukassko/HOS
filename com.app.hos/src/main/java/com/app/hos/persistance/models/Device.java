@@ -3,22 +3,22 @@ package com.app.hos.persistance.models;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity {
-
-	@NotEmpty
+	
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(nullable = false)
 	private String serial;
 	
-	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Connection connection;
 	
 	public Device(){}
@@ -88,12 +88,10 @@ public class Device extends BaseEntity {
 			return false;
 		return true;
 	}
-	
-	//@JsonValue
+
 	@Override
 	public String toString() {
-		return Integer.toString(getId());
+		return "Device [name=" + name + ", serial=" + serial + ", connection=" + connection + "]";
 	}
-
-	
+		
 }

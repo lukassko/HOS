@@ -20,7 +20,7 @@ public class CommandFactory {
 		} else {
 			return null;
 		}
-		
+		commandBuilder.createCommand();
  		return commandBuilder.getCommand();
 	}
 	

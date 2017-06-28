@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.app.hos.service.webservices.RestClient;
 import com.app.hos.service.webservices.SoapClient;
 
-@Configuration
+//@Configuration
 public class WeatherWsConfig {
 
 	@Bean

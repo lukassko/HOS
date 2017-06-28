@@ -1,9 +1,9 @@
 package com.app.hos.tests.units.service.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 
@@ -25,8 +26,9 @@ import com.app.hos.share.utils.DateTime;
 
 public class DeviceManagerTest {
 	
+	@Autowired
 	@InjectMocks
-	private DeviceManager manager = new DeviceManager();
+	private DeviceManager manager;
 	
 	@Mock
 	private DeviceRepository deviceRepository;
@@ -52,13 +54,13 @@ public class DeviceManagerTest {
 	@Before
     public void setUpTest() {
         MockitoAnnotations.initMocks(this);
-        Mockito.doNothing().when(deviceRepository).save(Mockito.any(Device.class));
         manager.createDevice(headers, device.getName(), device.getSerial());
     }
 	
 
 	@Test
 	public void createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
+        Mockito.doNothing().when(deviceRepository).save(Mockito.any(Device.class));
 		Mockito.verify(deviceRepository, Mockito.times(1)).save(Mockito.any(Device.class));
 	}
 	
@@ -81,15 +83,33 @@ public class DeviceManagerTest {
 		Assert.assertEquals(1, size);
 	}
 	
+	
+	@Test
+	public void getDeviceStatusesShouldCallForAllDeviceDb () {
+        Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
+        manager.getDeviceStatuses();
+        Mockito.verify(deviceRepository, Mockito.times(1)).findAll();
+	}
+	
+	@Test
+	public void getDeviceStatusesWhenNoDatainDbShouldReturnEmptyMap () {
+        Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
+		Map<Device, DeviceStatus> statuses = manager.getDeviceStatuses();
+		Assert.assertTrue(statuses.isEmpty());
+	}
+	
 	@Test
 	public void addDeviceStatusMethodShouldAddStatusToMap() {
 		Connection connection = manager.getConnectionBySerial(device.getSerial());
 		device.setConnection(connection);
 		DeviceStatus status = new DeviceStatus(56.2, 13.4);
 		manager.addDeviceStatus(device.getSerial(), status);
+		List<Device> devicesList = new ArrayList<Device>();
+		devicesList.add(device);
+		Mockito.when(deviceRepository.findAll()).thenReturn(devicesList);
 		Map<Device,DeviceStatus> statuses = manager.getDeviceStatuses();
 		Assert.assertEquals(1, statuses.size());
 		Assert.assertTrue(status.getCpuUsage() == statuses.get(device).getCpuUsage());
-
 	}
 }
+

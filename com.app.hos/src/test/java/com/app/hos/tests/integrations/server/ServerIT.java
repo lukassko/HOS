@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.manager;
+package com.app.hos.tests.integrations.server;
 
 
 import org.junit.BeforeClass;
@@ -46,52 +46,6 @@ Test ConnectionManager class with Aspects and SQLite database
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("test-sqlite")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ConnectionManagerIT {
+public class ServerIT {
 
-	private static Device device;
-	private static Connection connection;
-	
-	@Autowired
-    private LoggingRepository loggingRepository;
-	
-	@Autowired
-	@InjectMocks
-	private ConnectionManager manager;
-	
-	@Mock
-	private DeviceManager deviceManager;
-	
-	@Mock
-	private ApplicationContext appContext;
-	
-	@Before
-    public void initMocks(){
-        MockitoAnnotations.initMocks(this);
-    }
-	
-	@BeforeClass
-    public static void beforeClass() {
-		Connection testConnection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost", "192.168.0.21", 23451, new DateTime());
-		Device testDevice = new Device("Device", "98547kjyy1");
-		
-		testDevice.setConnection(testConnection);
-		testConnection.setDevice(testDevice);
-
-		device = testDevice;
-		connection = testConnection;
-    }
-    
-    @Test
-    @Rollback(true)
-    public void stage1_addNewDeviceMethodShouldAddEntryToDatabseLog() {
-    	manager.addConnection(connection);
-    	Collection<String> logsRows = loggingRepository.findAll();
-    	List<String> logs = new LinkedList<String>(logsRows);
-    	Assert.assertTrue(logs.size() == 1);
-    	logsRows = loggingRepository.findLogForLevel(Level.INFO.toString());
-    	logs = new LinkedList<String>(logsRows);
-    	Assert.assertTrue(logs.size() == 1);
-    }
-    
 }

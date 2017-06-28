@@ -57,7 +57,6 @@ public class JsonConverter {
             }
             ObjectNode valueNode = mapper.createObjectNode();
             for(Field field : valueFields){
-            	getJsonFieldName(field);
             	if(isNotIgnored(field))
 					valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
             }
@@ -81,12 +80,9 @@ public class JsonConverter {
     		try {
 				Method annotationMethod = clazz.getMethod("value");
 				String name = annotationMethod.getName();
-				System.out.println(name);
 			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
@@ -148,7 +144,6 @@ public class JsonConverter {
     
     private static ObjectNode getNullNode() {
     	ObjectNode node = mapper.createObjectNode();
-    	
     	return null;
     }
 }

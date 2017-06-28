@@ -273,6 +273,7 @@
 				</execution>
 			</executions>
 			<configuration>
+				<skip>true</skip>
 				<schemaLanguage>WSDL</schemaLanguage>
 				<generateDirectory>src/main/java</generateDirectory>
 				<generatePackage>com.app.hos.service.webservices.wsdl</generatePackage>

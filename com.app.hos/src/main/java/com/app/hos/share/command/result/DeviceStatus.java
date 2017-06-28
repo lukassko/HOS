@@ -46,5 +46,10 @@ public class DeviceStatus implements Result,Serializable {
 	public void setCpuUsage(double cpuUsage) {
 		this.cpuUsage = cpuUsage;
 	}
+
+	@Override
+	public String toString() {
+		return "DeviceStatus [time=" + time + ", ramUsage=" + ramUsage + ", cpuUsage=" + cpuUsage + "]";
+	}
     
 }
