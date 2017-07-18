@@ -1,5 +1,5 @@
 package com.app.hos.service.websocket.command.type;
 
 public enum WebCommandType {
-	REMOVE_DEVICE
+	GET_ALL_DEVICES,REMOVE_DEVICE
 }

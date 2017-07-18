@@ -1,4 +1,4 @@
-alert('OK');
+
 var deviceManager = (function() {
 
 	var progressMap = new Object();
@@ -6,9 +6,8 @@ var deviceManager = (function() {
 	var deviceStatuses = new Object();
 	var selectedDeivce = null;
 	var bars = progressBars.getProgresBarArray;
-	
-	alert("EXEC");
-	$(".device-container").append("<div class='no-device'>NO DEVICES</div>");
+
+	$(".device-container").append("<div class='no-device'>No connected devices<br><i class='fa fa-cog fa-3x'></i></div>");
 	
 	$('.my-progress').each(function( index ) {
 		var data = $(this).attr('data-usage-type');
@@ -16,6 +15,12 @@ var deviceManager = (function() {
 	});
 		
 	function _addDevices(devices) {
+		var tmp = Array.from(devices);
+		if (devices.length == 0) {
+			alert('EMPTY');
+			return
+		}
+		$(".no-device").empty();
 		var devices = JSON.parse(devices);
 		this.devices = devices;
 		for (var device of devices) { 

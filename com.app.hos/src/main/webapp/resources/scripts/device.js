@@ -16,7 +16,6 @@ Device.prototype.draw = function(content) {
 function PhoneDevice(name,serial,ip,port,connection) {
 	this.icon = "";
 	Device.call(this,name,serial,ip,port,connection,icon);
-
 }
 
 PhoneDevice.prototype = Object.create(Device.prototype);

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
-import com.app.hos.persistance.logging.LoggingRepository;
+import com.app.hos.logging.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.service.managers.connection.ConnectionManager;
 

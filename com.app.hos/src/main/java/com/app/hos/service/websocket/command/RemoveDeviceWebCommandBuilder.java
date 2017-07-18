@@ -7,8 +7,13 @@ public class RemoveDeviceWebCommandBuilder extends AbstractWebCommandBuilder {
 
 	@Override
 	public void setCommandType() {
-		String type = WebCommandType.REMOVE_DEVICE.toString();
-		command.setType(type);
+		command.setType(WebCommandType.REMOVE_DEVICE.toString());
+	}
+
+	@Override
+	public void setMessage() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

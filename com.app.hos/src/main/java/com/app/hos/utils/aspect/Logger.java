@@ -4,7 +4,7 @@ import java.util.logging.Level;
 
 import org.aspectj.lang.JoinPoint;
 
-import com.app.hos.persistance.logging.LoggingRepository;
+import com.app.hos.logging.LoggingRepository;
 import com.app.hos.share.utils.DateTime;
 
 public class Logger {

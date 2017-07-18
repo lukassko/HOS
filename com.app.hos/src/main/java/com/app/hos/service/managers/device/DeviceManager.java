@@ -57,7 +57,6 @@ public class DeviceManager {
 		Map<Device,DeviceStatus> allDevicesesStatuses = new HashMap<Device,DeviceStatus>();
 		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
 		for (Device device : devices) {
-			System.out.println(": "+device.toString());
 			DeviceStatus status = deviceStatuses.get(device);
 			if (status == null) {
 				status = new DeviceStatus(0, 0);

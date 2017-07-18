@@ -8,6 +8,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
