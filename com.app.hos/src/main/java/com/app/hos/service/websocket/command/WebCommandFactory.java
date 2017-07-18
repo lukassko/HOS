@@ -18,7 +18,7 @@ public class WebCommandFactory {
 		} else {
 			return null;
 		}
-		
+		commandBuilder.createCommand();
  		return commandBuilder.getCommand();
 	}
 }

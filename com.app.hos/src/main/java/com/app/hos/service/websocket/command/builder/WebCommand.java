@@ -2,27 +2,35 @@ package com.app.hos.service.websocket.command.builder;
 
 import java.io.Serializable;
 
+import com.app.hos.service.websocket.command.type.WebCommandType;
+
 public class WebCommand implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	public enum WebSocketCommandType {
-		REMOVE_DEVICE
-	}
-	
 	private String type;
-	private String serial;
+		
+	private String message;
 	
 	public String getType() {
 		return type;
 	}
+	
 	public void setType(String type) {
 		this.type = type;
 	}
-	public String getSerial() {
-		return serial;
+
+	public String getMessage() {
+		return message;
 	}
-	public void setSerial(String serial) {
-		this.serial = serial;
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
+
+	@Override
+	public String toString() {
+		return "WebCommand [type=" + type + ", message=" + message + "]";
+	}
+
 }

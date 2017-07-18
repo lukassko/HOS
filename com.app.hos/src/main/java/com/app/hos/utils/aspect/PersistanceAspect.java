@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.app.hos.persistance.logging.LoggingRepository;
+import com.app.hos.logging.LoggingRepository;
 import com.app.hos.persistance.models.Device;
 
 @Aspect

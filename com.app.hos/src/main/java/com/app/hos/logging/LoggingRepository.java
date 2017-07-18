@@ -1,4 +1,4 @@
-package com.app.hos.persistance.logging;
+package com.app.hos.logging;
 
 import java.util.Collection;
 

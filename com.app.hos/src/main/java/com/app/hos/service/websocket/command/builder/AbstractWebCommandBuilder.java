@@ -13,4 +13,6 @@ public abstract class AbstractWebCommandBuilder {
 	}
 	
 	public abstract void setCommandType ();
+	
+	public abstract void setMessage ();
 }

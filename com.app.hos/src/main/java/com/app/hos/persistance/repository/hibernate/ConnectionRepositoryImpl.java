@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -12,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.hos.persistance.models.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 
-@Transactional
+@Transactional("sqliteJpaTransactionManager")
 @Repository
 public class ConnectionRepositoryImpl implements  ConnectionRepository {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="myslq_persistance")
 	private EntityManager manager;
 	
 	public void save(HistoryConnection connection) {

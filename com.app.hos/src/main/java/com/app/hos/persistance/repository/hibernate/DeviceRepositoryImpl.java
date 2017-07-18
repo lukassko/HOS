@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -18,7 +19,7 @@ import com.app.hos.persistance.repository.DeviceRepository;
 @Repository
 public class DeviceRepositoryImpl implements DeviceRepository {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="myslq_persistance")
 	private EntityManager manager;
 	
 	

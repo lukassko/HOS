@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.persistance.models.Device;
 import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.websocket.DeviceWebSocket;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -20,21 +21,19 @@ public class MainController {
 	
 	//private RestClient rest;
 	private DeviceManager deviceManager;
+	private DeviceWebSocket webSocket;
 	
 	@Autowired
-	public MainController(DeviceManager deviceManager) {
+	public MainController(DeviceManager deviceManager, DeviceWebSocket webSocket) {
 		this.deviceManager = deviceManager;
+		this.webSocket = webSocket;
 	}
-	
-	// TESTING WESOCKETS
 	
 	@MessageMapping("/device-broker")
     @SendTo("/topic/device-info")
-    public String greeting(String message) throws Exception {
-        Thread.sleep(1000); // simulated delay
-        return new String("NO_SIEMA");
+    public void onCommandReceive(String command) {
+        webSocket.receiveMessage(command);
     }
-	
 	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
 	public String showMainPage() {
