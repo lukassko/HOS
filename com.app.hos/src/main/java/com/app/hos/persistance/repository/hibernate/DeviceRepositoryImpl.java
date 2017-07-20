@@ -19,7 +19,7 @@ import com.app.hos.persistance.repository.DeviceRepository;
 @Repository
 public class DeviceRepositoryImpl implements DeviceRepository {
 
-	@PersistenceContext(unitName="myslq_persistance")
+	@PersistenceContext//(unitName="myslq_persistance")
 	private EntityManager manager;
 	
 	

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,10 +31,12 @@ public class Connection extends BaseEntity {
 	@Column(name="remote_port")
 	private int remotePort;
 
+	@Lob
 	@NotEmpty
 	@Column(name="connection_time")
 	private DateTime connectionTime;
 
+	@Lob
 	@Column(name="end_connection_time")
 	private DateTime endConnectionTime;
 	

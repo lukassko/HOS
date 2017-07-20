@@ -190,14 +190,20 @@
 	   <scope>runtime</scope>
 	</dependency>
 	
-	<!-- Tomcat dependencies -->
-	<dependency>
+	<!-- Tomcat dependencies-->
+	<dependency> 
 	    <groupId>org.apache.tomcat</groupId>
 	    <artifactId>tomcat-dbcp</artifactId>
 	    <version>7.0.55</version>
-	</dependency>
+	</dependency> 
 	
-    
+	<!-- Tomcat dependencies
+    <dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-c3p0</artifactId>
+	    <version>4.3.6.Final</version>
+	</dependency> -->
+	
 	<!-- WebSockets dependencies -->
 	
 	<dependency>
@@ -256,6 +262,25 @@
                     </plugin>
                 </plugins>
             </build>
+    	</profile>
+    	<profile>
+        	<id>production</id>
+        	<activation>
+	            <activeByDefault>true</activeByDefault>
+	            <property>
+	                <name>spring.profiles.active</name>
+	                <value>production</value>
+	            </property>
+        	</activation>
+    	</profile>
+    	<profile>
+        	<id>development</id>
+        	<activation>
+	            <property>
+	                <name>spring.profiles.active</name>
+	                <value>development</value>
+	            </property>
+        	</activation>
     	</profile>
 	</profiles>
 
