@@ -9,7 +9,8 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	//@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer id;
 
 	public int getId() {

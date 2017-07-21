@@ -17,7 +17,7 @@ import com.app.hos.persistance.repository.ConnectionRepository;
 @Repository
 public class ConnectionRepositoryImpl implements  ConnectionRepository {
 
-	@PersistenceContext(unitName="myslq_persistance")
+	@PersistenceContext//(unitName="myslq_persistance")
 	private EntityManager manager;
 	
 	public void save(HistoryConnection connection) {

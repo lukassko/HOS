@@ -79,7 +79,7 @@ public class DateTime implements Serializable {
 
 	@Override
 	public String toString() {
-		return "DateTime [hour=" + hour + ", minutes=" + minutes + ", seconds=" + seconds
+		return "DateTime [hour=" + hour + ", minutes=" + minutes + ", seconds=" + seconds + ", millis=" + millis
 				+ ", day=" + day + ", month=" + month + ", year=" + year + "]";
 	}
 

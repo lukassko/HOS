@@ -30,10 +30,17 @@ public class PersistanceConfig {
     static class Hsqldb
     { }
 	
+	//@Profile({"test-sqlite","integration-test"})
 	@Configuration
-	@Profile({"test-sqlite","integration-test"})
+	@Profile({"test-sqlite"})
 	@PropertySource({ "classpath:persistance/properties/sqlite-test.properties" })
     static class SQLite
+    { }
+	
+	@Configuration
+	@Profile({"integration-test"})
+	@PropertySource({ "classpath:persistance/properties/mysql.properties" })
+    static class Mysql
     { }
 	
 	@Autowired
@@ -79,7 +86,7 @@ public class PersistanceConfig {
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("hibernate.hbm2ddl.auto"));
 	            setProperty("hibernate.hbm2ddl.import_files",
-		  	              env.getProperty("hibernate.hbm2ddl.import_files"));
+		  	      env.getProperty("hibernate.hbm2ddl.import_files"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
 	            setProperty("hibernate.globally_quoted_identifiers",

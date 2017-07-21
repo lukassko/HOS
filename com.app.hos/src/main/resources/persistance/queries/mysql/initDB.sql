@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CREATE DATABASE IF NOT EXISTS hos;
 GRANT ALL PRIVILEGES ON hos.* TO pc@localhost IDENTIFIED BY 'pc';
 
@@ -7,3 +8,5 @@ CREATE TABLE IF NOT EXISTS category (
 	id INT(4)  UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(20)
 ) engine=InnoDB;
+=======
+>>>>>>> 76bca260a3aebec8aa39c08258045ac0b3e027ed
