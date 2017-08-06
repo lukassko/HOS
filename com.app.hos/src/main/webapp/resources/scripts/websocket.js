@@ -7,10 +7,11 @@ var hosWebsocket = (function () {
 	    stompClient = Stomp.over(socket);
 	    stompClient.connect({}, function (frame) {
 	    	
-	        stompClient.subscribe('/topic/device-info', function (message) {
-	        	deviceManager.receiveMessage(message);
+	        stompClient.subscribe('/topic/device-info', function (command) {
+	        	commandManager.receiveCommand(command);
 	        });
 	        
+	        setSystemInfo("Connected to websocket");
 	    });
 	};
 	

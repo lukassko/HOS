@@ -12,8 +12,8 @@ public class WebCommand implements Serializable {
 		
 	private String message;
 	
-	public String getType() {
-		return type;
+	public WebCommandType getType() {
+		return WebCommandType.valueOf(this.type);
 	}
 	
 	public void setType(String type) {

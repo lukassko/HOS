@@ -31,13 +31,28 @@
 		    	$('#active-page').text(title);
 		    });
 		});
-		
 		hosWebsocket.connect();
 	});
 
+	function setSystemInfo(message) {
+		$("#system-info").text(message);
+		$("#system-info").fadeIn(1000);
+		setTimeout(function(){
+			$("#system-info").fadeOut(2000)
+		}, 3000 );
+	};
+	
+	var intervalID = setInterval(function(){
+		var builder = new WebCommandBuilder();
+        var command = builder.construct(new GetAllDeviceCommandBuilder());
+        hosWebsocket.sendCommand(command);
+	}, 5000);
+	
 	window.addEventListener("beforeunload", function (e) {
 		var dialogText = 'Dialog text here';
 		e.returnValue = dialogText;
+		clearInterval(intervalID);
+		hosWebsocket.disconnect();
 		return dialogText;                             
 	}); 
 	
@@ -93,6 +108,7 @@
 	<div id="user-bar" class="user-bar">
 		<span> Active page: </span>
 		<span id="active-page"> Dashboard </span>
+		<span id="system-info">Testowa wiadomosc: polaczone 5 urzadzen</span>
 	</div>
 	<div id="container" >
 		Hello WORLD

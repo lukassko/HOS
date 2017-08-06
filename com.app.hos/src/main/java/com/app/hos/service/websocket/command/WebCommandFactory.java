@@ -14,8 +14,13 @@ public class WebCommandFactory {
 			throw new IllegalArgumentException();
 		}
 		if (type == WebCommandType.REMOVE_DEVICE) {
+			System.out.println("OK1");
 			commandBuilder.setCommandBuilder(new RemoveDeviceWebCommandBuilder());
+		} else if (type == WebCommandType.GET_ALL_DEVICES) {
+			System.out.println("OK2");
+			commandBuilder.setCommandBuilder(new GetAllDevicesWebCommandBuilder());
 		} else {
+			System.out.println("OK3");
 			return null;
 		}
 		commandBuilder.createCommand();

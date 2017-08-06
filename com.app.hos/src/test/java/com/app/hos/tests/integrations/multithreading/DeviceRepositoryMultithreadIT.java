@@ -3,7 +3,6 @@ package com.app.hos.tests.integrations.multithreading;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,9 +23,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
-
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.PersistanceConfig;
 
@@ -36,7 +32,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
 @ActiveProfiles("integration-test")

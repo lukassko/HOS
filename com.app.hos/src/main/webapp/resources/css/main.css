@@ -158,6 +158,14 @@ body {
 	width: 100%;
 }
 
+#system-info {
+	color: yellow;
+	font-size: 20px;
+	float: right;
+	padding-right: 20px;
+	display: none;
+}
+
 /* CONNECTED DEVICES */
 
 .device-container {

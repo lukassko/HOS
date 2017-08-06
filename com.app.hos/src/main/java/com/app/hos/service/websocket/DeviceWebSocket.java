@@ -1,61 +1,61 @@
 package com.app.hos.service.websocket;
 
-import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.ip.IpHeaders;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.UnsupportedEncodingException;
 
-import com.app.hos.persistance.models.Device;
-import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.builder.WebCommand;
-import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.utils.json.JsonConverter;
 
 @Service
 public class DeviceWebSocket {
 
+	private final int THREAD_COUNT = 4;
 	@Autowired
     private SimpMessagingTemplate template;
+
 	@Autowired
-	private DeviceManager deviceManager;
+	private WebCommandManager commandManager;
 	
-	private ScheduledExecutorService scheduler;
-	private Future<?> threadHandler;
+	ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
 	
 	private final String destination = "/topic/device-info";
 	
 	public DeviceWebSocket() {
-		this.scheduler  = Executors.newScheduledThreadPool(1);
-		//this.threadHandler = scheduler.scheduleAtFixedRate(sendDevicesStatuses, 5, 5, SECONDS);
 	}
 
 	public void receiveMessage(String message) {
-		WebCommand command = JsonConverter.getObject(message, WebCommand.class);
+		final WebCommand command = JsonConverter.getObject(message, WebCommand.class);
 		System.out.println(command.toString());
-		Map<Device, DeviceStatus> devicesStatuses = deviceManager.getDeviceStatuses();
-		String jsonMap = JsonConverter.getJson(devicesStatuses);
-		sendJsonOverWebsocket(jsonMap);
+		Callable<WebCommand> commandTask = new Callable<WebCommand>() {
+			public WebCommand call() throws Exception {
+				return commandManager.executeCommand(command);
+			}
+		};
+		Future<WebCommand> submit = commandExecutor.submit(commandTask);
+		try {
+			WebCommand cmd = submit.get();
+			if (cmd != null) {
+				String response = JsonConverter.getJson(cmd);
+				System.out.println(response);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	private Runnable sendDevicesStatuses = new Runnable() {
-        public void run() {
-        	Map<Device,DeviceStatus> deviceStatuses = deviceManager.getDeviceStatuses();
-        	sendJsonOverWebsocket(JsonConverter.getJson(deviceStatuses));
-        }
-	};
 
 	private void sendObjectOverWebsocket(Object object) {
 		sendObjectOverWebsocket(destination, object);
