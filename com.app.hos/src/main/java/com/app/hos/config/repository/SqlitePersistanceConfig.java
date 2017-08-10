@@ -56,6 +56,10 @@ public class SqlitePersistanceConfig {
 	   dataSource.setUrl(env.getProperty("sqlite.jdbc.url"));
 	   dataSource.setUsername(env.getProperty("sqlite.jdbc.user"));
 	   dataSource.setPassword(env.getProperty("sqlite.jdbc.pass"));
+	   dataSource.setInitialSize(Integer.parseInt(env.getProperty("sqlite.hibernate.initial_size")));
+	   dataSource.setMaxActive(Integer.parseInt(env.getProperty("sqlite.hibernate.max_active")));
+	   dataSource.setMaxIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.max_idle")));
+	   dataSource.setMinIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.min_idle")));
 	   return dataSource;
 	}
 	 

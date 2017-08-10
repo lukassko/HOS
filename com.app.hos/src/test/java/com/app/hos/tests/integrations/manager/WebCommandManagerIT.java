@@ -1,5 +1,6 @@
 package com.app.hos.tests.integrations.manager;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,7 +14,7 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 import com.app.hos.tests.integrations.config.PersistanceConfig;
 
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @ActiveProfiles("integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, ApplicationContextConfig.class})

@@ -24,8 +24,16 @@ public class PersistanceAspect extends Logger {
 	@Before("addNewDevicePointcut(device)")
 	public void addNewDevice(JoinPoint point,Device device) {
 		if (device.isNew()) {
-			logAndSaveMessage(point, Level.INFO, device.getSerial(),"New device added");
+			logAndSaveMessage(point, Level.INFO, device.getSerial(),"New device added.");
 		} 
+	}
+	
+	@Pointcut("execution(* com.app.hos.persistance.repository.DeviceRepository.update*(..)) && args(serial,name)")
+	public void updateDevicePointcut(String serial, String name) {}
+	
+	@Before("updateDevicePointcut(serial,name)")
+	public void updateDevice(JoinPoint point,String serial, String name) {
+		logAndSaveMessage(point, Level.INFO, serial,"Device was updated.");
 	}
 	
 //	@AfterThrowing(pointcut="databaseExceptionPointcut()", throwing="exception")

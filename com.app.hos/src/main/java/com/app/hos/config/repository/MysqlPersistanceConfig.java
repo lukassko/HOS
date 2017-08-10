@@ -32,14 +32,14 @@ public class MysqlPersistanceConfig {
 	@Primary
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setPersistenceUnitName("myslq_persistance");
-		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
-		em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-		em.setJpaProperties(hibernateProperties());
-		em.afterPropertiesSet();
-		return em.getObject();
+		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+		emf.setPersistenceUnitName("myslq_persistance");
+		emf.setDataSource(dataSource());
+		emf.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
+		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		emf.setJpaProperties(hibernateProperties());
+		emf.afterPropertiesSet();
+		return emf.getObject();
 	}
 	
 	@Primary
@@ -73,6 +73,10 @@ public class MysqlPersistanceConfig {
 	         {
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("hibernate.hbm2ddl.auto"));
+	            setProperty("hibernate.show_sql", 
+	              env.getProperty("hibernate.show_sql"));
+	            setProperty("hibernate.format_sql", 
+	  	          env.getProperty("hibernate.format_sql"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
 	            setProperty("hibernate.globally_quoted_identifiers",

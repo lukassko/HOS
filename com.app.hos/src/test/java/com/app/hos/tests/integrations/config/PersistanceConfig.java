@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -46,6 +47,7 @@ public class PersistanceConfig {
 	@Autowired
 	private Environment env;
 
+	@Primary
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -58,11 +60,13 @@ public class PersistanceConfig {
 	}
 		
 	
+	@Primary
 	@Bean(name = "testEntityManager")
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }
 	
+	@Primary
 	@Bean
 	public DataSource dataSource() {
 	   BasicDataSource dataSource = new BasicDataSource();
@@ -73,6 +77,7 @@ public class PersistanceConfig {
 	   return dataSource;
 	}
 
+	@Primary
 	@Bean
     JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

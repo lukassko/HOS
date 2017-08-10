@@ -20,9 +20,7 @@ import com.app.hos.persistance.repository.DeviceRepository;
 public class DeviceRepositoryImpl implements DeviceRepository {
 
 	@PersistenceContext//(unitName="myslq_persistance")
-
 	private EntityManager manager;
-	
 	
 	public void save(Device device) {
 		if(device.isNew()) {
@@ -45,6 +43,16 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	public Collection<Device> findAll() {
 		Query query = this.manager.createQuery("SELECT d FROM Device d");
 		return query.getResultList();
+	}
+
+	public void updateDeviceNameByDeviceId(int id, String name) {
+		Device device = findDeviceById(id);
+		device.setName(name);
+	}
+
+	public void updateDeviceNameBySerialNo(String serial, String name) {
+		Device device = findDeviceBySerialNumber(serial);
+		device.setName(name);
 	}
 
 }

@@ -16,7 +16,7 @@ import com.app.hos.logging.LoggingRepository;
 
 
 @SuppressWarnings("unchecked")
-//@Repository
+@Repository
 public class LoggingRepositoryImpl implements LoggingRepository {
 
 	@PersistenceContext(unitName = "sqlite_persistance")

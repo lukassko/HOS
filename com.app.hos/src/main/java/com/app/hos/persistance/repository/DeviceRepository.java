@@ -14,5 +14,9 @@ public interface DeviceRepository {
 	public Device findDeviceBySerialNumber(String serial);
 	
 	public Device findDeviceById(int id);
+	
+	public void updateDeviceNameByDeviceId(int id,String name);
+	
+	public void updateDeviceNameBySerialNo(String serial,String name);
 
 }
