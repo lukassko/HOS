@@ -1,12 +1,10 @@
 package com.app.hos.service.managers.device;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.persistence.NoResultException;
 
 import com.app.hos.share.utils.DateTime;
@@ -14,106 +12,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.share.command.result.DeviceStatus;
 
 @Service
+@Transactional
 public class DeviceManager {
 	
 	@Autowired
 	private DeviceRepository deviceRepository;
-	
-	private Map<String,Device> connectedDevices = new HashMap<String,Device>();
-	private Map<Device,DeviceStatus> deviceStatuses = new HashMap<Device,DeviceStatus>();
-	
+
 	//need to find device at first, later create if not exist
 	public void createDevice(MessageHeaders messageHeaders, String name, String serial) {
-		String connectionId = messageHeaders.get(IpHeaders.CONNECTION_ID).toString();
-		if (!isDeviceConnected(connectionId)) {
-			Device device = findDevice(serial);
-			if (device == null) {
-				Device newDevice = createNewDevice(messageHeaders,name,serial);
-				connectedDevices.put(connectionId, newDevice);
-				deviceRepository.save(newDevice);
-			} else {
-				Connection connection = createNewConnection(messageHeaders);
-				device.setConnection(connection);
-			}
-		}
-	}
-
-	public Set<Device> getConnectedDevices() {
-		Set<Device> devicesList = new HashSet<Device>();
-		for (Device value : connectedDevices.values()) {
-			devicesList.add(value);
-	    }
-		return devicesList;
-	}
-
-	public Map<Device, DeviceStatus> getDeviceStatuses() {
-		Map<Device,DeviceStatus> allDevicesesStatuses = new HashMap<Device,DeviceStatus>();
-		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
-		for (Device device : devices) {
-			DeviceStatus status = deviceStatuses.get(device);
-			if (status == null) {
-				status = new DeviceStatus(0, 0);
-				status.setTime(new DateTime(0));
-			}
-			allDevicesesStatuses.put(device, status);
-		}
-		return allDevicesesStatuses;
-	}
-	
-	public void addDeviceStatus(String serialId, DeviceStatus deviceStatus) {
-		Device device = getDeviceBySerialId(serialId);
-		if (device == null) {
-			return;
-		}
-		deviceStatuses.put(device, deviceStatus);
-	}
-	
-	public void removeConnectedDevice(String connectionId){
-		Device device = connectedDevices.get(connectionId);
-		deviceStatuses.remove(device);
-		connectedDevices.remove(connectionId);
-	}
-	
-	public Connection getConnectionBySerial(String serial) {
-		Device device = getDeviceBySerialId(serial);
-		if (device != null) {
-			return device.getConnection();
-		}
-		return null;
-	}
-
-	private Device findDevice(String serial) {
+		Connection connection = createNewConnection(messageHeaders);
 		try {
-			return deviceRepository.findDeviceBySerialNumber(serial);
+			Device device = deviceRepository.findBySerialNumber(serial);
+			device.setConnection(connection);
 		} catch (NoResultException e) {
-			return null;
+			Device device = createNewDevice(messageHeaders,name,serial);
+			device.setConnection(connection);
+			deviceRepository.save(device);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	private Device getDeviceBySerialId(String serialId) {
-		for(Map.Entry<String, Device> entry : connectedDevices.entrySet()) {
-			Device device = entry.getValue();
-		    if (device.getSerial().equals(serialId)) {
-		    	return device;
-		    }
+
+	// sort statuses by time and get the latest status of device; 
+	// TEST SORTING WITH JUNIT
+	public Map<Device, DeviceStatus> getDeviceStatuses() {
+		Map<Device, DeviceStatus> deviceStatus = new HashMap<Device, DeviceStatus>();
+		Collection<Device> devices = deviceRepository.findAll();
+		for (Device device : devices) {
+			List<DeviceStatus> statuses = device.getDeviceStatuses();
+			Collections.sort(statuses);
+			deviceStatus.put(device, statuses.get(statuses.size() - 1));
 		}
-		return null;
+		return deviceStatus;
 	}
 	
-	private boolean isDeviceConnected(String connectionId) {
-		if (connectedDevices.containsKey(connectionId)) {
-			return true;
-		}
-		return false;
+	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {
+		Device device = deviceRepository.findBySerialNumber(serial);
+		List<DeviceStatus> statuses = device.getDeviceStatuses();
+		statuses.add(deviceStatus);
 	}
 	
+	// update connection time in 'connection' table, add HistoryConnection
+	public void removeConnectedDevice(String connectionId){
+		//Device device = connectedDevices.get(connectionId);
+		//deviceStatuses.remove(device);
+		//connectedDevices.remove(connectionId);
+	}
+
 	private Connection createNewConnection(MessageHeaders headers) {
 		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
 		String ip = headers.get(IpHeaders.IP_ADDRESS).toString();

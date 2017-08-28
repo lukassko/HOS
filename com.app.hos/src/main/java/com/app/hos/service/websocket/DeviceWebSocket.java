@@ -22,6 +22,7 @@ import com.app.hos.utils.json.JsonConverter;
 public class DeviceWebSocket {
 
 	private final int THREAD_COUNT = 4;
+	
 	@Autowired
     private SimpMessagingTemplate template;
 
@@ -32,12 +33,12 @@ public class DeviceWebSocket {
 	
 	private final String destination = "/topic/device-info";
 	
-	public DeviceWebSocket() {
-	}
+	public DeviceWebSocket() {}
 
 	public void receiveMessage(String message) {
 		final WebCommand command = JsonConverter.getObject(message, WebCommand.class);
 		System.out.println(command.toString());
+		System.out.println(command.getType().toString());
 		Callable<WebCommand> commandTask = new Callable<WebCommand>() {
 			public WebCommand call() throws Exception {
 				return commandManager.executeCommand(command);

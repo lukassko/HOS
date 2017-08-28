@@ -1,5 +1,6 @@
 package com.app.hos.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
-		Set<Device> devices = this.deviceManager.getConnectedDevices();
-		String jsonDevices = JsonConverter.getJson(devices);
-		model.addAttribute("devices", jsonDevices);
+		//List<Device> devices = this.deviceManager.getConnectedDevices();
+		//String jsonDevices = JsonConverter.getJson(devices);
+		//model.addAttribute("devices", jsonDevices);
 		return "system/devices";
 	}
 	

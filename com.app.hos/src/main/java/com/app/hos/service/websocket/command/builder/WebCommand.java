@@ -8,15 +8,16 @@ public class WebCommand implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String type;
+	private WebCommandType type;
 		
 	private String message;
 	
 	public WebCommandType getType() {
-		return WebCommandType.valueOf(this.type);
+		return this.type;
 	}
 	
-	public void setType(String type) {
+	
+	public void setType(WebCommandType type) {
 		this.type = type;
 	}
 

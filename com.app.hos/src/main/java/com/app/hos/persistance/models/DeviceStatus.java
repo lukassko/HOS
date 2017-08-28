@@ -1,24 +1,22 @@
-package com.app.hos.share.command.result;
+package com.app.hos.persistance.models;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.app.hos.share.utils.DateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DeviceStatus implements Result,Serializable {
+@Entity
+@Table(name = "devices_statuses")
+public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus> {
 
-	@JsonIgnore
-	private static final long serialVersionUID = 2L;
-	
 	private DateTime time;
-	@JsonProperty("ram")
+
     private double ramUsage;
-	@JsonProperty("cpu")
+
     private double cpuUsage;
     
-	public DeviceStatus( double ramUsage, double cpuUsage) {
-		this.time = new DateTime();
+    public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
+		this.time = time;
 		this.ramUsage = ramUsage;
 		this.cpuUsage = cpuUsage;
 	}
@@ -47,14 +45,15 @@ public class DeviceStatus implements Result,Serializable {
 		this.cpuUsage = cpuUsage;
 	}
 
-	public com.app.hos.persistance.models.DeviceStatus createEntityDeviceStatus() {
-		return new com.app.hos.persistance.models.DeviceStatus(this.time,this.ramUsage,this.cpuUsage);
+	public int compareTo(DeviceStatus status) {
+		long thisTimestamp = this.time.getTimestamp();
+		long objectTimestamp = status.getTime().getTimestamp();
+		return (thisTimestamp < objectTimestamp ) ? -1: (thisTimestamp > objectTimestamp) ? 1:0;
 	}
-
 	
 	@Override
 	public String toString() {
 		return "DeviceStatus [time=" + time + ", ramUsage=" + ramUsage + ", cpuUsage=" + cpuUsage + "]";
 	}
-    
+
 }

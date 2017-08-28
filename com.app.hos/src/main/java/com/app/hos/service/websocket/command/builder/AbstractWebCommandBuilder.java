@@ -10,7 +10,7 @@ public abstract class AbstractWebCommandBuilder {
 	protected DeviceManager deviceManager;
 	
 	protected WebCommand command;
-
+		
     public WebCommand getCommand() {
         return this.command;
     }

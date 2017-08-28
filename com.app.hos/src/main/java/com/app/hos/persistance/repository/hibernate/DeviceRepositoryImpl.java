@@ -1,7 +1,7 @@
 package com.app.hos.persistance.repository.hibernate;
 
 import java.util.Collection;
-
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 
-@Transactional
 @Repository
 public class DeviceRepositoryImpl implements DeviceRepository {
 
-	@PersistenceContext//(unitName="myslq_persistance")
+	@PersistenceContext
 	private EntityManager manager;
 	
 	public void save(Device device) {
@@ -30,11 +30,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		}
 	}
 
-	public Device findDeviceById(int id) {
+	public Device find(int id) {
 		return manager.find(Device.class, id);
 	}
 	
-	public Device findDeviceBySerialNumber(String serial) {
+	public Device findBySerialNumber(String serial) {
 		TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
 		return query.setParameter("serial", serial).getSingleResult();
 	}
@@ -46,13 +46,19 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	public void updateDeviceNameByDeviceId(int id, String name) {
-		Device device = findDeviceById(id);
+		Device device = find(id);
 		device.setName(name);
 	}
 
 	public void updateDeviceNameBySerialNo(String serial, String name) {
-		Device device = findDeviceBySerialNumber(serial);
+		Device device = findBySerialNumber(serial);
 		device.setName(name);
+	}
+
+	//remove device and all associated datas sach as statuses ond connections
+	public void remove(int id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

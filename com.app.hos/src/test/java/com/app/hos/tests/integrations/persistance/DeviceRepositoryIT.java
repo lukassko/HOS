@@ -105,21 +105,21 @@ public class DeviceRepositoryIT {
     
     @Test
     public void stage4_findDeviceByIdTest() {
-    	Device device1 = deviceRepository.findDeviceById(1);
-    	Device device2 = deviceRepository.findDeviceById(10);
+    	Device device1 = deviceRepository.find(1);
+    	Device device2 = deviceRepository.find(10);
     	Assert.assertNotNull(device1);
     	Assert.assertNull(device2);
     }
     
     @Test
     public void stage5_findDeviceBySerialTest() {
-    	Device device = deviceRepository.findDeviceBySerialNumber("98547kjyy2");
+    	Device device = deviceRepository.findBySerialNumber("98547kjyy2");
     	Assert.assertNotNull(device);
     }
     
     @Test(expected=NoResultException.class)
     public void stage6_findDeviceBySerialShouldThrowExceptionTest() {
-    	deviceRepository.findDeviceBySerialNumber("98547kffff");
+    	deviceRepository.findBySerialNumber("98547kffff");
     }
     
     @Test
@@ -128,7 +128,7 @@ public class DeviceRepositoryIT {
     	Connection connection4 = new Connection("192.168.0.24:23454-09:oa9:sd4", 
     			"localhost4", "192.168.0.24", 23454, new DateTime());
     
-    	Device device = deviceRepository.findDeviceById(1);
+    	Device device = deviceRepository.find(1);
     	Connection connection = device.getConnection();
     	connection.setConnectionId(connection4.getConnectionId());
     	connection.setHostname(connection4.getHostname());

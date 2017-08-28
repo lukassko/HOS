@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
+import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.share.command.result.DeviceStatus;
 
 public class StatusCommandBuilder extends AbstractCommandBuilder {
 

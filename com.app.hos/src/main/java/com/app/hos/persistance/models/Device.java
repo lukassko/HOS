@@ -1,9 +1,14 @@
 package com.app.hos.persistance.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,6 +25,10 @@ public class Device extends BaseEntity {
 	
 	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Connection connection;
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name="device_id")
+	private List<DeviceStatus> deviceStatuses = new ArrayList<DeviceStatus>();
 	
 	public Device(){}
 	
@@ -52,6 +61,14 @@ public class Device extends BaseEntity {
 		this.serial = serial;
 	}
 
+	public List<DeviceStatus> getDeviceStatuses() {
+		return deviceStatuses;
+	}
+
+	public void setDeviceStatuses(List<DeviceStatus> deviceStatuses) {
+		this.deviceStatuses = deviceStatuses;
+	}
+		
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,5 +110,5 @@ public class Device extends BaseEntity {
 	public String toString() {
 		return "Device [name=" + name + ", serial=" + serial + ", connection=" + connection + "]";
 	}
-		
+
 }
