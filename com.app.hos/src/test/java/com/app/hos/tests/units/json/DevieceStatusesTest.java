@@ -71,7 +71,7 @@ public class DevieceStatusesTest {
 		expectedJson.append(",\"hour\":" + device.getConnection().getConnectionTime().getHour());
 		expectedJson.append(",\"minutes\":" + device.getConnection().getConnectionTime().getMinutes());
 		expectedJson.append(",\"seconds\":" + device.getConnection().getConnectionTime().getSeconds());
-		expectedJson.append(",\"millis\":" + device.getConnection().getConnectionTime().getMillis()+"}");
+		//expectedJson.append(",\"millis\":" + device.getConnection().getConnectionTime().getMillis()+"}");
 		expectedJson.append(",\"endConnectionTime\":null,\"new\":false}}");
 		expectedJson.append(",\"devicestatus\":{\"time\":{\"year\":" + status.getTime().getYear());
 		expectedJson.append(",\"month\":" + status.getTime().getMonth());
@@ -79,7 +79,7 @@ public class DevieceStatusesTest {
 		expectedJson.append(",\"hour\":" + status.getTime().getHour());
 		expectedJson.append(",\"minutes\":" + status.getTime().getMinutes());
 		expectedJson.append(",\"seconds\":" + status.getTime().getSeconds());
-		expectedJson.append(",\"millis\":" + status.getTime().getMillis()+"}");
+		//expectedJson.append(",\"millis\":" + status.getTime().getMillis()+"}");
 		expectedJson.append(",\"ramUsage\":" + status.getRamUsage());
 		expectedJson.append(",\"cpuUsage\":" + status.getCpuUsage() +"}}");
 		return expectedJson.toString();

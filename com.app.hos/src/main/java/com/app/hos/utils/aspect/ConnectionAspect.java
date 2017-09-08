@@ -40,9 +40,12 @@ public class ConnectionAspect extends Logger {
 	public void closeConnection(JoinPoint point, String connectionId) {
 		Object target = point.getTarget();
 		if (target instanceof ConnectionManager) {
-			Connection connection = ((ConnectionManager)target).getConnection(connectionId);
-			if (connection != null)
+			try {
+				Connection connection = ((ConnectionManager)target).findConectionByid(connectionId);
 				logAndSaveMessage(point, Level.INFO, connection.getDevice().getSerial(),getConnectionLog(ConnectionEvent.CLOSE,connection));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

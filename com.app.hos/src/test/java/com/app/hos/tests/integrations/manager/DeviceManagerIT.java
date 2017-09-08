@@ -6,49 +6,41 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.config.AspectConfig;
-import com.app.hos.logging.LoggingRepository;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
+import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.share.command.result.DeviceStatus;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
-import com.app.hos.tests.integrations.config.PersistanceConfig;
 
 // get Collection of Devices when there is no device in database 
 // get statuses from device from DB and getting from Map (check what with id field)
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
-@Ignore("run only one integration test")
+
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, ApplicationContextConfig.class})
-@ActiveProfiles("test-sqlite")
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
+@ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceManagerIT {
-
-	@Autowired
-    private LoggingRepository loggingRepository;
 	
 	@Autowired
 	private DeviceManager manager;
@@ -58,7 +50,6 @@ public class DeviceManagerIT {
 
 	private static MessageHeaders headers;
 	private static Device device;
-	private static Connection connection;
 
 	@BeforeClass
 	public static void prepareDataForTests() {
@@ -68,50 +59,133 @@ public class DeviceManagerIT {
 		headerMap.put(IpHeaders.REMOTE_PORT,3456);
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "123123123");
-		connection= new Connection("192.168.0.12:3456:123:asd:dsa:213", 
-				"localhost", "192.168.0.12", 3456, new DateTime());
-		device.setConnection(connection);
+		device = new Device("Device1", "serial_main_device");
 	}
 
 
 	@Test
-	//@Transactional
-	@Rollback(true)
 	public void stage10_createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
-		manager.createDevice(headers, device.getName(), device.getSerial());
+		manager.openDeviceConnection(headers, device.getName(), device.getSerial());
 		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
 		Assert.assertEquals(1, devices.size());
+		
 	}
 	
 	@Test
-	public void stage20_getDeviceResultShoudGiveProperDeviceStatus() {
-		System.out.println(device.toString());
-		manager.createDevice(headers, device.getName(), device.getSerial());
-		DeviceStatus status = new DeviceStatus(56.2, 13.4);
+	public void stage15_getStatusesFromDeviceWithoutAnyShouldReturnEmptyList() {
+		List<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial());
+		Assert.assertTrue(stautuses.isEmpty());
+	}
+	
+	@Test
+	public void stage20_addStatusToDeviceShouldReturnPorperStatuses() {
+		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		manager.addDeviceStatus(device.getSerial(), status);
-		Map<Device,DeviceStatus> deviceStatuses = manager.getDeviceStatuses();
-		System.out.println(deviceStatuses.size());
-		
-		for(Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
-			Device device = entry.getKey();
-		    System.out.println(device.toString());
+		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Device device = null;
+		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
+		    device = entry.getKey();
+		    break;
 		}
-		
+		Assert.assertNotNull(device);
 		DeviceStatus tmpStatus = deviceStatuses.get(device);
-		System.out.println(tmpStatus.toString());
+		Assert.assertNotNull(tmpStatus);
 		Assert.assertTrue(tmpStatus.getCpuUsage() == status.getCpuUsage());
+		Assert.assertTrue(tmpStatus.getRamUsage() == status.getRamUsage());
+		Assert.assertTrue(tmpStatus.getTime().equals(status.getTime()));
 	}
 	
 	@Test
-	public void stage30_getDeviceResultShoudGiveProperDeviceStatus() {
-		Device tmpDevice = new Device("tmpDev", "tmpSerial");
-		manager.createDevice(headers, tmpDevice.getName(), tmpDevice.getSerial());
-		Map<Device,DeviceStatus> deviceStatuses = manager.getDeviceStatuses();
-		DeviceStatus tmpStatus = deviceStatuses.get(device);
-		DateTime statusTime = tmpStatus.getTime();
-		DateTime expectedTime = new DateTime(0);
-		Assert.assertEquals(statusTime,expectedTime);
+	public void stage30_addMultiStatusToDeviceShouldReturnPorperStatusesSize() {
+		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.1, 13.4));
+		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.43, 22.5));
+		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.89, 33.1));
+
+		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
+		Assert.assertEquals(4, deviceStatuses.size());
 	}
 	
+	@Test
+	public void stage40_addMultiStatusToDeviceAndChekLastOneStatus() {
+		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.39, 38.4));
+		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
+		Assert.assertEquals(5, deviceStatuses.size());
+	}
+	
+	@Test
+	public void stage45_addStatusToMultiDeviceAndChekLastOneStatus() throws InterruptedException {
+		Map<Device,DeviceStatus> latestStauses = new HashMap<Device, DeviceStatus>();
+		
+		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
+		manager.openDeviceConnection(headers, "device_2", "serial_device_2");
+		manager.openDeviceConnection(headers, "device_3", "serial_device_3");
+
+		manager.addDeviceStatus("serial_device_1", new DeviceStatus(new DateTime(),1.32, 48.64));
+		DeviceStatus status = new DeviceStatus(new DateTime(),0.39, 38.41);
+		Thread.sleep(1600);
+		manager.addDeviceStatus("serial_device_1", status);
+		Device device = deviceRepository.findBySerialNumber("serial_device_1");
+		Assert.assertNotNull(device);
+		latestStauses.put(device, status);
+		
+		manager.addDeviceStatus("serial_device_2", new DeviceStatus(new DateTime(),11.34, 33.43));
+		status = new DeviceStatus(new DateTime(),0.39, 38.41);
+		Thread.sleep(1400);
+		manager.addDeviceStatus("serial_device_2",status);
+		device = deviceRepository.findBySerialNumber("serial_device_2");
+		Assert.assertNotNull(device);
+		latestStauses.put(device, status);
+		
+		manager.addDeviceStatus("serial_device_3", new DeviceStatus(new DateTime(),78.30, 68.47));
+		status = new DeviceStatus(new DateTime(),32.33, 28.46);
+		Thread.sleep(2400);
+		manager.addDeviceStatus("serial_device_3", status);
+		device = deviceRepository.findBySerialNumber("serial_device_3");
+		Assert.assertNotNull(device);
+		latestStauses.put(device, status);
+		
+		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Assert.assertEquals(4, deviceStatuses.size()); // one device saved at the beginning
+		
+		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
+			Device mappedDevice = entry.getKey();
+			DeviceStatus mappedStatus = entry.getValue();
+			if (mappedDevice.getSerial().equals("serial_main_device")) {
+				continue;
+			}
+			Assert.assertNotNull(mappedStatus);
+			DeviceStatus tmp = latestStauses.get(mappedDevice);
+			Assert.assertEquals(mappedStatus, tmp);
+		}
+	}
+	
+	@Test
+	public void stage60_newConnectionForDeviceInDbShouldUpdateConnectionsParams () {	
+		Device oldConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
+		
+		Map<String,Object> headerMap = new HashMap<String, Object>();
+		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.122:13020:123:asd:dsa:213");
+		headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.122");
+		headerMap.put(IpHeaders.REMOTE_PORT,13020);
+		headerMap.put(IpHeaders.HOSTNAME,"localhost");
+		MessageHeaders headers = new MessageHeaders(headerMap);
+		
+		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
+		
+		Device newConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
+		Connection oldConnection = oldConnectedDevice.getConnection();
+		Connection newConnection = newConnectedDevice.getConnection();
+		
+		Assert.assertNotEquals(newConnection.getConnectionTime(), oldConnection.getConnectionTime());
+		Assert.assertNull(newConnection.getEndConnectionTime());
+	}
+	
+	//@Test
+	public void stage50_disconnectDeviceAndCheckLastConnectionTime() {
+	}
+	
+	//@Test
+	public void stage60_disconnectDeviceAndCheckHistoryConnection() {
+	}
+		
 }

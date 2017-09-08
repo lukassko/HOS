@@ -1,6 +1,7 @@
 package com.app.hos.persistance.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -23,13 +24,13 @@ public class Device extends BaseEntity {
 	@Column(nullable = false)
 	private String serial;
 	
-	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(mappedBy = "device",cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
 	private Connection connection;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="device_id")
 	private List<DeviceStatus> deviceStatuses = new ArrayList<DeviceStatus>();
-	
+
 	public Device(){}
 	
 	public Device(String name, String serial) {
@@ -42,7 +43,17 @@ public class Device extends BaseEntity {
 	}
 
 	public void setConnection(Connection connection) {
-		this.connection = connection;
+		if (this.connection == null) {
+			this.connection = connection;
+		} else {
+			this.connection.setDevice(this);
+			this.connection.setConnectionId(connection.getConnectionId());
+			this.connection.setHostname(connection.getHostname());
+			this.connection.setIp(connection.getIp());
+			this.connection.setRemotePort(connection.getRemotePort());
+			this.connection.setConnectionTime(connection.getConnectionTime());
+			this.connection.setEndConnectionTime(connection.getEndConnectionTime());
+		}
 	}
 
 	public String getName() {
@@ -62,13 +73,24 @@ public class Device extends BaseEntity {
 	}
 
 	public List<DeviceStatus> getDeviceStatuses() {
+		Collections.sort(deviceStatuses);
 		return deviceStatuses;
 	}
 
 	public void setDeviceStatuses(List<DeviceStatus> deviceStatuses) {
 		this.deviceStatuses = deviceStatuses;
 	}
-		
+	
+	public DeviceStatus getLastStatus() {
+		List<DeviceStatus> statuses = getDeviceStatuses();
+		int size = statuses.size();
+		if (size == 0) {
+			return null;
+		} else {
+			return statuses.get(size-1);
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

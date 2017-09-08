@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.hos.logging.LoggingRepository;
 
 
-@SuppressWarnings("unchecked")
+//@SuppressWarnings("unchecked")
 @Repository
 public class LoggingRepositoryImpl implements LoggingRepository {
 

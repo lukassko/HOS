@@ -79,8 +79,8 @@ public class MysqlPersistanceConfig {
 	  	          env.getProperty("hibernate.format_sql"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
-	            setProperty("hibernate.globally_quoted_identifiers",
-	             "true");
+	            //setProperty("hibernate.globally_quoted_identifiers",
+	            // "true");
 	         }
 	      };
 	   }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
+import com.app.hos.service.SystemFacade;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder.Command;
 
@@ -12,14 +13,14 @@ public class Server {
 	
 	//private ConnectionIdTransforner connectionIdTransformer;
 	@Autowired
-	private CommandManager commandManager;
+	private SystemFacade systemFacadeImpl;
 	@Autowired
 	private Gateway gateway;
 	
 
 	public void receiveCommand(Message<Command> message) {
 		Command command = message.getPayload();
-		commandManager.executeCommand(message.getHeaders(),command);
+		systemFacadeImpl.receivedCommand(message.getHeaders(),command);
 	}
 		
 	public void sendMessage(Message<Command> message) {

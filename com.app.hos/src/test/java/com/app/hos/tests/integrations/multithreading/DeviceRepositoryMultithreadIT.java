@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.logging.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
@@ -33,11 +34,12 @@ import com.app.hos.tests.integrations.config.PersistanceConfig;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, SqlitePersistanceConfig.class})
+@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class,SqlitePersistanceConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceRepositoryMultithreadIT {

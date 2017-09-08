@@ -134,7 +134,7 @@ public class DeviceRepositoryIT {
     	connection.setHostname(connection4.getHostname());
     	connection.setIp(connection4.getIp());
     	connection.setRemotePort(connection4.getRemotePort());
-    	connection.setConnectionTime(connection4.getConnectionTime());
+    	//connection.setConnectionTime(connection4.getConnectionTime());
     	deviceRepository.save(device);
     	
     	Assert.assertEquals(connection4.getConnectionId(),connection.getConnectionId());

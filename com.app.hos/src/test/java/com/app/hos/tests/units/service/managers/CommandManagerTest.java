@@ -58,7 +58,7 @@ public class CommandManagerTest {
 	@Test
 	public void executeCommandManagerWithHelloCommand() {
 		Mockito.doNothing().when(server).sendMessage(Mockito.any(Message.class));
-		Mockito.doNothing().when(deviceManager).createDevice(Mockito.any(MessageHeaders.class), Mockito.any(String.class), Mockito.any(String.class));
+		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.any(String.class), Mockito.any(String.class));
 		Command command = CommandFactory.getCommand(CommandType.HELLO);
 		manager.executeCommand(headers, command);
 		

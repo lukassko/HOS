@@ -16,22 +16,23 @@ public class DateTime implements Serializable {
 	private final Integer hour;
 	private final Integer minutes;
 	private final Integer seconds;
-	private final Integer millis;
+	//private final Integer millis;
 	private final Integer day;
 	private final Integer month;
 	private final Integer year;
 	private final Long timestamp;
-
+	
 	public DateTime() {
 		this.dateTime = new org.joda.time.DateTime();
 		this.hour = dateTime.getHourOfDay();
 		this.minutes = dateTime.getMinuteOfHour();
 		this.seconds = dateTime.getSecondOfMinute();
-		this.millis = dateTime.getMillisOfSecond();
+		//this.millis = dateTime.getMillisOfSecond();
 		this.day = dateTime.getDayOfMonth();
 		this.month = dateTime.getMonthOfYear();
 		this.year = dateTime.getYear();
-		this.timestamp = dateTime.getMillis();
+		long timestamp = dateTime.getMillis()/1000*1000;
+		this.timestamp = timestamp;
 	}
 	
 	public DateTime(long timestamp) {
@@ -39,18 +40,18 @@ public class DateTime implements Serializable {
 		this.hour = dateTime.getHourOfDay();
 		this.minutes = dateTime.getMinuteOfHour();
 		this.seconds = dateTime.getSecondOfMinute();
-		this.millis = dateTime.getMillisOfSecond();
+		//this.millis = dateTime.getMillisOfSecond();
 		this.day = dateTime.getDayOfMonth();
 		this.month = dateTime.getMonthOfYear();
 		this.year = dateTime.getYear();
-		this.timestamp = dateTime.getMillis();
+		this.timestamp = timestamp;
 	}
 	
 	public DateTime(int year,int month,int day,int hour,int minutes,int seconds, int millis) {
 		this.hour = hour;
 		this.minutes = minutes;
 		this.seconds = seconds;
-		this.millis = millis;
+		//this.millis = millis;
 		this.day = day;
 		this.month = month;
 		this.year = year;
@@ -58,29 +59,29 @@ public class DateTime implements Serializable {
 		this.timestamp = dateTime.getMillis();
 	}
 
-	public org.joda.time.DateTime getDateTime () {
+	public org.joda.time.DateTime getJodaDateTime () {
 		if (dateTime == null) {
 			this.dateTime = new org.joda.time.DateTime(this.year,this.month, this.day, 
-								this.hour, this.minutes, this.seconds,this.millis);  
+								this.hour, this.minutes, this.seconds);  
 		}
 		return this.dateTime;
 	}
 	
 	@Override
 	public int hashCode() {
-		return getDateTime().hashCode();
+		return getJodaDateTime().hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		DateTime other = (DateTime) obj;
-		return getDateTime().equals(other.getDateTime());
+		return getTimestamp().equals(other.getTimestamp());
 	}
 
 	@Override
 	public String toString() {
-		return "DateTime [hour=" + hour + ", minutes=" + minutes + ", seconds=" + seconds + ", millis=" + millis
-				+ ", day=" + day + ", month=" + month + ", year=" + year + "]";
+		return "DateTime [hour=" + hour + ", minutes=" + minutes + ", seconds=" + seconds
+				+ ", day=" + day + ", month=" + month + ", year=" + year + ", timestamp="+ timestamp + "]";
 	}
 
 	public Integer getHour() {
@@ -107,11 +108,12 @@ public class DateTime implements Serializable {
 		return year;
 	}
 
-	public Integer getMillis() {
-		return millis;
-	}
+//	public Integer getMillis() {
+//		return millis;
+//	}
 
 	public Long getTimestamp() {
 		return this.timestamp;
 	}
+	
 }

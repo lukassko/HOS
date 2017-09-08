@@ -26,7 +26,7 @@ public class DateTimeTest {
 		int hour = dateTime.getHour();
 		int minutes = dateTime.getMinutes();
 		int seconds = dateTime.getSeconds();
-		int millis = dateTime.getMillis();
+		//int millis = dateTime.getMillis();
 		StringBuilder expectedJson = new StringBuilder();
 		expectedJson.append("{\"year\":" + year);
 		expectedJson.append(",\"month\":" + month);
@@ -34,7 +34,7 @@ public class DateTimeTest {
 		expectedJson.append(",\"hour\":" + hour);
 		expectedJson.append(",\"minutes\":" + minutes);
 		expectedJson.append(",\"seconds\":" + seconds);
-		expectedJson.append(",\"millis\":" + millis +"}");
+		//expectedJson.append(",\"millis\":" + millis +"}");
 		Assert.assertEquals(json,expectedJson.toString());
 	}
 	

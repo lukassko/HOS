@@ -10,10 +10,10 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 
-@Transactional("sqliteJpaTransactionManager")
 @Repository
 public class ConnectionRepositoryImpl implements  ConnectionRepository {
 
@@ -28,9 +28,14 @@ public class ConnectionRepositoryImpl implements  ConnectionRepository {
 		}
 	}
 
-	public Collection<HistoryConnection> findAllConnectionsByDeviceId(int id) {
+	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id) {
 		TypedQuery<HistoryConnection> query = manager.createQuery("SELECT c FROM HistoryConnection c WHERE c.deviceId = :id", HistoryConnection.class);
 		return query.setParameter("id", id).getResultList();
+	}
+
+	public Connection findConnectionById(String connectionId) {
+		TypedQuery<Connection> query = manager.createQuery("SELECT c FROM Connection c WHERE c.connectionId = :connectionId", Connection.class);
+		return query.setParameter("connectionId", connectionId).getSingleResult();
 	}
 
 }

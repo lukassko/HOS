@@ -24,7 +24,7 @@ public class DateTimeJsonSerializer extends StdSerializer<DateTime> {
 		gen.writeNumberField("hour", date.getHour());
 		gen.writeNumberField("minutes", date.getMinutes());
 		gen.writeNumberField("seconds", date.getSeconds());
-		gen.writeNumberField("millis", date.getMillis());
+		//gen.writeNumberField("millis", date.getMillis());
 		gen.writeEndObject();
 	}
 

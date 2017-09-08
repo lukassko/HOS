@@ -2,7 +2,6 @@ package com.app.hos.tests.units.service.managers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
@@ -56,7 +55,7 @@ public class DeviceManagerTest {
 	@Before
     public void setUpTest() {
         MockitoAnnotations.initMocks(this);
-        manager.createDevice(headers, device.getName(), device.getSerial());
+        manager.openDeviceConnection(headers, device.getName(), device.getSerial());
     }
 	
 	@Test
@@ -70,14 +69,14 @@ public class DeviceManagerTest {
 	@Test
 	public void getDeviceStatusesWhenNoDatainDbShouldReturnEmptyMap () {
         Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-		Map<Device, DeviceStatus> statuses = manager.getDeviceStatuses();
+		Map<Device, DeviceStatus> statuses = manager.getLatestDevicesStatuses();
 		Assert.assertTrue(statuses.isEmpty());
 	}
 	
 	@Test
 	public void getDeviceStatusesShouldCallForAllDeviceDb () {
         Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-        manager.getDeviceStatuses();
+        manager.getLatestDevicesStatuses();
         Mockito.verify(deviceRepository, Mockito.times(1)).findAll();
 	}
 

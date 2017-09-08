@@ -1,16 +1,21 @@
 package com.app.hos.persistance.models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.converters.DateTimeConverter;
 import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,14 +36,14 @@ public class Connection extends BaseEntity {
 	@Column(name="remote_port")
 	private int remotePort;
 
-	@Lob
 	@NotEmpty
 	@Column(name="connection_time")
-	private DateTime connectionTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date connectionTime;
 
-	@Lob
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="end_connection_time")
-	private DateTime endConnectionTime;
+	private Date endConnectionTime;
 	
 	@JsonIgnore
 	@OneToOne(fetch=FetchType.EAGER)
@@ -47,12 +52,20 @@ public class Connection extends BaseEntity {
 	
 	public Connection() {}
 	
-	public Connection(String connectionId, String hostname, String ip, int remotePort, DateTime connectionTime) {
+	public Connection(String connectionId, String hostname, String ip, int remotePort, Date connectionTime) {
 		this.connectionId = connectionId;
 		this.hostname = hostname;
 		this.ip = ip;
 		this.remotePort = remotePort;
 		this.connectionTime = connectionTime;
+	}
+	
+	public Connection(String connectionId, String hostname, String ip, int remotePort, DateTime connectionTime) {
+		this.connectionId = connectionId;
+		this.hostname = hostname;
+		this.ip = ip;
+		this.remotePort = remotePort;
+		this.connectionTime = DateTimeConverter.getDate(connectionTime);
 	}
 
 	public String getConnectionId() {
@@ -88,20 +101,19 @@ public class Connection extends BaseEntity {
 	}
 
 	public DateTime getConnectionTime() {
-		return connectionTime;
+		return DateTimeConverter.getDateTime(connectionTime);
 	}
 
 	public void setConnectionTime(DateTime connectionTime) {
-		this.connectionTime = connectionTime;
+		this.connectionTime = DateTimeConverter.getDate(connectionTime);
 	}
-	
 
 	public DateTime getEndConnectionTime() {
-		return endConnectionTime;
+		return DateTimeConverter.getDateTime(endConnectionTime);
 	}
 
 	public void setEndConnectionTime(DateTime endConnectionTime) {
-		this.endConnectionTime = endConnectionTime;
+		this.endConnectionTime =  DateTimeConverter.getDate(endConnectionTime);
 	}
 
 	public Device getDevice() {
@@ -173,8 +185,8 @@ public class Connection extends BaseEntity {
 			throw new HistoryConnectionException();
 
 		HistoryConnection connection = new HistoryConnection();
-		connection.setConnectionTime(connectionTime.getTimestamp());
-		connection.setEndConnectionTime(endConnectionTime.getTimestamp());
+		connection.setConnectionTime(connectionTime);
+		connection.setEndConnectionTime(endConnectionTime);
 		connection.setDeviceId(device.getId());
 		connection.setIp(ip);
 		connection.setRemotePort(remotePort);

@@ -1,33 +1,89 @@
 package com.app.hos.persistance.models;
 
+
+import java.sql.Timestamp;
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.converters.DateTimeConverter;
+
+
+// PREAPARE NULL OBJECT FOR DeviceStatus
 
 @Entity
 @Table(name = "devices_statuses")
 public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus> {
 
-	private DateTime time;
-
+	@NotEmpty
+	@Column(name="time")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date time;
+	
+	@NotEmpty
+	@Column(name="ram")
     private double ramUsage;
 
+	@NotEmpty
+	@Column(name="cpu")
     private double cpuUsage;
     
+	public DeviceStatus() {}
+	
     public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
-		this.time = time;
+		this.time = new Timestamp(time.getTimestamp());
 		this.ramUsage = ramUsage;
 		this.cpuUsage = cpuUsage;
 	}
 
 	public DateTime getTime() {
-		return time;
+		return DateTimeConverter.getDateTime(time);
 	}
 
-	public void setTime(DateTime time) {
-		this.time = time;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(cpuUsage);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(ramUsage);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeviceStatus other = (DeviceStatus) obj;
+		if (Double.doubleToLongBits(cpuUsage) != Double.doubleToLongBits(other.cpuUsage))
+			return false;
+		if (Double.doubleToLongBits(ramUsage) != Double.doubleToLongBits(other.ramUsage))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		//} else if (this.getTime().getTimestamp().longValue() != other.getTime().getTimestamp().longValue())
+		} else if (!this.getTime().equals(other.getTime()))
+			return false;
+		return true;
+	}
+
+//	public void setTime(DateTime time) {
+//		this.time = DateTimeConverter.getDate(time);
+//	}
 
 	public double getRamUsage() {
 		return ramUsage;
@@ -46,7 +102,7 @@ public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus>
 	}
 
 	public int compareTo(DeviceStatus status) {
-		long thisTimestamp = this.time.getTimestamp();
+		long thisTimestamp = this.getTime().getTimestamp();
 		long objectTimestamp = status.getTime().getTimestamp();
 		return (thisTimestamp < objectTimestamp ) ? -1: (thisTimestamp > objectTimestamp) ? 1:0;
 	}

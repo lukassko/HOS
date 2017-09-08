@@ -1,8 +1,13 @@
 package com.app.hos.persistance.models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.converters.DateTimeConverter;
 
 @Table(name = "finalised_connections")
 @Entity
@@ -18,10 +23,10 @@ public class HistoryConnection extends BaseEntity {
 	private int remotePort;
 
 	@Column(name="begin_connection_time",nullable=false)
-	private long beginConnectionTime;
+	private Date beginConnectionTime;
 
 	@Column(name="end_connection_time",nullable=false)
-	private long endConnectionTime;
+	private Date endConnectionTime;
 
 	
 	public int getDeviceId() {
@@ -48,24 +53,26 @@ public class HistoryConnection extends BaseEntity {
 		this.remotePort = remotePort;
 	}
 
-	public long getConnectionTime() {
+	public Date getConnectionTime() {
 		return beginConnectionTime;
 	}
 
-	public void setConnectionTime(long connectionTime) {
+	public void setConnectionTime(Date connectionTime) {
 		this.beginConnectionTime = connectionTime;
 	}
 
-	public long getEndConnectionTime() {
+	public Date getEndConnectionTime() {
 		return endConnectionTime;
 	}
 
-	public void setEndConnectionTime(long endConnectionTime) {
+	public void setEndConnectionTime(Date endConnectionTime) {
 		this.endConnectionTime = endConnectionTime;
 	}
 
 	@Override
 	public int hashCode() {
+		long beginConnectionTime = this.beginConnectionTime.getTime();
+		long endConnectionTime = this.endConnectionTime.getTime();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (beginConnectionTime ^ (beginConnectionTime >>> 32));

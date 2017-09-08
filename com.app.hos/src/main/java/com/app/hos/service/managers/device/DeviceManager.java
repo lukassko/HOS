@@ -1,13 +1,13 @@
 package com.app.hos.service.managers.device;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
 import com.app.hos.share.utils.DateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
@@ -26,15 +26,20 @@ public class DeviceManager {
 	@Autowired
 	private DeviceRepository deviceRepository;
 
+	//@Autowired
+	//private ConnectionRepository connectionRepository;
+	
 	//need to find device at first, later create if not exist
-	public void createDevice(MessageHeaders messageHeaders, String name, String serial) {
+	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial) {
 		Connection connection = createNewConnection(messageHeaders);
 		try {
 			Device device = deviceRepository.findBySerialNumber(serial);
 			device.setConnection(connection);
+			connection.setDevice(device);
 		} catch (NoResultException e) {
 			Device device = createNewDevice(messageHeaders,name,serial);
 			device.setConnection(connection);
+			connection.setDevice(device);
 			deviceRepository.save(device);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,28 +48,27 @@ public class DeviceManager {
 
 	// sort statuses by time and get the latest status of device; 
 	// TEST SORTING WITH JUNIT
-	public Map<Device, DeviceStatus> getDeviceStatuses() {
+	public Map<Device, DeviceStatus> getLatestDevicesStatuses() {
 		Map<Device, DeviceStatus> deviceStatus = new HashMap<Device, DeviceStatus>();
 		Collection<Device> devices = deviceRepository.findAll();
 		for (Device device : devices) {
-			List<DeviceStatus> statuses = device.getDeviceStatuses();
-			Collections.sort(statuses);
-			deviceStatus.put(device, statuses.get(statuses.size() - 1));
+			deviceStatus.put(device, device.getLastStatus());
 		}
 		return deviceStatus;
+	}
+	
+	public List<DeviceStatus> getDeviceStatuses(String serialDevice) {
+		Device device = deviceRepository.findBySerialNumber(serialDevice);
+		//Hibernate.initialize(device.getDeviceStatuses());
+		return device.getDeviceStatuses();
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {
 		Device device = deviceRepository.findBySerialNumber(serial);
 		List<DeviceStatus> statuses = device.getDeviceStatuses();
 		statuses.add(deviceStatus);
-	}
-	
-	// update connection time in 'connection' table, add HistoryConnection
-	public void removeConnectedDevice(String connectionId){
-		//Device device = connectedDevices.get(connectionId);
-		//deviceStatuses.remove(device);
-		//connectedDevices.remove(connectionId);
+		//deviceRepository.save(device);
+		// i suppose that need to call 'save' method on device
 	}
 
 	private Connection createNewConnection(MessageHeaders headers) {

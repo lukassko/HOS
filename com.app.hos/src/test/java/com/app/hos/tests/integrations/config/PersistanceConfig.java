@@ -21,7 +21,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan("com.app.hos.persistance.*")
+@ComponentScan({"com.app.hos.logging.*","com.app.hos.persistance.*"})
 @EnableTransactionManagement
 public class PersistanceConfig {
 
@@ -52,6 +52,7 @@ public class PersistanceConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
+	   //em.setPackagesToScan(new String[] { "com.app.hos.*" });
 	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
 	   em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 	   em.setJpaProperties(hibernateProperties());
@@ -85,17 +86,24 @@ public class PersistanceConfig {
         return transactionManager;
     }
 
+//	hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+//			hibernate.show_sql=true
+//			hibernate.format_sql=true
+//			hibernate.hbm2ddl.auto=create
+//			hibernate.hbm2ddl.import_files = persistance/queries/mysql/initDB.sql
 	Properties hibernateProperties() {
 	      return new Properties() {
 	         {
-	            setProperty("hibernate.hbm2ddl.auto",
-	              env.getProperty("hibernate.hbm2ddl.auto"));
-	            setProperty("hibernate.hbm2ddl.import_files",
-		  	      env.getProperty("hibernate.hbm2ddl.import_files"));
-	            setProperty("hibernate.dialect",
-	              env.getProperty("hibernate.dialect"));
-	            setProperty("hibernate.globally_quoted_identifiers",
-	             "true");
+	        	 setProperty("hibernate.hbm2ddl.auto",
+	   	            env.getProperty("hibernate.hbm2ddl.auto"));
+	   	         setProperty("hibernate.show_sql", 
+	   	            env.getProperty("hibernate.show_sql"));
+	   	         setProperty("hibernate.format_sql", 
+	   	  	        env.getProperty("hibernate.format_sql"));
+	   	         setProperty("hibernate.dialect",
+	   	            env.getProperty("hibernate.dialect"));
+	   	         setProperty("hibernate.globally_quoted_identifiers",
+	   	            "true");
 	         }
 	      };
 	   }

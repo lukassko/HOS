@@ -55,7 +55,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		device.setName(name);
 	}
 
-	//remove device and all associated datas sach as statuses ond connections
+	//remove device and all associated data such as statuses and connections
 	public void remove(int id) {
 		// TODO Auto-generated method stub
 		
