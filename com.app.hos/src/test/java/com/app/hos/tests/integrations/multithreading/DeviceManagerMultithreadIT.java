@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.manager;
+package com.app.hos.tests.integrations.multithreading;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,12 +35,12 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DeviceManagerIT {
+public class DeviceManagerMultithreadIT {
 	
 	@Autowired
 	private DeviceManager manager;

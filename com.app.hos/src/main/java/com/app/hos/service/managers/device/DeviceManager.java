@@ -25,9 +25,6 @@ public class DeviceManager {
 	
 	@Autowired
 	private DeviceRepository deviceRepository;
-
-	//@Autowired
-	//private ConnectionRepository connectionRepository;
 	
 	//need to find device at first, later create if not exist
 	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial) {
