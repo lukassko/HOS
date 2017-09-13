@@ -58,6 +58,7 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
+		System.out.println(Thread.currentThread().getName());
 		//List<Device> devices = this.deviceManager.getConnectedDevices();
 		//String jsonDevices = JsonConverter.getJson(devices);
 		//model.addAttribute("devices", jsonDevices);

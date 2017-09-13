@@ -41,6 +41,29 @@ public class DevieceStatusesTest {
 	}
 	
 	@Test
+	public void setEmptyMapAndVerifyJsonRepresentation() {
+		Map<Device,DeviceStatus> emptyMap = new HashMap<Device,DeviceStatus>();
+		String json = JsonConverter.getJson(emptyMap);
+		Assert.assertEquals("[]", json);
+	}
+	
+	@Test
+	public void setNullAsKeyAndVerifyJsonRepresentation() {
+		Map<Device,DeviceStatus> nullkey = new HashMap<Device,DeviceStatus>();
+		for (Map.Entry<Device, DeviceStatus> statuses : deviceStatuses.entrySet()) {
+		    nullkey.put(statuses.getKey(), null);
+		    break;
+		}
+		String json = JsonConverter.getJson(nullkey);
+		System.out.println(json);
+	}
+	
+	@Test
+	public void setNullAsOneValueOfStatusAndVerifyJsonRepresentation() {
+
+	}
+	
+	@Test
 	public void serializeDeivceStatusesMapTest() {
 		String json = JsonConverter.getJson(deviceStatuses);
 		StringBuilder expectedJson = new StringBuilder();

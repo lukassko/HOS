@@ -1,19 +1,15 @@
 package com.app.hos.persistance.repository.hibernate;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Repository

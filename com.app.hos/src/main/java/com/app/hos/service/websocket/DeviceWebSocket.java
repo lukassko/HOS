@@ -38,10 +38,10 @@ public class DeviceWebSocket {
 	public void receiveMessage(String message) {
 		final WebCommand command = JsonConverter.getObject(message, WebCommand.class);
 		System.out.println(command.toString());
-		System.out.println(command.getType().toString());
 		Callable<WebCommand> commandTask = new Callable<WebCommand>() {
 			public WebCommand call() throws Exception {
-				return commandManager.executeCommand(command);
+				WebCommand result = commandManager.executeCommand(command);
+				return result;
 			}
 		};
 		Future<WebCommand> submit = commandExecutor.submit(commandTask);

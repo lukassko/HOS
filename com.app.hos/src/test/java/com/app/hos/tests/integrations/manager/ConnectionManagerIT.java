@@ -90,7 +90,6 @@ public class ConnectionManagerIT {
 		Assert.assertNotEquals(connectionTime, endConnectionTime);
 	}
 
-	
 }
 
 //@Test

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -62,6 +64,12 @@ public class DeviceManagerIT {
 		device = new Device("Device1", "serial_main_device");
 	}
 
+	@Test
+	public void stage05_getLatestDevicesStatusesWithoutAnyyConnectedDeviceShouldReturnEmptyMap() {
+		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Assert.assertNotNull(deviceStatuses);
+		Assert.assertTrue(deviceStatuses.isEmpty());
+	}
 
 	@Test
 	public void stage10_createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
@@ -75,6 +83,12 @@ public class DeviceManagerIT {
 	public void stage15_getStatusesFromDeviceWithoutAnyShouldReturnEmptyList() {
 		List<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial());
 		Assert.assertTrue(stautuses.isEmpty());
+	}
+	
+	@Test(expected = NoResultException.class) 
+	public void stage16_addStatusWithValidSerialNumber() {
+		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
+		manager.addDeviceStatus("invalid_serial", status);
 	}
 	
 	@Test

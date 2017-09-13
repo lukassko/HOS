@@ -3,6 +3,7 @@ package com.app.hos.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.hibernate.type.SerializationException;
 
@@ -34,4 +35,8 @@ public class Utils {
         }
     }
     
+    public static double generateRandomDouble() {
+		return ThreadLocalRandom.current().nextDouble(0, 100);
+	}
+
 }

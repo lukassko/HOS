@@ -2,9 +2,7 @@ package com.app.hos.persistance.repository;
 
 import java.util.Collection;
 
-import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
-import com.app.hos.share.command.result.DeviceStatus;
 
 public interface DeviceRepository {
 

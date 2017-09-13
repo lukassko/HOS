@@ -1,12 +1,19 @@
 package com.app.hos.tests.integrations.multithreading;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,20 +29,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
-import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
-import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
+import com.app.hos.utils.Utils;
 
-// get Collection of Devices when there is no device in database 
-// get statuses from device from DB and getting from Map (check what with id field)
-// check if getting AllDevices if from cache, not DB!
-// test view what will be show when devices list eq 0
-
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -45,147 +46,250 @@ public class DeviceManagerMultithreadIT {
 	@Autowired
 	private DeviceManager manager;
 	
-	@Autowired
-    private DeviceRepository deviceRepository;
-
-	private static MessageHeaders headers;
-	private static Device device;
-
-	@BeforeClass
-	public static void prepareDataForTests() {
-		Map<String,Object> headerMap = new HashMap<String, Object>();
-		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.12:3456:123:asd:dsa:213");
-		headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.12");
-		headerMap.put(IpHeaders.REMOTE_PORT,3456);
-		headerMap.put(IpHeaders.HOSTNAME,"localhost");
-		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "serial_main_device");
-	}
-
-
-	@Test
-	public void stage10_createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
-		manager.openDeviceConnection(headers, device.getName(), device.getSerial());
-		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
-		Assert.assertEquals(1, devices.size());
-		
-	}
+	private static final double DELTA = 1e-15;
 	
 	@Test
-	public void stage15_getStatusesFromDeviceWithoutAnyShouldReturnEmptyList() {
-		List<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial());
-		Assert.assertTrue(stautuses.isEmpty());
-	}
-	
-	@Test
-	public void stage20_addStatusToDeviceShouldReturnPorperStatuses() {
-		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
-		manager.addDeviceStatus(device.getSerial(), status);
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
-		Device device = null;
-		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
-		    device = entry.getKey();
-		    break;
-		}
-		Assert.assertNotNull(device);
-		DeviceStatus tmpStatus = deviceStatuses.get(device);
-		Assert.assertNotNull(tmpStatus);
-		Assert.assertTrue(tmpStatus.getCpuUsage() == status.getCpuUsage());
-		Assert.assertTrue(tmpStatus.getRamUsage() == status.getRamUsage());
-		Assert.assertTrue(tmpStatus.getTime().equals(status.getTime()));
-	}
-	
-	@Test
-	public void stage30_addMultiStatusToDeviceShouldReturnPorperStatusesSize() {
-		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.1, 13.4));
-		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.43, 22.5));
-		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.89, 33.1));
+	public void stage10_connectMultipleDeviceAndCheckIfAllWasSaved() {
 
-		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
-		Assert.assertEquals(4, deviceStatuses.size());
-	}
-	
-	@Test
-	public void stage40_addMultiStatusToDeviceAndChekLastOneStatus() {
-		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.39, 38.4));
-		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
-		Assert.assertEquals(5, deviceStatuses.size());
-	}
-	
-	@Test
-	public void stage45_addStatusToMultiDeviceAndChekLastOneStatus() throws InterruptedException {
-		Map<Device,DeviceStatus> latestStauses = new HashMap<Device, DeviceStatus>();
+		List<Callable<Void>> callables = new LinkedList<Callable<Void>>();
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
-		manager.openDeviceConnection(headers, "device_2", "serial_device_2");
-		manager.openDeviceConnection(headers, "device_3", "serial_device_3");
-
-		manager.addDeviceStatus("serial_device_1", new DeviceStatus(new DateTime(),1.32, 48.64));
-		DeviceStatus status = new DeviceStatus(new DateTime(),0.39, 38.41);
-		Thread.sleep(1600);
-		manager.addDeviceStatus("serial_device_1", status);
-		Device device = deviceRepository.findBySerialNumber("serial_device_1");
-		Assert.assertNotNull(device);
-		latestStauses.put(device, status);
-		
-		manager.addDeviceStatus("serial_device_2", new DeviceStatus(new DateTime(),11.34, 33.43));
-		status = new DeviceStatus(new DateTime(),0.39, 38.41);
-		Thread.sleep(1400);
-		manager.addDeviceStatus("serial_device_2",status);
-		device = deviceRepository.findBySerialNumber("serial_device_2");
-		Assert.assertNotNull(device);
-		latestStauses.put(device, status);
-		
-		manager.addDeviceStatus("serial_device_3", new DeviceStatus(new DateTime(),78.30, 68.47));
-		status = new DeviceStatus(new DateTime(),32.33, 28.46);
-		Thread.sleep(2400);
-		manager.addDeviceStatus("serial_device_3", status);
-		device = deviceRepository.findBySerialNumber("serial_device_3");
-		Assert.assertNotNull(device);
-		latestStauses.put(device, status);
-		
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
-		Assert.assertEquals(4, deviceStatuses.size()); // one device saved at the beginning
-		
-		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
-			Device mappedDevice = entry.getKey();
-			DeviceStatus mappedStatus = entry.getValue();
-			if (mappedDevice.getSerial().equals("serial_main_device")) {
-				continue;
+		Callable<Void> callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				Map<String,Object> headerMap = new HashMap<String, Object>();
+				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.1:1111:123:asd:dsa:213");
+				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.1");
+				headerMap.put(IpHeaders.REMOTE_PORT,1111);
+				headerMap.put(IpHeaders.HOSTNAME,"localhost_1");
+				final MessageHeaders headers = new MessageHeaders(headerMap);
+				manager.openDeviceConnection(headers, "device_1", "serial_device_1");
+				return null;
 			}
-			Assert.assertNotNull(mappedStatus);
-			DeviceStatus tmp = latestStauses.get(mappedDevice);
-			Assert.assertEquals(mappedStatus, tmp);
+		};
+
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				Map<String,Object> headerMap = new HashMap<String, Object>();
+				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.2:2222:123:asd:dsa:213");
+				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.2");
+				headerMap.put(IpHeaders.REMOTE_PORT,2222);
+				headerMap.put(IpHeaders.HOSTNAME,"localhost_2");
+				final MessageHeaders headers = new MessageHeaders(headerMap);
+				manager.openDeviceConnection(headers, "device_2", "serial_device_2");
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				Map<String,Object> headerMap = new HashMap<String, Object>();
+				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.3:3333:123:asd:dsa:213");
+				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.3");
+				headerMap.put(IpHeaders.REMOTE_PORT,3333);
+				headerMap.put(IpHeaders.HOSTNAME,"localhost_3");
+				final MessageHeaders headers = new MessageHeaders(headerMap);
+				manager.openDeviceConnection(headers, "device_3", "serial_device_3");
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		try {
+			assertConcurrent(callables,1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		Set<Device> devices = manager.getLatestDevicesStatuses().keySet();
+		Assert.assertEquals(3, devices.size());
 	}
 	
 	@Test
-	public void stage60_newConnectionForDeviceInDbShouldUpdateConnectionsParams () {	
-		Device oldConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
+	public void stage20_addMultiStatusToDevicesAndCheckIfAllWereSaved() {
+		List<Callable<Void>> callables = new LinkedList<Callable<Void>>();
 		
-		Map<String,Object> headerMap = new HashMap<String, Object>();
-		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.122:13020:123:asd:dsa:213");
-		headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.122");
-		headerMap.put(IpHeaders.REMOTE_PORT,13020);
-		headerMap.put(IpHeaders.HOSTNAME,"localhost");
-		MessageHeaders headers = new MessageHeaders(headerMap);
+		Callable<Void> callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_1", status);
+				return null;
+			}
+		};
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
+		callables.add(callable);
 		
-		Device newConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
-		Connection oldConnection = oldConnectedDevice.getConnection();
-		Connection newConnection = newConnectedDevice.getConnection();
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_1", status);
+				return null;
+			}
+		};
 		
-		Assert.assertNotEquals(newConnection.getConnectionTime(), oldConnection.getConnectionTime());
-		Assert.assertNull(newConnection.getEndConnectionTime());
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_1", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_2", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_2", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_3", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				manager.addDeviceStatus("serial_device_3", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		try {
+			assertConcurrent(callables,1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Set<Device> devices = manager.getLatestDevicesStatuses().keySet();
+		Assert.assertEquals(3, devices.size());
+		
+		List<DeviceStatus> statuses = manager.getDeviceStatuses("serial_device_1");
+		Assert.assertEquals(3, statuses.size());
+		
+		statuses = manager.getDeviceStatuses("serial_device_2");
+		Assert.assertEquals(2, statuses.size());
+		
 	}
 	
-	//@Test
-	public void stage50_disconnectDeviceAndCheckLastConnectionTime() {
-	}
-	
-	//@Test
-	public void stage60_disconnectDeviceAndCheckHistoryConnection() {
-	}
+	@Test
+	public void stage30_connectDeviceAndAddStatusToOthersShouldAddDatatoDb() {
 		
+		try {
+			Thread.sleep(1000); // wait some time to increase DateTime in database for new DeviceStatus
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		} 
+		
+		List<Callable<Void>> callables = new LinkedList<Callable<Void>>();
+		
+		Callable<Void> callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				DeviceStatus status = new DeviceStatus(new DateTime(), 13.12, 65.23);
+				manager.addDeviceStatus("serial_device_2", status);
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		callable = new Callable<Void>() {
+			public Void call() throws Exception {
+				Map<String,Object> headerMap = new HashMap<String, Object>();
+				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.4:4444:123:asd:dsa:213");
+				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.4");
+				headerMap.put(IpHeaders.REMOTE_PORT,4444);
+				headerMap.put(IpHeaders.HOSTNAME,"localhost_4");
+				final MessageHeaders headers = new MessageHeaders(headerMap);
+				manager.openDeviceConnection(headers, "device_4", "serial_device_4");
+				return null;
+			}
+		};
+		
+		callables.add(callable);
+		
+		try {
+			assertConcurrent(callables,1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Set<Device> devices = deviceStatuses.keySet();
+		Assert.assertEquals(4, devices.size());
+		
+		Device device = null;
+		for (Device dev : devices) 
+			if (dev.getSerial().equals("serial_device_2"))
+				device =  dev;
+		Assert.assertNotNull(device);
+		DeviceStatus status = deviceStatuses.get(device);
+		Assert.assertNotNull(status);
+		Assert.assertEquals(13.12, status.getRamUsage(),DELTA);
+		Assert.assertEquals(65.23, status.getCpuUsage(),DELTA);
+		
+	}
+
+	private void assertConcurrent(List<Callable<Void>> callables, final int maxTimeoutSeconds) throws InterruptedException {
+	    final int numThreads = callables.size();
+	    final List<Throwable> exceptions = Collections.synchronizedList(new ArrayList<Throwable>());
+	    final ExecutorService threadPool = Executors.newFixedThreadPool(numThreads);
+	    try {
+	        final CountDownLatch allExecutorThreadsReady = new CountDownLatch(numThreads);
+	        final CountDownLatch afterInitBlocker = new CountDownLatch(1);
+	        final CountDownLatch allDone = new CountDownLatch(numThreads);
+	        for (final Callable<?> submittedTestRunnable : callables) {
+	            threadPool.submit(new Runnable() {
+	                public void run() {
+	                    allExecutorThreadsReady.countDown();
+	                    try {
+	                        afterInitBlocker.await();
+	                        submittedTestRunnable.call();
+	                    } catch (final Throwable e) {
+	                        exceptions.add(e);
+	                    } finally {
+	                        allDone.countDown();
+	                    }
+	                }
+	            });
+	        }
+	        // wait until all threads are ready
+	        Assert.assertTrue("Timeout initializing threads! Perform long lasting initializations "
+	        										+ "before passing runnables to assertConcurrent", 
+	        										allExecutorThreadsReady.await(callables.size() * 10, TimeUnit.MILLISECONDS));
+	        // start all test runners
+	        afterInitBlocker.countDown();
+	        Assert.assertTrue("Test timeout! More than" + maxTimeoutSeconds + "seconds", allDone.await(maxTimeoutSeconds, TimeUnit.SECONDS));
+	    } finally {
+	        threadPool.shutdownNow();
+	    }
+	    Assert.assertTrue("Test failed with exception(s)" + exceptions, exceptions.isEmpty());
+	}
+
 }

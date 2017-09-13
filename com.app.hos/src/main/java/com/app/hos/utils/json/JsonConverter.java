@@ -49,19 +49,23 @@ public class JsonConverter {
             Object key = pair.getKey();
             Object value = pair.getValue();
             Field[] keyFields = key.getClass().getDeclaredFields();
-            Field[] valueFields = value.getClass().getDeclaredFields();
             ObjectNode keyNode = mapper.createObjectNode();
             for(Field field : keyFields){
             	if(isNotIgnored(field))
             		keyNode.putPOJO(field.getName(), getPOJOFromField(field, key));
             }
-            ObjectNode valueNode = mapper.createObjectNode();
-            for(Field field : valueFields){
-            	if(isNotIgnored(field))
-					valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
-            }
             node.set(getClassName(key), keyNode);
-        	node.set(getClassName(value), valueNode);
+            if (value == null) {
+            	node.set("null", null);
+            } else {
+            	 Field[] valueFields = value.getClass().getDeclaredFields();
+            	 ObjectNode valueNode = mapper.createObjectNode();
+                 for(Field field : valueFields){
+                 	if(isNotIgnored(field))
+     					valueNode.putPOJO(field.getName(), getPOJOFromField(field, value));
+                 }
+                 node.set(getClassName(value), valueNode);
+            }
             arrayNode.add(node);
         }
         String jsonFinal = null;
@@ -138,8 +142,13 @@ public class JsonConverter {
       }
 
     private static String getClassName(Object object) {
-    	String name = object.getClass().getSimpleName();
-    	return name.toLowerCase();
+    	if (object == null) {
+    		return "null";
+    	} else {
+    		String name = object.getClass().getSimpleName();
+        	return name.toLowerCase();
+    	}
+    	
     }
     
     private static ObjectNode getNullNode() {
