@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import com.app.hos.logging.LoggingRepository;
+import com.app.hos.utils.aspect.AutoInjectDependecyAspect;
 import com.app.hos.utils.aspect.ConnectionAspect;
 import com.app.hos.utils.aspect.PersistanceAspect;
 
@@ -21,4 +22,6 @@ public class AspectConfig {
     public ConnectionAspect loggingAspect(LoggingRepository repository) {
         return new ConnectionAspect(repository);
     }
+	
+
 }

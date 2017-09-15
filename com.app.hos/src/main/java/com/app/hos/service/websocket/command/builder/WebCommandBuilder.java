@@ -1,8 +1,6 @@
 package com.app.hos.service.websocket.command.builder;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class WebCommandBuilder {
 
 	private AbstractWebCommandBuilder commandBuilder;

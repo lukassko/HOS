@@ -2,7 +2,7 @@ package com.app.hos.service.websocket.command;
 
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
@@ -10,7 +10,6 @@ import com.app.hos.service.websocket.command.builder.AbstractWebCommandBuilder;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.utils.json.JsonConverter;
 
-@Component
 public class GetAllDevicesWebCommandBuilder extends AbstractWebCommandBuilder {
 
 	@Override

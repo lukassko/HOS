@@ -26,6 +26,7 @@
   	<aspectjrt.version>1.7.0</aspectjrt.version>
   	<aspectjweaver.version>1.7.0</aspectjweaver.version>
   	<maven.failsafe.version>2.19.1</maven.failsafe.version>
+  	<spring.aspects.version>4.3.11.RELEASE</spring.aspects.version>
   </properties>
   
   <dependencies>
@@ -115,6 +116,12 @@
 	    <version>${spring.version}</version>
 	</dependency>
 	
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aspects</artifactId>
+	   	<version>${spring.aspects.version}</version>
+	</dependency>
+
     <!-- Spring Integration dependencies -->
     
     <dependency>
