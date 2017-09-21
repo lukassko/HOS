@@ -12,6 +12,7 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.GetAllDevicesWebCommandBuilder;
+import com.app.hos.service.websocket.command.RemoveDeviceWebCommandBuilder;
 import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
@@ -43,5 +44,11 @@ public class ApplicationContextConfig {
 	@Scope("prototype")
 	public GetAllDevicesWebCommandBuilder getAllDevicesWebCommandBuilder() {
 	    return new GetAllDevicesWebCommandBuilder();
+	}
+	
+	@Bean("removeDeviceBuilder")
+	@Scope("prototype")
+	public RemoveDeviceWebCommandBuilder getRemoveDevicesWebCommandBuilder() {
+	    return new RemoveDeviceWebCommandBuilder();
 	}
 }

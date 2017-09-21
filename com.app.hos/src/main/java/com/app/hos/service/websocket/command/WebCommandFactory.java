@@ -23,7 +23,7 @@ public class WebCommandFactory implements ApplicationContextAware {
 			throw new IllegalArgumentException();
 		}
 		if (type == WebCommandType.REMOVE_DEVICE) {
-//			commandBuilder.setCommandBuilder(removeDeviceWebCommandBuilder);
+			commandBuilder.setCommandBuilder((RemoveDeviceWebCommandBuilder)applicationContext.getBean("allDeviceBuilder"));
 		} else if (type == WebCommandType.GET_ALL_DEVICES) {
 			commandBuilder.setCommandBuilder((GetAllDevicesWebCommandBuilder)applicationContext.getBean("allDeviceBuilder"));
 		} else {

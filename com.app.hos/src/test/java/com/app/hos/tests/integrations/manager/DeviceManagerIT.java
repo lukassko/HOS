@@ -65,7 +65,7 @@ public class DeviceManagerIT {
 	}
 
 	@Test
-	public void stage05_getLatestDevicesStatusesWithoutAnyyConnectedDeviceShouldReturnEmptyMap() {
+	public void stage05_getLatestDevicesStatusesWithoutAnyConnectedDeviceShouldReturnEmptyMap() {
 		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
 		Assert.assertNotNull(deviceStatuses);
 		Assert.assertTrue(deviceStatuses.isEmpty());
@@ -89,6 +89,21 @@ public class DeviceManagerIT {
 	public void stage16_addStatusWithValidSerialNumber() {
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		manager.addDeviceStatus("invalid_serial", status);
+	}
+	
+	@Test
+	public void stage18_getLatestStatusForConnectedDeviceWithoutAnyShouldReturnMapWithNullAsKey() {
+		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Assert.assertTrue(deviceStatuses.size() == 1);
+		Device device = null;
+		DeviceStatus status = null;
+		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
+		    device = entry.getKey();
+		    status = entry.getValue();
+		}
+		Assert.assertNotNull(device);
+		Assert.assertTrue(device.getSerial().equals(device.getSerial()));
+		Assert.assertNull(status);
 	}
 	
 	@Test

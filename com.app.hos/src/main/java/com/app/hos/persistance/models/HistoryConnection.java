@@ -6,9 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.app.hos.share.utils.DateTime;
-import com.app.hos.utils.converters.DateTimeConverter;
-
 @Table(name = "finalised_connections")
 @Entity
 public class HistoryConnection extends BaseEntity {

@@ -2,7 +2,6 @@ package com.app.hos.utils.json;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,21 +75,21 @@ public class JsonConverter {
     	return jsonFinal;
     }
     
-    private static String getJsonFieldName(Field field) {
-    	if (isAnnotatedWith(JsonProperty.class,field)) {
-    		Annotation annotation = field.getDeclaredAnnotation(JsonProperty.class);
-    		Class clazz = annotation.annotationType();
-    		try {
-				Method annotationMethod = clazz.getMethod("value");
-				String name = annotationMethod.getName();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-    	}
-     	return null;
-    }
+//    private static String getJsonFieldName(Field field) {
+//    	if (isAnnotatedWith(JsonProperty.class,field)) {
+//    		Annotation annotation = field.getDeclaredAnnotation(JsonProperty.class);
+//    		Class clazz = annotation.annotationType();
+//    		try {
+//				Method annotationMethod = clazz.getMethod("value");
+//				String name = annotationMethod.getName();
+//			} catch (NoSuchMethodException e) {
+//				e.printStackTrace();
+//			} catch (SecurityException e) {
+//				e.printStackTrace();
+//			}
+//    	}
+//     	return null;
+//    }
     
     private static boolean isNotIgnored(Field field) {
     	return isAnnotatedWith(JsonIgnore.class,field);
@@ -105,18 +103,6 @@ public class JsonConverter {
     		}
     	}
     	return true;
-    }
-    
-    private static Object getPOJOFromField (Field field, Object object) {
-    	field.setAccessible(true);
-    	Object fieldObject = null;
-    	try {
-			fieldObject = field.get(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	return fieldObject;
-    	
     }
     
     public static <T> T getObject(String json, Class<T> clazz) {
@@ -148,11 +134,18 @@ public class JsonConverter {
     		String name = object.getClass().getSimpleName();
         	return name.toLowerCase();
     	}
+    }
+    
+    private static Object getPOJOFromField (Field field, Object object) {
+    	field.setAccessible(true);
+    	Object fieldObject = null;
+    	try {
+			fieldObject = field.get(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return fieldObject;
     	
     }
     
-    private static ObjectNode getNullNode() {
-    	ObjectNode node = mapper.createObjectNode();
-    	return null;
-    }
 }

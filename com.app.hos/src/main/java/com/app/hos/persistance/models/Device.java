@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity {
