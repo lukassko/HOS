@@ -31,7 +31,6 @@ public class PersistanceConfig {
     static class Hsqldb
     { }
 	
-	//@Profile({"test-sqlite","integration-test"})
 	@Configuration
 	@Profile({"test-sqlite"})
 	@PropertySource({ "classpath:persistance/properties/sqlite-test.properties" })
@@ -86,11 +85,6 @@ public class PersistanceConfig {
         return transactionManager;
     }
 
-//	hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
-//			hibernate.show_sql=true
-//			hibernate.format_sql=true
-//			hibernate.hbm2ddl.auto=create
-//			hibernate.hbm2ddl.import_files = persistance/queries/mysql/initDB.sql
 	Properties hibernateProperties() {
 	      return new Properties() {
 	         {

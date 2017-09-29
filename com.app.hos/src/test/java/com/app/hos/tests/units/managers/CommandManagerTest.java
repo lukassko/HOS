@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.service.managers;
+package com.app.hos.tests.units.managers;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.config.AspectConfig;
-import com.app.hos.logging.LoggingRepository;
+import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;

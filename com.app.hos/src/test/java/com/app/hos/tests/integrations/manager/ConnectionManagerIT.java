@@ -25,11 +25,11 @@ import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.HistoryConnection;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
-
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -66,7 +66,7 @@ public class ConnectionManagerIT {
 	}
 	
 	@Test
-	public void stage10_generateHistoryConnectionShouldReturnProperDateTime() {
+	public void stage10_generateHistoryConnectionShouldReturnProperDateTimeForConnectionAndInsertToDb() {
 		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial());
 		List<Device> devices = getDevices();
 		Assert.assertTrue(devices.size() == 1);
@@ -74,7 +74,7 @@ public class ConnectionManagerIT {
 		Assert.assertNull(connection.getEndConnectionTime());
 		
 		try {
-			Thread.sleep(1500);
+			Thread.sleep(1500);  // simulate connection period
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -87,31 +87,58 @@ public class ConnectionManagerIT {
 		DateTime connectionTime = connection.getConnectionTime();
 		DateTime endConnectionTime = connection.getEndConnectionTime();
 		Assert.assertNotNull(endConnectionTime);
-		Assert.assertNotEquals(connectionTime, endConnectionTime);
+		Assert.assertNotEquals(connectionTime, endConnectionTime); 
+		
+		List<HistoryConnection> historyConnections = new LinkedList<HistoryConnection>(
+				connectionManager.findAllHistoryConnectionsByDeviceId(device.getId())
+		);
+		
+		Assert.assertTrue(historyConnections.size() == 1);
+		HistoryConnection historyConnection = historyConnections.get(0);
+		Assert.assertEquals(historyConnection.getConnectionDateTime(), connectionTime);
 	}
 
+	@Test
+	public void stage20_reconnectDeviceAndCheckEndConnectionTimeShouldReturnNull () {
+		try {
+			Thread.sleep(1500);  // simulate delay connection period
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial());
+		List<Device> devices = getDevices();
+		Assert.assertTrue(devices.size() == 1);
+		Connection connection = devices.get(0).getConnection();
+		Assert.assertNull(connection.getEndConnectionTime());
+	}
+	
+	@Test
+	public void stage30_endConnectionForDeviceShouldInsertOtherHistoryConnectionAndUpdateEndConnectionTime () {
+		try {
+			Thread.sleep(1500);  // simulate connection period
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
+		connectionManager.generateHistoryConnection(connectionId);
+		List<Device> devices = getDevices();
+		Device device = devices.get(0);
+		Connection connection = device.getConnection();
+		DateTime connectionTime = connection.getConnectionTime();
+		DateTime endConnectionTime = connection.getEndConnectionTime();
+		Assert.assertNotNull(endConnectionTime);
+		Assert.assertNotEquals(connectionTime, endConnectionTime); 
+		
+		List<HistoryConnection> historyConnections = new LinkedList<HistoryConnection>(
+				connectionManager.findAllHistoryConnectionsByDeviceId(device.getId())
+		);
+		
+		Assert.assertTrue(historyConnections.size() == 2);
+		HistoryConnection historyConnection = historyConnections.get(1);
+		Assert.assertEquals(historyConnection.getConnectionDateTime(), connectionTime);
+	}
+	
 }
 
-//@Test
-//public void stage50_setEndConnectionTimeAndCheckShouldReturnProperDateTime() {
-//	Device device = deviceRepository.findBySerialNumber("serial_device_1");
-//	DateTime endConnectionTime = new DateTime();
-//	device.getConnection().setEndConnectionTime(endConnectionTime);
-//	deviceRepository.save(device);
-//	device = deviceRepository.findBySerialNumber("serial_device_1");
-//	Assert.assertEquals(endConnectionTime, device.getConnection().getEndConnectionTime());
-//}
-
-//    @Test
-//    @Rollback(true)
-//    public void stage1_addNewDeviceMethodShouldAddEntryToDatabseLog() {
-//    	manager.addConnection(connection);
-//    	Collection<String> logsRows = loggingRepository.findAll();
-//    	List<String> logs = new LinkedList<String>(logsRows);
-//    	Assert.assertTrue(logs.size() == 1);
-//    	logsRows = loggingRepository.findLogForLevel(Level.INFO.toString());
-//    	logs = new LinkedList<String>(logsRows);
-//    	Assert.assertTrue(logs.size() == 1);
-//    }
     
 

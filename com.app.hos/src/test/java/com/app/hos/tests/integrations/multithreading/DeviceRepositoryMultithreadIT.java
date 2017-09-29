@@ -7,8 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.app.hos.config.AspectConfig;
-import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
@@ -28,7 +27,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.integrations.config.PersistanceConfig;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,8 +36,8 @@ import org.junit.runners.MethodSorters;
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class,SqlitePersistanceConfig.class})
 @ActiveProfiles("integration-test")
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceRepositoryMultithreadIT {
 
@@ -93,7 +91,7 @@ public class DeviceRepositoryMultithreadIT {
     	List<Future<Void>> futures = new ArrayList<Future<Void>>();
     	for (int x = 0; x < threadCount; x++) {
     		Callable<Void> callable = new Callable<Void>() {
-
+    			
 				public Void call() throws Exception {
 					Device device = queue.take();
 					deviceRepository.save(device);

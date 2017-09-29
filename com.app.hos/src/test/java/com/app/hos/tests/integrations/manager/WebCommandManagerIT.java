@@ -1,6 +1,5 @@
 package com.app.hos.tests.integrations.manager;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.WebCommandFactory;
@@ -26,11 +24,8 @@ import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @ActiveProfiles("integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -63,9 +58,9 @@ public class WebCommandManagerIT {
 		
 		deviceManager.openDeviceConnection(headers, "device_1", "serial_device_1");
 		WebCommand command = webCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		System.out.println(command.getMessage().toString());
-		String matchPattern = "(.*){\"webdevice\"(.*)\"endConnectionTime\":null,\"new\":false}},\"null\":null}(.*)";
-		System.out.println(matchPattern);
+		String matchPattern = "(.*)webdevice(.*)endConnectionTime(.*):null,(.*)new(.*):false}},(.*)null(.*):null}(.*)";
+		Assert.assertTrue(command.getMessage().matches(matchPattern));
+		matchPattern = "(.*)null..null}]";
 		Assert.assertTrue(command.getMessage().matches(matchPattern));
 	}
 	
@@ -74,9 +69,8 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		WebCommand command = webCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		System.out.println(command.getMessage().toString());
-		String matchPattern = "[{\"webdevice\".*\"endConnectionTime\":null,\"new\":false}}," +
-		"\"devicestatus\":{\"time\":.*\"ramUsage\":0.2,\"cpuUsage\":13.4}}]";
+		String matchPattern = "...webdevice(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.:(.*)"+
+					"ramUsage.:0.2,.cpuUsage.:13.4...";
 		Assert.assertTrue(command.getMessage().matches(matchPattern));
 	}
 	
@@ -85,8 +79,9 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),11.65, 33.1);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		WebCommand command = webCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		System.out.println(command.getMessage().toString());
-		Assert.assertNotNull(command);
+		String matchPattern = "...webdevice(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.:(.*)"+
+					"ramUsage.:11.65,.cpuUsage.:33.1...";
+		Assert.assertTrue(command.getMessage().matches(matchPattern));
 	}
 	
 	@Test
@@ -100,8 +95,11 @@ public class WebCommandManagerIT {
 		
 		deviceManager.openDeviceConnection(headers, "device_2", "serial_device_2");
 		WebCommand command = webCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		System.out.println(command.getMessage().toString());
-		Assert.assertNotNull(command);
+		
+		String matchPattern = "...webdevice.:..id.:1,(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.." + 
+						 "(.*)ramUsage.:11.65,.cpuUsage.:33.1(.*)webdevice.:..id.:2(.*)new.:false..,.null.:null..";
+		
+		Assert.assertTrue(command.getMessage().matches(matchPattern));
 	}
 	
 	@Test
@@ -109,7 +107,9 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),29.15, 89.13);
 		deviceManager.addDeviceStatus("serial_device_2", status);
 		WebCommand command = webCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		System.out.println(command.getMessage().toString());
-		Assert.assertNotNull(command);
+		String matchPattern = "...webdevice.:..id.:1,(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:"+
+						"..time..(.*)ramUsage.:11.65,.cpuUsage.:33.1(.*)webdevice.:..id.:2(.*)"+
+						"new.:false..,.devicestatus.:..time.:(.*)ramUsage.:29.15,.cpuUsage.:89.13...";
+		Assert.assertTrue(command.getMessage().matches(matchPattern));
 	}
 }

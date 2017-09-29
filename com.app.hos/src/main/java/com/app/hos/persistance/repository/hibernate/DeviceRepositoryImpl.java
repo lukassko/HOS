@@ -8,11 +8,13 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Repository
+@Transactional
 public class DeviceRepositoryImpl implements DeviceRepository {
 
 	@PersistenceContext

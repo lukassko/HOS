@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
-import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
-import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 
 public class DateTimeTest {
 	
@@ -26,14 +24,13 @@ public class DateTimeTest {
 		int hour = dateTime.getHour();
 		int minutes = dateTime.getMinutes();
 		int seconds = dateTime.getSeconds();
-		//int millis = dateTime.getMillis();
 		StringBuilder expectedJson = new StringBuilder();
 		expectedJson.append("{\"year\":" + year);
 		expectedJson.append(",\"month\":" + month);
 		expectedJson.append(",\"day\":" + day);
 		expectedJson.append(",\"hour\":" + hour);
 		expectedJson.append(",\"minutes\":" + minutes);
-		expectedJson.append(",\"seconds\":" + seconds);
+		expectedJson.append(",\"seconds\":" + seconds+"}");
 		//expectedJson.append(",\"millis\":" + millis +"}");
 		Assert.assertEquals(json,expectedJson.toString());
 	}

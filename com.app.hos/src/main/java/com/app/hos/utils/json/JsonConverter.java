@@ -2,11 +2,13 @@ package com.app.hos.utils.json;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
+import com.app.hos.utils.json.serializers.DateJsonSerializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +26,7 @@ public class JsonConverter {
 	
 	static {
 		module.addSerializer(DateTime.class, new DateTimeJsonSerializer(DateTime.class));
+		module.addSerializer(Date.class, new DateJsonSerializer(Date.class));
     	module.addDeserializer(DateTime.class, new DateTimeJsonDeserializer(DateTime.class));
 		mapper.registerModule(module);
 	}

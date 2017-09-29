@@ -4,8 +4,8 @@ import java.util.logging.Level;
 
 import org.aspectj.lang.JoinPoint;
 
-import com.app.hos.logging.LoggingRepository;
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.logging.model.Log;
+import com.app.hos.logging.repository.LoggingRepository;
 
 public class Logger {
 
@@ -26,7 +26,7 @@ public class Logger {
 	}
 
 	protected void saveLog(Level level, String serial,String message) {
-		repository.save(new DateTime().getTimestamp(), level.toString(), serial, message);
+		repository.save(new Log(level, serial, message));
 	}
 	
 	private java.util.logging.Logger getLogger(JoinPoint point) {

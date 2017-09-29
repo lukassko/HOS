@@ -3,14 +3,9 @@ package com.app.hos.tests.integrations.persistance;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 public abstract class PersistanceIT {
 	

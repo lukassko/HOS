@@ -3,12 +3,11 @@ package com.app.hos.utils.aspect;
 import java.util.logging.Level;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
-import com.app.hos.logging.LoggingRepository;
+import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.Device;
 
 @Aspect

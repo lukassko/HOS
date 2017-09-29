@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.app.hos.config.AspectConfig;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
@@ -21,18 +21,16 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.integrations.config.PersistanceConfig;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-@Ignore("run only one integration test")
+//Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class})
-@ActiveProfiles("test-sqlite")
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class})
+@ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceRepositoryIT {
 

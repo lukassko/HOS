@@ -1,24 +1,18 @@
 package com.app.hos.tests.integrations.persistance;
 
-
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.hos.config.AspectConfig;
-import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.integrations.config.PersistanceConfig;
-import com.app.hos.utils.converters.DateTimeConverter;
 import com.app.hos.utils.exceptions.HistoryConnectionException;
 
 import java.util.Collection;
@@ -34,7 +28,7 @@ import org.junit.runners.MethodSorters;
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistanceConfig.class , SqlitePersistanceConfig.class , AspectConfig.class})
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 //@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)

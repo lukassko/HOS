@@ -1,6 +1,8 @@
 package com.app.hos.tests.units.json;
 
+import java.util.List;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -9,7 +11,7 @@ import org.junit.Test;
 
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
-import com.app.hos.share.command.result.DeviceStatus;
+import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
 
@@ -26,7 +28,10 @@ public class DevieceStatusesTest {
 		testDevice.setId(1);
 		connection.setDevice(testDevice);
 		testDevice.setConnection(connection);
-		DeviceStatus testStatus = new DeviceStatus(34.5, 65.9);
+		List<DeviceStatus> statuses = new LinkedList<DeviceStatus>();
+		DeviceStatus testStatus = new DeviceStatus(new DateTime(),34.5, 65.9);
+		statuses.add(testStatus);
+		testDevice.setDeviceStatuses(statuses);
 		deviceStatuses.put(testDevice, testStatus);
 	
 		connection = new Connection("192.168.0.22:23452-09:oa9:sd1", 
@@ -36,7 +41,10 @@ public class DevieceStatusesTest {
 		testDevice.setId(2);
 		connection.setDevice(testDevice);
 		testDevice.setConnection(connection);
-		testStatus = new DeviceStatus(11.5, 33.6);
+		
+		statuses = new LinkedList<DeviceStatus>();
+		statuses.add(testStatus);
+		testDevice.setDeviceStatuses(statuses);
 		deviceStatuses.put(testDevice, testStatus);
 	}
 	
@@ -55,7 +63,6 @@ public class DevieceStatusesTest {
 		    break;
 		}
 		String json = JsonConverter.getJson(nullkey);
-		System.out.println(json);
 	}
 	
 	@Test
@@ -83,8 +90,7 @@ public class DevieceStatusesTest {
 		StringBuilder expectedJson = new StringBuilder();
 		expectedJson.append("{\"device\":{\"name\":\"" + device.getName());
 		expectedJson.append("\",\"serial\":\"" + device.getSerial());
-		expectedJson.append("\",\"connection\":{\"id\":" + device.getConnection().getId());
-		expectedJson.append(",\"connectionId\":\"" + device.getConnection().getConnectionId());
+		expectedJson.append("\",\"connection\":{\"connectionId\":\"" + device.getConnection().getConnectionId());
 		expectedJson.append("\",\"hostname\":\"" + device.getConnection().getHostname());
 		expectedJson.append("\",\"ip\":\"" + device.getConnection().getIp());
 		expectedJson.append("\",\"remotePort\":" + device.getConnection().getRemotePort());
@@ -93,16 +99,24 @@ public class DevieceStatusesTest {
 		expectedJson.append(",\"day\":" + device.getConnection().getConnectionTime().getDay());
 		expectedJson.append(",\"hour\":" + device.getConnection().getConnectionTime().getHour());
 		expectedJson.append(",\"minutes\":" + device.getConnection().getConnectionTime().getMinutes());
-		expectedJson.append(",\"seconds\":" + device.getConnection().getConnectionTime().getSeconds());
-		//expectedJson.append(",\"millis\":" + device.getConnection().getConnectionTime().getMillis()+"}");
-		expectedJson.append(",\"endConnectionTime\":null,\"new\":false}}");
-		expectedJson.append(",\"devicestatus\":{\"time\":{\"year\":" + status.getTime().getYear());
+		expectedJson.append(",\"seconds\":" + device.getConnection().getConnectionTime().getSeconds()+"}");
+		expectedJson.append(",\"endConnectionTime\":null,\"new\":false}");
+		expectedJson.append(",\"deviceStatuses\":[{\"time\":{\"year\":" + status.getTime().getYear());
 		expectedJson.append(",\"month\":" + status.getTime().getMonth());
 		expectedJson.append(",\"day\":" + status.getTime().getDay());
 		expectedJson.append(",\"hour\":" + status.getTime().getHour());
 		expectedJson.append(",\"minutes\":" + status.getTime().getMinutes());
-		expectedJson.append(",\"seconds\":" + status.getTime().getSeconds());
-		//expectedJson.append(",\"millis\":" + status.getTime().getMillis()+"}");
+		expectedJson.append(",\"seconds\":" + status.getTime().getSeconds()+"}");
+		expectedJson.append(",\"new\":true");
+		expectedJson.append(",\"ram\":"+status.getRamUsage());
+		expectedJson.append(",\"cpu\":"+status.getCpuUsage());
+		//expectedJson.append(",\"deviceStatuses\":[]}");
+		expectedJson.append("}]},\"devicestatus\":{\"time\":{\"year\":" + status.getTime().getYear());
+		expectedJson.append(",\"month\":" + status.getTime().getMonth());
+		expectedJson.append(",\"day\":" + status.getTime().getDay());
+		expectedJson.append(",\"hour\":" + status.getTime().getHour());
+		expectedJson.append(",\"minutes\":" + status.getTime().getMinutes());
+		expectedJson.append(",\"seconds\":" + status.getTime().getSeconds()+"}");
 		expectedJson.append(",\"ramUsage\":" + status.getRamUsage());
 		expectedJson.append(",\"cpuUsage\":" + status.getCpuUsage() +"}}");
 		return expectedJson.toString();

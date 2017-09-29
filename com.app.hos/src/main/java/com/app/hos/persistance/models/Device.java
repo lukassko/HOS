@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Table(name = "devices")
 @Entity
-public class Device extends BaseEntity {
+public class Device extends BaseEntity  {
 	
 	@Column(nullable = false)
 	private String name;
@@ -131,5 +131,6 @@ public class Device extends BaseEntity {
 	public String toString() {
 		return "Device [name=" + name + ", serial=" + serial + ", connection=" + connection + "]";
 	}
+
 
 }

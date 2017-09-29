@@ -9,14 +9,11 @@ import javax.sql.DataSource;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -56,10 +53,10 @@ public class SqlitePersistanceConfig {
 	   dataSource.setUrl(env.getProperty("sqlite.jdbc.url"));
 	   dataSource.setUsername(env.getProperty("sqlite.jdbc.user"));
 	   dataSource.setPassword(env.getProperty("sqlite.jdbc.pass"));
-	   dataSource.setInitialSize(Integer.parseInt(env.getProperty("sqlite.hibernate.initial_size")));
-	   dataSource.setMaxActive(Integer.parseInt(env.getProperty("sqlite.hibernate.max_active")));
-	   dataSource.setMaxIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.max_idle")));
-	   dataSource.setMinIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.min_idle")));
+	   //dataSource.setInitialSize(Integer.parseInt(env.getProperty("sqlite.hibernate.initial_size")));
+	   //dataSource.setMaxActive(Integer.parseInt(env.getProperty("sqlite.hibernate.max_active")));
+	   //dataSource.setMaxIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.max_idle")));
+	   //dataSource.setMinIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.min_idle")));
 	   return dataSource;
 	}
 	 

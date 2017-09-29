@@ -1,13 +1,11 @@
 package com.app.hos.service.managers.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.command.CommandFactory;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.type.CommandType;
@@ -16,8 +14,8 @@ import com.app.hos.share.command.type.CommandType;
 public class CommandManager {
 
 	//private TaskStrategy taskStrategy; inject
-	@Autowired
-	private DeviceManager deviceManager;
+	//@Autowired
+	//private DeviceManager deviceManager;
 	
 	
 	public void executeCommand(MessageHeaders headers, Command command) {

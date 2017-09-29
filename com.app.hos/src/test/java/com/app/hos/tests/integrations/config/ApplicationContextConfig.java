@@ -9,6 +9,9 @@ import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeavi
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
+import com.app.hos.service.SystemFacade;
+import com.app.hos.service.SystemFacadeImpl;
+import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.GetAllDevicesWebCommandBuilder;
@@ -35,11 +38,6 @@ public class ApplicationContextConfig {
         return new ConnectionManager();
     }
 	
-	@Bean
-    public AutoInjectDependecyAspect autoInjectDependecyAspect() {
-        return new AutoInjectDependecyAspect();
-    }
-
 	@Bean("allDeviceBuilder")
 	@Scope("prototype")
 	public GetAllDevicesWebCommandBuilder getAllDevicesWebCommandBuilder() {

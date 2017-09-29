@@ -2,10 +2,10 @@ package com.app.hos.service.integration.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandlingException;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.SystemFacade;
-import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder.Command;
 
 @Service 
@@ -24,8 +24,15 @@ public class Server {
 	}
 		
 	public void sendMessage(Message<Command> message) {
-		if(message != null) 
+		try {
 			this.gateway.send(message);
+		} catch (MessageHandlingException e) {
+			
+			// Socket does not exists
+			// Inform user about this
+			System.out.println("Unable to find outbound socket");
+		}
+			
 	}
 		
 	

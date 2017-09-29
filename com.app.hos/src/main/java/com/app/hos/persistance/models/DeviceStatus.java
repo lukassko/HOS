@@ -1,6 +1,7 @@
 package com.app.hos.persistance.models;
 
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -9,33 +10,50 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.app.hos.share.command.result.Result;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 // PREAPARE NULL OBJECT FOR DeviceStatus
 
 @Entity
 @Table(name = "devices_statuses")
-public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus> {
+public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus>,Result,Serializable {
 
+	@JsonIgnore
+	@Transient
+	private static final long serialVersionUID = 2L;
+	
 	@NotEmpty
 	@Column(name="time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date time;
 	
 	@NotEmpty
+	@JsonProperty("ram")
 	@Column(name="ram")
     private double ramUsage;
 
 	@NotEmpty
+	@JsonProperty("cpu")
 	@Column(name="cpu")
     private double cpuUsage;
     
 	public DeviceStatus() {}
+	
+	public DeviceStatus(double ramUsage, double cpuUsage) {
+		this.time = new Date();
+		this.ramUsage = ramUsage;
+		this.cpuUsage = cpuUsage;
+	}
+
 	
     public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
 		this.time = new Timestamp(time.getTimestamp());

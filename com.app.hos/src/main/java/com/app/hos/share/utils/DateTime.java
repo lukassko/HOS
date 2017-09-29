@@ -47,7 +47,7 @@ public class DateTime implements Serializable {
 		this.timestamp = timestamp;
 	}
 	
-	public DateTime(int year,int month,int day,int hour,int minutes,int seconds, int millis) {
+	public DateTime(int year,int month,int day,int hour,int minutes,int seconds) {
 		this.hour = hour;
 		this.minutes = minutes;
 		this.seconds = seconds;
@@ -55,7 +55,7 @@ public class DateTime implements Serializable {
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		this.dateTime = new org.joda.time.DateTime(year, month, day, hour, minutes, seconds,millis); 
+		this.dateTime = new org.joda.time.DateTime(year, month, day, hour, minutes, seconds); 
 		this.timestamp = dateTime.getMillis();
 	}
 
