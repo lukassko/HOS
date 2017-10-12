@@ -3,8 +3,8 @@ package com.app.hos.tests.units.command;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.share.command.CommandFactory;
 import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 
 public class CommandFactoryTest {

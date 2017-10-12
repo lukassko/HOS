@@ -1,4 +1,4 @@
-package com.app.hos.share.command;
+package com.app.hos.share.command.builder.concretebuilders;
 
 
 import com.app.hos.persistance.models.DeviceStatus;

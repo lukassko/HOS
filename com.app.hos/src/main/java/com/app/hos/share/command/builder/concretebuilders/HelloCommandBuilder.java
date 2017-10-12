@@ -1,4 +1,4 @@
-package com.app.hos.share.command;
+package com.app.hos.share.command.builder.concretebuilders;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
