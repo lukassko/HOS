@@ -66,6 +66,7 @@
 	  <artifactId>hibernate4-sqlite-dialect</artifactId>
 	  <version>0.1.2</version>
 	</dependency>
+	
 	<!-- Spring MVC dependencies -->
 	<dependency>
 		<groupId>jstl</groupId>
@@ -123,7 +124,6 @@
 	</dependency>
 
     <!-- Spring Integration dependencies -->
-    
     <dependency>
 		<groupId>org.springframework.integration</groupId>
 		<artifactId>spring-integration-ip</artifactId>
@@ -136,7 +136,6 @@
 	</dependency>
 	
 	<!-- Spring AOP dependencies -->
-	
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-aop</artifactId>
@@ -161,7 +160,6 @@
 	</dependency>
 
 	<!-- JSON libraries dependencies -->
-	
 	<dependency>
 	    <groupId>com.google.code.gson</groupId>
 	    <artifactId>gson</artifactId>
@@ -189,6 +187,7 @@
 		<artifactId>hibernate-validator</artifactId>
 		<version>${hibernate.version}</version>
 	</dependency>
+	
 	<!-- MySQL support dependencies -->
 	<dependency>
 	   <groupId>mysql</groupId>
@@ -212,7 +211,6 @@
 	</dependency> -->
 	
 	<!-- WebSockets dependencies -->
-	
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-websocket</artifactId>
@@ -250,6 +248,16 @@
 	    <version>2.9.7</version>
 	</dependency>
 
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>bootstrap</artifactId>
+	    <version>3.3.7-1</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.webjars</groupId>
+	    <artifactId>jquery</artifactId>
+	    <version>3.1.1</version>
+	</dependency>
   </dependencies>
   
   	<profiles>
