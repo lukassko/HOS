@@ -1,12 +1,10 @@
 package com.app.hos.share.command.builder.concretebuilders;
 
 
-import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
-import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.type.CommandType;
 
-public class StatusCommandBuilder extends AbstractCommandBuilder {
+public class MyStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public void setCommandType() {
@@ -15,11 +13,5 @@ public class StatusCommandBuilder extends AbstractCommandBuilder {
 	}
 
 	@Override
-	public void setResult() {
-		command.setResult(getResult());
-	}
-	
-	private Result getResult() {
-		return new DeviceStatus(12.6, 12.3);
-	}
+	public void setResult() {}
 }

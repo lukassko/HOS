@@ -60,7 +60,7 @@ public class CommandManagerTest {
 		Mockito.doNothing().when(server).sendMessage(Mockito.any(Message.class));
 		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.any(String.class), Mockito.any(String.class));
 		Command command = CommandFactory.getCommand(CommandType.HELLO);
-		manager.executeCommand(headers, command);
+		//manager.executeCommand(headers, command);
 		
 		Mockito.verify(server, Mockito.times(1)).sendMessage(Mockito.any(Message.class));
 		

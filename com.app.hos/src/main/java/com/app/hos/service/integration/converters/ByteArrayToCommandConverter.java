@@ -12,7 +12,7 @@ import org.springframework.core.serializer.Serializer;
 
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandBuilder;
-import com.app.hos.share.command.builder.concretebuilders.ImproperCommandBuilder;
+import com.app.hos.share.command.builder.concretebuilders.BadConversionCommandBuilder;
 
 public class ByteArrayToCommandConverter implements Serializer<Command>, Deserializer<Command>{
 	
@@ -24,11 +24,11 @@ public class ByteArrayToCommandConverter implements Serializer<Command>, Deseria
 		try {
 			cmd = (Command) ois.readObject();
 		} catch (ClassNotFoundException e) {
-			commandBuilder.setCommandBuilder(new ImproperCommandBuilder());
+			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder());
 			commandBuilder.createCommand();
 			cmd = commandBuilder.getCommand();
 		} catch (InvalidClassException e) {
-			commandBuilder.setCommandBuilder(new ImproperCommandBuilder());
+			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder());
 			commandBuilder.createCommand();
 			cmd = commandBuilder.getCommand();
 		}

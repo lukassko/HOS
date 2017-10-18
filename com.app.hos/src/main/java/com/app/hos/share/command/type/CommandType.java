@@ -4,7 +4,9 @@ public enum CommandType {
 	
 	HELLO(false),
 	MY_STATUS(false),
-	BAD_CONVERSION(false),
+	BAD_COMMAND_CONVERSION(false),
+	EXECUTION_EXCEPTION(false),
+	UNKNOWN_COMMAND(false),
 	GET_STATUS(true);
 	
 	private boolean isExecutable;
