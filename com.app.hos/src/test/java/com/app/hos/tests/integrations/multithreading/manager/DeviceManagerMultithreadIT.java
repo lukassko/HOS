@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.multithreading;
+package com.app.hos.tests.integrations.multithreading.manager;
 
 import java.util.ArrayList;
 import java.util.Collections;

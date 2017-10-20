@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.multithreading;
+package com.app.hos.tests.integrations.multithreading.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
