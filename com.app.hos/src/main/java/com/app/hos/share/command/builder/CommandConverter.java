@@ -2,7 +2,7 @@ package com.app.hos.share.command.builder;
 
 import java.util.concurrent.Callable;
 
-import com.app.hos.share.command.executable.GetStatusCommand;
+import com.app.hos.share.command.decorators.GetStatusCommand;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.exceptions.NotExecutableCommand;
 
@@ -12,7 +12,7 @@ public class CommandConverter {
 		CommandType type = CommandType.valueOf(command.getCommandType());
 		Callable<Command> executableCommand = null; 
 		if (type == CommandType.GET_STATUS) {
-			executableCommand = (GetStatusCommand)command; 
+			executableCommand = new GetStatusCommand(command);
 		} else {
 			throw new NotExecutableCommand(type);
 		}

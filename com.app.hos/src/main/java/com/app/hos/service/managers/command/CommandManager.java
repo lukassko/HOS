@@ -23,6 +23,11 @@ public class CommandManager {
 	@Autowired
 	private SystemFacade systemFacade;
 	
+	// setters
+	public void setSystemFacade(SystemFacade systemFacade) {
+		this.systemFacade = systemFacade;
+	}
+
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
 
 	public void executeCommand(String connectionId, Command command) throws NotExecutableCommand {

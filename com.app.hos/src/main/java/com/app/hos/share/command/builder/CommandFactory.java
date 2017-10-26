@@ -2,6 +2,7 @@ package com.app.hos.share.command.builder;
 
 import com.app.hos.share.command.builder.concretebuilders.BadConversionCommandBuilder;
 import com.app.hos.share.command.builder.concretebuilders.ExecutionExceptionCommandBuilder;
+import com.app.hos.share.command.builder.concretebuilders.GetStatusCommandBuilder;
 import com.app.hos.share.command.builder.concretebuilders.HelloCommandBuilder;
 import com.app.hos.share.command.builder.concretebuilders.MyStatusCommandBuilder;
 import com.app.hos.share.command.builder.concretebuilders.UnknownCommandBuilder;
@@ -15,7 +16,6 @@ public class CommandFactory {
 		if(type == null) {
 			throw new IllegalArgumentException();
 		}
-		
 		if (type == CommandType.HELLO) {
 			commandBuilder.setCommandBuilder(new HelloCommandBuilder());
 		} else if (type == CommandType.MY_STATUS) {
@@ -24,7 +24,9 @@ public class CommandFactory {
 			commandBuilder.setCommandBuilder(new ExecutionExceptionCommandBuilder());
 		} else if (type == CommandType.BAD_COMMAND_CONVERSION) {
 			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder());
-		} else  {
+		} else if (type == CommandType.GET_STATUS) {
+			commandBuilder.setCommandBuilder(new GetStatusCommandBuilder());
+		}else  {
 			commandBuilder.setCommandBuilder(new UnknownCommandBuilder());
 		}
 		commandBuilder.createCommand();

@@ -11,7 +11,7 @@ public interface SystemFacade {
 	
 	public void sendCommand(String connectionId, CommandType type);
 	
-	public void sendCommand(String connectionId, Command type);
+	public void sendCommand(String connectionId, Command command);
 	
 	public void closeConnection(String connectionId);
 }
