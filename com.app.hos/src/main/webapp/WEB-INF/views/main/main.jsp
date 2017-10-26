@@ -2,17 +2,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+	
+	<!-- jQuery -->
+	<script src="<c:url value="/webjars/jquery/3.1.1/jquery.min.js" />"></script>
+	
+	<!-- bootstrap -->	
+	<link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />">  
+	<script src="<c:url value="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js" />"></script>
+	
+	<!-- font awesome -->
+	<link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css" />">  
+	
+	<!-- WebSocket -->
+	<script src="<c:url value="/webjars/sockjs-client/1.0.2/sockjs.min.js" />"></script>
+	<script src="<c:url value="/webjars/stomp-websocket/2.3.3/stomp.min.js" />"></script>
 
+	<!-- attach other css and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
-	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
-	<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script> 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
-	
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
 	
 	<script>

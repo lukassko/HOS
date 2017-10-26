@@ -26,6 +26,6 @@ public abstract class AbstractCommandBuilder {
 
     public abstract void setCommandType ();
 
-    public abstract void setResult ();
+	public abstract void setResult();
 
 }
