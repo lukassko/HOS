@@ -1,0 +1,27 @@
+.navbar-inverse {
+	border-style:none;
+	margin-bottom:10px;
+}
+
+.navbar-nav li:hover {
+	background-color: #4f5b69;
+	-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	transition: all 1s ease;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #efffff;
+}
+.navbar-inverse .navbar-nav > .active > a {
+	background-color: #181c20;	
+}
+
+.navbar-nav > li,
+.navbar-nav > li:hover,
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover  {
+	color: #d19b3d;
+}
