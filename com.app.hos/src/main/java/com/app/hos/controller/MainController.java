@@ -19,7 +19,7 @@ public class MainController {
 //	private DeviceWebSocket webSocket;
 	
 	@Autowired
-	public MainController(DeviceManager deviceManager, WebSocketManager webSocket) {
+	public MainController(DeviceManager deviceManager) {
 //		this.deviceManager = deviceManager;
 //		this.webSocket = webSocket;
 	}

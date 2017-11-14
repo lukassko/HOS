@@ -21,9 +21,8 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.app.hos.config.AspectConfig;
-import com.app.hos.tests.integrations.config.ApplicationContextConfig;
-import com.app.hos.tests.integrations.config.PersistanceConfig;
+import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
 import java.lang.reflect.Type;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -32,7 +31,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @ActiveProfiles("integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {PersistanceConfig.class , AspectConfig.class, ApplicationContextConfig.class})
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class,ApplicationContextConfig.class})
 public class DeviceWebSocketIT {
 
 	private static final String WEBSOCKET_URI = "ws://localhost:8080/command";
