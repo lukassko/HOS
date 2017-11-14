@@ -1,41 +1,35 @@
 package com.app.hos.controller;
 
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.app.hos.persistance.models.Device;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.service.websocket.DeviceWebSocket;
-import com.app.hos.utils.json.JsonConverter;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.app.hos.service.websocket.WebSocketManager;
+
 
 @Controller
 public class MainController {
 	
 	//private RestClient rest;
-	private DeviceManager deviceManager;
-	private DeviceWebSocket webSocket;
+//	private DeviceManager deviceManager;
+//	private DeviceWebSocket webSocket;
 	
 	@Autowired
-	public MainController(DeviceManager deviceManager, DeviceWebSocket webSocket) {
-		this.deviceManager = deviceManager;
-		this.webSocket = webSocket;
+	public MainController(DeviceManager deviceManager, WebSocketManager webSocket) {
+//		this.deviceManager = deviceManager;
+//		this.webSocket = webSocket;
 	}
 	
-	@MessageMapping("/device-broker")
-    @SendTo("/topic/device-info")
-    public void onCommandReceive(String command) {
-        webSocket.receiveMessage(command);
-    }
-	
+//	@MessageMapping("/command")
+//    @SendTo("/topic/device-info")
+//    public void onCommandReceive(String command) {
+//        webSocket.receiveMessage(command);
+//    }
+//	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
 	public String showMainPage() {
 		return "main/main";

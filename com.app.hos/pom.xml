@@ -9,6 +9,7 @@
   <url>http://maven.apache.org</url>
   
   <properties>
+  	<maven.compiler.version>3.7.0</maven.compiler.version>
   	<spring.version>4.3.8.RELEASE</spring.version>
   	<spring.integration.version>4.3.5.RELEASE</spring.integration.version>
   	<spring.ws.version>2.4.0.RELEASE</spring.ws.version>
@@ -20,6 +21,7 @@
   	<hibernate.version>5.1.0.Final</hibernate.version>
   	<mysql.version>5.1.32</mysql.version>
   	<websocket.version>4.2.4.RELEASE</websocket.version>
+  	<websocket.api.version>1.1</websocket.api.version>
   	<stomp.version>2.3.3</stomp.version>
   	<sockjs.version>1.0.2</sockjs.version>
   	<hsqldb.version>2.3.4</hsqldb.version>
@@ -246,6 +248,12 @@
 	  <version>${stomp.version}</version>
 	</dependency>
 
+	<dependency>
+	    <groupId>javax.websocket</groupId>
+	    <artifactId>javax.websocket-api</artifactId>
+	    <version>${websocket.api.version}</version>
+	    <scope>provided</scope>
+	</dependency>
 	<!--TOOLS dependencies -->
 	<dependency>
 	    <groupId>joda-time</groupId>
@@ -316,6 +324,18 @@
   <build>
     <finalName>HOS</finalName>
 	<plugins>
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-compiler-plugin</artifactId>
+		        <version>${maven.compiler.version}</version>
+		        <configuration>
+			        <verbose>true</verbose>
+			        <fork>true</fork>
+			        <executable>C:\Program Files\Java\jdk1.8.0_91\bin\javac</executable>
+			        <source>1.8</source>
+			        <target>1.8</target>
+		     	</configuration>
+		</plugin>
 		<plugin>
 			<groupId>org.jvnet.jaxb2.maven2</groupId>
 			<artifactId>maven-jaxb2-plugin</artifactId>
