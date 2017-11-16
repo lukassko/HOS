@@ -9,8 +9,9 @@
   <url>http://maven.apache.org</url>
   
   <properties>
+  	<tomcat.version>8.0.44</tomcat.version>
   	<maven.compiler.version>3.7.0</maven.compiler.version>
-  	<javac.path>C:\Program Files\Java\jdk1.8.0_91\bin\javac</javac.path>
+  	<javac.path>${env.JAVAC}</javac.path>
   	<java.version>1.8</java.version>
   	<spring.version>4.3.8.RELEASE</spring.version>
   	<spring.integration.version>4.3.5.RELEASE</spring.integration.version>
@@ -51,14 +52,18 @@
 	    <artifactId>spring-test</artifactId>
 	    <version>${test.spring.version}</version>
 	</dependency>
-    
     <dependency>
 	    <groupId>org.mockito</groupId>
 	    <artifactId>mockito-all</artifactId>
 	    <version>${mockito.version}</version>
 	</dependency>
-	    
-    
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-test</artifactId>
+	    <version>1.4.0.RELEASE</version>
+	    <scope>test</scope>
+	</dependency>
+	
     <!-- Testing database dependencies -->
     <dependency>
 	    <groupId>org.hsqldb</groupId>
@@ -205,19 +210,47 @@
 	   <scope>runtime</scope>
 	</dependency>
 	
-	<!-- Tomcat dependencies-->
+	<!-- Tomcat dependencies -->
 	<dependency> 
 	    <groupId>org.apache.tomcat</groupId>
 	    <artifactId>tomcat-dbcp</artifactId>
 	    <version>7.0.55</version>
 	</dependency> 
-	
-	<!-- Tomcat dependencies
-    <dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-c3p0</artifactId>
-	    <version>4.3.6.Final</version>
-	</dependency> -->
+	<dependency>
+	   <groupId>org.apache.tomcat.embed</groupId>
+	   <artifactId>tomcat-embed-websocket</artifactId>
+	   <version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-core</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-logging-juli</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-jasper</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-jasper-el</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-jsp-api</artifactId>
+		<version>${tomcat.version}</version>
+	</dependency>
 	
 	<!-- WebSockets dependencies -->
 	<dependency>
@@ -231,51 +264,51 @@
 	    <artifactId>spring-messaging</artifactId>
 	    <version>${websocket.version}</version>
 	</dependency>
-	
-	<dependency>
-	   <groupId>org.apache.tomcat.embed</groupId>
-	   <artifactId>tomcat-embed-websocket</artifactId>
-	   <version>7.0.52</version>
-	</dependency>
- 
 	<dependency>
 	  <groupId>org.webjars</groupId>
 	  <artifactId>sockjs-client</artifactId>
 	  <version>${sockjs.version}</version>
 	</dependency>
-		
 	<dependency>
 	  <groupId>org.webjars</groupId>
 	  <artifactId>stomp-websocket</artifactId>
 	  <version>${stomp.version}</version>
 	</dependency>
-
 	<dependency>
 	    <groupId>javax.websocket</groupId>
 	    <artifactId>javax.websocket-api</artifactId>
 	    <version>${websocket.api.version}</version>
 	    <scope>provided</scope>
 	</dependency>
+	
 	<!--TOOLS dependencies -->
 	<dependency>
 	    <groupId>joda-time</groupId>
 	    <artifactId>joda-time</artifactId>
 	    <version>2.9.7</version>
 	</dependency>
-
+	<dependency>
+	    <groupId>commons-logging</groupId>
+	    <artifactId>commons-logging</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>juli</artifactId>
+	    <version>6.0.26</version>
+	</dependency>
+	
 	<!-- WebJars -->
 	<dependency>
 	    <groupId>org.webjars</groupId>
 	    <artifactId>bootstrap</artifactId>
 	    <version>${bootstrap.version}</version>
 	</dependency>
-	
 	<dependency>
 	    <groupId>org.webjars</groupId>
 	    <artifactId>jquery</artifactId>
 	    <version>${jquery.version}</version>
 	</dependency>
-	
 	<dependency>
 	    <groupId>org.webjars</groupId>
 	    <artifactId>font-awesome</artifactId>
@@ -299,6 +332,7 @@
                             </includes>
                         </configuration>
                     </plugin>
+                    
                 </plugins>
             </build>
     	</profile>

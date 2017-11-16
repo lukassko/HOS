@@ -14,11 +14,12 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.service.websocket.decoders.WebCommandDecoder;
 import com.app.hos.service.websocket.decoders.WebCommandEncoder;
 
 //@Component
-@ServerEndpoint(value = "/command", 
+@ServerEndpoint(value = "/websocket",
 decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class)
 public class WebSocketServerEndpoint {
 	
@@ -27,16 +28,22 @@ public class WebSocketServerEndpoint {
 	
 	@OnOpen
     public void onOpen(Session session) throws IOException {
+		System.out.println("New connaction Open");
 		sessions.add(session);
     }
  
     @OnMessage
     public void onMessage(Session session, WebCommand message) throws IOException {
         // Handle new messages
+    	WebCommand cmd = new WebCommand();
+    	cmd.setMessage("ELO");
+    	cmd.setType(WebCommandType.GET_ALL_DEVICES);
+    	sendMessage(session,cmd);
     }
  
     @OnClose
     public void onClose(Session session) throws IOException {
+    	System.out.println("Connection Close");
     	sessions.remove(session);
     }
  
