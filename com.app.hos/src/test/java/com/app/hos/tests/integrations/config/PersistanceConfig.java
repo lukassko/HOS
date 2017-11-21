@@ -51,7 +51,6 @@ public class PersistanceConfig {
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 	   em.setDataSource(dataSource());
-	   //em.setPackagesToScan(new String[] { "com.app.hos.*" });
 	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
 	   em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 	   em.setJpaProperties(hibernateProperties());
@@ -101,5 +100,4 @@ public class PersistanceConfig {
 	         }
 	      };
 	   }
-	
 }

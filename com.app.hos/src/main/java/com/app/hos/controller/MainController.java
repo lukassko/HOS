@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.service.websocket.WebSocketManager;
 
 
 @Controller
@@ -52,10 +51,6 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
-		System.out.println(Thread.currentThread().getName());
-		//List<Device> devices = this.deviceManager.getConnectedDevices();
-		//String jsonDevices = JsonConverter.getJson(devices);
-		//model.addAttribute("devices", jsonDevices);
 		return "system/devices";
 	}
 	

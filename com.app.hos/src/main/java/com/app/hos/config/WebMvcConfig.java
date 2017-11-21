@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("com.app.hos.*")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
 	@Override

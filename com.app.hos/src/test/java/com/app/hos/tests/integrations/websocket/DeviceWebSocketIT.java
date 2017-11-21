@@ -3,19 +3,19 @@ package com.app.hos.tests.integrations.websocket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import javax.servlet.ServletException;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -23,79 +23,67 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.app.hos.config.WebSocketConfig;
+import com.app.hos.utils.EmbeddedTomcat;
+
 import java.lang.reflect.Type;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.startup.Tomcat;
+
 
 // NEED TO START TOMCAT SERVER WITH INTEGRATION TESTS
 
 //@Ignore("run only one integration test")
-@ActiveProfiles("integration-test")
+//@ActiveProfiles("web-integration-test")
+@Profile("web-integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {WebSocketConfig.class})
+//@ContextConfiguration(classes = {WebSocketConfig.class})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceWebSocketIT {
-
-	private static Tomcat tomcat;
-	private static final int TOMCAT_PORT = 8080;
-	  
+	
 	private static final String WEBSOCKET_URI = "ws://localhost:8080/HOS/websocket";
 	private static final String WEBSOCKET_TOPIC = "/topic";
-	
+
+	private static EmbeddedTomcat tomcat;
     private BlockingQueue<String> blockingQueue;
     private WebSocketStompClient stompClient;
-    
+
+   
     @Before
     public void setup() {
         blockingQueue = new LinkedBlockingDeque<>();
         stompClient = new WebSocketStompClient(new SockJsClient(
         		asList(new WebSocketTransport(new StandardWebSocketClient()))));
         
-        tomcat = new Tomcat();
-        String baseDir = ".";
-        tomcat.setPort(TOMCAT_PORT);
-        tomcat.setBaseDir(baseDir);
-        tomcat.getHost().setAppBase(baseDir);
-        tomcat.getHost().setDeployOnStartup(true);
-        tomcat.getHost().setAutoDeploy(true);
-        tomcat.addWebapp(tomcat.getHost(), "/HOS", "src/main/webapp");
+        tomcat = new EmbeddedTomcat();
+        tomcat.init();
         try {
-        	//tomcat.init();
-            tomcat.start();
+			tomcat.start();
 		} catch (LifecycleException e) {
-			// TODO Auto-generated catch block
-			System.out.println("EXCEPTION BEFORE" + e.getMessage());
 			e.printStackTrace();
 		}
-        
-        
     }
-    
-    public void deploy(String appName) {
-        tomcat.addWebapp(tomcat.getHost(), "/" + appName, "src/main/webapp");
-    }
-
-    //public String getApplicationUrl(String appName) {
-   // 	return String.format("http://%s:%d/%s", tomcat.getHost().getName(),tomcat.getConnector().getLocalPort(), appName);
-   // }
       
     @After
     public void shutDownTomcat()  {
-      try {
-		tomcat.stop();
-		tomcat.destroy();
-	} catch (LifecycleException e) {
-		System.out.println("EXCEPTION AFTER" + e.getMessage());
-		e.printStackTrace();
-	}
+    	 try {
+ 			tomcat.stop();
+ 		} catch (LifecycleException e) {
+ 			e.printStackTrace();
+ 		}
     }
     
     @Test
-    public void shouldReceiveAMessageFromTheServer() throws Exception {
+    public void stage00_checkIfEmbeddedTomactHasStarted() throws LifecycleException {
+        if (!tomcat.isStarted()) {
+        	throw new LifecycleException();
+        }
+    }
+    
+    @Test
+    public void stage10_shouldReceiveAMessageFromTheServer() throws Exception {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {})
                 .get(1, SECONDS);
