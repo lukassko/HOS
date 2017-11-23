@@ -4,8 +4,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,18 +47,15 @@ public class DeviceWebSocketIT {
 	
 	private static final String WEBSOCKET_URI = "ws://localhost:8080/HOS/websocket";
 	private static final String WEBSOCKET_TOPIC = "/topic";
-
+	private static final String WEBSOCKET_APP = "/app";
+	
 	private static EmbeddedTomcat tomcat;
     private BlockingQueue<String> blockingQueue;
     private WebSocketStompClient stompClient;
 
    
-    @Before
-    public void setup() {
-        blockingQueue = new LinkedBlockingDeque<>();
-        stompClient = new WebSocketStompClient(new SockJsClient(
-        		asList(new WebSocketTransport(new StandardWebSocketClient()))));
-        
+    @BeforeClass
+    public static void setupClass() {
         tomcat = new EmbeddedTomcat();
         tomcat.init();
         try {
@@ -65,9 +64,16 @@ public class DeviceWebSocketIT {
 			e.printStackTrace();
 		}
     }
+    
+    @Before
+    public void setupTest() {
+        blockingQueue = new LinkedBlockingDeque<>();
+        stompClient = new WebSocketStompClient(new SockJsClient(
+        		asList(new WebSocketTransport(new StandardWebSocketClient()))));
+    }
       
-    @After
-    public void shutDownTomcat()  {
+    @AfterClass
+    public static void shutDownTomcat()  {
     	 try {
  			tomcat.stop();
  		} catch (LifecycleException e) {
@@ -81,17 +87,31 @@ public class DeviceWebSocketIT {
         	throw new LifecycleException();
         }
     }
-    
-    @Test
-    public void stage10_shouldReceiveAMessageFromTheServer() throws Exception {
+
+    //@Test
+    public void stage10_shouldReceiveAMessageFromTheServerUsingTopic() throws Exception {
         StompSession session = stompClient
                 .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {})
                 .get(1, SECONDS);
         session.subscribe(WEBSOCKET_TOPIC, new DefaultStompFrameHandler());
 
         String message = "MESSAGE TEST";
-        
+        Thread.sleep(2000);
         session.send(WEBSOCKET_TOPIC, message.getBytes());
+        String receiveMessage = blockingQueue.poll(1, SECONDS);
+        Assert.assertEquals(message, receiveMessage);
+    }
+    
+    @Test
+    public void stage20_shouldReceiveAMessageFromTheServerUsingApp() throws Exception {
+        StompSession session = stompClient
+                .connect(WEBSOCKET_URI, new StompSessionHandlerAdapter() {})
+                .get(1, SECONDS);
+        session.subscribe(WEBSOCKET_APP, new DefaultStompFrameHandler());
+
+        String message = "MESSAGE TEST";
+        
+        session.send(WEBSOCKET_APP, message.getBytes());
         String receiveMessage = blockingQueue.poll(1, SECONDS);
         Assert.assertEquals(message, receiveMessage);
     }

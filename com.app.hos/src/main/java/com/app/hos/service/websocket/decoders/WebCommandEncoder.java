@@ -13,6 +13,7 @@ public class WebCommandEncoder implements Encoder.Text<WebCommand> {
 	public void destroy() {}
 
 	public String encode(WebCommand object) throws EncodeException {
+		System.out.println("ENCODE");
 		return JsonConverter.getJson(object);
 	}
 

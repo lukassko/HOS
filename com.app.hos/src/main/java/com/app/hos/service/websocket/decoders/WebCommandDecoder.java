@@ -14,6 +14,7 @@ public class WebCommandDecoder implements Decoder.Text<WebCommand>  {
 	public void destroy() {}
 
 	public WebCommand decode(String s) throws DecodeException {
+		System.out.println("DECODE");
 		return JsonConverter.getObject(s, WebCommand.class);
 	}
 

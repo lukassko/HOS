@@ -8,5 +8,9 @@
 	<welcome-file-list>
 	    <welcome-file>main/main</welcome-file>
 	</welcome-file-list>
-
+<!--
+	<resource-env-ref>
+	    <resource-env-ref-name>jdbc/mysql</resource-env-ref-name>
+	    <resource-env-ref-type>javax.sql.DataSource</resource-env-ref-type>
+	</resource-env-ref> -->
 </web-app>

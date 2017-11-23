@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,6 +26,7 @@ import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 
+@Ignore("run only one integration test")
 public class DeviceManagerTest {
 	
 	@Autowired

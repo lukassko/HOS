@@ -14,8 +14,8 @@ import com.app.hos.utils.exceptions.NotExecutableCommand;
 
 public class WebSocketManager {
 	
-	@Autowired
-	private WebSocketServerEndpoint webSocketServer;
+	//@Autowired
+	//private WebSocketServerEndpoint webSocketServer;
 	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 
@@ -36,7 +36,7 @@ public class WebSocketManager {
 			WebCommand command = null;;
 			try {
 				command = (WebCommand)get();
-				webSocketServer.sendMessage(session, command);
+				//webSocketServer.sendMessage(session, command);
 			} catch (Exception e) {
 //				command = CommandFactory.getCommand(CommandType.EXECUTION_EXCEPTION);
 //				command.setResult(new com.app.hos.share.command.result.Message(e.getMessage()));

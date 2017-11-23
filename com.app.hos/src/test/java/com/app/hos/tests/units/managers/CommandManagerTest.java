@@ -6,6 +6,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,6 +24,7 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 
+@Ignore("run only one integration test")
 public class CommandManagerTest {
 
 	@Autowired

@@ -18,11 +18,12 @@ import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.service.websocket.decoders.WebCommandDecoder;
 import com.app.hos.service.websocket.decoders.WebCommandEncoder;
 
-//@Component
-@ServerEndpoint(value = "/websocket",
-decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class)
+@ServerEndpoint(value = "/websocket",decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class)
 public class WebSocketServerEndpoint {
 	
+	public WebSocketServerEndpoint () {
+		System.out.println("CREATE @ServerEndpoint");
+	}
 	
 	private Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 	
