@@ -5,6 +5,7 @@ import javax.websocket.EndpointConfig;
 
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.utils.json.JsonConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class WebCommandEncoder implements Encoder.Text<WebCommand> {
 
@@ -13,8 +14,12 @@ public class WebCommandEncoder implements Encoder.Text<WebCommand> {
 	public void destroy() {}
 
 	public String encode(WebCommand object) throws EncodeException {
-		System.out.println("ENCODE");
-		return JsonConverter.getJson(object);
+		try {
+			return JsonConverter.getJson(object);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -1,18 +1,24 @@
-package com.app.hos.service.websocket.command;
+package com.app.hos.service.websocket.command.builder.concretebuilders;
 
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.pojo.WebDevice;
+import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.builder.AbstractWebCommandBuilder;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.utils.json.JsonConverter;
 
 public class GetAllDevicesWebCommandBuilder extends AbstractWebCommandBuilder {
 
+	@Autowired
+	protected DeviceManager deviceManager;
+	
 	@Override
 	public void setCommandType() {
 		command.setType(WebCommandType.GET_ALL_DEVICES);

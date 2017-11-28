@@ -8,19 +8,30 @@ import java.util.concurrent.FutureTask;
 import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.utils.exceptions.NotExecutableCommand;
 
+@Service
 public class WebSocketManager {
-	
-	//@Autowired
-	//private WebSocketServerEndpoint webSocketServer;
+
+	@Autowired
+	private WebCommandFactory factory;
 	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 
-	public void executeCommand(Session session, WebCommand command) throws NotExecutableCommand {
-
+	public void executeCommand(WebCommandCallback callback, Session session, String command) {
+//    	WebCommand cmd = null;
+//		try {
+//			cmd = JsonConverter.getObject(message, WebCommand.class);
+//		} catch (JsonParseException | JsonMappingException e) {
+//			cmd = factory.getCommand(WebCommandType.BAD_COMMAND_CONVERSION, e.getMessage());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//    	sendMessage(session,cmd);
 	}
 	
 	class FutureCommandCallback<V> extends FutureTask<V> {

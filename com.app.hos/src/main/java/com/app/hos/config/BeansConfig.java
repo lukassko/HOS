@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 
-import com.app.hos.service.websocket.command.GetAllDevicesWebCommandBuilder;
-import com.app.hos.service.websocket.command.RemoveDeviceWebCommandBuilder;
+import com.app.hos.service.websocket.command.builder.concretebuilders.GetAllDevicesWebCommandBuilder;
+import com.app.hos.service.websocket.command.builder.concretebuilders.RemoveDeviceWebCommandBuilder;
 
 @Configuration
 @Profile("!web-integration-test")

@@ -13,33 +13,46 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.socket.server.standard.SpringConfigurator;
+
+import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
-import com.app.hos.service.websocket.decoders.WebCommandDecoder;
-import com.app.hos.service.websocket.decoders.WebCommandEncoder;
+import com.app.hos.tests.integrations.manager.WebCommandManagerIT;
+import com.app.hos.utils.json.JsonConverter;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
-@ServerEndpoint(value = "/websocket",decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class)
+//decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class,
+@ServerEndpoint(value = "/websocket",configurator = SpringConfigurator.class)
 public class WebSocketServerEndpoint {
 	
-	public WebSocketServerEndpoint () {
-		System.out.println("CREATE @ServerEndpoint");
+	private WebSocketManager manager;
+	
+	@Autowired
+	public WebSocketServerEndpoint (WebSocketManager manager) {
+		this.manager = manager;
 	}
 	
 	private Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 	
 	@OnOpen
     public void onOpen(Session session) throws IOException {
-		System.out.println("New connaction Open");
 		sessions.add(session);
     }
  
     @OnMessage
-    public void onMessage(Session session, WebCommand message) throws IOException {
-        // Handle new messages
-    	WebCommand cmd = new WebCommand();
-    	cmd.setMessage("ELO");
-    	cmd.setType(WebCommandType.GET_ALL_DEVICES);
-    	sendMessage(session,cmd);
+    public void onMessage(Session session, String message) {
+    	manager.executeCommand(new WebCommandCallback() {
+    		
+			@Override
+			public void onReady(Session session, String message) {
+				sendMessage(session, message);
+			}
+			
+		}, session, message);
     }
  
     @OnClose
@@ -50,24 +63,21 @@ public class WebSocketServerEndpoint {
  
     @OnError
     public void onError(Session session, Throwable throwable) {
-        // Do error handling here
+    	System.out.println("Error with Session: " + session.getId() + " | throwable " + throwable.getMessage());
     }
     
-    public synchronized void broadcastMessage(WebCommand command) {
+    public synchronized void broadcastMessage(String message) {
     	sessions.forEach(session -> {
-	        try {
-	        	session.getBasicRemote().sendObject(command);
-	        } catch (IOException | EncodeException e) {
-	        	e.printStackTrace();
-	        }
+	        	sendMessage(session,message);
     	});
     }
     
-    public synchronized void sendMessage(Session session, WebCommand command) {
+    public synchronized void sendMessage(Session session, String message) {
     	try {
-			session.getBasicRemote().sendObject(command);
-		} catch (IOException | EncodeException e) {
+			session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
+    
     }
 }
