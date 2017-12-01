@@ -15,5 +15,10 @@ public class RemoveDeviceWebCommandBuilder extends AbstractWebCommandBuilder {
 	public void setCommandType() {
 		command.setType(WebCommandType.REMOVE_DEVICE);
 	}
+	
+	@Override
+	public void setStatus() {
+		command.setStatus(true);
+	}
 
 }

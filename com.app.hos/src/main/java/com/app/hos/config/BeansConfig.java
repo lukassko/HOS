@@ -25,4 +25,5 @@ public class BeansConfig {
 	public RemoveDeviceWebCommandBuilder getRemoveDevicesWebCommandBuilder() {
 	    return new RemoveDeviceWebCommandBuilder();
 	}
+
 }

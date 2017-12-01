@@ -19,7 +19,9 @@ public abstract class AbstractWebCommandBuilder {
 		this.command = new WebCommand();
 	}
 	
-	public abstract void setCommandType ();
+	public abstract void setCommandType();
+	
+	public abstract void setStatus ();
 	
 	public void setMessage () {
 		this.command.setMessage(this.exceptionMessage);

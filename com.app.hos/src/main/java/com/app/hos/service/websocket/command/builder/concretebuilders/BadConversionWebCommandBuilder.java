@@ -14,4 +14,8 @@ public class BadConversionWebCommandBuilder extends AbstractWebCommandBuilder {
 		command.setType(WebCommandType.BAD_COMMAND_CONVERSION);
 	}
 
+	@Override
+	public void setStatus() {
+		command.setStatus(false);
+	}
 }

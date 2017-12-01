@@ -5,7 +5,7 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 
-public class GetStatusCommand  extends CommandDecorator {
+public class GetStatusCommand extends FutureCommandDecorator {
 	
 	public GetStatusCommand(Command command) {
 		super(command);
