@@ -20,7 +20,7 @@
 	<!-- attach other css and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
-	
+	<script src="<c:url value="/resources/scripts/webCommands.js" />"></script>
 	<script>
 	$(document).ready(function() {
 		

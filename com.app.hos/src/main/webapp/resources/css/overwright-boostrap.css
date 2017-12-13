@@ -25,3 +25,8 @@
 .navbar-inverse .navbar-nav > .active > a:hover  {
 	color: #d19b3d;
 }
+
+.navbar-brand {
+	color: #efffff !important;
+	font-size: 22px !important;
+}
