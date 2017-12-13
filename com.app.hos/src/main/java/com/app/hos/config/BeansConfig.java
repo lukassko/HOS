@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 
-import com.app.hos.service.websocket.command.GetAllDevicesWebCommandBuilder;
-import com.app.hos.service.websocket.command.RemoveDeviceWebCommandBuilder;
+import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder.concretebuilders.GetAllDevicesWebCommandBuilder;
+import com.app.hos.service.websocket.command.builder.concretebuilders.RemoveDeviceWebCommandBuilder;
+import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
 
 @Configuration
 @Profile("!web-integration-test")
@@ -15,8 +17,8 @@ public class BeansConfig {
 	@Bean("allDeviceBuilder")
 	@Profile("!web-integration-test")
 	@Scope("prototype")
-	public GetAllDevicesWebCommandBuilder getAllDevicesWebCommandBuilder() {
-	    return new GetAllDevicesWebCommandBuilder();
+	public GetAllDeviceWebCommand getAllDevicesWebCommand(WebCommand command) {
+	    return new GetAllDeviceWebCommand(command);
 	}
 	
 	@Bean("removeDeviceBuilder")
@@ -25,4 +27,5 @@ public class BeansConfig {
 	public RemoveDeviceWebCommandBuilder getRemoveDevicesWebCommandBuilder() {
 	    return new RemoveDeviceWebCommandBuilder();
 	}
+
 }

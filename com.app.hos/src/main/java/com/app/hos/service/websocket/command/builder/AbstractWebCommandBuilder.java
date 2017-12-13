@@ -1,16 +1,16 @@
 package com.app.hos.service.websocket.command.builder;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.app.hos.service.managers.device.DeviceManager;
-
 public abstract class AbstractWebCommandBuilder {
 
-	@Autowired
-	protected DeviceManager deviceManager;
-	
 	protected WebCommand command;
-		
+	protected String exceptionMessage = null;
+	
+	public AbstractWebCommandBuilder() {}
+	
+	public AbstractWebCommandBuilder(String message) {
+		this.exceptionMessage = message;
+	}
+	
     public WebCommand getCommand() {
         return this.command;
     }
@@ -19,8 +19,12 @@ public abstract class AbstractWebCommandBuilder {
 		this.command = new WebCommand();
 	}
 	
-	public abstract void setCommandType ();
+	public abstract void setCommandType();
 	
-	public abstract void setMessage ();
+	public abstract void setStatus ();
 	
+	public void setMessage () {
+		this.command.setMessage(this.exceptionMessage);
+	};
+
 }

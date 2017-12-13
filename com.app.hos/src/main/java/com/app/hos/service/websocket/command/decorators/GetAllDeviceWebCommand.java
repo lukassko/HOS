@@ -1,4 +1,4 @@
-package com.app.hos.service.websocket.command;
+package com.app.hos.service.websocket.command.decorators;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -7,22 +7,18 @@ import java.util.TreeMap;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.pojo.WebDevice;
-import com.app.hos.service.websocket.command.builder.AbstractWebCommandBuilder;
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.utils.json.JsonConverter;
 
-public class GetAllDevicesWebCommandBuilder extends AbstractWebCommandBuilder {
-
-	@Override
-	public void setCommandType() {
-		command.setType(WebCommandType.GET_ALL_DEVICES);
+public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
+	
+	public GetAllDeviceWebCommand(WebCommand command) {
+		super(command);
 	}
-
-	@Override
-	public void setMessage() {
+	
+	public WebCommand call() throws Exception {
 		Map<Device, DeviceStatus> devicesStatuses = deviceManager.getLatestDevicesStatuses();
 		
-		// sort device by id
 		Map<WebDevice, DeviceStatus> webDevicesStatuses =  new TreeMap<WebDevice, DeviceStatus>(
 			new Comparator<WebDevice>() {
 				
@@ -42,6 +38,7 @@ public class GetAllDevicesWebCommandBuilder extends AbstractWebCommandBuilder {
 		
 		String jsonMap = JsonConverter.getJson(webDevicesStatuses);
 		command.setMessage(jsonMap);
+		return command;
 	}
 
 }

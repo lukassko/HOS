@@ -16,6 +16,7 @@ public class WebCommandBuilder {
 	 public void createCommand () {
 		 commandBuilder.createCommand();
 		 commandBuilder.setCommandType();
+		 commandBuilder.setStatus();
 		 commandBuilder.setMessage();
 	 }
 }

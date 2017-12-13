@@ -3,6 +3,7 @@ package com.app.hos.tests.units.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -11,11 +12,14 @@ import org.junit.Test;
 
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class DateTimeTest {
 	
 	@Test
-	public void jsonSerializationTest() {
+	public void jsonSerializationTest() throws JsonProcessingException {
 		DateTime dateTime = new DateTime();
 		String json = JsonConverter.getJson(dateTime);
 		int year = dateTime.getYear();
@@ -36,7 +40,7 @@ public class DateTimeTest {
 	}
 	
 	@Test
-	public void jsonDeserializationTest() {
+	public void jsonDeserializationTest() throws IOException {
 		DateTime dateTime = new DateTime();
 		String json = JsonConverter.getJson(dateTime);
 		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class);
@@ -45,7 +49,7 @@ public class DateTimeTest {
 	}
 	
 	@Test
-	public void getTimestampTest() {
+	public void getTimestampTest() throws IOException {
 		DateTime dateTime = new DateTime();
 		String json = JsonConverter.getJson(dateTime);
 		DateTime convertedTime = JsonConverter.getObject(json, DateTime.class);

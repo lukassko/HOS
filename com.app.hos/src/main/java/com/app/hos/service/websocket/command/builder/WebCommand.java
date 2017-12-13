@@ -6,10 +6,12 @@ import com.app.hos.service.websocket.command.type.WebCommandType;
 
 public class WebCommand implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
 	private WebCommandType type;
-		
+	
+	private boolean status;
+	
 	private String message;
 	
 	public WebCommandType getType() {
@@ -28,9 +30,17 @@ public class WebCommand implements Serializable {
 		this.message = message;
 	}
 
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+	
 	@Override
 	public String toString() {
-		return "WebCommand [type=" + type + ", message=" + message + "]";
+		return "WebCommand [type=" + this.type + ", status=" + this.status + "message=" + this.message + "]";
 	}
 
 }

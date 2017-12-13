@@ -3,12 +3,12 @@ package com.app.hos.tests.integrations.websocket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -17,7 +17,6 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -33,11 +32,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 import org.apache.catalina.LifecycleException;
 
-
-// NEED TO START TOMCAT SERVER WITH INTEGRATION TESTS
-
-//@Ignore("run only one integration test")
-//@ActiveProfiles("web-integration-test")
+@Ignore("run only one integration test")
 @Profile("web-integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

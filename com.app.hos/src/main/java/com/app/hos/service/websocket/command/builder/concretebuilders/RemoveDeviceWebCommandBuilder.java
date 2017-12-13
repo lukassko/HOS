@@ -1,20 +1,24 @@
-package com.app.hos.service.websocket.command;
+package com.app.hos.service.websocket.command.builder.concretebuilders;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.service.websocket.command.builder.AbstractWebCommandBuilder;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 
-//@Component
 public class RemoveDeviceWebCommandBuilder extends AbstractWebCommandBuilder {
 
+	@Autowired
+	protected DeviceManager deviceManager;
+	
 	@Override
 	public void setCommandType() {
 		command.setType(WebCommandType.REMOVE_DEVICE);
 	}
-
+	
 	@Override
-	public void setMessage() {
+	public void setStatus() {
+		command.setStatus(true);
 	}
 
 }

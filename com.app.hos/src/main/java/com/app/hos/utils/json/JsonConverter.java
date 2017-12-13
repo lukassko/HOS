@@ -1,5 +1,6 @@
 package com.app.hos.utils.json;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -11,7 +12,9 @@ import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateJsonSerializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -31,16 +34,15 @@ public class JsonConverter {
 		mapper.registerModule(module);
 	}
 	
-    public static String getJson(Object object) {
-    	String json = null;
-        try {
-        	json = mapper.writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-        return json;
+    public static String getJson(Object object) throws JsonProcessingException {
+        return mapper.writeValueAsString(object);
     }
 
+    
+    public static <T> T getObject(String json, Class<T> clazz) throws JsonParseException, JsonMappingException, IOException {
+    	return mapper.readValue(json, clazz);
+    }
+       
     public static String getJson(Map map) {
     	ArrayNode arrayNode = mapper.createArrayNode();
     	Iterator it = map.entrySet().iterator();
@@ -107,17 +109,7 @@ public class JsonConverter {
     	}
     	return true;
     }
-    
-    public static <T> T getObject(String json, Class<T> clazz) {
-    	T obj = null;
-    	try {
-			obj = mapper.readValue(json, clazz);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	return obj;
-    }
-         
+  
     public static String readField(String json, String name){
     	String value = null;
 		try {
