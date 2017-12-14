@@ -216,5 +216,12 @@ public class DeviceManagerIT {
 	//@Test
 	public void stage60_disconnectDeviceAndCheckHistoryConnection() {
 	}
+	
+	//@Test
+	public void stage70_removeDeviceShouldRemoveAllDeviceDatas() {
 		
+		// should remove history connections
+		
+		// should remove device
+	}
 }
