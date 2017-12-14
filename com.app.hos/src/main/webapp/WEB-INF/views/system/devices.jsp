@@ -16,7 +16,6 @@
 	<script src="<c:url value="/resources/scripts/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/carousel.js" />"></script>
 	<script src="<c:url value="/resources/scripts/devicesManager.js" />"></script>
-	<script src="<c:url value="/resources/scripts/webCommands.js" />"></script>
 	<script>
 
 		$(document).ready(function() {
@@ -64,10 +63,10 @@
 		      <ul class="nav navbar-nav">
 		      
 		      <!-- class="active" -->
-		        <li><a href="#">Link</span></a></li>
-		        <li><a href="#">Link</a></li>
+		        <li><a href="#">Status</span></a></li>
+		        <li><a href="#">History</a></li>
 		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commands <span class="caret"></span></a>
 		          <ul class="dropdown-menu">
 		            <li><a href="#">Action</a></li>
 		            <li><a href="#">Another action</a></li>
@@ -86,13 +85,12 @@
 		        <button type="submit" class="btn btn-default">Submit</button>
 		      </form>
 		      <ul class="nav navbar-nav navbar-right">
-		        <li><a href="#">Link</a></li>
 		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
 		          <ul class="dropdown-menu">
-		            <li><a href="#">Action</a></li>
-		            <li><a href="#">Another action</a></li>
-		            <li><a href="#">Something else here</a></li>
+		            <li><a href="#">Disconnect</a></li>
+		            <li><a href="#">Remove</a></li>
+		            <li><a href="#">Block</a></li>
 		            <li role="separator" class="divider"></li>
 		            <li><a href="#">Separated link</a></li>
 		          </ul>
@@ -101,9 +99,29 @@
 		    </div>
 		  </div>
 		</nav>
-	<div style="display: block; bottom: 10px;" class="device-prop">
-		TESTTTT
-	</div>
+		<div class="device-detail device-prop" style="width: 200px;height:200px ">
+			<div class="usage-info">
+	        	CPU
+	        </div>
+			<div class="my-progress" data-usage-type="cpu">
+			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
+			</div>
+		</div>
+		<div id="parent" class="device-detail device-prop" style="width:200px;height:200px ">
+			<div class="usage-info">
+	        	RAM
+	        </div>
+			<div class="my-progress" data-usage-type="ram">
+			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
+			</div>
+		</div>
+		<div class="device-detail device-prop" style="width: 300px;height:200px ">
+	        	IP Address
+		</div>
+		<div class="device-detail device-prop" style="width: 300px;height:200px ">
+		</div>
+		<div class="device-detail device-prop" style="width: 300px;height:200px ">
+		</div>
 	</div>
 	
 </div>
