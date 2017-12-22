@@ -1,29 +1,13 @@
 package com.app.hos.tests.integrations.multithreading.manager;
 
 import java.io.IOException;
-import java.net.URI;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.websocket.CloseReason;
-import javax.websocket.Extension;
-import javax.websocket.MessageHandler;
 import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
-import javax.websocket.MessageHandler.Partial;
-import javax.websocket.MessageHandler.Whole;
-import javax.websocket.RemoteEndpoint.Async;
-import javax.websocket.RemoteEndpoint.Basic;
 
 import org.junit.Assert;
 import org.junit.Before;

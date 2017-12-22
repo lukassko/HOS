@@ -12,8 +12,7 @@ public class BaseEntity {
 
 	@JsonIgnore
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
-	//@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
 	public int getId() {

@@ -10,7 +10,7 @@ public interface DeviceRepository {
 	
 	public Collection<Device> findAll();
 	
-	public void remove(int id);
+	public void remove(Device device);
 	
 	public Device findBySerialNumber(String serial);
 	

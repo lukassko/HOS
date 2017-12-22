@@ -103,7 +103,7 @@ public class ConnectionAspectIT {
 	// Exception should be thrown by Aspect
 	@Test(expected = NoResultException.class)
 	public void testCloseConnectionAspect() {	
-		Mockito.doNothing().when(connectionManager).generateHistoryConnection(Mockito.anyString());
+		Mockito.doNothing().when(connectionManager).finalizeConnection(Mockito.anyString());
 		String connectionId = "192.168.0.12:3456:123:asd:dsa:213";
 		systemFacade.closeConnection(connectionId);
 	}

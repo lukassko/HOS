@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.integration.ip.IpHeaders;
@@ -13,6 +15,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 
+import com.app.hos.persistance.models.Connection;
+import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.command.CommandManager;
@@ -104,9 +108,11 @@ public class SystemFacadeImpl implements SystemFacade {
 	}
 
 	// public API
-	public void closeConnection(String connectionId) {
-		getConnectionFactory().closeConnection(connectionId);
-		connectionManager.generateHistoryConnection(connectionId);
+	public boolean closeConnection(String connectionId) {
+		boolean isConnectionClose = getConnectionFactory().closeConnection(connectionId);
+		if (isConnectionClose) 
+			connectionManager.finalizeConnection(connectionId);
+		return isConnectionClose;
 	}
 	
 	public void sendCommand(String connectionId, CommandType type) {
@@ -122,7 +128,17 @@ public class SystemFacadeImpl implements SystemFacade {
 		List<String> conectionIds = getConnectionFactory().getOpenConnectionIds();
 		return conectionIds.contains(connectionId);
 	}
-
+	
+	@Override
+	@Transactional
+	public void removeDevice(String serial) {
+		Device device = deviceManager.findDeviceBySerial(serial);
+		Connection connection = device.getConnection();
+		if (closeConnection(connection.getConnectionId())) {
+			deviceManager.removeDevice(device);
+		}
+	}
+	
 	// private methods
 	private Message<Command> createMessage(String connectionId, Command command) {
 		return MessageBuilder.withPayload(command).setHeader(IpHeaders.CONNECTION_ID, connectionId).build();
@@ -131,4 +147,5 @@ public class SystemFacadeImpl implements SystemFacade {
 	private AbstractConnectionFactory getConnectionFactory() {
 		return (AbstractConnectionFactory)appContext.getBean("hosServer");
 	}
+
 }

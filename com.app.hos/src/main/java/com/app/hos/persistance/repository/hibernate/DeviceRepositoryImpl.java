@@ -14,7 +14,7 @@ import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Repository
-@Transactional
+//@Transactional
 public class DeviceRepositoryImpl implements DeviceRepository {
 
 	@PersistenceContext
@@ -52,11 +52,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		Device device = findBySerialNumber(serial);
 		device.setName(name);
 	}
-
-	//remove device and all associated data such as statuses and connections
-	public void remove(int id) {
-		// TODO Auto-generated method stub
-		
+	
+	//remove device and all associated data such as statuses and connection
+	public void remove(Device device) {
+		manager.remove(device);
+		//manager.flush();
 	}
 
 }

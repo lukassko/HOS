@@ -18,7 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import com.app.hos.share.utils.DateTime;
 
@@ -33,6 +34,7 @@ import org.junit.runners.MethodSorters;
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Transactional
 public class DeviceRepositoryIT {
 
 	private static List<Device> devicesList = new LinkedList<Device>();
@@ -80,7 +82,7 @@ public class DeviceRepositoryIT {
     	Assert.assertEquals(device.getName(),deviceList.get(0).getName());
     }
     
-    @Test(expected=PersistenceException.class)
+    @Test(expected=ConstraintViolationException.class)
     @Rollback(true)
     public void stage2_saveDeviceShouldThrowExceptionTest() {
     	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
@@ -139,13 +141,12 @@ public class DeviceRepositoryIT {
     	Assert.assertEquals(connection4.getConnectionId(),connection.getConnectionId());
     }
     
-    @Test
+    @Test(expected=ConstraintViolationException.class)
     public void stage8_saveDeviceShouldThrowExceptionWithValidationTest() {
     	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
 		Device device = new Device("", "");
 		connection.setDevice(device);
 		deviceRepository.save(device);
-		//Assert.assertEquals(1, 2);
     }
 }

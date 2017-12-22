@@ -80,7 +80,7 @@ public class ConnectionManagerIT {
 		}
 		
 		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
-		connectionManager.generateHistoryConnection(connectionId);
+		connectionManager.finalizeConnection(connectionId);
 		devices = getDevices();
 		Device device = devices.get(0);
 		connection = device.getConnection();
@@ -120,7 +120,7 @@ public class ConnectionManagerIT {
 			e.printStackTrace();
 		}
 		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
-		connectionManager.generateHistoryConnection(connectionId);
+		connectionManager.finalizeConnection(connectionId);
 		List<Device> devices = getDevices();
 		Device device = devices.get(0);
 		Connection connection = device.getConnection();

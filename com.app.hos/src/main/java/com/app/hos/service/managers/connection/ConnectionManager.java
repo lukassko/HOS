@@ -31,7 +31,7 @@ public class ConnectionManager {
 	}
 	
 	// update connection time in 'connection' table, add HistoryConnection
-	public void generateHistoryConnection(String connectionId){
+	public void finalizeConnection(String connectionId){
 		Connection connection = connectionRepository.findConnectionById(connectionId);
 		connection.setEndConnectionTime(new DateTime());
 		try {

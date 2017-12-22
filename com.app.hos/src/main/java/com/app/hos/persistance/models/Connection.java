@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -31,11 +32,11 @@ public class Connection extends BaseEntity {
 	@NotEmpty
 	private String ip;
 	
-	@NotEmpty
+	@NotNull
 	@Column(name="remote_port")
-	private int remotePort;
+	private Integer remotePort;
 
-	@NotEmpty
+	@NotNull
 	@Column(name="connection_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date connectionTime;
@@ -167,7 +168,7 @@ public class Connection extends BaseEntity {
 		if (remotePort == 0) {
 			if (other.remotePort != 0)
 				return false;
-		} else if (remotePort != other.remotePort)
+		} else if (!remotePort.equals(other.remotePort))
 			return false;
 		return true;
 	}

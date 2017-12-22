@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -37,7 +37,7 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -179,11 +179,12 @@ public class DeviceManagerIT {
 		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
 			Device mappedDevice = entry.getKey();
 			DeviceStatus mappedStatus = entry.getValue();
-			if (mappedDevice.getSerial().equals("serial_main_device")) {
-				continue;
+			if (mappedDevice.getSerial().equals("serial_main_device")) { 
+				continue; // one device saved at the beginning
 			}
 			Assert.assertNotNull(mappedStatus);
 			DeviceStatus tmp = latestStauses.get(mappedDevice);
+			Assert.assertNotNull(tmp);
 			Assert.assertEquals(mappedStatus, tmp);
 		}
 	}
@@ -209,17 +210,27 @@ public class DeviceManagerIT {
 		Assert.assertNull(newConnection.getEndConnectionTime());
 	}
 	
-	//@Test
+	//@Test <- move to ConnectionManagerIT
 	public void stage50_disconnectDeviceAndCheckLastConnectionTime() {
+		
 	}
 	
-	//@Test
+	//@Test <- move to ConnectionManagerIT
 	public void stage60_disconnectDeviceAndCheckHistoryConnection() {
 	}
 	
-	//@Test
-	public void stage70_removeDeviceShouldRemoveAllDeviceDatas() {
+	@Test
+	public void stage70_removeDetachedEntityShouldThrowException() {
+		System.out.println("REMOVE DETACHED!");
+		manager.removeDevice(device);
+	}
 		
+	@Test
+	@Transactional
+	public void stage80_removeDeviceShouldRemoveAllDeviceDatas() {
+		System.out.println("REMOVE!");
+		Device dev = manager.findDeviceBySerial(device.getSerial());
+		manager.removeDevice(dev);
 		// should remove history connections
 		
 		// should remove device

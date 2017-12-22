@@ -28,7 +28,7 @@ public class DeviceManager {
 		
 	//need to find device at first, later create if not exist
 	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial) {
-		System.out.println("\n\nRun real method openDeviceConnection!\n\n");
+		//System.out.println("\n\nRun real method openDeviceConnection!\n\n");
 		Connection connection = createNewConnection(messageHeaders);
 		try {
 			Device device = deviceRepository.findBySerialNumber(serial);
@@ -39,8 +39,6 @@ public class DeviceManager {
 			device.setConnection(connection);
 			connection.setDevice(device);
 			deviceRepository.save(device);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -55,8 +53,8 @@ public class DeviceManager {
 		return deviceStatus;
 	}
 	
-	public List<DeviceStatus> getDeviceStatuses(String serialDevice) {
-		Device device = deviceRepository.findBySerialNumber(serialDevice);
+	public List<DeviceStatus> getDeviceStatuses(String serial) {
+		Device device = deviceRepository.findBySerialNumber(serial);
 		//Hibernate.initialize(device.getDeviceStatuses());
 		return device.getDeviceStatuses();
 	}
@@ -67,6 +65,14 @@ public class DeviceManager {
 		statuses.add(deviceStatus);
 		//deviceRepository.save(device);
 		// i suppose that need to call 'save' method on device
+	}
+
+	public Device findDeviceBySerial(String serial) {
+		return deviceRepository.findBySerialNumber(serial);
+	}
+	
+	public void removeDevice(Device device) {
+		deviceRepository.remove(device);
 	}
 
 	private Connection createNewConnection(MessageHeaders headers) {

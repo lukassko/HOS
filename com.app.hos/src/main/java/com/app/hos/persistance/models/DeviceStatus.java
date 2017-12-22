@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -31,20 +32,20 @@ public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus>
 	@Transient
 	private static final long serialVersionUID = 2L;
 	
-	@NotEmpty
+	@NotNull
 	@Column(name="time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date time;
 	
-	@NotEmpty
+	@NotNull
 	@JsonProperty("ram")
 	@Column(name="ram")
-    private double ramUsage;
+    private Double ramUsage;
 
-	@NotEmpty
+	@NotNull
 	@JsonProperty("cpu")
 	@Column(name="cpu")
-    private double cpuUsage;
+    private Double cpuUsage;
     
 	public DeviceStatus() {}
 	

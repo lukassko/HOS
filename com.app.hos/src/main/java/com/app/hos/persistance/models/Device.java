@@ -13,13 +13,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity  {
 	
+	@NotEmpty
 	@Column(nullable = false)
 	private String name;
 	
+	@NotEmpty
 	@Column(nullable = false)
 	private String serial;
 	
