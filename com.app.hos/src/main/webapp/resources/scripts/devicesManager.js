@@ -17,7 +17,6 @@ var deviceManager = (function() {
 	function _addDevices(devices) {
 		var tmp = Array.from(devices);
 		if (devices.length == 0) {
-			alert('EMPTY');
 			return
 		}
 		$(".no-device").empty();

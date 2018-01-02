@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
-import javax.transaction.Transactional;
+import javax.persistence.NonUniqueResultException;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -27,6 +28,7 @@ import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.utils.DateTime;
@@ -37,7 +39,7 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -50,6 +52,9 @@ public class DeviceManagerIT {
 	@Autowired
     private DeviceRepository deviceRepository;
 
+	@Autowired
+    private ConnectionRepository connectionRepository;
+	
 	private static MessageHeaders headers;
 	private static Device device;
 
@@ -76,7 +81,8 @@ public class DeviceManagerIT {
 		manager.openDeviceConnection(headers, device.getName(), device.getSerial());
 		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
 		Assert.assertEquals(1, devices.size());
-		
+		device = devices.get(0);
+		Assert.assertFalse(device.isNew());
 	}
 	
 	@Test
@@ -219,20 +225,12 @@ public class DeviceManagerIT {
 	public void stage60_disconnectDeviceAndCheckHistoryConnection() {
 	}
 	
-	@Test
+	@Test(expected = NonUniqueResultException.class)
 	public void stage70_removeDetachedEntityShouldThrowException() {
-		System.out.println("REMOVE DETACHED!");
 		manager.removeDevice(device);
+		Assert.assertNull(deviceRepository.find(device.getId()));
+		Connection connection = device.getConnection();
+		connectionRepository.findConnectionById(connection.getConnectionId());
 	}
-		
-	@Test
-	@Transactional
-	public void stage80_removeDeviceShouldRemoveAllDeviceDatas() {
-		System.out.println("REMOVE!");
-		Device dev = manager.findDeviceBySerial(device.getSerial());
-		manager.removeDevice(dev);
-		// should remove history connections
-		
-		// should remove device
-	}
+
 }

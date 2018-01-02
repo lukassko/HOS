@@ -30,6 +30,7 @@ public class WebSocketServerEndpoint {
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
+		System.out.println("SOCKET OPEN");
 		sessions.add(session);
 	}
 
@@ -40,6 +41,7 @@ public class WebSocketServerEndpoint {
 
 	@OnClose
 	public void onClose(Session session) throws IOException {
+		System.out.println("SOCKET onClose");
 		sessions.remove(session);
 	}
 

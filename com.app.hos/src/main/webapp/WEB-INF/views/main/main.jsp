@@ -21,6 +21,7 @@
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
 	<script src="<c:url value="/resources/scripts/webCommands.js" />"></script>
+	<script src="<c:url value="/resources/scripts/commandManager.js" />"></script>
 	<script>
 	$(document).ready(function() {
 		
@@ -30,9 +31,14 @@
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
-		    	$.get(page, function(data){
-				    $('#container').html(data);
+		    	var request = $.get(page);
+
+		    	$.get(page, function(data) {
+		    		$('#container').html(data)
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					setSystemInfo("Error requesting page: " + page);
 				});
+		    	
 		    	var title = $(this).text();
 		    	$('#active-page').text(title);
 		    });

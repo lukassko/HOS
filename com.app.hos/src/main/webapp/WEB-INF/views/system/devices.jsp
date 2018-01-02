@@ -38,7 +38,7 @@
 <body> 
 
 <div class="view-container">
-	<div class="device-container device-prop">
+	<div class="device-container device-property">
 	<!--  	<script>
 			var devices ='${devices}';
 			deviceManager.addDevices(devices);
@@ -46,7 +46,7 @@
 	</div>
 	
 	<div class="device-panel">
-		<nav class="navbar navbar-inverse device-prop">
+		<nav class="navbar navbar-inverse device-property">
 		  <div class="container-fluid">
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
@@ -99,29 +99,43 @@
 		    </div>
 		  </div>
 		</nav>
-		<div class="device-detail device-prop" style="width: 200px;height:200px ">
-			<div class="usage-info">
+		<div class="device-block device-property" style="width: 200px;height:200px ">
+			<div class="usage usage-info">
 	        	CPU
 	        </div>
 			<div class="my-progress" data-usage-type="cpu">
 			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
-		<div id="parent" class="device-detail device-prop" style="width:200px;height:200px ">
-			<div class="usage-info">
+		<div id="parent" class="device-block device-property" style="width:200px;height:200px ">
+			<div class="usage usage-info">
 	        	RAM
 	        </div>
 			<div class="my-progress" data-usage-type="ram">
 			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
-		<div class="device-detail device-prop" style="width: 300px;height:200px ">
-	        	IP Address
-		</div>
-		<div class="device-detail device-prop" style="width: 300px;height:200px ">
-		</div>
-		<div class="device-detail device-prop" style="width: 300px;height:200px ">
-		</div>
+		<table class="detail-table" style="width: calc(100% - 420px); height: 210px;">
+			<tr class="detail-table-row">
+				<td class="detail-table-cell" style="width:60%;">
+					<div class="device-property">
+				        <div class="usage usage-info">IP Address</div>
+				        <div class="usage usage-info-value">192.168.0.1</div>
+					</div>
+				</td>
+				<td class="detail-table-cell" style="width:40%;">
+					<div class="device-property">
+				        <div class="usage usage-info">Port no</div>
+				        <div class="usage usage-info-value">1111</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="detail-table-row">
+				<td colspan="2" class="detail-table-cell">
+					<div class="device-property"></div>
+				</td>
+			</tr>
+		</table>
 	</div>
 	
 </div>

@@ -27,7 +27,7 @@ public class Device extends BaseEntity  {
 	@Column(nullable = false)
 	private String serial;
 	
-	@OneToOne(mappedBy = "device",cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
+	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Connection connection;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)

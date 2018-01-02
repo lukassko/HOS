@@ -9,7 +9,7 @@ public class ApplicationContextConfig {
 	
 	@Configuration
 	@Profile("!web-integration-test")
-	@ComponentScan("com.app.hos.*")
+	@ComponentScan("com.app.hos*")
     static class NoWebIntegrationTestConfig
     { }
 	

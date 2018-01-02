@@ -245,45 +245,54 @@ div.device:hover {
 	border: 2px solid #d19b3d;
 }
 
-.device-prop {
+.device-property {
 	background-color: #2e353d;
 	border-radius: 5px;
 	color: #efffff !important;
 }
 
-.device-detail {
+.device-block {
 	position: relative;
-	display: inline-block;
+	float: left;
 	margin: 5px;
-	height: 100%;
-	width: 300px;
+	/*height: 100%;
+	width: 300px;*/
 }
 
-/* DEVICE TABLE INFO */
-table.device-table td {
-	height: 25%;
+.detail-table {
+	display: table;
 }
 
-table.device-table td:first-child {
-	width: 30%;
-	padding: 10px;
+.detail-table .detail-table-row {
+	width: 100%; 
+	height: 50%;
 }
 
-table.device-table td:last-child {
-	font-size: 18px;
-	text-align: center;
-	width: 70%;
+.detail-table .detail-table-row .detail-table-cell {
+	/*width:50%;
+	height:50%;*/
+	padding:5px;
 }
 
-table.device-table {
-	width: 100%;
-	height: 100%;
+.detail-table .detail-table-row div.device-property {
+	width:100%;
+	height:100%;
+	position:relative;
 }
 
-.usage-info {
+.device-property .usage {
 	position: absolute;
-	top: 0px;
-	width: 100%;
-	height: 30px;
 	text-align: center;
+	width: 100%;
+}
+
+.device-property .usage.usage-info {
+	top: 0px;
+	height: 30px;
+}
+
+.device-property .usage.usage-info-value {
+	top: 40px;
+	width: 100%;
+	font-size: 30px;
 }

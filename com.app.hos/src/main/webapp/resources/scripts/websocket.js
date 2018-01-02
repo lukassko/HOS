@@ -1,29 +1,47 @@
 var hosWebsocket = (function () {
 
-	var stompClient = null;
-
+	var socket = null;
+	var url = "ws://localhost:8080/HOS/websocket";
+	var isConnected = false;
+	
 	function connect() {
-	    var socket = new SockJS('/HOS/device-info');
-	    stompClient = Stomp.over(socket);
-	    stompClient.connect({}, function (frame) {
-	    	
-	        stompClient.subscribe('/topic/device-info', function (command) {
-	        	commandManager.receiveCommand(command);
-	        });
-	        
-	        setSystemInfo("Connected to websocket");
-	    });
+	    socket = new WebSocket(url);
+	    
+	    socket.onopen = function() {
+	    	isConnected = true;
+	    	setSystemInfo("Connected to websocket");
+	    }
+	    
+	    socket.onmessage = function (event) {
+	    	var command = JSON.parse(event.data);
+	    	console.log(command);
+	    	commandManager.receiveCommand(command);
+	    };
+	    
+	    socket.onclose = function() {
+	    	setSystemInfo("WebSocket closed");
+	    }
+	    	 
+	    socket.onerror = function() {
+	    	setSystemInfo("WebSocket error!");
+	    }
+	    
 	};
 	
 	function disconnect() {
-	    if (stompClient != null) {
-	        stompClient.disconnect();
+	    if (socket != null) {
+	    	socket.close();
 	    }
 	};
 	
 	function sendCommand(command) {
-		var command = JSON.stringify(command);
-	    stompClient.send("/HOS/device-broker", {}, command);
+		if (isConnected) {
+			var command = JSON.stringify(command);
+			socket.send(command);
+		} else {
+			setSystemInfo("WebSocket is not connected!");
+		}
+		
 	};
 
 	return {
