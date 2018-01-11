@@ -8,7 +8,7 @@ import com.app.hos.utils.exceptions.handler.HOSExceptionHandler;
 public class DefaultExceptionHandler<T extends Throwable> implements HOSExceptionHandler<T> {
 
 	@Override
-	public void handle(T throwable, boolean throwRuntimeException) {
+	public void handle(Throwable throwable, boolean throwRuntimeException) {
 		if (throwRuntimeException) {
 			if (throwable  instanceof RuntimeException) {
 				throw (RuntimeException) throwable;
@@ -16,6 +16,7 @@ public class DefaultExceptionHandler<T extends Throwable> implements HOSExceptio
 				throw new RuntimeException(throwable);
 			}
 		}
+		
 	}
 
 }

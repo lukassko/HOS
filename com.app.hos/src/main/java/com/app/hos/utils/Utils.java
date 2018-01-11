@@ -35,10 +35,9 @@ public class Utils {
 		}
     }
     
-    @SuppressWarnings("unchecked")
-	public static <T> Class<? extends T> getGenericParamter(String clazzName) {
+	public static Class<?> getGenericParamter(String clazzName) {
 		ParameterizedType parameterizedType = (ParameterizedType) Utils.getClass(clazzName).getGenericInterfaces()[0];
-		return (Class<? extends T>) (parameterizedType.getActualTypeArguments()[0]);
+		return (Class<?>)(parameterizedType.getActualTypeArguments()[0]);
     }
 
     public static List<String> scanForAnnotation(Class<? extends Annotation> clazz, String basePackage) {

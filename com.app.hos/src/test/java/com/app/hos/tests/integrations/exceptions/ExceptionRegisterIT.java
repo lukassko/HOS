@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -21,7 +22,7 @@ import com.app.hos.utils.exceptions.handler.HOSExceptionHandlerInfo;
 import com.app.hos.utils.exceptions.handler.instance.JsonParseExceptinHandler;
 import com.fasterxml.jackson.core.JsonParseException;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @WebAppConfiguration 
 @ContextConfiguration(classes = {ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

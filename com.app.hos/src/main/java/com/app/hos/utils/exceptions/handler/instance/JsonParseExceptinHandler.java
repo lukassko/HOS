@@ -9,6 +9,7 @@ public class JsonParseExceptinHandler implements HOSExceptionHandler<JsonParseEx
 
 	@Override
 	public void handle(JsonParseException throwable, boolean throwRuntimeException) {
+		// TODO Auto-generated method stub
 		
 	}
 
