@@ -2,7 +2,6 @@ package com.app.hos.utils.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.logging.Level;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.utils.aspect.ConnectionAspect.ConnectionEvent;
 
 @SuppressWarnings("rawtypes")
 @Aspect

@@ -13,7 +13,7 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandConverter;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 @Service
 public class CommandManager {
@@ -30,7 +30,7 @@ public class CommandManager {
 
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
 
-	public void executeCommand(String connectionId, Command command) throws NotExecutableCommand {
+	public void executeCommand(String connectionId, Command command) throws NotExecutableCommandException {
 		Callable<Command> executableCommand = CommandConverter.getExecutableCommand(command);
 		executeCommand(connectionId,executableCommand);
 	}

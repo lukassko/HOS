@@ -12,25 +12,25 @@ import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.command.decorators.GetStatusCommand;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 @Service
 public class CommandConverter implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
 	
-	public static Callable<Command> getExecutableCommand(Command command) throws NotExecutableCommand {
+	public static Callable<Command> getExecutableCommand(Command command) throws NotExecutableCommandException {
 		CommandType type = CommandType.valueOf(command.getCommandType());
 		Callable<Command> executableCommand = null; 
 		if (type == CommandType.GET_STATUS) {
 			executableCommand = new GetStatusCommand(command);
 		} else {
-			throw new NotExecutableCommand(type);
+			throw new NotExecutableCommandException(type);
 		}
 		return executableCommand;
 	}
 	
-	public static Callable<WebCommand> getExecutableWebCommand(WebCommand command) throws NotExecutableCommand {
+	public static Callable<WebCommand> getExecutableWebCommand(WebCommand command) throws NotExecutableCommandException {
 		WebCommandType type = command.getType();
 		Callable<WebCommand> executableCommand = null; 
 		if (type == WebCommandType.GET_ALL_DEVICES) {

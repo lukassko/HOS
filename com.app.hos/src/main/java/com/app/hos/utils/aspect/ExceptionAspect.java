@@ -1,5 +1,14 @@
 package com.app.hos.utils.aspect;
 
-public class ExceptionAspect {
+import org.aspectj.lang.annotation.Aspect;
+
+import com.app.hos.logging.repository.LoggingRepository;
+
+@Aspect
+public class ExceptionAspect extends Logger {
+
+	public ExceptionAspect(LoggingRepository repository) {
+		super(repository);
+	}
 
 }

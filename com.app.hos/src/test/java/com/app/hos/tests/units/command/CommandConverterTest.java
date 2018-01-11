@@ -8,12 +8,12 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandConverter;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 public class CommandConverterTest {
 
 	@Test
-	public void convertCommandFromNonExecutableToExecutable() throws NotExecutableCommand {
+	public void convertCommandFromNonExecutableToExecutable() throws NotExecutableCommandException {
 		Command nonExecutabaleCommand = CommandFactory.getCommand(CommandType.GET_STATUS);
 		CommandConverter.getExecutableCommand(nonExecutabaleCommand);
 		//Assert.assertEquals(CommandType.HELLO, command.getEnumeratedCommandType());

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.utils.aspect.ConnectionAspect;
-import com.app.hos.utils.aspect.PersistanceAspect;
 
 @Profile("!web-integration-test")
 @Configuration

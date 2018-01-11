@@ -42,7 +42,7 @@ import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.command.builder.CommandConverter;
 import com.app.hos.tests.utils.Utils;
 import com.app.hos.tests.utils.WebCommandSimulation;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -75,7 +75,7 @@ public class WebCommandManagerMultithreadIT {
 	}
 	
 	@Before
-    public void initMocks() throws NotExecutableCommand {
+    public void initMocks() throws NotExecutableCommandException {
 		serverEndpoint = Mockito.spy(new WebSocketServerEndpoint(webSocketManager));
 		
 		MockitoAnnotations.initMocks(this);
@@ -87,14 +87,14 @@ public class WebCommandManagerMultithreadIT {
 	}
 	
 	@Test
-	public void stage00_checkIfPowerMockReturnProperObjectFromStaticFactoryMethod() throws NotExecutableCommand {
+	public void stage00_checkIfPowerMockReturnProperObjectFromStaticFactoryMethod() throws NotExecutableCommandException {
 		Callable<WebCommand> testCommand = CommandConverter.getExecutableWebCommand(command);
 		Assert.assertNotNull(testCommand);
 		Assert.assertTrue(testCommand == testExecutableCommand);
 	}
 	
 	@Test
-	public void stage10_executeSingleWebCommandShouldExecuteAndSendBackValueAfterDelayTime () throws NotExecutableCommand, InstantiationException, IllegalAccessException, IOException {
+	public void stage10_executeSingleWebCommandShouldExecuteAndSendBackValueAfterDelayTime () throws NotExecutableCommandException, InstantiationException, IllegalAccessException, IOException {
 		
 		String message = JsonConverter.getJson(command);
 		serverEndpoint.onMessage(Utils.getSessionTest(), message);
@@ -120,7 +120,7 @@ public class WebCommandManagerMultithreadIT {
 	
 	
 	@Test
-	public void stage20_executeMultiWebCommandsShouldExecuteAndSendBackValueAfterDelayTime() throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+	public void stage20_executeMultiWebCommandsShouldExecuteAndSendBackValueAfterDelayTime() throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(3);
 		

@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.integration.ip.tcp.connection.AbstractConnectionFactory;
 import org.springframework.integration.support.MessageBuilder;
@@ -26,14 +25,12 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.Utils;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 @Service
 public class SystemFacadeImpl implements SystemFacade {
 
-	@Autowired
-	private ApplicationContext appContext;
-	
 	@Autowired
 	private DeviceManager deviceManager;
 	
@@ -68,7 +65,7 @@ public class SystemFacadeImpl implements SystemFacade {
 			String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
 			try {
 				commandManager.executeCommand(connectionId, command);
-			} catch (NotExecutableCommand e) {
+			} catch (NotExecutableCommandException e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -145,7 +142,7 @@ public class SystemFacadeImpl implements SystemFacade {
 	}
 		
 	private AbstractConnectionFactory getConnectionFactory() {
-		return (AbstractConnectionFactory)appContext.getBean("hosServer");
+		return (AbstractConnectionFactory)Utils.getObjectFromContext("hosServer");
 	}
 
 }

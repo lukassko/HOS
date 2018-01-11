@@ -33,7 +33,7 @@ import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 @Ignore("run only one integration test")
 @WebAppConfiguration 
@@ -59,7 +59,7 @@ public class CommandManagerMultithreadIT {
 	
 
 	@Test
-	public void stage00_executeGetStatusCommandShouldReturnMyStatusCommand () throws NotExecutableCommand {
+	public void stage00_executeGetStatusCommandShouldReturnMyStatusCommand () throws NotExecutableCommandException {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);
 
@@ -80,14 +80,14 @@ public class CommandManagerMultithreadIT {
 		Assert.assertTrue(sendCommand.getEnumeratedCommandType()==CommandType.MY_STATUS);
 	}
 	
-	@Test(expected = NotExecutableCommand.class)
-	public void stage10_tryToExecuteNotExecutableCommandShouldThrowExecption() throws NotExecutableCommand {
+	@Test(expected = NotExecutableCommandException.class)
+	public void stage10_tryToExecuteNotExecutableCommandShouldThrowExecption() throws NotExecutableCommandException {
 		Command command = CommandFactory.getCommand(CommandType.HELLO);
 		commandManager.executeCommand("any string", command);
 	}
 	
 	@Test
-	public void stage20_executeTwoCommandsShouldSendProperCommandAsResponse() throws NotExecutableCommand {
+	public void stage20_executeTwoCommandsShouldSendProperCommandAsResponse() throws NotExecutableCommandException {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(2);
 		

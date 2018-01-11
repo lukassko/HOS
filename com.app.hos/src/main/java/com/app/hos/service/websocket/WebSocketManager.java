@@ -13,7 +13,7 @@ import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.command.builder.CommandConverter;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -37,7 +37,7 @@ public class WebSocketManager {
 		}
 	}
 	
-	public void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommand {
+	public void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommandException {
 		Callable<WebCommand> executableCommand = CommandConverter.getExecutableWebCommand(command);
 		executeCommand(callback,session,executableCommand);
 	}

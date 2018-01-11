@@ -2,11 +2,11 @@ package com.app.hos.utils.exceptions;
 
 import com.app.hos.share.command.type.CommandType;
 
-public class NotExecutableCommand extends Exception {
+public class NotExecutableCommandException extends HOSException {
 
 	private static final long serialVersionUID = 1L;
 
-	public NotExecutableCommand(CommandType type) {
+	public NotExecutableCommandException(CommandType type) {
 		super("Command is not executable " + type.toString());
 	}
 }

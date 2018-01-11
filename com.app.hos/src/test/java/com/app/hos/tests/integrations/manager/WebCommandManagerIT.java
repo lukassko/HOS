@@ -32,12 +32,12 @@ import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.utils.Utils;
-import com.app.hos.utils.exceptions.NotExecutableCommand;
+import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -55,7 +55,7 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage00_getAllDevicesWhenNoConnectedDeviceShouldReturnEmptyString() 
-				throws NotExecutableCommand, InterruptedException, JsonParseException, JsonMappingException, IOException {
+				throws NotExecutableCommandException, InterruptedException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
@@ -74,7 +74,7 @@ public class WebCommandManagerIT {
 
 	@Test
 	public void stage10_getAllDevicesWithOneConnectedDeviceWithoutStatusShouldReturnProperMessage() 
-			throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
@@ -104,7 +104,7 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage20_getAllDevicesWithOneConnectedDeviceWithOneStatusShouldReturnProperMessage() 
-			throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
@@ -128,7 +128,7 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage30_getAllDevicesWithOneConnectedDeviceWithManyStatusesShouldReturnProperMessage() 
-			throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
@@ -152,7 +152,7 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage40_getAllDevicesWithTwoConnectedDevicesShouldReturnProperMessage() 
-			throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
@@ -183,7 +183,7 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage50_getAllDevicesWithTwoConnectedDevicesWithStatusesShouldReturnProperMessage() 
-			throws NotExecutableCommand, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
 		final StringBuffer sendedMessage = new StringBuffer();
 		
