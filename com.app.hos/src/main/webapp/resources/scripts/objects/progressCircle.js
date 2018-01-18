@@ -1,5 +1,5 @@
 var progressBars = (function () {
-	
+
 	var arrayBars = new Array();
     
 	var Progress = function( element ) {

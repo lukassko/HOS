@@ -19,10 +19,14 @@
 
 	<!-- attach other css and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
-	<script src="<c:url value="/resources/scripts/websocket.js" />"></script>
-	<script src="<c:url value="/resources/scripts/webCommands.js" />"></script>
-	<script src="<c:url value="/resources/scripts/commandManager.js" />"></script>
+	<script src="<c:url value="/resources/scripts/socket/websocket.js" />"></script>
+	<script src="<c:url value="/resources/scripts/command/webCommands.js" />"></script>
+	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
+	<script src="<c:url value="/resources/scripts/managers/devicesManager.js" />"></script>
 	<script>
+		
+	var activePage = 'dashboard';
+	
 	$(document).ready(function() {
 		
 		$('ul.collapse li').not('li.collapsed').each(function() {
@@ -31,8 +35,10 @@
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
+		    	activePage = page;
+		    	
 		    	var request = $.get(page);
-
+				
 		    	$.get(page, function(data) {
 		    		$('#container').html(data)
 				}).fail(function(jqXHR, textStatus, errorThrown) {
@@ -43,7 +49,7 @@
 		    	$('#active-page').text(title);
 		    });
 		});
-		hosWebsocket.connect();
+		hosWebsocket.connect(getAllDevices);
 	});
 
 	function setSystemInfo(message) {
@@ -55,14 +61,21 @@
 	};
 	
 	var intervalID = setInterval(function(){
+		getAllDevices();
+	}, 5000);
+	
+	function callback() {
+		getAllDevices();
+	}
+	
+	function getAllDevices() {
 		var builder = new WebCommandBuilder();
         var command = builder.construct(new GetAllDeviceCommandBuilder());
         hosWebsocket.sendCommand(command);
-	}, 5000);
+	}
 	
 	window.addEventListener("beforeunload", function (e) {
 		var dialogText = 'Dialog text here';
-		console.log('beforeunload');
 		e.returnValue = dialogText;
 		return dialogText;                             
 	}); 

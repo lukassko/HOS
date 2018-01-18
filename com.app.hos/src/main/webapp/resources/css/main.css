@@ -221,18 +221,18 @@ html, body {
 	height: 60px;
 	margin: 5px auto;
 	padding: 5px;
-	background-color: #020203;
-	border-radius: 10px;
+	background-color: #23282e;
+	border-radius: 5px;
 	display: table;
-	border: 2px solid #020203;
+	border: 2px solid #23282e;
 }
 
 div.device:hover {
 	background-color: #23282e;
 	border: 2px solid #d19b3d;
-	-webkit-transition: background-color 500ms linear, border 500ms linear;
-	-ms-transition: background-color 500ms linear, border 500ms linear;
-	transition: background-color 500ms linear, border 500ms linear;
+	-webkit-transition: border 500ms linear;
+	-ms-transition: border 500ms linear;
+	transition: border 500ms linear;
 }
 
 .device-icon-text {

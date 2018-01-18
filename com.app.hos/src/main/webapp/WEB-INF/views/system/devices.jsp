@@ -12,25 +12,14 @@
 	<link rel="stylesheet" href="<c:url value="/resources/css/carousel.css" />">
 	<link rel="stylesheet" href="<c:url value="/resources/css/overwright-boostrap.css" />">
 	
-	
-	<script src="<c:url value="/resources/scripts/progressCircle.js" />"></script>
-	<script src="<c:url value="/resources/scripts/carousel.js" />"></script>
-	<script src="<c:url value="/resources/scripts/devicesManager.js" />"></script>
+	<script src="<c:url value="/resources/scripts/objects/progressCircle.js" />"></script>
+	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
+	<script src="<c:url value="/resources/scripts/objects/carousel.js" />"></script>
+
 	<script>
 
 		$(document).ready(function() {
-			$('ul.nav li').each(function() {
-			    $(this).on("click", function() {
-			    	$('ul.nav li').removeClass('active');
-			    	$(this).addClass('active');
-			    	//var page = $(this).attr("data-target");
-			    	//$.get(page, function(data){
-					//    $('#container').html(data);
-					//});
-			    	//var title = $(this).text();
-			    	//$('#active-page').text(title);
-			    });
-			});
+			deviceManager.drawDevices();
 		});
 	
 	</script>
@@ -120,13 +109,13 @@
 				<td class="detail-table-cell" style="width:60%;">
 					<div class="device-property">
 				        <div class="usage usage-info">IP Address</div>
-				        <div class="usage usage-info-value">192.168.0.1</div>
+				        <div id="ip-address" class="usage usage-info-value">xxx.xxx.xxx.xxx</div>
 					</div>
 				</td>
 				<td class="detail-table-cell" style="width:40%;">
 					<div class="device-property">
 				        <div class="usage usage-info">Port no</div>
-				        <div class="usage usage-info-value">1111</div>
+				        <div id="port-number" class="usage usage-info-value">xxx</div>
 					</div>
 				</td>
 			</tr>

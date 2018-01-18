@@ -6,9 +6,8 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet"
-	href="<c:url value="/resources/css/carousel.css" />">
-<script src="<c:url value="/resources/scripts/carousel.js" />"></script>
+<link rel="stylesheet" href="<c:url value="/resources/css/carousel.css" />">
+<script src="<c:url value="/resources/scripts/objects/carousel.js" />"></script>
 
 </head>
 <body>

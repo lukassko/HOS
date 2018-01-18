@@ -4,17 +4,17 @@ var hosWebsocket = (function () {
 	var url = "ws://localhost:8080/HOS/websocket";
 	var isConnected = false;
 	
-	function connect() {
+	function connect(onConnectCallback) {
 	    socket = new WebSocket(url);
 	    
 	    socket.onopen = function() {
 	    	isConnected = true;
 	    	setSystemInfo("Connected to websocket");
+	    	onConnectCallback();
 	    }
 	    
 	    socket.onmessage = function (event) {
 	    	var command = JSON.parse(event.data);
-	    	console.log(command);
 	    	commandManager.receiveCommand(command);
 	    };
 	    
