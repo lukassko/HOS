@@ -51,16 +51,32 @@ var deviceManager = (function() {
 	
 	function setDeviceData() {
 		var data = connectedDevices.get(selectedDeivce);
-		console.log(data);
 		var connection = data.connection;
 		var ip = connection.ip;
 		var port = connection.remotePort;	
 		var name = data.name;
 		var serial = data.serial;
+		var connectionTime = getConnectionTimeAsString(connection);
 		deviceControlsManager.setData('ip-address',ip);
 		deviceControlsManager.setData('port-number',port);
+		deviceControlsManager.setData('connection-time',connectionTime);
 	}
 	
+	function getConnectionTimeAsString(connection){
+		var connectionTime = connection.connectionTime;
+		var day = addZero(connectionTime.day);
+		var month = addZero(connectionTime.month);
+		var year = connectionTime.year;
+		var hour = addZero(connectionTime.hour);
+		var minutes = addZero(connectionTime.minutes);
+		var seconds = addZero(connectionTime.seconds);
+		return year + '/' + month + '/' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+	}
+	
+	function addZero(n) {
+		return n.toString().length == 1 ?  n = '0' + n: n;
+	}
+
 	function setDeviceStatus() {
 		var status = deviceStatuses.get(selectedDeivce);
 		deviceControlsManager.setProgress('cpu',status.cpuUsage);
@@ -76,9 +92,20 @@ var deviceManager = (function() {
 	}
 	
 	function createDeviceButton (id,name) {
-		var deviceButton = '<div id="device' + id +
-			'" class="device"><i class="fa fa-desktop fa-2x device-icon-text"></i> '+
-			'<div class="device-icon-text">' + name + '</div></div>';
+		var deviceButton = '<div id="device' + id + '" class="device tooltips">' +
+								'<i class="fa fa-desktop fa-2x device-icon-text" style="float: left;"></i> '+
+								'<div class="device-icon-text device-name">' + name + '</div>'+
+								'<span class="tooltiptext">' + name + '</span>'+
+							'</div>';
+			
+		$('.device-container').append(deviceButton);
+	};
+	
+	function createDeviceButton_ (id,name) {
+		var deviceButton = '<div id="device' + id + '" class="device">' +
+								'<i class="fa fa-desktop fa-2x device-icon-text" style="float: left;"></i> '+
+								'<div class="device-icon-text device-name">' + name + '</div>'+
+							'</div>';
 			
 		$('.device-container').append(deviceButton);
 	};

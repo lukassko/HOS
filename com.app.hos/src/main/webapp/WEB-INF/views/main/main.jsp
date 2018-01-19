@@ -19,6 +19,7 @@
 
 	<!-- attach other css and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
+	<link rel="stylesheet" href="<c:url value="/resources/css/tooltip.css" />">
 	<script src="<c:url value="/resources/scripts/socket/websocket.js" />"></script>
 	<script src="<c:url value="/resources/scripts/command/webCommands.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
@@ -35,12 +36,11 @@
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
-		    	activePage = page;
-		    	
 		    	var request = $.get(page);
-				
+
 		    	$.get(page, function(data) {
 		    		$('#container').html(data)
+		    		activePage = page;
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					setSystemInfo("Error requesting page: " + page);
 				});

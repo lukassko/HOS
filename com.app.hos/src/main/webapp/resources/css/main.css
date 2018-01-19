@@ -207,7 +207,8 @@ html, body {
 	margin: 10px;
 	border-right: 2px solid #2e353d;
 	float: left;
-	overflow-y:auto;
+	/*overflow-y:auto;
+	overflow-x: hidden;*/
 	top:0;
 	bottom:0;
 }
@@ -219,11 +220,11 @@ html, body {
 .device {
 	width: 100%;
 	height: 60px;
-	margin: 5px auto;
 	padding: 5px;
+	margin: 5px auto;
 	background-color: #23282e;
 	border-radius: 5px;
-	display: table;
+	display: inline-block;
 	border: 2px solid #23282e;
 }
 
@@ -236,8 +237,18 @@ div.device:hover {
 }
 
 .device-icon-text {
-	display: table-cell;
-	vertical-align: middle;
+    line-height: 46px;
+}
+
+.device-icon-text,
+.ellipsis-no-wrap-text {
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.device-icon-text ~ .device-name {
+    padding-left:5px;
 }
 
 .device-container .activeDevice {
@@ -296,3 +307,4 @@ div.device:hover {
 	width: 100%;
 	font-size: 30px;
 }
+

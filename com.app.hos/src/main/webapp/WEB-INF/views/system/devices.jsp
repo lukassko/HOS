@@ -106,13 +106,19 @@
 		</div>
 		<table class="detail-table" style="width: calc(100% - 420px); height: 210px;">
 			<tr class="detail-table-row">
-				<td class="detail-table-cell" style="width:60%;">
+				<td class="detail-table-cell" style="width:50%;">
+					<div class="device-property">
+				        <div class="usage usage-info">Connection time</div>
+				        <div id="connection-time" class="usage usage-info-value">xxxx-xx-xx xx:xx:xx</div>
+					</div>
+				</td>
+				<td class="detail-table-cell" style="width:30%;">
 					<div class="device-property">
 				        <div class="usage usage-info">IP Address</div>
 				        <div id="ip-address" class="usage usage-info-value">xxx.xxx.xxx.xxx</div>
 					</div>
 				</td>
-				<td class="detail-table-cell" style="width:40%;">
+				<td class="detail-table-cell" style="width:20%;">
 					<div class="device-property">
 				        <div class="usage usage-info">Port no</div>
 				        <div id="port-number" class="usage usage-info-value">xxx</div>
@@ -120,7 +126,7 @@
 				</td>
 			</tr>
 			<tr class="detail-table-row">
-				<td colspan="2" class="detail-table-cell">
+				<td colspan="3" class="detail-table-cell">
 					<div class="device-property"></div>
 				</td>
 			</tr>
