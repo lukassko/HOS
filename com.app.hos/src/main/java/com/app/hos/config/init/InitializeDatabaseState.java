@@ -56,6 +56,19 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		deviceRepository.save(device);
 		
+		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
+    			"localhost3", "192.168.0.66", 7893, new DateTime());
+		device = new Device("Device 1", "98547kjyy3");
+		
+		connection.setDevice(device);
+		device.setConnection(connection);
+
+		statuses = new LinkedList<DeviceStatus>();
+		statuses.add(new DeviceStatus(19.21, 99.1));
+		statuses.add(new DeviceStatus(32.21, 9.60));
+		device.setDeviceStatuses(statuses);
+		
+		deviceRepository.save(device);
 	}
 	
 }

@@ -14,7 +14,7 @@
 	
 	<script src="<c:url value="/resources/scripts/objects/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
-	<script src="<c:url value="/resources/scripts/objects/carousel.js" />"></script>
+	<script src="<c:url value="/resources/scripts/charts/charts.js" />"></script>
 
 	<script>
 
@@ -96,7 +96,7 @@
 			 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
-		<div id="parent" class="device-block device-property" style="width:200px;height:200px ">
+		<div class="device-block device-property" style="width:200px;height:200px ">
 			<div class="usage usage-info">
 	        	RAM
 	        </div>
@@ -104,7 +104,7 @@
 			 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
 			</div>
 		</div>
-		<table class="detail-table" style="width: calc(100% - 420px); height: 210px;">
+		<table class="detail-table">
 			<tr class="detail-table-row">
 				<td class="detail-table-cell" style="width:50%;">
 					<div class="device-property">
@@ -114,7 +114,7 @@
 				</td>
 				<td class="detail-table-cell" style="width:30%;">
 					<div class="device-property">
-				        <div class="usage usage-info">IP Address</div>
+				        <div class="usage usage-info ">IP Address</div>
 				        <div id="ip-address" class="usage usage-info-value">xxx.xxx.xxx.xxx</div>
 					</div>
 				</td>
@@ -131,8 +131,8 @@
 				</td>
 			</tr>
 		</table>
+		<div id="test" style="width: 100%; bottom:0; margin: 0 auto; background-color: pink;"></div>
 	</div>
-	
 </div>
 </body>
 </html>

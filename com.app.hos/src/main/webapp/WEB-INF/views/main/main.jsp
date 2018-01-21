@@ -17,9 +17,15 @@
 	<script src="<c:url value="/webjars/sockjs-client/1.0.2/sockjs.min.js" />"></script>
 	<script src="<c:url value="/webjars/stomp-websocket/2.3.3/stomp.min.js" />"></script>
 
-	<!-- attach other css and script -->
+	<!-- HighCharts -->
+	<script src="<c:url value="/webjars/highcharts/5.0.1/highcharts.js" />"></script>
+
+	<!-- attach other css -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<link rel="stylesheet" href="<c:url value="/resources/css/tooltip.css" />">
+	
+	<!-- attach other script -->
+	<script src="<c:url value="/resources/scripts/utils.js" />"></script>
 	<script src="<c:url value="/resources/scripts/socket/websocket.js" />"></script>
 	<script src="<c:url value="/resources/scripts/command/webCommands.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
@@ -51,22 +57,10 @@
 		});
 		hosWebsocket.connect(getAllDevices);
 	});
-
-	function setSystemInfo(message) {
-		$("#system-info").text(message);
-		$("#system-info").fadeIn(1000);
-		setTimeout(function(){
-			$("#system-info").fadeOut(2000)
-		}, 3000 );
-	};
 	
 	var intervalID = setInterval(function(){
 		getAllDevices();
 	}, 5000);
-	
-	function callback() {
-		getAllDevices();
-	}
 	
 	function getAllDevices() {
 		var builder = new WebCommandBuilder();

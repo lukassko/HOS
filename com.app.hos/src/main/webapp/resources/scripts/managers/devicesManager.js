@@ -22,12 +22,11 @@ var deviceManager = (function() {
 		connectedDevices.forEach(function(device,id, map) {
 			if (!isDeviceDraw(id)) {
 				addDevice(device);
-			} else {
-				if (selectedDeivce == id) {
-					setDeviceStatus();
-				}
 			} 
 		});
+		if (selectedDeivce != null) {
+			setClickedDevice();
+		}
 	}
 	
 	function addDevice(device) {
@@ -38,13 +37,13 @@ var deviceManager = (function() {
 		$(devId).css('cursor','pointer');
 		$('.device-container').on('click', devId, function(){
 			$('.device-container div.activeDevice').removeClass('activeDevice');
-	    	$(this).addClass('activeDevice'); 
 	    	selectedDeivce = id;
 	    	setClickedDevice();
 		});
 	};
 	
 	function setClickedDevice() {
+		$(getDivDeviceId(selectedDeivce)).addClass('activeDevice'); 
 		setDeviceData();
 		setDeviceStatus();
 	};
@@ -70,12 +69,9 @@ var deviceManager = (function() {
 		var hour = addZero(connectionTime.hour);
 		var minutes = addZero(connectionTime.minutes);
 		var seconds = addZero(connectionTime.seconds);
-		return year + '/' + month + '/' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+		return getTimeAsString(year,month,day,hour,minutes,seconds);
 	}
 	
-	function addZero(n) {
-		return n.toString().length == 1 ?  n = '0' + n: n;
-	}
 
 	function setDeviceStatus() {
 		var status = deviceStatuses.get(selectedDeivce);
@@ -100,16 +96,7 @@ var deviceManager = (function() {
 			
 		$('.device-container').append(deviceButton);
 	};
-	
-	function createDeviceButton_ (id,name) {
-		var deviceButton = '<div id="device' + id + '" class="device">' +
-								'<i class="fa fa-desktop fa-2x device-icon-text" style="float: left;"></i> '+
-								'<div class="device-icon-text device-name">' + name + '</div>'+
-							'</div>';
-			
-		$('.device-container').append(deviceButton);
-	};
-	
+		
 	function _removeDevice() {
 		
 	}

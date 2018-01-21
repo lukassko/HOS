@@ -126,14 +126,14 @@
 		padding-left: 20px;
 		line-height: 50px !important;
 	}
-	.main-container {
-		margin-left: 0px;
+	#container {
+		left: 0;
 	}
 }
 
 @media ( min-width : 767px) {
-	.main-container {
-		margin-left: 300px;
+	#container {
+		left: 300px;
 	}
 	.nav-side-menu .menu-list .menu-content {
 		display: block;
@@ -182,7 +182,6 @@ html, body {
 	position: fixed;
 	top: 50px;
 	right: 0;
-	left: 300px;
 	bottom: 0;
 }
 
@@ -240,13 +239,6 @@ div.device:hover {
     line-height: 46px;
 }
 
-.device-icon-text,
-.ellipsis-no-wrap-text {
-	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .device-icon-text ~ .device-name {
     padding-left:5px;
 }
@@ -272,6 +264,9 @@ div.device:hover {
 
 .detail-table {
 	display: table;
+	width: calc(100% - 420px); 
+	min-width: 200px;
+	height: 210px;
 }
 
 .detail-table .detail-table-row {
@@ -308,3 +303,11 @@ div.device:hover {
 	font-size: 30px;
 }
 
+.usage-info,
+.usage-info-value ,
+.device-icon-text,
+.ellipsis-no-wrap-text {
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
