@@ -9,7 +9,6 @@ public class NotExecutableCommandExceptionHandler implements HOSExceptionHandler
 
 	@Override
 	public void handle(NotExecutableCommandException throwable, boolean throwRuntimeException) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -20,6 +20,6 @@ public class ExceptionAspect extends Logger {
 	
 	@Before("excpetionHandlerPointcut(throwable,throwRuntimeException)")
 	public <T extends Throwable> void excpetionHandler(JoinPoint point,T throwable, boolean throwRuntimeException) {
-
+		System.out.println("ExceptionAspect -> excpetionHandler pointcut");
 	}
 }

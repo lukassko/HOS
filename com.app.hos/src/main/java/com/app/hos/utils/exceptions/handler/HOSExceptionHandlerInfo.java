@@ -1,12 +1,13 @@
 package com.app.hos.utils.exceptions.handler;
 
+@SuppressWarnings("rawtypes")
 public class HOSExceptionHandlerInfo {
 
 	private Throwable excpetion;
 	
-	private Class<? extends Throwable> exceptionClass;
+	private Class exceptionClass;
 	
-	private HOSExceptionHandler<? extends Throwable> handler;
+	private HOSExceptionHandler handler;
 
 	public Throwable getExcpetion() {
 		return excpetion;
@@ -16,19 +17,19 @@ public class HOSExceptionHandlerInfo {
 		this.excpetion = excpetion;
 	}
 
-	public Class<? extends Throwable> getExceptionClass() {
+	public Class getExceptionClass() {
 		return exceptionClass;
 	}
 
-	public void setExceptionClass(Class<? extends Throwable> exceptionClass) {
+	public void setExceptionClass(Class exceptionClass) {
 		this.exceptionClass = exceptionClass;
 	}
 
-	public HOSExceptionHandler<? extends Throwable> getHandler() {
+	public HOSExceptionHandler getHandler() {
 		return handler;
 	}
 
-	public void setHandler(HOSExceptionHandler<? extends Throwable> handler) {
+	public void setHandler(HOSExceptionHandler handler) {
 		this.handler = handler;
 	}
 	

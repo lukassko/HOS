@@ -10,18 +10,19 @@ import org.springframework.stereotype.Service;
 import com.app.hos.utils.Utils;
 import com.app.hos.utils.exceptions.handler.instance.DefaultExceptionHandler;
 
+@SuppressWarnings("rawtypes")
 @Service
 public class HOSExceptionHandlerFactory {
 
-	private HOSExceptionHandler<? extends Throwable> defaultExceptionHandler = new DefaultExceptionHandler<>();
+	private HOSExceptionHandler defaultExceptionHandler = new DefaultExceptionHandler();
 	
 	private final Map<Class<? extends Throwable>, HOSExceptionHandler<? extends Throwable>> handlers = new LinkedHashMap<>();
 	
-	public <T extends Throwable> void setDefaultExceptionHandler(HOSExceptionHandler<T> defaultExceptionHandler) {
+	public void setDefaultExceptionHandler(HOSExceptionHandler defaultExceptionHandler) {
 		this.defaultExceptionHandler = defaultExceptionHandler;
 	}
 	
-	public HOSExceptionHandler<? extends Throwable> getDefaultExceptionHandler() {
+	public HOSExceptionHandler getDefaultExceptionHandler() {
 		return this.defaultExceptionHandler;
 	}
 	
@@ -51,7 +52,7 @@ public class HOSExceptionHandlerFactory {
 		this.handlers.put(clazz, handler);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked")
 	public void registerHandlers(String packageToScan){
 		List<String> handlers =  Utils.scanForAnnotation(ExceptionHandler.class,packageToScan);
 		for(String handler : handlers) {
