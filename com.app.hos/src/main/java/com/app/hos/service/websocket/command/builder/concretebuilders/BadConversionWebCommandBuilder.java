@@ -11,7 +11,7 @@ public class BadConversionWebCommandBuilder extends AbstractWebCommandBuilder {
 	
 	@Override
 	public void setCommandType() {
-		command.setType(WebCommandType.BAD_COMMAND_CONVERSION);
+		command.setType(WebCommandType.JSON_EXCEPTION);
 	}
 
 	@Override

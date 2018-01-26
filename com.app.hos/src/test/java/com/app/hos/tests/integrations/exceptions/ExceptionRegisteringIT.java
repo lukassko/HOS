@@ -19,7 +19,7 @@ import com.app.hos.utils.exceptions.handler.ExceptionHandler;
 import com.app.hos.utils.exceptions.handler.HOSExceptionHandler;
 import com.app.hos.utils.exceptions.handler.HOSExceptionHandlerFactory;
 import com.app.hos.utils.exceptions.handler.HOSExceptionHandlerInfo;
-import com.app.hos.utils.exceptions.handler.instance.JsonParseExceptinHandler;
+import com.app.hos.utils.exceptions.handler.instance.WebSocketJsonExceptionHandler;
 import com.fasterxml.jackson.core.JsonParseException;
 
 @Ignore("run only one integration test")
@@ -27,8 +27,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 @ContextConfiguration(classes = {ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ExceptionRegisterIT {
-
+public class ExceptionRegisteringIT {
+	
 	@Autowired
 	private HOSExceptionHandlerFactory exceptionHandlerFactory;
 		 
@@ -66,7 +66,7 @@ public class ExceptionRegisterIT {
 		List<String> handlers = findHandlers();
 		for(String handler : handlers) {
 			Class<?> hanlderClazz = Utils.getClass(handler);
-			if (hanlderClazz.equals(JsonParseExceptinHandler.class)) {
+			if (hanlderClazz.equals(WebSocketJsonExceptionHandler.class)) {
 				Class exceptoinClazz = Utils.getGenericParamter(handler);
 				Assert.assertTrue(exceptoinClazz.equals(JsonParseException.class));
 				return;

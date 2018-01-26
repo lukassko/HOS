@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class DateTimeTest {
 	
 	@Test
-	public void jsonSerializationTest() throws JsonProcessingException {
+	public void jsonSerializationTest() throws IOException {
 		DateTime dateTime = new DateTime();
 		String json = JsonConverter.getJson(dateTime);
 		int year = dateTime.getYear();

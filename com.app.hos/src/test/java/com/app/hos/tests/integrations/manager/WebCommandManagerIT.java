@@ -61,10 +61,11 @@ public class WebCommandManagerIT {
 		final StringBuffer sendedMessage = new StringBuffer();
 		WebCommandType type = WebCommandType.GET_ALL_DEVICES;
 		WebCommand command = WebCommandFactory.getCommand(type);
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		afterExecuteCommand.await(3, TimeUnit.SECONDS);
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
@@ -89,11 +90,11 @@ public class WebCommandManagerIT {
 		deviceManager.openDeviceConnection(headers, "device_1", "serial_device_1");
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
 		String matchPattern = "(.*)webdevice(.*)endConnectionTime(.*):null,(.*)new(.*):false}},(.*)null(.*):null}(.*)";
@@ -113,11 +114,11 @@ public class WebCommandManagerIT {
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
 		
@@ -137,11 +138,11 @@ public class WebCommandManagerIT {
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
 		
@@ -167,11 +168,11 @@ public class WebCommandManagerIT {
 		deviceManager.openDeviceConnection(headers, "device_2", "serial_device_2");
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
 		
@@ -191,11 +192,11 @@ public class WebCommandManagerIT {
 		deviceManager.addDeviceStatus("serial_device_2", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
-		
+		String message = JsonConverter.getJson(command);
 		webSocketManager.executeCommand((s, m) -> {
 			sendedMessage.append(m);
 			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), command);
+		}, Utils.getSessionTest(), message);
 		
 		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
 		

@@ -23,7 +23,7 @@ public class WebCommandFactory {
 			commandBuilder.setCommandBuilder(new RemoveDeviceWebCommandBuilder());
 		} else if (type == WebCommandType.GET_ALL_DEVICES) {
 			commandBuilder.setCommandBuilder(new GetAllDevicesWebCommandBuilder());
-		} else if (type == WebCommandType.BAD_COMMAND_CONVERSION) {
+		} else if (type == WebCommandType.JSON_EXCEPTION) {
 			commandBuilder.setCommandBuilder(new BadConversionWebCommandBuilder(message));
 		} else {
 			return null;

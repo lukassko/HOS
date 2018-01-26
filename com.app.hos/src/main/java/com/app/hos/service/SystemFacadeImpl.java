@@ -45,8 +45,6 @@ public class SystemFacadeImpl implements SystemFacade {
 	@Autowired
 	private Server server;
 
-	@Autowired
-	private WebSocketServerEndpoint webSocketServerEndpoint;
 	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 	
@@ -124,11 +122,6 @@ public class SystemFacadeImpl implements SystemFacade {
 
 	public void sendCommand(String connectionId, Command command) {
 		server.sendMessage(createMessage(connectionId, command));
-	}
-	
-	@Override
-	public void sendWebCommand(Session session, String message) {
-		this.webSocketServerEndpoint.sendMessage(session, message);
 	}
 	
 	public boolean isConnectionOpen (String connectionId) {

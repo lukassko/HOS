@@ -41,7 +41,7 @@ public class ExcpetionAspectIT {
 	public void stage10_checkIfLogWillOccureInDbBeforeExceptionHandlingForNotExeccutableCommand() {	
 		
 		try {
-			thrower.throwNotExeccutableCommand();
+			thrower.throwNotExeccutableCommandException();
 		} catch(NotExecutableCommandException e) {
 			ExceptionUtils.handle(e);
 		}
@@ -60,6 +60,16 @@ public class ExcpetionAspectIT {
 		}
 		
 		Assert.assertTrue(loggingRepository.findLogForLevel(Level.WARNING).size() == 2);
+	}
+	
+	@Test
+	public void stage30_throwChildExceptionButCatchParentExceptionAndCheckLogs() {
+		try {
+			thrower.throwJsonException();
+		} catch(Exception e) {
+			ExceptionUtils.handle(e);
+		}
+		Assert.assertTrue(loggingRepository.findLogForLevel(Level.WARNING).size() == 3);
 	}
 		
 }

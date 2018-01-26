@@ -12,9 +12,7 @@ import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateJsonSerializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -34,12 +32,12 @@ public class JsonConverter {
 		mapper.registerModule(module);
 	}
 	
-    public static String getJson(Object object) throws JsonProcessingException {
+    public static String getJson(Object object) throws JsonProcessingException,IOException {
         return mapper.writeValueAsString(object);
     }
 
     
-    public static <T> T getObject(String json, Class<T> clazz) throws JsonParseException, JsonMappingException, IOException {
+    public static <T> T getObject(String json, Class<T> clazz) throws JsonProcessingException, IOException {
     	return mapper.readValue(json, clazz);
     }
        

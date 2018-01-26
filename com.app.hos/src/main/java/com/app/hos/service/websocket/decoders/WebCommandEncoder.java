@@ -1,4 +1,6 @@
 package com.app.hos.service.websocket.decoders;
+import java.io.IOException;
+
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
@@ -17,6 +19,9 @@ public class WebCommandEncoder implements Encoder.Text<WebCommand> {
 		try {
 			return JsonConverter.getJson(object);
 		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
