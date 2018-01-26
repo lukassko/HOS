@@ -1,5 +1,6 @@
 package com.app.hos.utils.aspect;
 
+import java.util.logging.Level;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,6 +21,6 @@ public class ExceptionAspect extends Logger {
 	
 	@Before("excpetionHandlerPointcut(throwable,throwRuntimeException)")
 	public <T extends Throwable> void excpetionHandler(JoinPoint point,T throwable, boolean throwRuntimeException) {
-		System.out.println("ExceptionAspect -> excpetionHandler pointcut");
+		saveLog(Level.WARNING ,null,throwable.getMessage());
 	}
 }

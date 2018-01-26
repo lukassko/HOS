@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExceptionUtils {
 
-	@Autowired
 	private static HOSExceptionHandlerFactory exceptionHandlerFactory;
 	
+	@Autowired
+	public void setExceptionHandlerFactory(HOSExceptionHandlerFactory exceptionHandlerFactory) {
+		ExceptionUtils.exceptionHandlerFactory = exceptionHandlerFactory;
+	}
+
 	public static void handle(final Throwable throwable) {
 		ExceptionUtils.handle(throwable, true);
 	}

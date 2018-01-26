@@ -1,5 +1,7 @@
 package com.app.hos.tests.integrations.aspect;
 
+import java.util.logging.Level;
+
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,6 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.config.AspectConfig;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
+import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.tests.utils.Thrower;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
@@ -19,12 +24,11 @@ import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 //@Ignore("run only one integration test")
 @WebAppConfiguration 
-@ContextConfiguration(classes = {ApplicationContextConfig.class})
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ExcpetionAspectIT {
 	
-
 	private Thrower thrower = new Thrower();
 	
 	@Autowired
@@ -39,10 +43,9 @@ public class ExcpetionAspectIT {
 			ExceptionUtils.handle(e);
 		}
 		
-		//Assert.assertTrue(loggingRepository.findAll().size() == 1 );
+		Assert.assertTrue(loggingRepository.findLogForLevel(Level.WARNING).size() == 1);
 	}
-	
-	
+		
 }
 
     
