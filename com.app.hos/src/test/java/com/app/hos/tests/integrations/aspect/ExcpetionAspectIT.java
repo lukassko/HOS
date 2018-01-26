@@ -17,7 +17,10 @@ import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.logging.repository.LoggingRepository;
+import com.app.hos.persistance.models.Connection;
+import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.utils.Thrower;
+import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
@@ -35,7 +38,7 @@ public class ExcpetionAspectIT {
 	private LoggingRepository loggingRepository;
 	
 	@Test
-	public void stage10_checkIfLogWillOccureInDbBeforeExceptionHandling() {	
+	public void stage10_checkIfLogWillOccureInDbBeforeExceptionHandlingForNotExeccutableCommand() {	
 		
 		try {
 			thrower.throwNotExeccutableCommand();
@@ -44,6 +47,19 @@ public class ExcpetionAspectIT {
 		}
 		
 		Assert.assertTrue(loggingRepository.findLogForLevel(Level.WARNING).size() == 1);
+	}
+	
+	@Test
+	public void stage20_checkIfLogWillOccureInDbBeforeExceptionHandlingForNotExeccutableCommand() {	
+		
+		try {
+			thrower.throwHistoryConnectionException(new Connection("192.168.0.22:23452-09:oa9:sd2", 
+	    			"localhost2", "192.168.0.22", 23452, new DateTime()));
+		} catch(HistoryConnectionException e) {
+			ExceptionUtils.handle(e);
+		}
+		
+		Assert.assertTrue(loggingRepository.findLogForLevel(Level.WARNING).size() == 2);
 	}
 		
 }

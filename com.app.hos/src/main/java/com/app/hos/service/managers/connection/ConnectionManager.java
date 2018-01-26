@@ -13,6 +13,7 @@ import com.app.hos.persistance.models.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.exceptions.HistoryConnectionException;
+import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service
 @Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
@@ -38,7 +39,7 @@ public class ConnectionManager {
 			HistoryConnection historyConnection = connection.createHistoryConnection();
 			connectionRepository.save(historyConnection);
 		} catch (HistoryConnectionException e) {
-			e.printStackTrace();
+			ExceptionUtils.handle(e);
 		}
 	}
 	

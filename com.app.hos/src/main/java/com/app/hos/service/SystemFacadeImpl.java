@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.transaction.Transactional;
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
@@ -21,6 +22,7 @@ import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.websocket.WebSocketServerEndpoint;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.result.NewDevice;
@@ -43,6 +45,9 @@ public class SystemFacadeImpl implements SystemFacade {
 	@Autowired
 	private Server server;
 
+	@Autowired
+	private WebSocketServerEndpoint webSocketServerEndpoint;
+	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 	
 	// setters
@@ -121,6 +126,11 @@ public class SystemFacadeImpl implements SystemFacade {
 		server.sendMessage(createMessage(connectionId, command));
 	}
 	
+	@Override
+	public void sendWebCommand(Session session, String message) {
+		this.webSocketServerEndpoint.sendMessage(session, message);
+	}
+	
 	public boolean isConnectionOpen (String connectionId) {
 		List<String> conectionIds = getConnectionFactory().getOpenConnectionIds();
 		return conectionIds.contains(connectionId);
@@ -144,5 +154,6 @@ public class SystemFacadeImpl implements SystemFacade {
 	private AbstractConnectionFactory getConnectionFactory() {
 		return (AbstractConnectionFactory)Utils.getObjectFromContext("hosServer");
 	}
+
 
 }

@@ -15,13 +15,16 @@ import javax.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
+import com.app.hos.utils.exceptions.WebSocketException;
+import com.app.hos.utils.exceptions.handler.ExceptionUtils;
+
 //decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class,
 @ServerEndpoint(value = "/websocket", configurator = SpringConfigurator.class)
 public class WebSocketServerEndpoint {
 
 	private WebSocketManager webSocketManager;
 
-	private Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
+	private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
 	@Autowired
 	public WebSocketServerEndpoint(WebSocketManager manager) {
@@ -30,7 +33,6 @@ public class WebSocketServerEndpoint {
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
-		System.out.println("SOCKET OPEN");
 		sessions.add(session);
 	}
 
@@ -41,12 +43,12 @@ public class WebSocketServerEndpoint {
 
 	@OnClose
 	public void onClose(Session session) throws IOException {
-		System.out.println("SOCKET onClose");
 		sessions.remove(session);
 	}
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
+		ExceptionUtils.handle(new WebSocketException(session, throwable));
 	}
 
 	public synchronized void broadcastMessage(String message) {
@@ -59,7 +61,7 @@ public class WebSocketServerEndpoint {
 		try {
 			session.getBasicRemote().sendText(message);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ExceptionUtils.handle(e);
 		}
 	}
 	

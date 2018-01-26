@@ -182,7 +182,7 @@ public class Connection extends BaseEntity {
 
 	public HistoryConnection createHistoryConnection() throws HistoryConnectionException {
 		if (endConnectionTime == null) 
-			throw new HistoryConnectionException();
+			throw new HistoryConnectionException(this);
 
 		HistoryConnection connection = new HistoryConnection();
 		connection.setConnectionTime(connectionTime);
