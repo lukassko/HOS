@@ -3,8 +3,6 @@ package com.app.hos.service.managers.connection;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +14,7 @@ import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service
-@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
+//@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
 @Transactional
 public class ConnectionManager {
 	

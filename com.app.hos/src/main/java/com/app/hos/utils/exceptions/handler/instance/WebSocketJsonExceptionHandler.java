@@ -15,7 +15,7 @@ public class WebSocketJsonExceptionHandler implements HOSExceptionHandler<WebSoc
 	public void handle(WebSocketJsonException throwable, boolean throwRuntimeException) {
 		Session session = throwable.getSession();
 		WebCommandCallback callback = throwable.getCallback();
-		String message = "";
+		String message = throwable.getMessage();
 		if (session != null && callback != null) {
 			callback.onReady(session, message);
 		}

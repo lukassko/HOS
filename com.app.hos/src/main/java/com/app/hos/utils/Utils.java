@@ -19,10 +19,14 @@ public class Utils {
 		return ThreadLocalRandom.current().nextDouble(0, 100);
 	}
 
-    public static Object getObjectFromContext(String bean) {
-    	return ApplicationContextProvider.getApplicationContext().getBean(bean);
+   // public static Object getObjectFromContext(String beanName) {
+    //	return ApplicationContextProvider.getApplicationContext().getBean(beanName);
+   // }
+    
+    public static Object getObjectFromContext(String beanName, Object...bean) {
+    	return ApplicationContextProvider.getApplicationContext().getBean(beanName,bean);
     }
-       
+    
     public static <T> T getObjectFromContext(Class<T> bean) {
     	return ApplicationContextProvider.getApplicationContext().getBean(bean);
     }

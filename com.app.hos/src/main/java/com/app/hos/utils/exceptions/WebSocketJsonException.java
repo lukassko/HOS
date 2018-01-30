@@ -29,12 +29,11 @@ public class WebSocketJsonException extends HOSException {
 	}
 
 	public WebSocketJsonException(Throwable throwable) {
-		super("Exception while processing Json object",throwable);
-		
+		super(throwable);	
 	}
 	
 	public WebSocketJsonException(Session session,WebCommandCallback callback,Throwable throwable) {
-		super("Exception while processing Json object",throwable);
+		super(throwable);
 		this.session = session;
 		this.callback = callback;
 	}

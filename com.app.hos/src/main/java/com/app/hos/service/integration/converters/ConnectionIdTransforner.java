@@ -15,12 +15,9 @@ public class ConnectionIdTransforner {
 	}
 	
 	public Message<Command> transform(Message<Command> commandMsg) {
-		System.out.println("Transofrm MESSAGE");
-		Message<Command> newMessage = MessageBuilder.withPayload(commandMsg.getPayload())
+		return MessageBuilder.withPayload(commandMsg.getPayload())
 		        .setHeader(IpHeaders.CONNECTION_ID, connectionId)
 		        .copyHeadersIfAbsent(commandMsg.getHeaders())
 		        .build();
-
-		return newMessage;
 	}
 }

@@ -15,5 +15,5 @@ public interface SystemFacade {
 		
 	public boolean closeConnection(String connectionId);
 	
-	public void removeDevice(String serial);
+	public boolean removeDevice(String serial);
 }

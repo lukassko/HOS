@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.transaction.Transactional;
-import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
@@ -22,13 +21,13 @@ import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.service.managers.connection.ConnectionManager;
 import com.app.hos.service.managers.device.DeviceManager;
-import com.app.hos.service.websocket.WebSocketServerEndpoint;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.Utils;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
+import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service
 public class SystemFacadeImpl implements SystemFacade {
@@ -69,7 +68,7 @@ public class SystemFacadeImpl implements SystemFacade {
 			try {
 				commandManager.executeCommand(connectionId, command);
 			} catch (NotExecutableCommandException e) {
-				e.printStackTrace();
+				ExceptionUtils.handle(e);
 			}
 		} else {
 			final String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
@@ -131,12 +130,14 @@ public class SystemFacadeImpl implements SystemFacade {
 	
 	@Override
 	@Transactional
-	public void removeDevice(String serial) {
+	public boolean removeDevice(String serial) {
 		Device device = deviceManager.findDeviceBySerial(serial);
 		Connection connection = device.getConnection();
 		if (closeConnection(connection.getConnectionId())) {
 			deviceManager.removeDevice(device);
-		}
+			return true;
+		} 
+		return false;
 	}
 	
 	// private methods
@@ -147,6 +148,4 @@ public class SystemFacadeImpl implements SystemFacade {
 	private AbstractConnectionFactory getConnectionFactory() {
 		return (AbstractConnectionFactory)Utils.getObjectFromContext("hosServer");
 	}
-
-
 }

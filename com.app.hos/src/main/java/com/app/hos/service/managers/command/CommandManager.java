@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.SystemFacade;
+import com.app.hos.service.websocket.command.WebCommandFactory;
+import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandConverter;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
+import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service
 public class CommandManager {
@@ -54,9 +57,9 @@ public class CommandManager {
 			try {
 				command = (Command)get();
 			} catch (Exception e) {
+				ExceptionUtils.handle(e);
 				command = CommandFactory.getCommand(CommandType.EXECUTION_EXCEPTION);
 				command.setResult(new com.app.hos.share.command.result.Message(e.getMessage()));
-				e.printStackTrace();
 			}
 			systemFacade.sendCommand(connectionId, command);
 		}

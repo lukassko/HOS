@@ -42,7 +42,7 @@ public class WebSocketServerEndpoint {
 	}
 
 	@OnClose
-	public void onClose(Session session) throws IOException {
+	public void onClose(Session session) {
 		sessions.remove(session);
 	}
 

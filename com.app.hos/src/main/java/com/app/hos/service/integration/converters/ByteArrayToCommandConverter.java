@@ -2,7 +2,6 @@ package com.app.hos.service.integration.converters;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -23,15 +22,11 @@ public class ByteArrayToCommandConverter implements Serializer<Command>, Deseria
 		Command cmd = null;
 		try {
 			cmd = (Command) ois.readObject();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder());
 			commandBuilder.createCommand();
 			cmd = commandBuilder.getCommand();
-		} catch (InvalidClassException e) {
-			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder());
-			commandBuilder.createCommand();
-			cmd = commandBuilder.getCommand();
-		}
+		} 
 		return cmd;
 	}
 
