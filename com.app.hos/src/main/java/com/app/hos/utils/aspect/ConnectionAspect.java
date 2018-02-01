@@ -12,7 +12,7 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.Connection;
-import com.app.hos.service.managers.connection.ConnectionManager;
+import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.type.CommandType;
 

@@ -23,7 +23,7 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 
 @Ignore("run only one integration test")
@@ -71,14 +71,14 @@ public class DeviceManagerTest {
 	@Test
 	public void getDeviceStatusesWhenNoDatainDbShouldReturnEmptyMap () {
         Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-		Map<Device, DeviceStatus> statuses = manager.getLatestDevicesStatuses();
+		Map<Device, DeviceStatus> statuses = manager.getConnectedDevices();
 		Assert.assertTrue(statuses.isEmpty());
 	}
 	
 	@Test
 	public void getDeviceStatusesShouldCallForAllDeviceDb () {
         Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-        manager.getLatestDevicesStatuses();
+        manager.getConnectedDevices();
         Mockito.verify(deviceRepository, Mockito.times(1)).findAll();
 	}
 

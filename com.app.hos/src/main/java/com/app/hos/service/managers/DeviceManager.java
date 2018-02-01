@@ -1,4 +1,4 @@
-package com.app.hos.service.managers.device;
+package com.app.hos.service.managers;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class DeviceManager {
 
 	// sort statuses by time and get the latest status of device; 
 	// TEST SORTING WITH JUNIT
-	public Map<Device, DeviceStatus> getLatestDevicesStatuses() {
+	public Map<Device, DeviceStatus> getConnectedDevices() {
 		Map<Device, DeviceStatus> deviceStatus = new HashMap<Device, DeviceStatus>();
 		Collection<Device> devices = deviceRepository.findAll();
 		for (Device device : devices) {
@@ -54,9 +54,7 @@ public class DeviceManager {
 	}
 	
 	public List<DeviceStatus> getDeviceStatuses(String serial) {
-		Device device = deviceRepository.findBySerialNumber(serial);
-		//Hibernate.initialize(device.getDeviceStatuses());
-		return device.getDeviceStatuses();
+		return deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {

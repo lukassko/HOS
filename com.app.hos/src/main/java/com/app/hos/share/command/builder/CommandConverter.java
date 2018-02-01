@@ -38,6 +38,8 @@ public class CommandConverter {
 		if (type == WebCommandType.GET_ALL_DEVICES) {
 			//executableCommand = (GetAllDeviceWebCommand)applicationContext.getBean("allDeviceBuilder",command);
 			executableCommand = (GetAllDeviceWebCommand)Utils.getObjectFromContext("allDeviceFutureCommand",command);
+		} else if (type == WebCommandType.GET_DEVICE_STATUSES) {
+			executableCommand = (GetAllDeviceWebCommand)Utils.getObjectFromContext("deviceStatusesFutureCommand",command);
 		} else if (type == WebCommandType.REMOVE_DEVICE) {
 			executableCommand = (GetAllDeviceWebCommand)Utils.getObjectFromContext("removeDeviceFutureCommand",command);
 		} else if (type == WebCommandType.BLOCK_DEVICE) {

@@ -57,7 +57,7 @@
 	
 	<int:service-activator input-channel="toServerChannel"
 		ref="server"
-		method="receiveCommand"/>
+		method="receiveMessage"/>
 	
     <bean id="server"
 		class="com.app.hos.service.integration.server.Server" />

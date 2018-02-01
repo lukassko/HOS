@@ -25,7 +25,7 @@ import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
-import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 import com.app.hos.utils.Utils;
@@ -97,7 +97,7 @@ public class DeviceManagerMultithreadIT {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Set<Device> devices = manager.getLatestDevicesStatuses().keySet();
+		Set<Device> devices = manager.getConnectedDevices().keySet();
 		Assert.assertEquals(3, devices.size());
 	}
 	
@@ -181,7 +181,7 @@ public class DeviceManagerMultithreadIT {
 			e.printStackTrace();
 		}
 		
-		Set<Device> devices = manager.getLatestDevicesStatuses().keySet();
+		Set<Device> devices = manager.getConnectedDevices().keySet();
 		Assert.assertEquals(3, devices.size());
 		
 		List<DeviceStatus> statuses = manager.getDeviceStatuses("serial_device_1");
@@ -234,7 +234,7 @@ public class DeviceManagerMultithreadIT {
 			e.printStackTrace();
 		}
 		
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
 		Set<Device> devices = deviceStatuses.keySet();
 		Assert.assertEquals(4, devices.size());
 		

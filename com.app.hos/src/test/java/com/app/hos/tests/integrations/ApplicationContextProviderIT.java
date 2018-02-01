@@ -13,7 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.utils.Utils;
 
 

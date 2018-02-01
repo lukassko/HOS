@@ -1,6 +1,7 @@
 package com.app.hos.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,9 +19,9 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.service.integration.server.Server;
+import com.app.hos.service.managers.ConnectionManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.managers.command.CommandManager;
-import com.app.hos.service.managers.connection.ConnectionManager;
-import com.app.hos.service.managers.device.DeviceManager;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.result.NewDevice;
@@ -47,7 +48,7 @@ public class SystemFacadeImpl implements SystemFacade {
 	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 	
-	// setters
+	// setters - used to test for Mocks (try to remove)
 	public void setDeviceManager(DeviceManager deviceManager) {
 		this.deviceManager = deviceManager;
 	}
@@ -60,7 +61,8 @@ public class SystemFacadeImpl implements SystemFacade {
 		this.commandManager = commandManager;
 	}
 	
-	
+	// commands API
+	@Override
 	public void receivedCommand(final MessageHeaders headers, final Command command) {
 		final CommandType type = CommandType.valueOf(command.getCommandType());
 		if (type.isExecutable()) {
@@ -106,28 +108,33 @@ public class SystemFacadeImpl implements SystemFacade {
 		}
 	}
 
-	// public API
+	@Override
+	public void sendCommand(String connectionId, CommandType type) {
+		Command command = CommandFactory.getCommand(type);
+		server.sendMessage(createMessage(connectionId, command));
+	}
+	
+	@Override
+	public void sendCommand(String connectionId, Command command) {
+		server.sendMessage(createMessage(connectionId, command));
+	}
+	
+	// connections API
+	@Override
 	public boolean closeConnection(String connectionId) {
 		boolean isConnectionClose = getConnectionFactory().closeConnection(connectionId);
 		if (isConnectionClose) 
 			connectionManager.finalizeConnection(connectionId);
 		return isConnectionClose;
 	}
-	
-	public void sendCommand(String connectionId, CommandType type) {
-		Command command = CommandFactory.getCommand(type);
-		server.sendMessage(createMessage(connectionId, command));
-	}
 
-	public void sendCommand(String connectionId, Command command) {
-		server.sendMessage(createMessage(connectionId, command));
-	}
-	
+	@Override
 	public boolean isConnectionOpen (String connectionId) {
 		List<String> conectionIds = getConnectionFactory().getOpenConnectionIds();
 		return conectionIds.contains(connectionId);
 	}
 	
+	// devices API
 	@Override
 	@Transactional
 	public boolean removeDevice(String serial) {
@@ -139,6 +146,11 @@ public class SystemFacadeImpl implements SystemFacade {
 		} 
 		return false;
 	}
+
+	@Override
+	public Map<Device, DeviceStatus> getConnectedDevices() {
+		return deviceManager.getConnectedDevices();
+	}
 	
 	// private methods
 	private Message<Command> createMessage(String connectionId, Command command) {
@@ -148,4 +160,5 @@ public class SystemFacadeImpl implements SystemFacade {
 	private AbstractConnectionFactory getConnectionFactory() {
 		return (AbstractConnectionFactory)Utils.getObjectFromContext("hosServer");
 	}
+
 }

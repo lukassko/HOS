@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.builder.concretebuilders.RemoveDeviceWebCommandBuilder;
 import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
+import com.app.hos.service.websocket.command.decorators.GetDeviceStatusesWebCommand;
 import com.app.hos.service.websocket.command.decorators.RemoveDeviceWebCommand;
 import com.app.hos.utils.ApplicationContextProvider;
 
@@ -20,6 +21,13 @@ public class BeansConfig {
 	@Scope("prototype")
 	public GetAllDeviceWebCommand getAllDevicesWebCommand(WebCommand command) {
 	    return new GetAllDeviceWebCommand(command);
+	}
+	
+	@Bean("deviceStatusesFutureCommand")
+	@Profile("!web-integration-test")
+	@Scope("prototype")
+	public GetDeviceStatusesWebCommand getDeviceStatusesWebCommand(WebCommand command) {
+	    return new GetDeviceStatusesWebCommand(command);
 	}
 	
 	@Bean("removeDeviceFutureCommand")

@@ -1,4 +1,4 @@
-package com.app.hos.service.managers.connection;
+package com.app.hos.service.managers;
 
 import java.util.Collection;
 

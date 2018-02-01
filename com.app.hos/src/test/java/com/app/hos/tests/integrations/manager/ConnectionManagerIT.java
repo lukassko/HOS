@@ -26,8 +26,8 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.models.HistoryConnection;
-import com.app.hos.service.managers.connection.ConnectionManager;
-import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.managers.ConnectionManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 
@@ -59,7 +59,7 @@ public class ConnectionManagerIT {
 	}
 	
 	private List<Device> getDevices() {
-		Map<Device,DeviceStatus> devicStauses = deviceManager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> devicStauses = deviceManager.getConnectedDevices();
 		List<Device> devices = new LinkedList<Device>();
 		devices.addAll(devicStauses.keySet());
 		return devices;

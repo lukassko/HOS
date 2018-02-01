@@ -8,11 +8,15 @@ public class RemoveDeviceWebCommand extends FutureWebCommandDecorator {
 		super(command);
 	}
 	
-	// TODO:
-	// - finalise connection
 	public WebCommand call() throws Exception {
-		
-		return null;
+		String deviceSerial = command.getMessage();
+		if (systemFacade.removeDevice(deviceSerial)) {
+			command.setStatus(true);
+		} else {
+			command.setStatus(false);
+			command.setMessage(""); // set why device cannot be removed
+		}
+		return command;
 	}
 
 }

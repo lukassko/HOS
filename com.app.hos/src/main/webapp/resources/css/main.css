@@ -129,6 +129,9 @@
 	#container {
 		left: 0;
 	}
+	.main-container {
+		width:100%;
+	}
 }
 
 @media ( min-width : 767px) {
@@ -137,6 +140,9 @@
 	}
 	.nav-side-menu .menu-list .menu-content {
 		display: block;
+	}
+	.main-container {
+		width:calc(100% - 300px);
 	}
 }
 
@@ -155,7 +161,6 @@ html, body {
 
 .main-container {
 	height:100%;
-	width:calc(100% - 300px);
 }
 
 .user-bar {
@@ -265,7 +270,7 @@ div.device:hover {
 .detail-table {
 	display: table;
 	width: calc(100% - 420px); 
-	min-width: 200px;
+	min-width: 210px;
 	height: 210px;
 }
 

@@ -30,7 +30,7 @@ import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.service.managers.device.DeviceManager;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 
@@ -71,7 +71,7 @@ public class DeviceManagerIT {
 
 	@Test
 	public void stage05_getLatestDevicesStatusesWithoutAnyConnectedDeviceShouldReturnEmptyMap() {
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
 		Assert.assertNotNull(deviceStatuses);
 		Assert.assertTrue(deviceStatuses.isEmpty());
 	}
@@ -99,7 +99,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage18_getLatestStatusForConnectedDeviceWithoutAnyShouldReturnMapWithNullAsKey() {
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
 		Assert.assertTrue(deviceStatuses.size() == 1);
 		Device device = null;
 		DeviceStatus status = null;
@@ -116,7 +116,7 @@ public class DeviceManagerIT {
 	public void stage20_addStatusToDeviceShouldReturnPorperStatuses() {
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		manager.addDeviceStatus(device.getSerial(), status);
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
 		Device device = null;
 		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {
 		    device = entry.getKey();
@@ -179,7 +179,7 @@ public class DeviceManagerIT {
 		Assert.assertNotNull(device);
 		latestStauses.put(device, status);
 		
-		Map<Device,DeviceStatus> deviceStatuses = manager.getLatestDevicesStatuses();
+		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
 		Assert.assertEquals(4, deviceStatuses.size()); // one device saved at the beginning
 		
 		for (Map.Entry<Device, DeviceStatus> entry : deviceStatuses.entrySet()) {

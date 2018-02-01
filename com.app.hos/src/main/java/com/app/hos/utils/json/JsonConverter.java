@@ -94,6 +94,19 @@ public class JsonConverter {
 //     	return null;
 //    }
     
+
+    public static String readField(String json, String name){
+	    String value = null;
+		try {
+			ObjectNode object = new ObjectMapper().readValue(json, ObjectNode.class);
+			JsonNode node = object.get(name);
+		    value = (node == null ? null : node.textValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return value;
+    }
+
     private static boolean isNotIgnored(Field field) {
     	return isAnnotatedWith(JsonIgnore.class,field);
     }
@@ -108,18 +121,6 @@ public class JsonConverter {
     	return true;
     }
   
-    public static String readField(String json, String name){
-    	String value = null;
-		try {
-			ObjectNode object = new ObjectMapper().readValue(json, ObjectNode.class);
-			JsonNode node = object.get(name);
-	        value = (node == null ? null : node.textValue());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-        return value;
-      }
-
     private static String getClassName(Object object) {
     	if (object == null) {
     		return "null";
@@ -138,7 +139,6 @@ public class JsonConverter {
 			e.printStackTrace();
 		}
     	return fieldObject;
-    	
     }
     
 }

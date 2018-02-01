@@ -17,7 +17,7 @@ public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
 	}
 	
 	public WebCommand call() throws Exception {
-		Map<Device, DeviceStatus> devicesStatuses = deviceManager.getLatestDevicesStatuses();
+		Map<Device, DeviceStatus> devicesStatuses = systemFacade.getConnectedDevices();
 		
 		Map<WebDevice, DeviceStatus> webDevicesStatuses =  new TreeMap<WebDevice, DeviceStatus>(
 			new Comparator<WebDevice>() {
@@ -36,8 +36,7 @@ public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
 		   webDevicesStatuses.put(new WebDevice(device), status);
 		}
 		
-		String jsonMap = JsonConverter.getJson(webDevicesStatuses);
-		command.setMessage(jsonMap);
+		command.setMessage(JsonConverter.getJson(webDevicesStatuses));
 		return command;
 	}
 
