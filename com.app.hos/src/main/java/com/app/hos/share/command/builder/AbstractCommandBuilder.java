@@ -3,11 +3,20 @@ package com.app.hos.share.command.builder;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.app.hos.share.command.result.Message;
+
 
 public abstract class AbstractCommandBuilder {
 
     protected Command command;
-
+    protected String exceptionMessage = null;
+    
+    public AbstractCommandBuilder() {}
+	
+	public AbstractCommandBuilder(String message) {
+		this.exceptionMessage = message;
+	}
+	
     public Command getCommand() {
         return this.command;
     }
@@ -24,8 +33,12 @@ public abstract class AbstractCommandBuilder {
         command.setSerialId(serverName);
     }
 
+	public void setResult() {
+		this.command.setResult(new Message(exceptionMessage));
+	};
+	
     public abstract void setCommandType ();
-
-	public abstract void setResult();
-
+	
+	public abstract void setStatus();
+	
 }

@@ -16,4 +16,9 @@ public class UnknownCommandBuilder extends AbstractCommandBuilder {
 		command.setResult(null);
 	}
 
+	@Override
+	public void setStatus() {
+		command.setStatus(false);
+	}
+
 }

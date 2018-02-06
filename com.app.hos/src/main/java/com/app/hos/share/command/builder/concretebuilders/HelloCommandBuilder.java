@@ -36,4 +36,10 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 	    }
 	    return name;
 	}
+	
+	@Override
+	public void setStatus() {
+		command.setStatus(true);
+	}
+
 }

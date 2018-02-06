@@ -12,4 +12,11 @@ public abstract class FutureCommandDecorator implements Callable<Command> {
 		this.command = command;
 	}
 
+	public Command getCommand() {
+		return command;
+	}
+
+	public void setCommand(Command command) {
+		this.command = command;
+	}
 }

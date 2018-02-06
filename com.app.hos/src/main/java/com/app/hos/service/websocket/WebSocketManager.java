@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 import com.app.hos.service.websocket.command.type.WebCommandType;
-import com.app.hos.share.command.builder.CommandConverter;
 import com.app.hos.utils.exceptions.WebSocketJsonException;
+import com.app.hos.utils.converters.CommandConverter;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 import com.app.hos.utils.json.JsonConverter;
@@ -50,20 +51,21 @@ public class WebSocketManager {
 
 		private Session session;
 		private WebCommandCallback callback;
+		private WebCommand command;
 		
 		public FutureCommandCallback(WebCommandCallback callback, Session session, Callable<V> callable) {
 			super(callable);
 			this.session = session;
 			this.callback = callback;
+			this.command = ((FutureWebCommandDecorator)callable).getCommand();
 		}
 		
 		public void done() {
-			WebCommand command = null;
 			try {
-				command = (WebCommand)get();
+				this.command = (WebCommand)get();
 			} catch (Exception e) {
-				ExceptionUtils.handle(e);
-				command = WebCommandFactory.getCommand(WebCommandType.EXECUTION_EXCEPTION, e.getMessage());
+				this.command.setMessage(e.getMessage());
+				this.command.setStatus(false);
 			}
 
 			try {

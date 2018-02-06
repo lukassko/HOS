@@ -13,8 +13,9 @@ public class Command implements Serializable {
     private String serialId;
     private String commandType;
     private Result result;
+    private boolean status;
 
-    public void setSerialId (String serialId) {
+	public void setSerialId (String serialId) {
         this.serialId = serialId;
     }
 
@@ -38,6 +39,14 @@ public class Command implements Serializable {
         this.result = result;
     }
     
+    public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
     public CommandType getEnumeratedCommandType() {
     	return CommandType.valueOf(commandType);
     }

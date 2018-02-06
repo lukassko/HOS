@@ -14,4 +14,10 @@ public class MyStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public void setResult() {}
+	
+	@Override
+	public void setStatus() {
+		command.setStatus(true);
+	}
+	
 }

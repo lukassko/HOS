@@ -18,5 +18,6 @@ public class CommandBuilder {
         commandBuilder.createCommand(clientId, clientName);
         commandBuilder.setCommandType();
         commandBuilder.setResult();
+        commandBuilder.setStatus();
     }
 }
