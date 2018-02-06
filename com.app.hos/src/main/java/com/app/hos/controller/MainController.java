@@ -4,31 +4,34 @@ package com.app.hos.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.app.hos.service.managers.DeviceManager;
-
+import com.app.hos.pojo.WebDeviceStatusesRequest;
+import com.app.hos.service.SystemFacade;
+import com.app.hos.share.utils.DateTime;
 
 @Controller
 public class MainController {
 	
-	//private RestClient rest;
-//	private DeviceManager deviceManager;
-//	private DeviceWebSocket webSocket;
-	
 	@Autowired
-	public MainController(DeviceManager deviceManager) {
-//		this.deviceManager = deviceManager;
-//		this.webSocket = webSocket;
+	private SystemFacade systemFacade;
+	
+	// use HTTP request (not by web socket)
+	@RequestMapping(value = "/devices/{serial}", method=RequestMethod.GET)
+	public String getDeviceStatuses(@PathVariable(value="serial") String serial,
+									@RequestParam("from") DateTime from,
+									@RequestParam("to") DateTime to) {
+		
+		WebDeviceStatusesRequest statusRequet = new WebDeviceStatusesRequest();
+		statusRequet.setFrom(from);
+		statusRequet.setTo(to);
+		statusRequet.setSerial(serial);
+		return null;
 	}
 	
-//	@MessageMapping("/command")
-//    @SendTo("/topic/device-info")
-//    public void onCommandReceive(String command) {
-//        webSocket.receiveMessage(command);
-//    }
-//	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
 	public String showMainPage() {
 		return "main/main";

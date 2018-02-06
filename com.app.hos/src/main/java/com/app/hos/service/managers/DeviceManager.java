@@ -53,8 +53,11 @@ public class DeviceManager {
 		return deviceStatus;
 	}
 	
-	public List<DeviceStatus> getDeviceStatuses(String serial) {
-		return deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
+	// need to sort first
+	// find statuses which match period
+	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
+		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
+		return statuses;
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {

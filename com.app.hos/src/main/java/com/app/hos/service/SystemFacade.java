@@ -1,11 +1,13 @@
 package com.app.hos.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.pojo.WebDeviceStatusesRequest;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.type.CommandType;
 
@@ -27,4 +29,6 @@ public interface SystemFacade {
 	public boolean removeDevice(String serial);
 	
 	public Map<Device, DeviceStatus> getConnectedDevices();
+	
+	public List<DeviceStatus> getDeviceStatuses(WebDeviceStatusesRequest request);
 }

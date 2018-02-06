@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.pojo.WebDeviceStatusesRequest;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
@@ -150,6 +151,12 @@ public class SystemFacadeImpl implements SystemFacade {
 	@Override
 	public Map<Device, DeviceStatus> getConnectedDevices() {
 		return deviceManager.getConnectedDevices();
+	}
+	
+	@Override
+	public List<DeviceStatus> getDeviceStatuses(WebDeviceStatusesRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	// private methods
