@@ -184,10 +184,10 @@ public class DeviceManagerMultithreadIT {
 		Set<Device> devices = manager.getConnectedDevices().keySet();
 		Assert.assertEquals(3, devices.size());
 		
-		List<DeviceStatus> statuses = manager.getDeviceStatuses("serial_device_1");
+		Set<DeviceStatus> statuses = manager.getDeviceStatuses("serial_device_1", new DateTime(0), new DateTime());
 		Assert.assertEquals(3, statuses.size());
 		
-		statuses = manager.getDeviceStatuses("serial_device_2");
+		statuses = manager.getDeviceStatuses("serial_device_2", new DateTime(0), new DateTime());
 		Assert.assertEquals(2, statuses.size());
 		
 	}

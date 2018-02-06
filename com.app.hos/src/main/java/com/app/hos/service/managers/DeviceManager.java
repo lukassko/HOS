@@ -1,9 +1,13 @@
 package com.app.hos.service.managers;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.persistence.NoResultException;
 
 import com.app.hos.share.utils.DateTime;
@@ -18,6 +22,7 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.pojo.WebDevice;
 
 @Service
 @Transactional
@@ -53,11 +58,20 @@ public class DeviceManager {
 		return deviceStatus;
 	}
 	
-	// need to sort first
-	// find statuses which match period
-	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
+	public Set<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
 		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
-		return statuses;
+		
+		Set<DeviceStatus> sortedStatus = new TreeSet<>(
+			(DeviceStatus status1, DeviceStatus status2) -> status1.getTime().compareTo(status2.getTime())
+		);
+		
+		statuses.forEach(status -> {
+			DateTime date = status.getTime();
+			if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
+				sortedStatus.add(status);
+		});
+
+		return sortedStatus;
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {

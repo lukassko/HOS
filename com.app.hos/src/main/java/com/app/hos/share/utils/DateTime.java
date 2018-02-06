@@ -7,7 +7,7 @@ import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @JsonSerializer(serializer = DateTimeJsonSerializer.class)
-public class DateTime implements Serializable {
+public class DateTime implements Serializable, Comparable<DateTime> {
 
 	private static final long serialVersionUID = 4L;
 
@@ -114,6 +114,11 @@ public class DateTime implements Serializable {
 
 	public Long getTimestamp() {
 		return this.timestamp;
+	}
+
+	@Override
+	public int compareTo(DateTime other) {
+		return Long.compare(this.timestamp, other.timestamp);
 	}
 	
 }

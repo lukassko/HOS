@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -21,6 +22,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
@@ -39,7 +41,7 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -87,7 +89,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage15_getStatusesFromDeviceWithoutAnyShouldReturnEmptyList() {
-		List<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial());
+		Set<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertTrue(stautuses.isEmpty());
 	}
 	
@@ -131,19 +133,24 @@ public class DeviceManagerIT {
 	}
 	
 	@Test
+	@Transactional
 	public void stage30_addMultiStatusToDeviceShouldReturnPorperStatusesSize() {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.1, 13.4));
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.43, 22.5));
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.89, 33.1));
-
-		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
+		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
+		Assert.assertEquals(4, statuses.size());
+		Set<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(4, deviceStatuses.size());
 	}
 	
 	@Test
+	@Transactional
 	public void stage40_addMultiStatusToDeviceAndChekLastOneStatus() {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.39, 38.4));
-		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial());
+		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
+		Assert.assertEquals(5, statuses.size());
+		Set<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(5, deviceStatuses.size());
 	}
 	
