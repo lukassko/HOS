@@ -2,6 +2,8 @@ package com.app.hos.service.websocket.command.decorators;
 
 import com.app.hos.service.websocket.command.builder.WebCommand;
 
+//This commands is passed through HTTP request
+//DO NOT USE WEBSOCKET
 public class RemoveDeviceWebCommand extends FutureWebCommandDecorator {
 	
 	public RemoveDeviceWebCommand(WebCommand command) {

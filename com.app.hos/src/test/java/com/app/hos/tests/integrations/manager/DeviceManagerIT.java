@@ -41,7 +41,7 @@ import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -89,7 +89,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage15_getStatusesFromDeviceWithoutAnyShouldReturnEmptyList() {
-		Set<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
+		List<DeviceStatus> stautuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertTrue(stautuses.isEmpty());
 	}
 	
@@ -140,7 +140,7 @@ public class DeviceManagerIT {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.89, 33.1));
 		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
 		Assert.assertEquals(4, statuses.size());
-		Set<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
+		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(4, deviceStatuses.size());
 	}
 	
@@ -150,7 +150,7 @@ public class DeviceManagerIT {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.39, 38.4));
 		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
 		Assert.assertEquals(5, statuses.size());
-		Set<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
+		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(5, deviceStatuses.size());
 	}
 	

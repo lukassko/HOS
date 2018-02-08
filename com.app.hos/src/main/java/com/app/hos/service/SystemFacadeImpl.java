@@ -27,6 +27,7 @@ import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.Utils;
 import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.exceptions.handler.ExceptionUtils;
@@ -154,9 +155,8 @@ public class SystemFacadeImpl implements SystemFacade {
 	}
 	
 	@Override
-	public List<DeviceStatus> getDeviceStatuses(WebDeviceStatusesRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
+		return deviceManager.getDeviceStatuses(serial, from, to);
 	}
 	
 	// private methods

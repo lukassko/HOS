@@ -10,6 +10,7 @@ import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.pojo.WebDeviceStatusesRequest;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.utils.DateTime;
 
 public interface SystemFacade {
 	
@@ -30,5 +31,5 @@ public interface SystemFacade {
 	
 	public Map<Device, DeviceStatus> getConnectedDevices();
 	
-	public List<DeviceStatus> getDeviceStatuses(WebDeviceStatusesRequest request);
+	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to);
 }
