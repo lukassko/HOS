@@ -25,6 +25,7 @@ import com.app.hos.share.utils.DateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,14 +62,25 @@ public class RestfulControllerIT {
     }
 	
 	@Test
-	public void test () throws Exception {
+	public void stage00_printHttpResponse () throws Exception {
+		
+		this.mockMvc.perform(get("/devices/statuses/{serial}","any_serial")
+				.param("from", "1505001600")
+				.param("to", "1505001000"))
+	    		.andDo(print());
+
+	}
+	
+	@Test
+	public void stage10_checkHttpBodyResponse() throws Exception {
 		
 		this.mockMvc.perform(get("/devices/statuses/{serial}","any_serial")
 				.param("from", "1505001600")
 				.param("to", "1505001000"))
 	    	.andExpect(status().isOk())
-	    	.andExpect(jsonPath("$[1].title", "sad"));
+	    	.andExpect(jsonPath("$").isArray())
+	    	.andExpect(jsonPath("$[0].cpu").value(83.45))
+	    	.andExpect(jsonPath("$[1].ram").value(0.23));
 	}
-		
 
 }
