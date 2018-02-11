@@ -15,6 +15,7 @@
 	<script src="<c:url value="/resources/scripts/objects/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/charts/charts.js" />"></script>
+	<script src="<c:url value="/resources/scripts/ajax/deviceStatuses.js" />"></script>
 
 	<script>
 
@@ -131,7 +132,9 @@
 				</td>
 			</tr>
 		</table>
-		<div id="test" style="width: 100%; bottom:0; margin: 0 auto; background-color: pink;"></div>
+		<div id="test" style="width: 100%; bottom:0; margin: 0 auto; background-color: pink;">
+		<button type="button" onclick="deviceStatus.get()">TEST AJAX</button> 
+		</div>
 	</div>
 </div>
 </body>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,8 @@ public class RestfulController {
 	private SystemFacade systemFacade;
 	
 	// use HTTP request (not by web socket)
-	@RequestMapping(value = "/devices/statuses/{serial}", method=RequestMethod.GET,produces = "application/json")
-	public ResponseEntity<?> getDeviceStatuses(@PathVariable(value="serial") String serial,
+	@RequestMapping(value = "/devices/statuses/{serial}", method=RequestMethod.GET,produces = "application/json;charset=UTF-8")
+	public ResponseEntity<List<DeviceStatus>> getDeviceStatuses(@PathVariable(value="serial") String serial,
 									@RequestParam("from") long from,
 									@RequestParam("to") long to) {
 		
@@ -32,6 +33,7 @@ public class RestfulController {
 		return new ResponseEntity<List<DeviceStatus>>(statuses,HttpStatus.OK);
 	}
 	
+
 	// use HTTP request (not by web socket)
 	@RequestMapping(value = "/devices/remove/{serial}", method=RequestMethod.GET,produces = "application/json")
 	public ResponseEntity<?> removeDevice(@PathVariable(value="serial") String serial) {

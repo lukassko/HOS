@@ -29,7 +29,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("Lukasz Device", "98547kjyy1");
+		Device device = new Device("Lukasz Device", "serial_1");
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -44,7 +44,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost2", "192.168.0.89", 43219, new DateTime());
-		device = new Device("Smartphone123", "98547kjyy2");
+		device = new Device("Smartphone123", "serial_2");
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -58,7 +58,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost3", "192.168.0.66", 7893, new DateTime());
-		device = new Device("Device 1", "98547kjyy3");
+		device = new Device("Device 1", "serial_3");
 		
 		connection.setDevice(device);
 		device.setConnection(connection);

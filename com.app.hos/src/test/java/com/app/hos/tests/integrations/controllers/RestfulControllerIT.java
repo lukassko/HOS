@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -65,6 +66,7 @@ public class RestfulControllerIT {
 	public void stage00_printHttpResponse () throws Exception {
 		
 		this.mockMvc.perform(get("/devices/statuses/{serial}","any_serial")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
 				.param("from", "1505001600")
 				.param("to", "1505001000"))
 	    		.andDo(print());
@@ -76,11 +78,12 @@ public class RestfulControllerIT {
 		
 		this.mockMvc.perform(get("/devices/statuses/{serial}","any_serial")
 				.param("from", "1505001600")
-				.param("to", "1505001000"))
-	    	.andExpect(status().isOk())
-	    	.andExpect(jsonPath("$").isArray())
-	    	.andExpect(jsonPath("$[0].cpu").value(83.45))
-	    	.andExpect(jsonPath("$[1].ram").value(0.23));
+				.param("to", "1505001000")
+				.contentType(MediaType.APPLICATION_JSON_UTF8))
+		    	.andExpect(status().isOk())
+		    	.andExpect(jsonPath("$").isArray())
+		    	.andExpect(jsonPath("$[0].cpu").value(83.45))
+		    	.andExpect(jsonPath("$[1].ram").value(0.23));
 	}
 
 }
