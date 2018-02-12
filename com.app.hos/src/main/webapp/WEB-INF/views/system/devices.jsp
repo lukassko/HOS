@@ -133,7 +133,7 @@
 			</tr>
 		</table>
 		<div id="test" style="width: 100%; bottom:0; margin: 0 auto; background-color: pink;">
-		<button type="button" onclick="deviceStatus.get()">TEST AJAX</button> 
+		<button type="button" onclick="new DeviceStatusAjax('serial_1',0,1518297087).send()">TEST AJAX</button> 
 		</div>
 	</div>
 </div>

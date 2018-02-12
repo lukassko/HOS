@@ -3,48 +3,37 @@
 // create factory method - create object first and later return 
 function AjaxCall () {};
 
-AjaxCall.prototype.get = function () {
+AjaxCall.prototype.send = function () {
+	var that = this;
 	$.ajax({
 		url         : this.url,
 	    type        : this.type,
 	    contentType : 'aplication/json', //data type which is send
 	    dataType    : 'json', //expected data type
-	    data        : {}
+	    data        : this.contentData
 	})
 	.done(function(response) {
-		this.onSuccess();
+		that.onSuccess(response);
 	})
-	.fail(function() {
-		this.onFailed();
-	})
-	.always(function() {
-		//console.log('ALWAYES block');
+	.fail(function(response) {
+		that.onFailed(response.status,response.responseText);
 	});
 };
 
-function DeviceStatusAjax (serial,from, to) {
+function DeviceStatusAjax (serial,from,to) {
 	AjaxCall.call(this);
 	
 	this.url = "devices/statuses/"+ serial +"?from=" + from + "&to=" + to;
 	this.type = "get";
-	
-	this.onSuccess = function () {
-		console.log("onSuccess");
+	this.contentData = {};
+	this.onSuccess = function (response) {
+		console.log(response);
 	};
 	
-	this.onFailed = function () {
-		console.log("onFailed");
+	this.onFailed = function (status, response) {
+		console.log("status " + status);
 	};
-	
 };
-
 
 DeviceStatusAjax.prototype = Object.create(AjaxCall.prototype);
 
-DeviceStatusAjax.prototype.get = function () {
-    // Call the original version of getName that we overrode.
-	AjaxCall.prototype.get.call(this);
-}
-
-
-var deviceStatus = new DeviceStatusAjax('serial_1',0,1518297087);

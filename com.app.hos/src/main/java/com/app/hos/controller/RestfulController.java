@@ -28,8 +28,8 @@ public class RestfulController {
 	public ResponseEntity<List<DeviceStatus>> getDeviceStatuses(@PathVariable(value="serial") String serial,
 									@RequestParam("from") long from,
 									@RequestParam("to") long to) {
-		
-		List<DeviceStatus> statuses = systemFacade.getDeviceStatuses(serial, new DateTime(from), new DateTime(to));
+		System.out.println("---------- serial to " + to);
+		List<DeviceStatus> statuses = systemFacade.getDeviceStatuses(serial, new DateTime(from), new DateTime());
 		return new ResponseEntity<List<DeviceStatus>>(statuses,HttpStatus.OK);
 	}
 	
