@@ -1,7 +1,7 @@
 .nav-side-menu {
 	overflow: auto;
-	font-family: verdana;
-	font-size: 12px;
+	/*font-family: verdana;
+	font-size: 12px;*/
 	font-weight: 200;
 	background-color: #2e353d;
 	position: fixed;
@@ -16,7 +16,6 @@
 	line-height: 50px;
 	display: block;
 	text-align: center;
-	font-size: 14px;
 }
 
 .nav-side-menu .toggle-btn {
@@ -27,7 +26,7 @@
 	list-style: none;
 	padding: 0px;
 	margin: 0px;
-	line-height: 35px;
+	line-height: 45px;
 	cursor: pointer;
 }
 
@@ -54,7 +53,7 @@
 .nav-side-menu ul .sub-menu li, .nav-side-menu li .sub-menu li {
 	background-color: #181c20;
 	border: none;
-	line-height: 28px;
+	line-height: 45px;
 	border-bottom: 1px solid #23282e;
 	margin-left: 0px;
 }
@@ -65,7 +64,7 @@
 }
 
 .nav-side-menu ul .sub-menu li:before, .nav-side-menu li .sub-menu li:before
-	{
+{
 	font-family: FontAwesome;
 	content: "\f105";
 	display: inline-block;
@@ -99,6 +98,10 @@
 	-o-transition: all 1s ease;
 	-ms-transition: all 1s ease;
 	transition: all 1s ease;
+}
+
+.nav-side-menu .menu-list ul.menu-content li i.fa  {
+	margin-right: 10px;
 }
 
 @media ( max-width : 767px) {
@@ -169,7 +172,6 @@ html, body {
 	background-color: #2e353d;
 	line-height: 50px;
 	display: block;
-	font-size: 14px;
 	position: fixed;
 	left: 300px;
 	right: 0;
@@ -315,4 +317,10 @@ div.device:hover {
 	white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+#status-chart {
+	width: 100%; 
+	height: calc(100% - 260px);
+	background-color: pink;
 }

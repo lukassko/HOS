@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />">  
 	<script src="<c:url value="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js" />"></script>
 	
+	<!-- DateRangePicker -->
+	<link rel="stylesheet" href="<c:url value="/webjars/bootstrap-daterangepicker/2.1.19/css/bootstrap-daterangepicker.css" />">  	
+	
 	<!-- font awesome -->
 	<link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.7.0/css/font-awesome.min.css" />">  
 	
@@ -20,6 +23,9 @@
 	<!-- HighCharts -->
 	<script src="<c:url value="/webjars/highcharts/5.0.1/highcharts.js" />"></script>
 
+	<!-- MomentJs -->
+	<script src="<c:url value="/webjars/momentjs/2.20.1/moment.js" />"></script>
+	
 	<!-- attach other css -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/main.css" />">
 	<link rel="stylesheet" href="<c:url value="/resources/css/tooltip.css" />">
@@ -30,11 +36,15 @@
 	<script src="<c:url value="/resources/scripts/command/webCommands.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/devicesManager.js" />"></script>
+	
 	<script>
 		
 	var activePage = 'dashboard';
 	
 	$(document).ready(function() {
+		
+		// loaded here beacuse it use jQuery, therefore must be load after jQuery is loaded
+		$.getScript("webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js");
 		
 		$('ul.collapse li').not('li.collapsed').each(function() {
 			var page = $(this).attr("data-target");
