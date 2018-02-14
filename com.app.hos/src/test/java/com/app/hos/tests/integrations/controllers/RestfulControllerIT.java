@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.controller.RestfulController;
+import com.app.hos.controller.DeviceRestfulController;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.service.SystemFacade;
 import com.app.hos.share.utils.DateTime;
@@ -45,7 +45,7 @@ public class RestfulControllerIT {
 	
 	@InjectMocks
 	@Autowired
-	private RestfulController controller;
+	private DeviceRestfulController controller;
 	
 	@Before
     public void initMocks(){
