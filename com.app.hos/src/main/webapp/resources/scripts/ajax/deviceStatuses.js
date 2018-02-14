@@ -20,12 +20,13 @@ AjaxCall.prototype.send = function () {
 	});
 };
 
-function DeviceStatusAjax (serial,from,to) {
+function DeviceStatusCall (serial,from,to) {
 	AjaxCall.call(this);
 	
 	this.url = "devices/statuses/"+ serial +"?from=" + from + "&to=" + to;
-	this.type = "get";
+	this.type = "GET";
 	this.contentData = {};
+	
 	this.onSuccess = function (response) {
 		console.log(response);
 	};
@@ -35,5 +36,22 @@ function DeviceStatusAjax (serial,from,to) {
 	};
 };
 
-DeviceStatusAjax.prototype = Object.create(AjaxCall.prototype);
+function DeleteDeviceCall (serial) {
+	AjaxCall.call(this);
+	
+	this.url = "devices/statuses/"+ serial;
+	this.type = "DELETE";
+	this.contentData = {};
+	
+	this.onSuccess = function (response) {
+		console.log(response);
+	};
+	
+	this.onFailed = function (status, response) {
+		console.log("status " + status);
+	};
+};
+
+DeviceStatusCall.prototype = Object.create(AjaxCall.prototype);
+DeleteDeviceCall.prototype = Object.create(AjaxCall.prototype);
 

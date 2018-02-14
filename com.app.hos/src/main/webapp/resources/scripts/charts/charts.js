@@ -2,7 +2,7 @@
 var charts = (function() {
 	$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function (data) {
 
-	    Highcharts.chart('container-test', {
+	    Highcharts.chart('status-chart1', {
 	        chart: {
 	            zoomType: 'x'
 	        },
@@ -56,7 +56,8 @@ var charts = (function() {
 	            name: 'USD to EUR',
 	            data: data
 	        }]
-	    });
+	    }).setOptions(Highcharts.theme);
+
 	});
 })();
 	

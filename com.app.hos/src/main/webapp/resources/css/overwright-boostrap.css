@@ -30,3 +30,13 @@
 	color: #efffff !important;
 	font-size: 22px !important;
 }
+
+.ranges li {
+	color: #2e353d;
+}
+
+.ranges li.active,
+.ranges li:hover {
+	background-color: #2e353d;
+	border: 1px solid #2e353d;
+}
