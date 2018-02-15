@@ -6,11 +6,6 @@
 <head>
 	<%@ page isELIgnored="false" %>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
-
-	<!-- DateRangePicker 
-	<link rel="stylesheet" href="<c:url value="/webjars/bootstrap-daterangepicker/2.1.19/css/bootstrap-daterangepicker.css" />">  
-	<script src="<c:url value="/webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js" />"></script>-->	
 	
 	<!-- attach other css and script -->
 	<link rel="stylesheet" href="<c:url value="/resources/css/progress.css" />">
@@ -20,14 +15,21 @@
 	<script src="<c:url value="/resources/scripts/objects/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/objects/datePicker.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
-	<script src="<c:url value="/resources/scripts/charts/charts.js" />"></script>
-	<script src="<c:url value="/resources/scripts/charts/chartsTheme.js" />"></script>
 	<script src="<c:url value="/resources/scripts/ajax/deviceStatuses.js" />"></script>
 
 	<script>
 
 		$(document).ready(function() {
+
 			deviceManager.drawDevices();
+			
+			$("#report-range").datepicker(
+				function callback(type, start, end) {
+					var request = new DeviceStatusCall('serial_2',start.unix(),end.unix()).send();
+				}
+			);
+			
+			$("#status-chart").chart();
 		});
 	
 	</script>
@@ -36,10 +38,6 @@
 
 <div class="view-container">
 	<div class="device-container device-property">
-	<!--  	<script>
-			var devices ='${devices}';
-			deviceManager.addDevices(devices);
-	    </script> 		-->
 	</div>
 	
 	<div class="device-panel">
@@ -148,16 +146,15 @@
 				</table>
 			</div>
 		</div>
-		<div class="row" style="height: calc(100% - 280px); margin-top:10px;">
-			<div class="col-12" style="height:50px;">
-				<div id="report-range" class="pull-right form-control" style="width:300px;">
-				    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-				    <span></span> <b class="caret"></b>
+		<div class="row" style="margin-top:10px; height: calc(100% - 280px);">
+			<div class="col-12 device-property" style="height:100%;">
+				<div class="center-left" style="padding-left: 10px; height: 50px;">
+					<div id="report-range" data-type="status"></div>
+				</div>
+				<div style="height:calc(100% - 50px);">
+					<div id="status-chart" style="height:100%;"></div>
 				</div>
 			</div>
-		</div>
-		<div class="row" style="height: calc(100% - 320px);">
-			
 		</div>
 	</div>	
 	</div>

@@ -57,17 +57,25 @@ public class DeviceManager {
 	}
 	
 	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
-		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
-				
+		
 		List<DeviceStatus> sortedStatus = new LinkedList<DeviceStatus>();
 		
-		statuses.forEach(status -> {
-			DateTime date = status.getTime();
-			if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
-				sortedStatus.add(status);			
-		});
+		try {
+			List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
+			
+			statuses.forEach(status -> {
+				DateTime date = status.getTime();
+				if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
+					sortedStatus.add(status);			
+			});
+			
+			Collections.sort(sortedStatus);
+			
+		} catch (NoResultException e) {
+			
+		}
 		
-		Collections.sort(sortedStatus);
+		
 		return sortedStatus;
 	}
 	

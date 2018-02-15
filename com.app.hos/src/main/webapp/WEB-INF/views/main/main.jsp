@@ -45,6 +45,7 @@
 		
 		// loaded here beacuse it use jQuery, therefore must be load after jQuery is loaded
 		$.getScript("webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js");
+		$.getScript("resources/scripts/plugins.js");
 		
 		$('ul.collapse li').not('li.collapsed').each(function() {
 			var page = $(this).attr("data-target");

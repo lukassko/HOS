@@ -319,8 +319,19 @@ div.device:hover {
     text-overflow: ellipsis;
 }
 
-#status-chart {
-	width: 100%; 
-	height: calc(100% - 260px);
-	background-color: pink;
+.center,
+.center-left ,
+.center-right {
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center; 
+	align-items: center;
+}
+
+.center-left {
+	align-items: left;
+}
+.center-right {
+	align-items: right;
+	
 }

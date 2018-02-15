@@ -16,6 +16,7 @@ import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.Utils;
 
 @Component
 //@Profile("init")
@@ -34,11 +35,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 		
-		List<DeviceStatus> statuses = new LinkedList<DeviceStatus>();
-		statuses.add(new DeviceStatus(23.32, 65.33));
-		statuses.add(new DeviceStatus(13.25, 11.56));
-		
-		device.setDeviceStatuses(statuses);
+		device.setDeviceStatuses(generateRandomStatus());
 		
 		deviceRepository.save(device);
 		
@@ -49,10 +46,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 
-		statuses = new LinkedList<DeviceStatus>();
-		statuses.add(new DeviceStatus(89.11, 45.93));
-		statuses.add(new DeviceStatus(65.27, 48.78));
-		device.setDeviceStatuses(statuses);
+		device.setDeviceStatuses(generateRandomStatus());
 		
 		deviceRepository.save(device);
 		
@@ -63,12 +57,19 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 
-		statuses = new LinkedList<DeviceStatus>();
-		statuses.add(new DeviceStatus(19.21, 99.1));
-		statuses.add(new DeviceStatus(32.21, 9.60));
-		device.setDeviceStatuses(statuses);
+		device.setDeviceStatuses(generateRandomStatus());
 		
 		deviceRepository.save(device);
 	}
 	
+	private List<DeviceStatus> generateRandomStatus() {
+		List<DeviceStatus> statuses = new LinkedList<>();
+		DateTime templateDate = new DateTime();
+		long timestamp = templateDate.getTimestamp() - 86400000;
+		for (int i = 0; i < 86400000; i = i + 10000) {
+			statuses.add(new DeviceStatus(new DateTime(timestamp), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+			timestamp = timestamp + 10000;
+		}
+		return statuses;
+	}
 }

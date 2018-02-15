@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.config.init.InitializeDatabaseState;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.controller.DeviceRestfulController;
 import com.app.hos.persistance.models.DeviceStatus;
@@ -36,7 +37,10 @@ import java.util.List;
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @WebAppConfiguration
-public class RestfulControllerIT {
+public class DeviceRestfulControllerIT {
+	
+	@Autowired
+	private InitializeDatabaseState initializer;
 	
 	private MockMvc mockMvc;
 	
@@ -70,7 +74,6 @@ public class RestfulControllerIT {
 				.param("from", "1505001600")
 				.param("to", "1505001000"))
 	    		.andDo(print());
-
 	}
 	
 	@Test
