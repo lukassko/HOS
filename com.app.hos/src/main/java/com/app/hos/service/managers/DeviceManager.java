@@ -88,7 +88,13 @@ public class DeviceManager {
 	}
 
 	public Device findDeviceBySerial(String serial) {
-		return deviceRepository.findBySerialNumber(serial);
+		Device device;
+		try {
+			device = deviceRepository.findBySerialNumber(serial);
+		} catch (NoResultException e) {
+			device = null;
+		}
+		return device;
 	}
 	
 	public void removeDevice(Device device) {
@@ -101,8 +107,7 @@ public class DeviceManager {
 	    int remotePort = (Integer) headers.get(IpHeaders.REMOTE_PORT);
 	    String hostname = headers.get(IpHeaders.HOSTNAME).toString();
 		DateTime connectionTime = new DateTime();
-		Connection connection = new Connection(connectionId, hostname, ip, remotePort, connectionTime);
-		return connection;
+		return new Connection(connectionId, hostname, ip, remotePort, connectionTime);
 	}
 	
 	private Device createNewDevice(MessageHeaders headers, String name, String serial) {

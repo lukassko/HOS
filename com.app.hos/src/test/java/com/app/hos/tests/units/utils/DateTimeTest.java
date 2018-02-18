@@ -81,4 +81,15 @@ public class DateTimeTest {
 
        Assert.assertEquals(dateBefore, dateAfter);
     }
+	
+	@Test
+	public void printTimestamp()  {
+		DateTime dateTime = new DateTime();
+		long timestamp = dateTime.getTimestamp();
+		System.out.println(dateTime);
+		System.out.println(timestamp);
+		DateTime newDateTime = new DateTime(timestamp - 900000);
+		System.out.println(newDateTime);
+		System.out.println(newDateTime.getTimestamp());
+	}
 }

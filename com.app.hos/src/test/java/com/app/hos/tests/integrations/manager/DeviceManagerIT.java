@@ -2,9 +2,9 @@ package com.app.hos.tests.integrations.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -35,13 +35,14 @@ import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
+import com.app.hos.utils.Utils;
 
 // get Collection of Devices when there is no device in database 
 // get statuses from device from DB and getting from Map (check what with id field)
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
@@ -133,23 +134,19 @@ public class DeviceManagerIT {
 	}
 	
 	@Test
-	@Transactional
 	public void stage30_addMultiStatusToDeviceShouldReturnPorperStatusesSize() {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.1, 13.4));
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.43, 22.5));
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.89, 33.1));
-		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
-		Assert.assertEquals(4, statuses.size());
+		//List<DeviceStatus> statuses = manager.findDeviceBySerial(device.getSerial()).getDeviceStatuses();
+		//Assert.assertEquals(4, statuses.size());
 		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(4, deviceStatuses.size());
 	}
 	
 	@Test
-	@Transactional
 	public void stage40_addMultiStatusToDeviceAndChekLastOneStatus() {
 		manager.addDeviceStatus(device.getSerial(), new DeviceStatus(new DateTime(),0.39, 38.4));
-		List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(device.getSerial()).getDeviceStatuses();
-		Assert.assertEquals(5, statuses.size());
 		List<DeviceStatus> deviceStatuses = manager.getDeviceStatuses(device.getSerial(), new DateTime(0), new DateTime());
 		Assert.assertEquals(5, deviceStatuses.size());
 	}
@@ -203,6 +200,33 @@ public class DeviceManagerIT {
 	}
 	
 	@Test
+	public void stage50_addMultiStatusWithDifferentTimeAndCheckIfMethodReturnProperSizeForGivenPeriod() {
+		manager.openDeviceConnection(headers, "device_4", "serial_device_4");
+		List<DeviceStatus> statuses = generateRandomStatus(24); // last 24 hours
+		Device device = manager.findDeviceBySerial("serial_device_4");
+		
+		Assert.assertTrue(getDeviceStatuses(device).isEmpty());
+		
+		device.setDeviceStatuses(statuses);
+		saveDevice(device);
+		
+		// call new mehod with transactional annotation
+		device = manager.findDeviceBySerial("device_4");
+		Assert.assertEquals(0, device.getDeviceStatuses().size());
+		
+	}
+	
+	@Transactional
+	private void saveDevice (Device device) {
+		deviceRepository.save(device);
+	}
+	
+	@Transactional
+	private List<DeviceStatus> getDeviceStatuses (Device device) {
+		return deviceRepository.find(device.getId()).getDeviceStatuses();
+	}
+	
+	@Test
 	public void stage60_newConnectionForDeviceInDbShouldUpdateConnectionsParams () {	
 		Device oldConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
 		
@@ -240,4 +264,15 @@ public class DeviceManagerIT {
 		connectionRepository.findConnectionById(connection.getConnectionId());
 	}
 
+	private List<DeviceStatus> generateRandomStatus(int size) {
+		List<DeviceStatus> statuses = new LinkedList<>();
+		long DIFF = 3600000; // 1 hour (milliseconds)
+		long timestamp = new DateTime().getTimestamp();
+		for (int i = 0; i < size; i++) {
+			statuses.add(new DeviceStatus(new DateTime(timestamp), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+			timestamp = timestamp - DIFF;
+		}
+		return statuses;
+	}
+	
 }
