@@ -5,6 +5,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +26,9 @@ import javax.websocket.RemoteEndpoint.Async;
 import javax.websocket.RemoteEndpoint.Basic;
 
 import org.junit.Assert;
+
+import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.share.utils.DateTime;
 
 public class Utils {
 
@@ -154,4 +158,19 @@ public class Utils {
 			public void addMessageHandler(MessageHandler handler) throws IllegalStateException {}
 		};
 	}
+
+	
+	public static List<DeviceStatus> generateRandomStatus(int size, int resolution) {
+		List<DeviceStatus> statuses = new LinkedList<>();
+		long DIFF = resolution; // milliseconds
+		long timestamp = new DateTime().getTimestamp();
+		for (int i = 0; i < size; i++) {
+			statuses.add(new DeviceStatus(new DateTime(timestamp), 
+								com.app.hos.utils.Utils.generateRandomDouble(), 
+									com.app.hos.utils.Utils.generateRandomDouble()));
+			timestamp = timestamp - DIFF;
+		}
+		return statuses;
+	}
+	
 }

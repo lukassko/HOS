@@ -22,8 +22,11 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
@@ -34,7 +37,6 @@ import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.integrations.config.ApplicationContextConfig;
 import com.app.hos.utils.Utils;
 
 // get Collection of Devices when there is no device in database 
@@ -47,6 +49,7 @@ import com.app.hos.utils.Utils;
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@WebAppConfiguration
 public class DeviceManagerIT {
 	
 	@Autowired
@@ -202,28 +205,26 @@ public class DeviceManagerIT {
 	@Test
 	public void stage50_addMultiStatusWithDifferentTimeAndCheckIfMethodReturnProperSizeForGivenPeriod() {
 		manager.openDeviceConnection(headers, "device_4", "serial_device_4");
-		List<DeviceStatus> statuses = generateRandomStatus(24); // last 24 hours
-		Device device = manager.findDeviceBySerial("serial_device_4");
 		
-		Assert.assertTrue(getDeviceStatuses(device).isEmpty());
+		//24 statuses, with one hour resolutions
+		List<DeviceStatus> generatedStatuses = com.app.hos.tests.utils.Utils.generateRandomStatus(24, 3600000);
 		
-		device.setDeviceStatuses(statuses);
-		saveDevice(device);
+		generatedStatuses.forEach(status ->
+			{manager.addDeviceStatus("serial_device_4",status);}
+		);
 		
-		// call new mehod with transactional annotation
-		device = manager.findDeviceBySerial("device_4");
-		Assert.assertEquals(0, device.getDeviceStatuses().size());
+		List<DeviceStatus>  statuses = manager.getDeviceStatuses("serial_device_4", new DateTime(0), new DateTime());
+		Assert.assertEquals(24, statuses.size());
 		
-	}
-	
-	@Transactional
-	private void saveDevice (Device device) {
-		deviceRepository.save(device);
-	}
-	
-	@Transactional
-	private List<DeviceStatus> getDeviceStatuses (Device device) {
-		return deviceRepository.find(device.getId()).getDeviceStatuses();
+		long currTimestamp = new DateTime().getTimestamp();
+		long fromTimestamp = currTimestamp - (3600000 * 5);
+		statuses = manager.getDeviceStatuses("serial_device_4", new DateTime(fromTimestamp), new DateTime(currTimestamp));
+		Assert.assertEquals(6, statuses.size());
+		
+		fromTimestamp = currTimestamp - (3600000 * 8);
+		statuses = manager.getDeviceStatuses("serial_device_4", new DateTime(fromTimestamp), new DateTime(currTimestamp));
+		Assert.assertEquals(9, statuses.size());
+		
 	}
 	
 	@Test
@@ -264,15 +265,4 @@ public class DeviceManagerIT {
 		connectionRepository.findConnectionById(connection.getConnectionId());
 	}
 
-	private List<DeviceStatus> generateRandomStatus(int size) {
-		List<DeviceStatus> statuses = new LinkedList<>();
-		long DIFF = 3600000; // 1 hour (milliseconds)
-		long timestamp = new DateTime().getTimestamp();
-		for (int i = 0; i < size; i++) {
-			statuses.add(new DeviceStatus(new DateTime(timestamp), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
-			timestamp = timestamp - DIFF;
-		}
-		return statuses;
-	}
-	
 }

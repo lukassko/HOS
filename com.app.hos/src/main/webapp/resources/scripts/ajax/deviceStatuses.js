@@ -20,35 +20,34 @@ AjaxCall.prototype.send = function () {
 	});
 };
 
-function DeviceStatusCall (serial,from,to) {
+function DeviceStatusCall (serial,from,to,callback) {
 	AjaxCall.call(this);
-	
 	this.url = "devices/statuses/"+ serial +"?from=" + from + "&to=" + to;
 	this.type = "GET";
 	this.contentData = {};
 	
 	this.onSuccess = function (response) {
-		console.log(response);
+		callback(200, response);
 	};
 	
 	this.onFailed = function (status, response) {
-		console.log("status " + status);
+		callback(status, response);
 	};
 };
 
-function DeleteDeviceCall (serial) {
+function DeleteDeviceCall (serial,callback) {
 	AjaxCall.call(this);
 	
 	this.url = "devices/statuses/"+ serial;
 	this.type = "DELETE";
 	this.contentData = {};
 	
-	this.onSuccess = function (response) {
-		console.log(response);
+	this.onSuccess = function (status, response) {
+		callback(status, response);
 	};
 	
 	this.onFailed = function (status, response) {
-		console.log("status " + status);
+		callback(status, response);
 	};
 };
 

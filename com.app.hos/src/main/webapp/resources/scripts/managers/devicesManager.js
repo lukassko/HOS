@@ -43,6 +43,7 @@ var deviceManager = (function() {
 	};
 	
 	function setClickedDevice() {
+		$("#report-range").enable();
 		$(getDivDeviceId(selectedDeivce)).addClass('activeDevice'); 
 		setDeviceData();
 		setDeviceStatus();
@@ -101,10 +102,19 @@ var deviceManager = (function() {
 		
 	}
 	
+	function _getActiveDevice() {
+		var device = connectedDevices.get(selectedDeivce);
+		if (device == undefined) {
+			return null
+		}
+		return device;
+	}
+	
 	return {
 		setDevices: _setDevices,
 		drawDevices: _drawDevices,
-		removeDevice: _removeDevice
+		removeDevice: _removeDevice,
+		getActiveDevice: _getActiveDevice
 	}
 	
 })();

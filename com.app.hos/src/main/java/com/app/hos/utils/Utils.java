@@ -16,7 +16,10 @@ import org.springframework.core.type.filter.TypeFilter;
 public class Utils {
 
     public static double generateRandomDouble() {
-		return ThreadLocalRandom.current().nextDouble(0, 100);
+    	double generated = ThreadLocalRandom.current().nextDouble(0, 100);
+    	generated = generated*100;
+    	generated = (double)((int) generated);
+		return generated /100;
 	}
 
    // public static Object getObjectFromContext(String beanName) {

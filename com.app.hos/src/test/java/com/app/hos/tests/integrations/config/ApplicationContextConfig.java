@@ -8,6 +8,7 @@ import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.EnableLoadTimeWeaving.AspectJWeaving;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.app.hos.service.SystemFacade;
 import com.app.hos.service.SystemFacadeImpl;
@@ -24,6 +25,7 @@ import com.app.hos.utils.aspect.AutoInjectDependecyAspect;
 @Configuration
 @ComponentScan("com.app.hos.service.websocket.*")
 @EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableTransactionManagement
 //@EnableSpringConfigured
 //@EnableLoadTimeWeaving(aspectjWeaving=AspectJWeaving.ENABLED)
 public class ApplicationContextConfig {

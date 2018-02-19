@@ -16,7 +16,7 @@
 	<script src="<c:url value="/resources/scripts/objects/datePicker.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/ajax/deviceStatuses.js" />"></script>
-
+	<script src="<c:url value="/resources/scripts/charts/chartsApi.js" />"></script>
 	<script>
 
 		$(document).ready(function() {
@@ -24,12 +24,25 @@
 			deviceManager.drawDevices();
 			
 			$("#report-range").datepicker(
-				function callback(type, start, end) {
-					var request = new DeviceStatusCall('serial_2',start.unix(),end.unix()).send();
+				function onDateSelect(type, start, end) {
+					var device = deviceManager.getActiveDevice();
+					if (device != null) {
+						new DeviceStatusCall(device.serial,start.unix(),end.unix(), function(status, response) {
+							chartsApi.setStatus(response);
+							var series = chartsApi.getSeries();
+							var chart = $("#status-chart").highcharts();
+							console.log(chart);
+							$.each(series , function(index, serie) {
+							  	chart.series[index].setData(serie.data, false);
+							});
+							chart.redraw();
+						}).send();
+					}
 				}
 			);
-			
 			$("#status-chart").chart();
+			$("#report-range").disable();
+
 		});
 	
 	</script>

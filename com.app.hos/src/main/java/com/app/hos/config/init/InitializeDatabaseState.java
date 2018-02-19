@@ -3,10 +3,9 @@ package com.app.hos.config.init;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +15,9 @@ import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.utils.Utils;
 
 @Component
-//@Profile("init")
+@Profile("!integration-test")
 public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
@@ -35,7 +33,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 		
-		device.setDeviceStatuses(generateRandomStatus());
+		device.setDeviceStatuses(generateRandomStatus(24, 3600000));
 		
 		deviceRepository.save(device);
 		
@@ -46,7 +44,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 
-		device.setDeviceStatuses(generateRandomStatus());
+		device.setDeviceStatuses(generateRandomStatus(24, 3600000));
 		
 		deviceRepository.save(device);
 		
@@ -57,19 +55,23 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		connection.setDevice(device);
 		device.setConnection(connection);
 
-		device.setDeviceStatuses(generateRandomStatus());
+		
+		device.setDeviceStatuses(generateRandomStatus(24, 3600000));
 		
 		deviceRepository.save(device);
 	}
 	
-	private List<DeviceStatus> generateRandomStatus() {
+	private List<DeviceStatus> generateRandomStatus(int size, int resolution) {
 		List<DeviceStatus> statuses = new LinkedList<>();
-		DateTime templateDate = new DateTime();
-		long timestamp = templateDate.getTimestamp() - 86400000;
-		for (int i = 0; i < 86400000; i = i + 10000) {
-			statuses.add(new DeviceStatus(new DateTime(timestamp), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
-			timestamp = timestamp + 10000;
+		long DIFF = resolution; // milliseconds
+		long timestamp = new DateTime().getTimestamp();
+		for (int i = 0; i < size; i++) {
+			statuses.add(new DeviceStatus(new DateTime(timestamp), 
+								com.app.hos.utils.Utils.generateRandomDouble(), 
+									com.app.hos.utils.Utils.generateRandomDouble()));
+			timestamp = timestamp - DIFF;
 		}
 		return statuses;
 	}
+	
 }

@@ -1,8 +1,22 @@
 (function ( $ ) {
 
+	$.fn.disable = function() {
+		return this.each(function() {
+			$(this).css('opacity', '0.6');
+			$(this).css('pointer-events', 'none');
+		});
+	}
+	
+	$.fn.enable = function() {
+		return this.each(function() {
+			$(this).css('opacity', '1');
+			$(this).css('pointer-events', 'auto');
+		});
+	}
+	
     $.fn.datepicker = function(callback) {
     	
-    	var start = moment().subtract(29, 'days');
+    	var start = moment().startOf('day');
         var end = moment();
         
         return this.each(function() {
@@ -45,7 +59,6 @@
     	
         var settings = $.extend({
             title: "CPU/RAM usage",
-            yAxis : "Percent usage"
         }, options );
         
         Highcharts.chart(chart.attr('id'), {
@@ -55,6 +68,7 @@
     		    style: {fontFamily: 'Verdana, Geneva, sans-serif'},
     		    plotBorderColor: '#606063'
     	    },
+    	    colors: ["#7cb5ec", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354", "#2b908f", "#f45b5b", "#91e8e1","#434348"],
     	    title: {
     	        text: settings.title,
     	        style: {
@@ -63,11 +77,8 @@
     		    }
     	    },
     	    xAxis: {
-    	        allowDecimals: false,
+    	        type: 'datetime',
     	        labels: {
-    	            formatter: function () {
-    	                return this.value; // clean, unformatted number for year
-    	            },
     	            style: {color: '#efffff'}
     	        },
     	        title: {
@@ -81,14 +92,14 @@
     	            text: settings.yAxis
     	        },
     	        labels: {
-    	            style: {color: '#efffff'}
+    	            style: {color: '#efffff'},
     	        },
     	        title: {
+    	        	 text: '%',
     		         style: {color: '#efffff'}
-    		     }
-    	    },
-    	    tooltip: {
-    	        pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+    		    },
+    		    gridLineWidth: 0
+    		    
     	    },
     	    plotOptions: {
     	        area: {
@@ -105,9 +116,10 @@
     		      itemHoverStyle: {color: '#FFF'},
     		      itemHiddenStyle: {color: '#606063'}
     		},
-    		series: [{
-    			data:[null,null]     
-    	    }]
+    		series: [
+    			{name: 'CPU', data:[]},
+    			{name: 'RAM',data:[]}
+    	    ]
     	});
         
         return this;

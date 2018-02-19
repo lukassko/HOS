@@ -36,6 +36,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 	}
 	
 	public DateTime(long timestamp) {
+		timestamp = convertToMillis(timestamp);
 		this.dateTime = new org.joda.time.DateTime(timestamp); 
 		this.hour = dateTime.getHourOfDay();
 		this.minutes = dateTime.getMinuteOfHour();
@@ -119,6 +120,14 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 	@Override
 	public int compareTo(DateTime other) {
 		return Long.compare(this.timestamp, other.timestamp);
+	}
+	
+	private long convertToMillis (long timestamp) {
+		// timestamp in seconds
+		if (String.valueOf(timestamp).length() == 10) {
+			timestamp = timestamp * 1000;
+		}
+		return timestamp;
 	}
 	
 }

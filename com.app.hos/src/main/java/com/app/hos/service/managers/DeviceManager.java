@@ -16,6 +16,7 @@ import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
@@ -62,7 +63,6 @@ public class DeviceManager {
 		
 		try {
 			List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
-			
 			statuses.forEach(status -> {
 				DateTime date = status.getTime();
 				if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
@@ -80,7 +80,7 @@ public class DeviceManager {
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {
-		Device device = deviceRepository.findBySerialNumber(serial);
+		Device device = findDeviceBySerial(serial);
 		List<DeviceStatus> statuses = device.getDeviceStatuses();
 		statuses.add(deviceStatus);
 		//deviceRepository.save(device);
@@ -89,11 +89,11 @@ public class DeviceManager {
 
 	public Device findDeviceBySerial(String serial) {
 		Device device;
-		try {
+		//try {
 			device = deviceRepository.findBySerialNumber(serial);
-		} catch (NoResultException e) {
-			device = null;
-		}
+		//} catch (NoResultException e) {
+		//	device = null;
+		//}
 		return device;
 	}
 	
