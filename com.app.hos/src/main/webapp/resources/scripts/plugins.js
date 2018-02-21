@@ -58,12 +58,22 @@
     	var chart = $(this);
     	
         var settings = $.extend({
-            title: "CPU/RAM usage",
+            title: "",
+            series: [],
+            type: 'area'
         }, options );
+        
+        var series = [];
+        $.each(settings.series , function(index, serie) {
+        	series.push({
+        		name: serie,
+        		data: []
+        	});
+        });
         
         Highcharts.chart(chart.attr('id'), {
     	    chart: {
-    	        type: 'area',
+    	        type: settings.type,
     	        backgroundColor:'#2e353d',
     		    style: {fontFamily: 'Verdana, Geneva, sans-serif'},
     		    plotBorderColor: '#606063'
@@ -116,10 +126,7 @@
     		      itemHoverStyle: {color: '#FFF'},
     		      itemHiddenStyle: {color: '#606063'}
     		},
-    		series: [
-    			{name: 'CPU', data:[]},
-    			{name: 'RAM',data:[]}
-    	    ]
+    		series: series
     	});
         
         return this;

@@ -29,19 +29,22 @@
 					if (device != null) {
 						new DeviceStatusCall(device.serial,start.unix(),end.unix(), function(status, response) {
 							chartsApi.setStatus(response);
-							var series = chartsApi.getSeries();
-							var chart = $("#status-chart").highcharts();
-							console.log(chart);
+							var series = chartsApi.getStatusSeries();
+							statusChart.removeSeries();
 							$.each(series , function(index, serie) {
-							  	chart.series[index].setData(serie.data, false);
+								statusChart.addSerie(serie.name, serie.data);
 							});
-							chart.redraw();
+
 						}).send();
 					}
 				}
 			);
-			$("#status-chart").chart();
-			$("#report-range").disable();
+
+			var statusChart = new Chart("#status-chart",{
+	            title: 'CPU/RAM Usage'
+	        });
+			//$("#report-range").daterangepicker("update", 'Last 7 Days');
+			//$("#report-range").disable();
 
 		});
 	

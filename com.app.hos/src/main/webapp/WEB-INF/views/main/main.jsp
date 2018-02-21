@@ -36,6 +36,7 @@
 	<script src="<c:url value="/resources/scripts/command/webCommands.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/devicesManager.js" />"></script>
+	<script src="<c:url value="/resources/scripts/charts/chart.js" />"></script>
 	
 	<script>
 		

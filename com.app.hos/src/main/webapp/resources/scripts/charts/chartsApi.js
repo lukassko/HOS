@@ -16,7 +16,7 @@ var chartsApi = (function() {
 		});
 	}
 	
-	function _getSeries() {
+	function _getStatusSeries() {
 		series = [];
 		var cpuSerie = {
 				name: 'CPU Usage',
@@ -31,9 +31,19 @@ var chartsApi = (function() {
 		return series;
 	}
 	
+	function _registerChart(type,element){
+		charts.set(type,element);
+	}
+
+	function _draw(type) {
+		
+	}
+	
 	return {
 		setStatus: _setStatus,
-		getSeries: _getSeries
+		getStatusSeries: _getStatusSeries,
+		registerChart: _registerChart,
+		draw: _draw
 	}
 	
 })();
