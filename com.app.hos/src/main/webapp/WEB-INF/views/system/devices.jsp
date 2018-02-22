@@ -17,34 +17,32 @@
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/ajax/deviceStatuses.js" />"></script>
 	<script src="<c:url value="/resources/scripts/charts/chartsApi.js" />"></script>
+
 	<script>
-
+	
 		$(document).ready(function() {
-
+			
 			deviceManager.drawDevices();
 			
-			$("#report-range").datepicker(
-				function onDateSelect(type, start, end) {
-					var device = deviceManager.getActiveDevice();
-					if (device != null) {
-						new DeviceStatusCall(device.serial,start.unix(),end.unix(), function(status, response) {
-							chartsApi.setStatus(response);
-							var series = chartsApi.getStatusSeries();
-							statusChart.removeSeries();
-							$.each(series , function(index, serie) {
-								statusChart.addSerie(serie.name, serie.data);
-							});
-
-						}).send();
-					}
-				}
-			);
+			var statusDatePicker = new DatePicker("#report-range",
+					function onDateSelect(type, start, end) {
+						var device = deviceManager.getActiveDevice();
+						if (device != null) {
+							new DeviceStatusCall(device.serial,start.unix(),end.unix(), function(status, response) {
+								chartsApi.setStatus(response);
+								var series = chartsApi.getStatusSeries();
+								statusChart.removeSeries();
+								$.each(series , function(index, serie) {
+									statusChart.addSerie(serie.name, serie.data);
+								});
+		
+							}).send();
+						}
+					});
 
 			var statusChart = new Chart("#status-chart",{
 	            title: 'CPU/RAM Usage'
 	        });
-			//$("#report-range").daterangepicker("update", 'Last 7 Days');
-			//$("#report-range").disable();
 
 		});
 	
@@ -77,7 +75,7 @@
 				      <ul class="nav navbar-nav">
 				      
 				      <!-- class="active" -->
-				        <li><a href="#">Status</a></li>
+				        <li><a href="#"  onclick="callDate();">Status</a></li>
 				        <li><a href="#">History</a></li>
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commands <span class="caret"></span></a>
