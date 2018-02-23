@@ -6,8 +6,8 @@ import org.springframework.messaging.MessageHandlingException;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.SystemFacade;
+import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.share.command.builder.Command;
-import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service 
 public class Server {

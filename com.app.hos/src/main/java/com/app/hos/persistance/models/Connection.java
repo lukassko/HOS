@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
-import com.app.hos.utils.exceptions.HistoryConnectionException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "connections")

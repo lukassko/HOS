@@ -6,9 +6,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 
 import com.app.hos.logging.repository.LoggingRepository;
-import com.app.hos.utils.aspect.ConnectionAspect;
-import com.app.hos.utils.aspect.ExceptionAspect;
-import com.app.hos.utils.aspect.PersistanceAspect;
+import com.app.hos.service.aspects.ConnectionAspect;
+import com.app.hos.service.aspects.ExceptionAspect;
+import com.app.hos.service.aspects.PersistanceAspect;
 
 @Profile("!web-integration-test")
 @Configuration

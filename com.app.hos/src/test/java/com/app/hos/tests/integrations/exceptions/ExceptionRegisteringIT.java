@@ -14,12 +14,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.service.exceptions.handler.ExceptionHandler;
+import com.app.hos.service.exceptions.handler.HOSExceptionHandler;
+import com.app.hos.service.exceptions.handler.HOSExceptionHandlerFactory;
+import com.app.hos.service.exceptions.handler.HOSExceptionHandlerInfo;
+import com.app.hos.service.exceptions.handler.instance.WebSocketJsonExceptionHandler;
 import com.app.hos.utils.Utils;
-import com.app.hos.utils.exceptions.handler.ExceptionHandler;
-import com.app.hos.utils.exceptions.handler.HOSExceptionHandler;
-import com.app.hos.utils.exceptions.handler.HOSExceptionHandlerFactory;
-import com.app.hos.utils.exceptions.handler.HOSExceptionHandlerInfo;
-import com.app.hos.utils.exceptions.handler.instance.WebSocketJsonExceptionHandler;
 import com.fasterxml.jackson.core.JsonParseException;
 
 @Ignore("run only one integration test")

@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.SystemFacade;
+import com.app.hos.service.exceptions.NotExecutableCommandException;
+import com.app.hos.share.command.FutureCommandFactory;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.decorators.FutureCommandDecorator;
 import com.app.hos.share.command.result.Message;
-import com.app.hos.utils.converters.CommandConverter;
-import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 
 @Service
@@ -32,7 +32,7 @@ public class CommandManager {
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
 
 	public void executeCommand(String connectionId, Command command) throws NotExecutableCommandException {
-		Callable<Command> executableCommand = CommandConverter.getExecutableCommand(command);
+		Callable<Command> executableCommand = FutureCommandFactory.getCommand(command);
 		executeCommand(connectionId,executableCommand);
 	}
 	

@@ -35,27 +35,29 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.websocket.WebSocketManager;
 import com.app.hos.service.websocket.WebSocketServerEndpoint;
 import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.tests.utils.Utils;
 import com.app.hos.tests.utils.WebCommandSimulation;
-import com.app.hos.utils.converters.CommandConverter;
-import com.app.hos.utils.exceptions.NotExecutableCommandException;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
-@PrepareForTest(CommandConverter.class)
+@PrepareForTest(FutureWebCommandFactory.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WebCommandManagerMultithreadIT {
+	
+	@Autowired
+	private FutureWebCommandFactory futureWebCommandFactory;
 	
 	@Autowired
 	private WebSocketManager webSocketManager;
@@ -79,16 +81,19 @@ public class WebCommandManagerMultithreadIT {
 		serverEndpoint = Mockito.spy(new WebSocketServerEndpoint(webSocketManager));
 		
 		MockitoAnnotations.initMocks(this);
-		PowerMockito.mockStatic(CommandConverter.class);
-		PowerMockito.when(CommandConverter.getExecutableWebCommand(Mockito.any(WebCommand.class))).thenReturn(testExecutableCommand);
-	    
+		//PowerMockito.mockStatic(FutureWebCommandFactory.class);
+		//PowerMockito.when(FutureWebCommandFactory.getCommand(Mockito.any(WebCommand.class))).thenReturn(testExecutableCommand);
+		//Mockito.doReturn(testExecutableCommand).when(futureWebCommandFactory.get(Mockito.any(WebCommand.class)));
+		Mockito.when(futureWebCommandFactory.get(Mockito.any(WebCommand.class))).thenReturn(testExecutableCommand);
+		
 		Mockito.doNothing().when(serverEndpoint).sendMessage(Mockito.any(Session.class), Mockito.anyString());
 		Mockito.doCallRealMethod().when(serverEndpoint).onMessage(Mockito.any(Session.class), Mockito.anyString());
 	}
 	
 	@Test
 	public void stage00_checkIfPowerMockReturnProperObjectFromStaticFactoryMethod() throws NotExecutableCommandException {
-		Callable<WebCommand> testCommand = CommandConverter.getExecutableWebCommand(command);
+		//Callable<WebCommand> testCommand = FutureWebCommandFactory.getCommand(command);
+		Callable<WebCommand> testCommand = futureWebCommandFactory.get(command);
 		Assert.assertNotNull(testCommand);
 		Assert.assertTrue(testCommand == testExecutableCommand);
 	}

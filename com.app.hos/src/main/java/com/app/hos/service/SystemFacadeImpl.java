@@ -19,6 +19,8 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.pojo.WebDeviceStatusesRequest;
+import com.app.hos.service.exceptions.NotExecutableCommandException;
+import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
@@ -29,8 +31,6 @@ import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.Utils;
-import com.app.hos.utils.exceptions.NotExecutableCommandException;
-import com.app.hos.utils.exceptions.handler.ExceptionUtils;
 
 @Service
 public class SystemFacadeImpl implements SystemFacade {

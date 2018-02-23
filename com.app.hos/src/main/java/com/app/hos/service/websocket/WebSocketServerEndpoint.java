@@ -15,8 +15,8 @@ import javax.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
-import com.app.hos.utils.exceptions.WebSocketException;
-import com.app.hos.utils.exceptions.handler.ExceptionUtils;
+import com.app.hos.service.exceptions.WebSocketException;
+import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
 //decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class,
 @ServerEndpoint(value = "/websocket", configurator = SpringConfigurator.class)

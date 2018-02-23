@@ -8,22 +8,24 @@ import java.util.concurrent.FutureTask;
 
 import javax.websocket.Session;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.service.websocket.command.WebCommandFactory;
+import com.app.hos.service.exceptions.NotExecutableCommandException;
+import com.app.hos.service.exceptions.WebSocketJsonException;
+import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
-import com.app.hos.service.websocket.command.type.WebCommandType;
-import com.app.hos.utils.exceptions.WebSocketJsonException;
-import com.app.hos.utils.converters.CommandConverter;
-import com.app.hos.utils.exceptions.NotExecutableCommandException;
-import com.app.hos.utils.exceptions.handler.ExceptionUtils;
+import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class WebSocketManager {
-
+	
+	@Autowired
+	private FutureWebCommandFactory futureWebCommandFactory;
+	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 	
 	public void executeCommand(WebCommandCallback callback, Session session, String message) {	
@@ -38,7 +40,8 @@ public class WebSocketManager {
 	}
 	
 	private void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommandException {
-		Callable<WebCommand> executableCommand = CommandConverter.getExecutableWebCommand(command);
+		//Callable<WebCommand> executableCommand = FutureWebCommandFactory.getCommand(command);
+		Callable<WebCommand> executableCommand = futureWebCommandFactory.get(command);
 		executeCommand(callback,session,executableCommand);
 	}
 	

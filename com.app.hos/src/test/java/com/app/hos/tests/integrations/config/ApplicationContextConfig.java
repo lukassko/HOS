@@ -12,15 +12,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.app.hos.service.SystemFacade;
 import com.app.hos.service.SystemFacadeImpl;
+import com.app.hos.service.aspects.AutoInjectDependecyAspect;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.service.websocket.command.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder.concretebuilders.GetAllDevicesWebCommandBuilder;
 import com.app.hos.service.websocket.command.builder.concretebuilders.RemoveDeviceWebCommandBuilder;
 import com.app.hos.service.websocket.command.type.WebCommandType;
-import com.app.hos.utils.aspect.AutoInjectDependecyAspect;
 
 @Configuration
 @ComponentScan("com.app.hos.service.websocket.*")

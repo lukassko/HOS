@@ -34,6 +34,14 @@ public class Utils {
     	return ApplicationContextProvider.getApplicationContext().getBean(bean);
     }
 
+    public static Object createObject(Class<?> clazz) {
+    	try {
+			return clazz.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+    }
+    
     public static Class<?> getClass(final String clazzName) {
 		try {
 			return Class.forName(clazzName);

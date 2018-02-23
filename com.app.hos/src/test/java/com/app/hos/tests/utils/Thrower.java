@@ -1,10 +1,10 @@
 package com.app.hos.tests.utils;
 
 import com.app.hos.persistance.models.Connection;
+import com.app.hos.service.exceptions.HistoryConnectionException;
+import com.app.hos.service.exceptions.NotExecutableCommandException;
+import com.app.hos.service.exceptions.WebSocketJsonException;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.exceptions.HistoryConnectionException;
-import com.app.hos.utils.exceptions.WebSocketJsonException;
-import com.app.hos.utils.exceptions.NotExecutableCommandException;
 
 public class Thrower {
 	

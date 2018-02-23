@@ -2,7 +2,6 @@ package com.app.hos.tests.integrations.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
@@ -37,14 +34,13 @@ import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.utils.Utils;
 
 // get Collection of Devices when there is no device in database 
 // get statuses from device from DB and getting from Map (check what with id field)
 // check if getting AllDevices if from cache, not DB!
 // test view what will be show when devices list eq 0
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
