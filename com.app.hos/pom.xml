@@ -480,29 +480,23 @@
 	      	</configuration>
 	    </plugin>
 	    <!-- Sass compiler -->
-        <plugin>
-            <groupId>org.jasig.maven</groupId>
-            <artifactId>sass-maven-plugin</artifactId>
-            <version>1.1.1</version>
-            <executions>
-                <execution>
-                    <phase>prepare-package</phase>
-                    <goals>
-                        <goal>update-stylesheets</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <resources>
-                    <resource>
-                        <source>
-                            <directory>${project.basedir}/src/main/webapp/sass</directory>
-                        </source>
-                        <destination>${project.basedir}/src/main/webapp/resources/css</destination>
-                    </resource>
-                </resources>
-            </configuration>
-        </plugin>
+	    <plugin>
+	        <groupId>com.github.warmuuh</groupId>
+	        <artifactId>libsass-maven-plugin</artifactId>
+	        <version>0.2.9-libsass_3.4.7</version>
+	        <executions>
+		        <execution>
+			        <phase>generate-resources</phase>
+			        <goals>
+			        	<goal>compile</goal>
+			        </goals>
+		        </execution>
+	        </executions>
+	        <configuration>
+		        <inputPath>${project.basedir}/src/main/webapp/sass</inputPath>
+		        <outputPath>${project.basedir}/src/main/webapp/resources/css</outputPath>
+	        </configuration>
+      	</plugin>
 	 </plugins>
   </build>
 </project>

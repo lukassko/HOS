@@ -24,26 +24,33 @@
 			
 			deviceManager.drawDevices();
 			
-			var statusDatePicker = new DatePicker("#report-range",
+			window.statusDatePicker = new DatePicker("#report-range",
 					function onDateSelect(type, start, end) {
 						var device = deviceManager.getActiveDevice();
 						if (device != null) {
 							new DeviceStatusCall(device.serial,start.unix(),end.unix(), function(status, response) {
 								chartsApi.setStatus(response);
 								var series = chartsApi.getStatusSeries();
-								statusChart.removeSeries();
-								$.each(series , function(index, serie) {
-									statusChart.addSerie(serie.name, serie.data);
-								});
+								ramChart.removeSeries();
+								cpuChart.removeSeries();
+								var cpuData = series[0];
+								var ramData = series[1];
+								ramChart.addSerie(ramData.name, ramData.data);
+								cpuChart.addSerie(cpuData.name, cpuData.data);
 		
 							}).send();
 						}
 					});
 
-			var statusChart = new Chart("#status-chart",{
-	            title: 'CPU/RAM Usage'
+			var ramChart = new Chart("#ram-chart",{
+	            title: 'RAM usage'
 	        });
-
+			
+			var cpuChart = new Chart("#cpu-chart",{
+	            title: 'CPU usage'
+	        });
+			
+			deviceManager.selectFirst();
 		});
 	
 	</script>
@@ -75,7 +82,7 @@
 				      <ul class="nav navbar-nav">
 				      
 				      <!-- class="active" -->
-				        <li><a href="#"  onclick="callDate();">Status</a></li>
+				        <li><a href="#">Status</a></li>
 				        <li><a href="#">History</a></li>
 				        <li class="dropdown">
 				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commands <span class="caret"></span></a>
@@ -166,7 +173,8 @@
 					<div id="report-range" data-type="status"></div>
 				</div>
 				<div style="height:calc(100% - 50px);">
-					<div id="status-chart" style="height:100%;"></div>
+					<div id="ram-chart" style="height:50%;"></div>
+					<div id="cpu-chart" style="height:50%;"></div>
 				</div>
 			</div>
 		</div>

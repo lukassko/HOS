@@ -78,7 +78,13 @@
     		    style: {fontFamily: 'Verdana, Geneva, sans-serif'},
     		    plotBorderColor: '#606063'
     	    },
-    	    colors: ["#7cb5ec", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354", "#2b908f", "#f45b5b", "#91e8e1","#434348"],
+    	    colors: ["#d19b3d","#7cb5ec", "#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#2b908f", "#f45b5b","#e4d354", "#91e8e1","#434348"],
+    	    credits: {
+    	        enabled: false
+    	    },
+    	    legend: {
+    	        enabled: false
+    	    },
     	    title: {
     	        text: settings.title,
     	        style: {

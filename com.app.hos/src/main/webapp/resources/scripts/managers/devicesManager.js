@@ -25,7 +25,7 @@ var deviceManager = (function() {
 			} 
 		});
 		if (selectedDeivce != null) {
-			setClickedDevice();
+			refreshDeviceStatus();
 		}
 	}
 	
@@ -42,11 +42,15 @@ var deviceManager = (function() {
 		});
 	};
 	
-	function setClickedDevice() {
-		$("#report-range").enable();
-		$(getDivDeviceId(selectedDeivce)).addClass('activeDevice'); 
+	function refreshDeviceStatus() {
 		setDeviceData();
 		setDeviceStatus();
+	}
+	
+	function setClickedDevice() {
+		statusDatePicker.setRange();
+		$(getDivDeviceId(selectedDeivce)).addClass('activeDevice'); 
+		refreshDeviceStatus();
 	};
 	
 	function setDeviceData() {
@@ -110,11 +114,20 @@ var deviceManager = (function() {
 		return device;
 	}
 	
+	function _selectFirst() {
+		if (connectedDevices.size > 0) {
+			var id = connectedDevices.keys().next().value;
+			selectedDeivce = id;
+			setClickedDevice();
+		}
+	}
+	
 	return {
 		setDevices: _setDevices,
 		drawDevices: _drawDevices,
 		removeDevice: _removeDevice,
-		getActiveDevice: _getActiveDevice
+		getActiveDevice: _getActiveDevice,
+		selectFirst: _selectFirst
 	}
 	
 })();
