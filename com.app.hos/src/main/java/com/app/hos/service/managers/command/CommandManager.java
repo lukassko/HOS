@@ -8,7 +8,7 @@ import java.util.concurrent.FutureTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.share.command.FutureCommandFactory;
 import com.app.hos.share.command.builder.Command;
@@ -22,11 +22,11 @@ public class CommandManager {
 	private final int THREAD_COUNT = 4;
 	
 	@Autowired
-	private SystemFacade systemFacade;
+	private CommandsApi commandsApi;
 	
 	// setters
-	public void setSystemFacade(SystemFacade systemFacade) {
-		this.systemFacade = systemFacade;
+	public void setSystemFacade(CommandsApi commandsApi) {
+		this.commandsApi = commandsApi;
 	}
 
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
@@ -59,7 +59,7 @@ public class CommandManager {
 				this.command.setResult(new Message(e.getMessage()));
 				this.command.setStatus(false);
 			}
-			systemFacade.sendCommand(connectionId, command);
+			commandsApi.sendCommand(connectionId, command);
 		}
 	}
 

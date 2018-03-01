@@ -5,7 +5,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandlingException;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.CommandsApi;
+import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.share.command.builder.Command;
 
@@ -14,13 +15,13 @@ public class Server {
 	
 	//private ConnectionIdTransforner connectionIdTransformer;
 	@Autowired
-	private SystemFacade systemFacadeImpl;
+	private CommandsApi commandsApi;
 	
 	@Autowired
 	private Gateway gateway;
 
 	public void receiveMessage(Message<Command> message) {
-		systemFacadeImpl.receivedCommand(message.getHeaders(),message.getPayload());
+		commandsApi.receivedCommand(message.getHeaders(),message.getPayload());
 	}
 		
 	public void sendMessage(Message<Command> message) {

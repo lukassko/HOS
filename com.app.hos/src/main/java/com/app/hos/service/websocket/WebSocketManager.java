@@ -18,7 +18,6 @@ import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
 import com.app.hos.utils.json.JsonConverter;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class WebSocketManager {
@@ -40,7 +39,6 @@ public class WebSocketManager {
 	}
 	
 	private void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommandException {
-		//Callable<WebCommand> executableCommand = FutureWebCommandFactory.getCommand(command);
 		Callable<WebCommand> executableCommand = futureWebCommandFactory.get(command);
 		executeCommand(callback,session,executableCommand);
 	}
@@ -71,13 +69,7 @@ public class WebSocketManager {
 				this.command.setStatus(false);
 			}
 
-			try {
-				this.callback.onReady(session,JsonConverter.getJson(command));
-			} catch (JsonProcessingException e) {
-				ExceptionUtils.handle(new WebSocketJsonException(session, callback, e));
-			} catch (IOException e) {
-				ExceptionUtils.handle(e);
-			}
+			this.callback.onReady(session,command);
 		}
 	}
 }

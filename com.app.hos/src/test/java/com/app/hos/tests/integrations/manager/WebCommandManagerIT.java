@@ -2,6 +2,8 @@ package com.app.hos.tests.integrations.manager;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +39,7 @@ import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -58,27 +60,37 @@ public class WebCommandManagerIT {
 				throws NotExecutableCommandException, InterruptedException, JsonParseException, JsonMappingException, IOException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
+		
 		WebCommandType type = WebCommandType.GET_ALL_DEVICES;
 		WebCommand command = WebCommandFactory.getCommand(type);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
-			afterExecuteCommand.countDown();
-		}, Utils.getSessionTest(), message);
 		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
+			afterExecuteCommand.countDown();
+			
+		}, Utils.getSessionTest(), message);
+
 		afterExecuteCommand.await(3, TimeUnit.SECONDS);
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+		
+		Assert.assertTrue(webCommand.getStatus());
+		
 		Assert.assertTrue(webCommand.getType().equals(type));
-		Assert.assertTrue(command.getMessage().equals("[]"));
+		Assert.assertTrue(webCommand.getMessage().equals("[]"));
 	}
 
 	@Test
 	public void stage10_getAllDevicesWithOneConnectedDeviceWithoutStatusShouldReturnProperMessage() 
-			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException, InterruptedException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
 		
 		Map<String,Object> headerMap = new HashMap<String, Object>();
 		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.100:13020:100:asd:dsa:100");
@@ -91,36 +103,56 @@ public class WebCommandManagerIT {
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
+		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
 			afterExecuteCommand.countDown();
+			
 		}, Utils.getSessionTest(), message);
 		
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		afterExecuteCommand.await(3, TimeUnit.SECONDS);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+
+		Assert.assertTrue(webCommand.getStatus());
+		
 		String matchPattern = "(.*)webdevice(.*)endConnectionTime(.*):null,(.*)new(.*):false}},(.*)null(.*):null}(.*)";
 		Assert.assertTrue(webCommand.getMessage().matches(matchPattern));
+		
 		matchPattern = "(.*)null..null}]";
 		Assert.assertTrue(webCommand.getMessage().matches(matchPattern));
 	}
 	
 	@Test
 	public void stage20_getAllDevicesWithOneConnectedDeviceWithOneStatusShouldReturnProperMessage() 
-			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException, InterruptedException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
 		
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
+		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
 			afterExecuteCommand.countDown();
+			
 		}, Utils.getSessionTest(), message);
 		
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		afterExecuteCommand.await(3, TimeUnit.SECONDS);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+
+		Assert.assertTrue(webCommand.getStatus());
 		
 		String matchPattern = "...webdevice(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.:(.*)"+
 					"ramUsage.:0.2,.cpuUsage.:13.4...";
@@ -129,22 +161,31 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage30_getAllDevicesWithOneConnectedDeviceWithManyStatusesShouldReturnProperMessage() 
-			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException, InterruptedException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
 
 		DeviceStatus status = new DeviceStatus(new DateTime(),11.65, 33.1);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
+		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
 			afterExecuteCommand.countDown();
+			
 		}, Utils.getSessionTest(), message);
 		
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		afterExecuteCommand.await(3, TimeUnit.SECONDS);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+				
+		Assert.assertTrue(webCommand.getStatus());
 		
 		String matchPattern = "...webdevice(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.:(.*)"+
 					"ramUsage.:11.65,.cpuUsage.:33.1...";
@@ -153,10 +194,10 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage40_getAllDevicesWithTwoConnectedDevicesShouldReturnProperMessage() 
-			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException, InterruptedException {
 		
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
 		
 		Map<String,Object> headerMap = new HashMap<String, Object>();
 		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.100:13020:100:asd:dsa:101");
@@ -169,12 +210,21 @@ public class WebCommandManagerIT {
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
+		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
 			afterExecuteCommand.countDown();
+			
 		}, Utils.getSessionTest(), message);
 		
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		afterExecuteCommand.await(3, TimeUnit.SECONDS);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+
+		Assert.assertTrue(webCommand.getStatus());
 		
 		String matchPattern = "...webdevice.:..id.:1,(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:..time.." + 
 						 "(.*)ramUsage.:11.65,.cpuUsage.:33.1(.*)webdevice.:..id.:2(.*)new.:false..,.null.:null..";
@@ -184,21 +234,31 @@ public class WebCommandManagerIT {
 	
 	@Test
 	public void stage50_getAllDevicesWithTwoConnectedDevicesWithStatusesShouldReturnProperMessage() 
-			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException {
+			throws NotExecutableCommandException, JsonParseException, JsonMappingException, IOException, InterruptedException {
 		final CountDownLatch afterExecuteCommand = new CountDownLatch(1);
-		final StringBuffer sendedMessage = new StringBuffer();
+		final List<WebCommand> sentCommands = new LinkedList<>();
 		
 		DeviceStatus status = new DeviceStatus(new DateTime(),29.15, 89.13);
 		deviceManager.addDeviceStatus("serial_device_2", status);
 		
 		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
-		webSocketManager.executeCommand((s, m) -> {
-			sendedMessage.append(m);
+		
+		webSocketManager.executeCommand((s, c) -> {
+			
+			sentCommands.add(c);
 			afterExecuteCommand.countDown();
+			
 		}, Utils.getSessionTest(), message);
 		
-		WebCommand webCommand = JsonConverter.getObject(sendedMessage.toString(), WebCommand.class);
+		
+		afterExecuteCommand.await(3, TimeUnit.SECONDS);
+		
+		Assert.assertEquals(1, sentCommands.size());
+		
+		WebCommand webCommand = sentCommands.get(0);
+		
+		Assert.assertTrue(webCommand.getStatus());
 		
 		String matchPattern = "...webdevice.:..id.:1,(.*)endConnectionTime.:null,.new.:false..,.devicestatus.:"+
 						"..time..(.*)ramUsage.:11.65,.cpuUsage.:33.1(.*)webdevice.:..id.:2(.*)"+
@@ -206,4 +266,5 @@ public class WebCommandManagerIT {
 		
 		Assert.assertTrue(webCommand.getMessage().matches(matchPattern));
 	}
+
 }

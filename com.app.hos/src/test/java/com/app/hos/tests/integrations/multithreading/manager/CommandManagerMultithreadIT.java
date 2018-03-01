@@ -28,7 +28,7 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder.Command;

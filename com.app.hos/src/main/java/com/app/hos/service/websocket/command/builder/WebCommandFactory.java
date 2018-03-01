@@ -15,9 +15,6 @@ public class WebCommandFactory {
 	}
 
 	public static WebCommand getCommand(WebCommandType type, String message) {
-		if(type == null) {
-			throw new IllegalArgumentException();
-		}
 		if (type == WebCommandType.REMOVE_DEVICE) {
 			commandBuilder.setCommandBuilder(new RemoveDeviceWebCommandBuilder());
 		} else if (type == WebCommandType.GET_ALL_DEVICES) {
@@ -27,7 +24,7 @@ public class WebCommandFactory {
 		} else if (type == WebCommandType.JSON_EXCEPTION) {
 			commandBuilder.setCommandBuilder(new BadConversionWebCommandBuilder(message));
 		} else {
-			return null;
+			throw new IllegalArgumentException();
 		}	
 		commandBuilder.createCommand();
  		return commandBuilder.getCommand();

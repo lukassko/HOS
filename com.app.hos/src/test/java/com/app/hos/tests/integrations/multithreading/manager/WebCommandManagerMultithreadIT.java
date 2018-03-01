@@ -22,7 +22,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
@@ -47,11 +46,12 @@ import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @WebAppConfiguration 
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
-@PrepareForTest(FutureWebCommandFactory.class)
+//@RunWith(PowerMockRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+//@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
+//@PrepareForTest(FutureWebCommandFactory.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WebCommandManagerMultithreadIT {
@@ -84,6 +84,7 @@ public class WebCommandManagerMultithreadIT {
 		//PowerMockito.mockStatic(FutureWebCommandFactory.class);
 		//PowerMockito.when(FutureWebCommandFactory.getCommand(Mockito.any(WebCommand.class))).thenReturn(testExecutableCommand);
 		//Mockito.doReturn(testExecutableCommand).when(futureWebCommandFactory.get(Mockito.any(WebCommand.class)));
+
 		Mockito.when(futureWebCommandFactory.get(Mockito.any(WebCommand.class))).thenReturn(testExecutableCommand);
 		
 		Mockito.doNothing().when(serverEndpoint).sendMessage(Mockito.any(Session.class), Mockito.anyString());

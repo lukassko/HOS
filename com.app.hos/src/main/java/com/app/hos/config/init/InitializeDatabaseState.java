@@ -26,6 +26,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+
 		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
 		Device device = new Device("Lukasz Device", "serial_1");

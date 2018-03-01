@@ -17,6 +17,8 @@ import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.app.hos.service.exceptions.WebSocketException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
+import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.utils.json.JsonConverter;
 
 //decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class,
 @ServerEndpoint(value = "/websocket", configurator = SpringConfigurator.class)
@@ -38,7 +40,7 @@ public class WebSocketServerEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String message) {
-		webSocketManager.executeCommand((s, m) -> sendMessage(s, m), session, message);
+		webSocketManager.executeCommand((s, c) -> sendMessage(s, c), session, message);
 	}
 
 	@OnClose
@@ -57,6 +59,14 @@ public class WebSocketServerEndpoint {
 		});
 	}
 
+	public void sendMessage(Session session, WebCommand command) {
+		try {
+			sendMessage(session,JsonConverter.getJson(command));
+		} catch (IOException e) {
+			ExceptionUtils.handle(e);
+		} 
+	}
+	
 	public synchronized void sendMessage(Session session, String message) {
 		try {
 			session.getBasicRemote().sendText(message);

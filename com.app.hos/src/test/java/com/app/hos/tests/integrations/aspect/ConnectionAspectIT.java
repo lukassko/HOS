@@ -29,7 +29,7 @@ import org.springframework.messaging.Message;
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;

@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.app.hos.service.SystemFacade;
-import com.app.hos.service.SystemFacadeImpl;
+import com.app.hos.service.api.SystemFacade;
+import com.app.hos.service.api.SystemFacadeImpl;
 import com.app.hos.service.aspects.AutoInjectDependecyAspect;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;

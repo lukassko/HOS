@@ -1,4 +1,4 @@
-package com.app.hos.service;
+package com.app.hos.service.api;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
-import com.app.hos.pojo.WebDeviceStatusesRequest;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.integration.server.Server;
@@ -33,7 +32,7 @@ import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.Utils;
 
 @Service
-public class SystemFacadeImpl implements SystemFacade {
+public class SystemFacadeImpl implements SystemFacade  {
 
 	@Autowired
 	private DeviceManager deviceManager;

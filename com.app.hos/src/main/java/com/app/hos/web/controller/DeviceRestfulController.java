@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.hos.persistance.models.DeviceStatus;
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.SystemFacade;
 import com.app.hos.share.utils.DateTime;
 
 @Controller

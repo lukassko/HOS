@@ -40,7 +40,7 @@ public class WebCommand implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "WebCommand [type=" + this.type + ", status=" + this.status + "message=" + this.message + "]";
+		return "WebCommand [type=" + this.type + ", status=" + this.status + ", message=" + this.message + "]";
 	}
 
 }

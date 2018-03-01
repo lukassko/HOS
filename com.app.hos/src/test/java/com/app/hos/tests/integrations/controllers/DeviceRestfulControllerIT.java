@@ -22,7 +22,7 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.init.InitializeDatabaseState;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.models.DeviceStatus;
-import com.app.hos.service.SystemFacade;
+import com.app.hos.service.api.SystemFacade;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.web.controller.DeviceRestfulController;
 
