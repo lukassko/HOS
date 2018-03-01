@@ -1,0 +1,29 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+body {
+	background-color: #2e353d;
+}
+
+.login-pane {
+	width: 360px;
+	margin: auto;
+}
+
+.form {
+	background-color: #23282e;
+	padding: 45px;
+}
+
+.form input {
+	width: 100%;
+	padding: 15px;
+	font-size: 14px;
+}
+
+.form button {
+	width: 100%;
+	text-transform: uppercase;
+	font-size: 14px;
+	padding: 15px;
+	cursor: pointer;
+}

@@ -30,10 +30,10 @@ public class ConnectionAspect extends Logger {
 		super(repository);
 	}
 	
-	@Pointcut("execution(* com.app.hos.service.SystemFacade.receivedCommand(..)) && args(headers,command)")
+	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.receivedCommand(..)) && args(headers,command)")
 	public void newCommandPointcut(MessageHeaders headers, Command command) {}
 	
-	@Pointcut("execution(* com.app.hos.service.SystemFacade.closeConnection(..)) && args(connectionId)")
+	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
 	@Before("newCommandPointcut(headers,command)")
