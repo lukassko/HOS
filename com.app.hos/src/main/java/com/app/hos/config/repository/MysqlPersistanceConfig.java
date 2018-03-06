@@ -69,9 +69,10 @@ public class MysqlPersistanceConfig {
     }
 
 
+	@SuppressWarnings("serial")
 	Properties hibernateProperties() {
 	      return new Properties() {
-	         {
+			{
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("hibernate.hbm2ddl.auto"));
 	            setProperty("hibernate.show_sql", 

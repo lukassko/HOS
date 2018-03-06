@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebFilter("/*")
@@ -27,23 +28,28 @@ public class AuthenticationFilter implements Filter {
 			throws IOException, ServletException {
 		
 		HttpServletRequest request = (HttpServletRequest)req;
-		
-		if (isLogged(request) || isLogging(request)) {
+		HttpServletResponse response = (HttpServletResponse)res;
+		if (isLogging(request) || isLogged(request) || isAauthenticating(request)) {
 			chain.doFilter(req, res);
 		} else {
-			redirectToLog(req,res);
+			response.sendRedirect("login");
 		}
 	}
 
 	private boolean isLogged(HttpServletRequest request) {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
 		return session != null && session.getAttribute("user") != null;
 	}
 	
 	private boolean isLogging(HttpServletRequest request) {
-        String loginURI = request.getContextPath() + "/logging";
+        String loginURI = request.getContextPath() + "/login";
         String user = request.getParameter("user");
-		return 	request.getRequestURI().equals(loginURI) && user != null;
+		return 	request.getRequestURI().equals(loginURI) && user == null;
+	}
+	
+	private boolean isAauthenticating(HttpServletRequest request) {
+        String loginURI = request.getContextPath() + "/logging";
+		return 	request.getRequestURI().equals(loginURI);
 	}
 	
 	private void redirectToLog(ServletRequest req, ServletResponse res) throws ServletException, IOException {

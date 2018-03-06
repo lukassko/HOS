@@ -2,7 +2,6 @@ package com.app.hos.tests.integrations.persistance;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +28,7 @@ import org.junit.runners.MethodSorters;
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class})
-@ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ConnectionRepositoryIT {
 
 	private static List<Connection> connectionList = new LinkedList<Connection>();

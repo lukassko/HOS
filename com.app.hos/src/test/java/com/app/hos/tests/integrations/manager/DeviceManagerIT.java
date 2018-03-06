@@ -24,9 +24,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.config.AspectConfig;
-import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
@@ -42,7 +39,8 @@ import com.app.hos.share.utils.DateTime;
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
+//MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, 
+@ContextConfiguration(classes = {ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @WebAppConfiguration

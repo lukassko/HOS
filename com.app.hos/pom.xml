@@ -7,7 +7,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>hos Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  
+
   <properties>
   	<tomcat.version>8.0.44</tomcat.version>
   	<maven.compiler.version>3.7.0</maven.compiler.version>
@@ -42,6 +42,7 @@
   	<highcharts.version>5.0.1</highcharts.version>
   	<momentjs.version>2.20.1</momentjs.version>
   	<daterange-picker.version>2.1.19</daterange-picker.version>
+  	<libsass.plugin.version>0.2.8-libsass_3.4.4</libsass.plugin.version>
   	<!-- JAVA compiler version -->
   	<maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -469,7 +470,7 @@
 	    <plugin>
 	        <groupId>com.github.warmuuh</groupId>
 	        <artifactId>libsass-maven-plugin</artifactId>
-	        <version>0.2.9-libsass_3.4.7</version>
+	        <version>${libsass.plugin.version}</version>
 	        <executions>
 		        <execution>
 			        <phase>generate-resources</phase>
