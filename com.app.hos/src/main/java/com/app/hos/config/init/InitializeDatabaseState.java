@@ -41,7 +41,6 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		user.setName("Lukasz");
 		user.setPassword("pass");
 		user.setRole(Role.ADMIN);
-		
 		userRepository.save(user);
 	}
 	

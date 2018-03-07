@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -40,10 +41,15 @@ public class LoginServlet extends HttpServlet {
 		String userPassword = (String)request.getAttribute("password");
 
 		User user = provider.authenticate(userName,userPassword);
-		if (user == null) {
-
+		if (user != null) {
+			System.out.println("Useur not null, create session");
+			HttpSession session = request.getSession(true);
+			session.setAttribute("user", user);
+			 //setting session to expiry in 5 mins
+			session.setMaxInactiveInterval(5*60);
+			response.sendRedirect("/");
 		} else {
-
+			System.out.println("Useur null :(");
 		}
 		
     }
