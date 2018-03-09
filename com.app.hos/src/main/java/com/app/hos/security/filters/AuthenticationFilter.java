@@ -1,4 +1,4 @@
-package com.app.hos.web.security;
+package com.app.hos.security.filters;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -30,16 +30,7 @@ public class AuthenticationFilter implements Filter {
 
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)res;
-		System.out.println("Request " + request.getRequestURI());
-		System.out.println("Is session null? " + (null == request.getSession(false)));
-		Enumeration attrs1 =  req.getAttributeNames();
-		while(attrs1.hasMoreElements()) {
-		    System.out.println("1 "+attrs1.nextElement());
-		}
-		Enumeration attrs2 =  request.getAttributeNames();
-		while(attrs2.hasMoreElements()) {
-		    System.out.println(attrs2.nextElement());
-		}
+		
 		if (isResourceRequest(request) || isLogging(request) || isLogged(request) || isAauthenticating(request)) {
 			chain.doFilter(req, res);
 		} else {

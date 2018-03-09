@@ -1,25 +1,30 @@
 package com.app.hos.persistance.models;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 @Table(name = "users")
 @Entity
 public class User extends BaseEntity  {
-	
-	public enum Role {
-		ADMIN,
-		USER
-	}
 
 	private String name;
 	
 	private String password;
 	
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinTable(
+		name = "users_roles", 
+		joinColumns = { @JoinColumn(name = "user_id") }, 
+		inverseJoinColumns = { @JoinColumn(name = "role_id") }
+	)
+	private Set<Role> roles;
 
 	public String getName() {
 		return name;
@@ -37,21 +42,21 @@ public class User extends BaseEntity  {
 		this.password = password;
 	}
 
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		return result;
 	}
 
@@ -59,7 +64,7 @@ public class User extends BaseEntity  {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -74,13 +79,31 @@ public class User extends BaseEntity  {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (role != other.role)
+		if (roles == null) {
+			if (other.roles != null)
+				return false;
+		} else if (!compareRoles(other))
 			return false;
 		return true;
 	}
 
+	private boolean compareRoles(User other) {
+		if (this.getRoles().size() != other.getRoles().size())
+			return false;	
+		Set<Role> othersRole = other.getRoles();
+		Set<Role> thisRole = this.getRoles();
+		for (Role role : thisRole) {
+			if (!othersRole.contains(role)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", password=" + password + ", role=" + role + "]";
+		return "User [name=" + name + ", password=" + password + "]";
 	}
+	
+
 }

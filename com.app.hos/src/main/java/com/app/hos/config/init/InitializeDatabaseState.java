@@ -14,7 +14,6 @@ import com.app.hos.persistance.models.Connection;
 import com.app.hos.persistance.models.Device;
 import com.app.hos.persistance.models.DeviceStatus;
 import com.app.hos.persistance.models.User;
-import com.app.hos.persistance.models.User.Role;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.utils.DateTime;
@@ -40,7 +39,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		User user = new User();
 		user.setName("Lukasz");
 		user.setPassword("pass");
-		user.setRole(Role.ADMIN);
+		
 		userRepository.save(user);
 	}
 	

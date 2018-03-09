@@ -30,14 +30,12 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public User find(String name, String password) {
-		String queryString = "SELECT u FROM User u WHERE u.name = :name AND u.password = :password";
+	public User find(String userName) {
+		String queryString = "SELECT u FROM User u WHERE u.name = :userName";
 		Query query = manager.createQuery(queryString);
 		
-		query	.setParameter("name", name)
-				.setParameter("password", password);
+		query.setParameter("name", userName);
 		
 		return (User) query.getSingleResult();
 	}
-
 }
