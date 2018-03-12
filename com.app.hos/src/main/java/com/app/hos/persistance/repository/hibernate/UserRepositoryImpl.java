@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public User find(String name) {
+	public User findByName(String name) {
 		String queryString = "SELECT u FROM User u WHERE u.name = :name";
 		Query query = manager.createQuery(queryString);
 		

@@ -1,5 +1,6 @@
 package com.app.hos.persistance.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -7,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
+@Table(name = "roles")
 @Entity
 public class Role extends BaseEntity {
 
@@ -17,25 +20,30 @@ public class Role extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="role")
-	private UserRole userRole;
+	private UserRole role;
 
-	public Role(UserRole userRole) {
-		this.userRole= userRole;
+	public Role() {}
+	
+	public Role(UserRole role) {
+		this.role= role;
 	}
 	
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users;
 
 	public UserRole getUserRole() {
-		return userRole;
+		return role;
 	}
 
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
+	public void setUserRole(UserRole role) {
+		this.role = role;
 	}
 
 	public Set<User> getUsers() {
-		return users;
+		if (this.users == null) {
+			this.users = new HashSet<>();
+		}
+		return this.users;
 	}
 
 	public void setUsers(Set<User> users) {
@@ -46,7 +54,7 @@ public class Role extends BaseEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((userRole == null) ? 0 : userRole.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		return result;
 	}
 
@@ -59,9 +67,14 @@ public class Role extends BaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Role other = (Role) obj;
-		if (userRole != other.userRole)
+		if (role != other.role)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Role [role= " + role + "]";
 	}
 	
 }

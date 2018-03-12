@@ -23,7 +23,7 @@ public class HosUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		try {
-			User user = userRepository.find(userName);
+			User user = userRepository.findByName(userName);
 			return new HosUserDetails(user);
 		} catch (NoResultException e) {
 			throw new UsernameNotFoundException(userName);

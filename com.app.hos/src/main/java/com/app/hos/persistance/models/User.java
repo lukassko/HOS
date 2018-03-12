@@ -1,5 +1,6 @@
 package com.app.hos.persistance.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,12 +18,12 @@ public class User extends BaseEntity  {
 	private String name;
 	
 	private String password;
-	
-	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(
 		name = "users_roles", 
-		joinColumns = { @JoinColumn(name = "user_id") }, 
-		inverseJoinColumns = { @JoinColumn(name = "role_id") }
+		joinColumns = { @JoinColumn(name = "user_id",referencedColumnName="id") }, 
+		inverseJoinColumns = { @JoinColumn(name = "role_id",referencedColumnName="id") }
 	)
 	private Set<Role> roles;
 
@@ -49,8 +50,16 @@ public class User extends BaseEntity  {
 		this.password = password;
 	}
 
+	public void addRole(Role role) {
+		this.getRoles().add(role);
+		role.getUsers().add(this);
+	}
+	
 	public Set<Role> getRoles() {
-		return roles;
+		if (this.roles == null) {
+			this.roles = new HashSet<>();
+		}
+		return this.roles;
 	}
 
 	public void setRoles(Set<Role> roles) {
