@@ -40,15 +40,24 @@ public class UserRepositoryIT {
     	user.setName("admin");
     	user.setPassword("root");
     	
-    	Set<Role> usersRole = new HashSet<>();
-    	usersRole.add(new Role(UserRole.ADMIN));
-    	user.setRoles(usersRole);
+    	Role role = new Role(UserRole.USER);
     	
+    	Set<Role> roles = new HashSet<>();
+    	roles.add(role); 
+    	
+    	Set<User> users = new HashSet<>();
+    	users.add(user);
+    	
+    	role.setUsers(users);
+    	user.setRoles(roles);
+
     	userRepository.save(user);
+    	//userRepository.save(user);
     	
     	Assert.assertTrue(TransactionSynchronizationManager.isActualTransactionActive());
     	Assert.assertEquals(user, userRepository.find(1));
-    	Assert.assertEquals(user, userRepository.find("Lukasz"));
-    	Assert.assertEquals(usersRole, userRepository.find("Lukasz").getRoles());
+    	Assert.assertEquals(user, userRepository.find("admin"));
+    	Assert.assertEquals(1, userRepository.find("admin").getRoles().size());
+    	Assert.assertTrue(user.compareRoles(userRepository.find("admin")));
     }
 }

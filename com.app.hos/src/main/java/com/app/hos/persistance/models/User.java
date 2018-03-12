@@ -18,7 +18,7 @@ public class User extends BaseEntity  {
 	
 	private String password;
 	
-	@ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "users_roles", 
 		joinColumns = { @JoinColumn(name = "user_id") }, 
@@ -26,6 +26,13 @@ public class User extends BaseEntity  {
 	)
 	private Set<Role> roles;
 
+	public User(){}
+	
+	public User(String name, String password) {
+		this.name = name;
+		this.password = password;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -87,7 +94,7 @@ public class User extends BaseEntity  {
 		return true;
 	}
 
-	private boolean compareRoles(User other) {
+	public boolean compareRoles(User other) {
 		if (this.getRoles().size() != other.getRoles().size())
 			return false;	
 		Set<Role> othersRole = other.getRoles();

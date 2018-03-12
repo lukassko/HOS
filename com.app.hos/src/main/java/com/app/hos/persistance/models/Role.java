@@ -2,6 +2,7 @@ package com.app.hos.persistance.models;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,7 @@ public class Role extends BaseEntity {
 	}
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name="role")
 	private UserRole userRole;
 
 	public Role(UserRole userRole) {
