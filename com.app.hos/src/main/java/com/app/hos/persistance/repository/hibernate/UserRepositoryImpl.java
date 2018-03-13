@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
 			manager.merge(user);
 		}
 	}
-
+	
 	@Override
 	public User find(int id) {
 		return manager.find(User.class, id);
