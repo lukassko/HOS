@@ -1,19 +1,18 @@
 package com.app.hos.security.filters;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.app.hos.security.states.StatesAuthenticator;
 
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
@@ -25,20 +24,26 @@ public class AuthenticationFilter implements Filter {
 	public void destroy() {}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-
-		HttpServletRequest request = (HttpServletRequest)req;
-		HttpServletResponse response = (HttpServletResponse)res;
 		
-		if (isResourceRequest(request) || isLogging(request) || isLogged(request) || isAauthenticating(request)) {
-			chain.doFilter(req, res);
-		} else {
-			response.sendRedirect("login");
-		}
+		StatesAuthenticator statesAuthenticator = getStatesAuthenticator(request);
+		statesAuthenticator.doAuthentication(request, response, chain);
 	}
 
-	private boolean isResourceRequest (HttpServletRequest request) {
+	private StatesAuthenticator getStatesAuthenticator(ServletRequest req) {
+		StatesAuthenticator statesAuthenticator;
+		HttpServletRequest request = (HttpServletRequest)req;
+		HttpSession session = request.getSession(false);
+		if (session == null) 
+			statesAuthenticator = new StatesAuthenticator();
+		else 
+			statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
+		
+		return statesAuthenticator;
+	}
+	
+	/*private boolean isResourceRequest (HttpServletRequest request) {
 		String requestUrl = request.getRequestURI();
 		if (requestUrl.contains("/resources/") || requestUrl.contains("/webjars/"))
 			return true;
@@ -59,6 +64,6 @@ public class AuthenticationFilter implements Filter {
 	private boolean isAauthenticating(HttpServletRequest request) {
         String loginURI = request.getContextPath() + "/logging";
 		return 	request.getRequestURI().equals(loginURI);
-	}
+	}*/
 
 }
