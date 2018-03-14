@@ -6,19 +6,35 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.app.hos.security.states.AuthenticationState;
 import com.app.hos.security.states.StatesAuthenticator;
 
 public class AuthenticatingState implements AuthenticationState {
 
+	private final String errorMessage = "Unauthorized request";
+	
 	@Override
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException{
 		
 		authentication.setAuthentication(null);
-		// check URl
-		chain.doFilter(request, response);
+		
+		HttpServletResponse httpResponse = (HttpServletResponse)request;
+		
+        if (isLoggingRequest(request))
+        	chain.doFilter(request, response);
+        else
+        	httpResponse.sendError(401, errorMessage);
+        
 	}
 
+	private boolean isLoggingRequest(ServletRequest request) {
+		HttpServletRequest httpRequest = (HttpServletRequest)request;
+		String loginURI = httpRequest.getContextPath() + "/login";
+        String userTryUrl = httpRequest.getRequestURI();
+        return loginURI.equals(userTryUrl);
+	}
 }

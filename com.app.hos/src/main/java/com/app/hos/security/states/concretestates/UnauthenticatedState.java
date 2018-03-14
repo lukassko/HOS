@@ -24,7 +24,14 @@ public class UnauthenticatedState implements AuthenticationState {
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		
-		HttpSession session = httpRequest.getSession(true);
+		 //get the old session and invalidate if exists
+        HttpSession oldSession = httpRequest.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+        //generate a new session
+        HttpSession session = httpRequest.getSession(true);
+        session.setMaxInactiveInterval(300); // 5 minutes
 		session.setAttribute("authenticator", authentication);
 
 		httpResponse.sendRedirect("login");
