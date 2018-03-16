@@ -23,7 +23,7 @@ public class HosUserAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return this.userDetails.getAuthorities();
 	}
 
 	public HosUserAuthentication setCredentials(Object credentials) {

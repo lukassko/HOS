@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
@@ -25,4 +27,9 @@ public class BeansConfig {
 	public ApplicationContextProvider getApplicationContext() {
 	    return new ApplicationContextProvider();
 	}
+	
+	@Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

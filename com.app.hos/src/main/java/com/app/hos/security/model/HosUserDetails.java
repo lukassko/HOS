@@ -12,13 +12,15 @@ public class HosUserDetails implements UserDetails {
 
 	private User user;
 	
+	private Collection<? extends GrantedAuthority> authorities;
+	
 	public HosUserDetails(User user) {
 		this.user = user;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return this.authorities;
 	}
 
 	@Override
@@ -50,6 +52,10 @@ public class HosUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.setAuthorities(authorities);
 	}
 
 }
