@@ -31,4 +31,5 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 	public boolean supports(Class<?> authenticationClazz) {
 		return false;
 	}
+
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
@@ -15,8 +16,16 @@ import javax.persistence.JoinColumn;
 @Entity
 public class User extends BaseEntity  {
 
+	@Column(name="name")
 	private String name;
 	
+	@Column(name="hash")
+	private String hash;
+	
+	@Column(name="salt")
+	private String salt;
+	
+	@Column(name="password")
 	private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
