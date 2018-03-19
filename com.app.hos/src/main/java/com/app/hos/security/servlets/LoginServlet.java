@@ -18,10 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import com.app.hos.pojo.UserHash;
+import com.app.hos.security.UserHashing;
 import com.app.hos.security.model.HosUserAuthentication;
 import com.app.hos.security.states.StatesAuthenticator;
 import com.app.hos.security.states.concretestates.AuthenticatedState;
 import com.app.hos.security.states.concretestates.AuthenticatingState;
+import com.app.hos.utils.security.SecurityUtils;
 
 @SuppressWarnings("serial")
 @WebServlet("/logging")
@@ -46,35 +49,28 @@ public class LoginServlet extends HttpServlet {
 	// user try to log in
 	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = (String)request.getAttribute("user");
-		String userPassword = (String)request.getAttribute("password");
+		String hash = (String)request.getAttribute("hash");
 		
-		StatesAuthenticator statesAuthenticator = getStatesAuthenticator(request);
-		UserDetails userDetails;
+		HttpSession session = SecurityUtils.getSessionFromHttpServletRequest(request);
+		
+		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
+		UserHashing userHashing = (UserHashing)session.getAttribute("user");
+		String challenge = (String)session.getAttribute("challenge");
+		
+		UserHash userHash = new UserHash().setHash(hash).setSalt(userHashing.getSalt()).setChallenge(challenge);
 		
 		try {
-		
-			userDetails = userDetailsService.loadUserByUsername(userName);
-			Authentication authentication = new HosUserAuthentication(userDetails).setCredentials(userPassword);
+
+			Authentication authentication = new HosUserAuthentication(userHashing).setCredentials(userHash);
+			
 			authentication = authenticationProvider.authenticate(authentication);	
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
 			response.sendRedirect("/");
 
 		} catch (AuthenticationException e) {
 			statesAuthenticator.setState(new AuthenticatingState());
-			unauthorized(response, e.getMessage());
+			SecurityUtils.unauthorized(response, e.getMessage());
 		}
-		
     }
-	
-	private StatesAuthenticator getStatesAuthenticator(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		return (StatesAuthenticator)session.getAttribute("authenticator");
-	}
-	
-	
-	private void unauthorized(HttpServletResponse response, String message) throws IOException {
-		response.sendError(401, message);
-	}
 
 }

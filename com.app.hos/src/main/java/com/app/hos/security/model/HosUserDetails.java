@@ -3,12 +3,12 @@ package com.app.hos.security.model;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.app.hos.persistance.models.User;
+import com.app.hos.security.UserHashing;
 
 @SuppressWarnings("serial")
-public class HosUserDetails implements UserDetails {
+public class HosUserDetails implements UserHashing {
 
 	private User user;
 	
@@ -24,8 +24,8 @@ public class HosUserDetails implements UserDetails {
 	}
 
 	@Override
-	public String getPassword() {
-		return user.getPassword();
+	public String getPassword() throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("Use combination of hash and salt with UserHashing interface.");
 	}
 
 	@Override
@@ -50,12 +50,21 @@ public class HosUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.setAuthorities(authorities);
+	}
+
+	@Override
+	public String getHash() {
+		return this.user.getHash();
+	}
+
+	@Override
+	public String getSalt() {
+		return this.user.getSalt();
 	}
 
 }

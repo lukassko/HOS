@@ -75,6 +75,22 @@ public class User extends BaseEntity  {
 		this.roles = roles;
 	}
 
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

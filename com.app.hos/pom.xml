@@ -44,6 +44,7 @@
   	<daterange-picker.version>2.1.19</daterange-picker.version>
   	<libsass.plugin.version>0.2.8-libsass_3.4.4</libsass.plugin.version>
   	<springsecurity.version>5.0.3.RELEASE</springsecurity.version>
+  	<guava.version>20.0</guava.version>
   	<!-- JAVA compiler version -->
   	<maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -338,6 +339,12 @@
 	    <version>6.0.26</version>
 	</dependency>
 	
+	<dependency>
+    	<groupId>com.google.guava</groupId>
+	    <artifactId>guava</artifactId>
+	    <version>${guava.version}</version>
+	</dependency>
+
 	<!-- WebJars -->
 	<dependency>
 	    <groupId>org.webjars</groupId>
