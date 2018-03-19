@@ -24,7 +24,7 @@ import com.app.hos.utils.security.SecurityUtils;
 
 @SuppressWarnings("serial")
 @WebServlet("/challenge")
-public class HashingServlet extends HttpServlet {
+public class ChallengeServlet extends HttpServlet {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -51,7 +51,7 @@ public class HashingServlet extends HttpServlet {
 			String challenge = SecurityUtils.getRandomSalt().toString();
 			
 			// store challenge and user in session
-			HttpSession session = SecurityUtils.getSessionFromHttpServletRequest(request);
+			HttpSession session = request.getSession(false);
 			session.setAttribute("challenge", challenge);
 			session.setAttribute("user", userHashing);
 			
@@ -64,7 +64,7 @@ public class HashingServlet extends HttpServlet {
 			response.getWriter().write(json);
 			
 		} catch(UsernameNotFoundException e) {
-			SecurityUtils.unauthorized(response, e.getMessage());
+			response.sendError(401, e.getMessage());
 		}
     }
 

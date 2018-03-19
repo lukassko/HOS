@@ -24,17 +24,19 @@ public class AuthenticatingState implements AuthenticationState {
 		
 		HttpServletResponse httpResponse = (HttpServletResponse)request;
 		
-        if (isLoggingRequest(request))
+        if (isChallengeLoggingRequest(request))
         	chain.doFilter(request, response);
         else
         	httpResponse.sendError(401, errorMessage);
         
 	}
 
-	private boolean isLoggingRequest(ServletRequest request) {
+	private boolean isChallengeLoggingRequest(ServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
-		String loginURI = httpRequest.getContextPath() + "/login";
+		String context = httpRequest.getContextPath();
+		String loginURI =  context + "/login";
+		String challnangeURI =  context + "/challenge";
         String userTryUrl = httpRequest.getRequestURI();
-        return loginURI.equals(userTryUrl);
+        return userTryUrl.equals(loginURI) || loginURI.equals(challnangeURI);
 	}
 }

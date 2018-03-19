@@ -1,6 +1,5 @@
 package com.app.hos.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;

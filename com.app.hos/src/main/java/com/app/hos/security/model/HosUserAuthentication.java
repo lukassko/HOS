@@ -4,15 +4,17 @@ import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import com.app.hos.security.UserHashing;
 
 @SuppressWarnings("serial")
 public class HosUserAuthentication implements Authentication {
 
-	private UserDetails userDetails;
+	private UserHashing userDetails;
 	private Object credentials;
+	private boolean isAuthenticated;
 	
-	public HosUserAuthentication(UserDetails userDetails) {
+	public HosUserAuthentication(UserHashing userDetails) {
 		this.userDetails = userDetails;
 	}
 	
@@ -48,11 +50,12 @@ public class HosUserAuthentication implements Authentication {
 
 	@Override
 	public boolean isAuthenticated() {
-		return false;
+		return this.isAuthenticated;
 	}
 
 	@Override
 	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+		this.isAuthenticated = isAuthenticated;
 	}
 
 }

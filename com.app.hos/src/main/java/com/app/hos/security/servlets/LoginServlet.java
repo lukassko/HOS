@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.app.hos.pojo.UserHash;
@@ -24,14 +22,11 @@ import com.app.hos.security.model.HosUserAuthentication;
 import com.app.hos.security.states.StatesAuthenticator;
 import com.app.hos.security.states.concretestates.AuthenticatedState;
 import com.app.hos.security.states.concretestates.AuthenticatingState;
-import com.app.hos.utils.security.SecurityUtils;
 
 @SuppressWarnings("serial")
 @WebServlet("/logging")
 public class LoginServlet extends HttpServlet {
 	
-	@Autowired
-	private UserDetailsService userDetailsService;
 	
 	@Autowired
 	private AuthenticationProvider authenticationProvider;
@@ -49,13 +44,13 @@ public class LoginServlet extends HttpServlet {
 	// user try to log in
 	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession(false);
+		
 		String hash = (String)request.getAttribute("hash");
-		
-		HttpSession session = SecurityUtils.getSessionFromHttpServletRequest(request);
-		
-		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
-		UserHashing userHashing = (UserHashing)session.getAttribute("user");
 		String challenge = (String)session.getAttribute("challenge");
+		UserHashing userHashing = (UserHashing)session.getAttribute("user");
+		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
 		
 		UserHash userHash = new UserHash().setHash(hash).setSalt(userHashing.getSalt()).setChallenge(challenge);
 		
@@ -69,7 +64,7 @@ public class LoginServlet extends HttpServlet {
 
 		} catch (AuthenticationException e) {
 			statesAuthenticator.setState(new AuthenticatingState());
-			SecurityUtils.unauthorized(response, e.getMessage());
+			response.sendError(401,e.getMessage());
 		}
     }
 
