@@ -11,10 +11,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+import javax.servlet.DispatcherType;
 import com.app.hos.security.states.StatesAuthenticator;
 
-@WebFilter("/*")
+//@WebFilter("/*")
+@WebFilter(
+        urlPatterns = "/*",
+        dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
+)
 public class AuthenticationFilter implements Filter {
 
 	@Override
@@ -42,28 +46,5 @@ public class AuthenticationFilter implements Filter {
 		
 		return statesAuthenticator;
 	}
-	
-	/*private boolean isResourceRequest (HttpServletRequest request) {
-		String requestUrl = request.getRequestURI();
-		if (requestUrl.contains("/resources/") || requestUrl.contains("/webjars/"))
-			return true;
-		return false;
-	}
-	
-	private boolean isLogged(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		return session != null && session.getAttribute("user") != null;
-	}
-	
-	private boolean isLogging(HttpServletRequest request) {
-        String loginURI = request.getContextPath() + "/login";
-        String user = request.getParameter("user");
-		return 	request.getRequestURI().equals(loginURI) && user == null;
-	}
-	
-	private boolean isAauthenticating(HttpServletRequest request) {
-        String loginURI = request.getContextPath() + "/logging";
-		return 	request.getRequestURI().equals(loginURI);
-	}*/
 
 }

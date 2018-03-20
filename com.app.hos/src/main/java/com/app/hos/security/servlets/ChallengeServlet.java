@@ -17,10 +17,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.app.hos.pojo.UserHash;
-import com.app.hos.security.UserHashing;
+import com.app.hos.security.detailservice.UserDetailsWithHashing;
 import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.security.SecurityUtils;
-
 
 @SuppressWarnings("serial")
 @WebServlet("/challenge")
@@ -45,7 +44,7 @@ public class ChallengeServlet extends HttpServlet {
 		try {
 			// find user
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-			UserHashing userHashing = (UserHashing)userDetails;
+			UserDetailsWithHashing userHashing = (UserDetailsWithHashing)userDetails;
 			
 			String userSalt = userHashing.getSalt();
 			String challenge = SecurityUtils.getRandomSalt().toString();

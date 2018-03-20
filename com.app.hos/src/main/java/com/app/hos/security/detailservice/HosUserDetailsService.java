@@ -1,4 +1,4 @@
-package com.app.hos.security;
+package com.app.hos.security.detailservice;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.app.hos.persistance.models.Role;
 import com.app.hos.persistance.models.User;
-import com.app.hos.security.model.HosUserDetails;
 import com.app.hos.service.managers.UserManager;
 
 public class HosUserDetailsService implements UserDetailsService {

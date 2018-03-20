@@ -1,14 +1,13 @@
-package com.app.hos.security.model;
+package com.app.hos.security.detailservice;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import com.app.hos.persistance.models.User;
-import com.app.hos.security.UserHashing;
 
 @SuppressWarnings("serial")
-public class HosUserDetails implements UserHashing {
+public class HosUserDetails implements UserDetailsWithHashing {
 
 	private User user;
 	
@@ -24,7 +23,7 @@ public class HosUserDetails implements UserHashing {
 	}
 
 	@Override
-	public String getPassword() throws UnsupportedOperationException {
+	public String getPassword() {
 		throw new UnsupportedOperationException("Use combination of hash and salt with UserHashing interface.");
 	}
 

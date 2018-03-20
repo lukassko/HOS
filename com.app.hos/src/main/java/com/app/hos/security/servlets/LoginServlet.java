@@ -17,11 +17,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.app.hos.pojo.UserHash;
-import com.app.hos.security.UserHashing;
-import com.app.hos.security.model.HosUserAuthentication;
+import com.app.hos.security.authentication.HosUserAuthentication;
+import com.app.hos.security.detailservice.UserDetailsWithHashing;
 import com.app.hos.security.states.StatesAuthenticator;
 import com.app.hos.security.states.concretestates.AuthenticatedState;
-import com.app.hos.security.states.concretestates.AuthenticatingState;
 
 @SuppressWarnings("serial")
 @WebServlet("/logging")
@@ -49,21 +48,22 @@ public class LoginServlet extends HttpServlet {
 		
 		String hash = (String)request.getAttribute("hash");
 		String challenge = (String)session.getAttribute("challenge");
-		UserHashing userHashing = (UserHashing)session.getAttribute("user");
+		UserDetailsWithHashing user = (UserDetailsWithHashing)session.getAttribute("user");
 		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
 		
-		UserHash userHash = new UserHash().setHash(hash).setSalt(userHashing.getSalt()).setChallenge(challenge);
+		UserHash userHash = new UserHash().setHash(hash).setSalt(user.getSalt()).setChallenge(challenge);
 		
 		try {
 
-			Authentication authentication = new HosUserAuthentication(userHashing).setCredentials(userHash);
+			Authentication authentication = new HosUserAuthentication(user).setCredentials(userHash);
 			
 			authentication = authenticationProvider.authenticate(authentication);	
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
+			statesAuthenticator.setAuthentication(authentication);
 			response.sendRedirect("/");
 
 		} catch (AuthenticationException e) {
-			statesAuthenticator.setState(new AuthenticatingState());
+			//statesAuthenticator.setState(new AuthenticatingState());
 			response.sendError(401,e.getMessage());
 		}
     }

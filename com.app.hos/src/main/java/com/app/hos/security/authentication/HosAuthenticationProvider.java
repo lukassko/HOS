@@ -1,4 +1,4 @@
-package com.app.hos.security;
+package com.app.hos.security.authentication;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -7,6 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.pojo.UserHash;
+import com.app.hos.security.detailservice.UserDetailsWithHashing;
 import com.app.hos.utils.security.SecurityUtils;
 
 @Service
@@ -14,7 +15,7 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		UserHashing userDetail = (UserHashing)authentication.getPrincipal();
+		UserDetailsWithHashing userDetail = (UserDetailsWithHashing)authentication.getPrincipal();
 		UserHash userHash = (UserHash)authentication.getCredentials();
 
 		if (isChallengeCorrect(userHash,userDetail)) {
@@ -26,7 +27,7 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 		return authentication;
 	}
 
-	private boolean isChallengeCorrect(UserHash userHash, UserHashing userHashing) {
+	private boolean isChallengeCorrect(UserHash userHash, UserDetailsWithHashing userHashing) {
 		
 		String oneTimeHash = userHash.getHash();
 		

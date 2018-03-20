@@ -1,8 +1,8 @@
-package com.app.hos.security;
+package com.app.hos.security.detailservice;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-public interface UserHashing extends UserDetails {
+public interface UserDetailsWithHashing extends UserDetails {
 
 	public String getHash();
 	

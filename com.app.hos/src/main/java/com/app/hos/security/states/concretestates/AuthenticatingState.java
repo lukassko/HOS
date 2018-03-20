@@ -20,8 +20,6 @@ public class AuthenticatingState implements AuthenticationState {
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException{
 		
-		authentication.setAuthentication(null);
-		
 		HttpServletResponse httpResponse = (HttpServletResponse)request;
 		
         if (isChallengeLoggingRequest(request))
