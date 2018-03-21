@@ -14,8 +14,9 @@ public class UserTest {
 
 	@Test
 	public void testEqueslOfUserRolesShouldReturnTrue() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Michal","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Michal");
 		
 		Set<Role> users1Roles = new HashSet<>();
 		users1Roles.add(new Role(UserRole.USER));
@@ -27,13 +28,15 @@ public class UserTest {
 		users2Roles.add(new Role(UserRole.USER));
 		user2.setRoles(users2Roles);
 		
+		// when then
 		Assert.assertTrue(user1.compareRoles(user2));
 	}
 	
 	@Test
 	public void testEqueslOfUserRolesShouldReturnTrueByAddingDoubleRole() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Michal","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Michal");
 		
 		Set<Role> users1Roles = new HashSet<>();
 		users1Roles.add(new Role(UserRole.USER));
@@ -46,13 +49,15 @@ public class UserTest {
 		users2Roles.add(new Role(UserRole.USER));
 		user2.setRoles(users2Roles);
 		
+		// when then
 		Assert.assertTrue(user1.compareRoles(user2));
 	}
 	
 	@Test
 	public void testEqueslOfUserRolesShouldReturnFalse() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Michal","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Michal");
 		
 		Set<Role> users1Roles = new HashSet<>();
 		users1Roles.add(new Role(UserRole.USER));
@@ -63,20 +68,25 @@ public class UserTest {
 		users2Roles.add(new Role(UserRole.USER));
 		user2.setRoles(users2Roles);
 		
+		// when then
 		Assert.assertFalse(user1.compareRoles(user2));
 	}
 	
 	@Test
 	public void compareTwoUsersWithoueRolesShouldReturnTrue() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Lukasz","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Lukasz");
+		
+		// when then
 		Assert.assertTrue(user1.equals(user2));
 	}
 	
 	@Test
 	public void compareTwoUsersWithRolesShouldReturnTrue() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Lukasz","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Lukasz");
 		
 		Set<Role> users1Roles = new HashSet<>();
 		users1Roles.add(new Role(UserRole.USER));
@@ -88,20 +98,24 @@ public class UserTest {
 		users2Roles.add(new Role(UserRole.USER));
 		user2.setRoles(users2Roles);
 		
+		// when then
 		Assert.assertTrue(user1.equals(user2));
 	}
 	
 	@Test
 	public void compareTwoUsersWithoutRolesShouldReturnFalse() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Michal","password");
+		User user1 = new User("Lukasz");
+		User user2 = new User("Michal");
+		
+		// when then
 		Assert.assertFalse(user1.equals(user2));
 	}
 
 	@Test
 	public void compareTwoUsersWithRolesShouldReturnFalse() {
-		User user1 = new User("Lukasz","password");
-		User user2 = new User("Michal","password");
+		// given
+		User user1 = new User("Lukasz");
+		User user2 = new User("Michal");
 		
 		Set<Role> users1Roles = new HashSet<>();
 		users1Roles.add(new Role(UserRole.USER));
@@ -112,6 +126,7 @@ public class UserTest {
 		users2Roles.add(new Role(UserRole.USER));
 		user2.setRoles(users2Roles);
 		
+		// when then
 		Assert.assertFalse(user1.equals(user2));
 	}
 }

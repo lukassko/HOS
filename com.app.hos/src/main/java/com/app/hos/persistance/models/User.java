@@ -24,9 +24,6 @@ public class User extends BaseEntity  {
 	
 	@Column(name="salt")
 	private String salt;
-	
-	@Column(name="password")
-	private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(
@@ -34,13 +31,12 @@ public class User extends BaseEntity  {
 		joinColumns = { @JoinColumn(name = "user_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "role_id") }
 	)
-	private Set<Role> roles;
+	private Set<Role> roles = new HashSet<>();
 
 	public User(){}
 	
-	public User(String name, String password) {
+	public User(String name) {
 		this.name = name;
-		this.password = password;
 	}
 	
 	public String getName() {
@@ -51,23 +47,12 @@ public class User extends BaseEntity  {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public void addRole(Role role) {
 		this.getRoles().add(role);
 		role.getUsers().add(this);
 	}
 	
 	public Set<Role> getRoles() {
-		if (this.roles == null) {
-			this.roles = new HashSet<>();
-		}
 		return this.roles;
 	}
 
@@ -95,9 +80,10 @@ public class User extends BaseEntity  {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+		result = prime * result + ((salt == null) ? 0 : salt.hashCode());
 		return result;
 	}
 
@@ -115,10 +101,15 @@ public class User extends BaseEntity  {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (password == null) {
-			if (other.password != null)
+		if (hash == null) {
+			if (other.hash != null)
 				return false;
-		} else if (!password.equals(other.password))
+		} else if (!hash.equals(other.hash))
+			return false;
+		if (salt == null) {
+			if (other.salt != null)
+				return false;
+		} else if (!salt.equals(other.salt))
 			return false;
 		if (roles == null) {
 			if (other.roles != null)
@@ -143,8 +134,6 @@ public class User extends BaseEntity  {
 	
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", password=" + password + "]";
+		return "User [name=" + name + "]";
 	}
-	
-
 }

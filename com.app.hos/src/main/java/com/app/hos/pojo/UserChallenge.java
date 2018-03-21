@@ -1,6 +1,6 @@
 package com.app.hos.pojo;
 
-public class UserHash {
+public class UserChallenge {
 
 	private String salt;
 	
@@ -12,7 +12,7 @@ public class UserHash {
 		return salt;
 	}
 
-	public UserHash setSalt(String salt) {
+	public UserChallenge setSalt(String salt) {
 		this.salt = salt;
 		return this;
 	}
@@ -21,7 +21,7 @@ public class UserHash {
 		return challenge;
 	}
 
-	public UserHash setChallenge(String challenge) {
+	public UserChallenge setChallenge(String challenge) {
 		this.challenge = challenge;
 		return this;
 	}
@@ -30,7 +30,7 @@ public class UserHash {
 		return hash;
 	}
 
-	public UserHash setHash(String hash) {
+	public UserChallenge setHash(String hash) {
 		this.hash = hash;
 		return this;
 	}

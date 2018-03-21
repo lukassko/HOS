@@ -5,16 +5,16 @@ import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.app.hos.security.detailservice.UserDetailsWithHashing;
+import com.app.hos.security.detailservice.UserDetails;
 
 @SuppressWarnings("serial")
 public class HosUserAuthentication implements Authentication {
 
-	private UserDetailsWithHashing userDetails;
+	private UserDetails userDetails;
 	private Object credentials;
 	private boolean isAuthenticated;
 	
-	public HosUserAuthentication(UserDetailsWithHashing userDetails) {
+	public HosUserAuthentication(UserDetails userDetails) {
 		this.userDetails = userDetails;
 	}
 	

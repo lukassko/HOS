@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import com.app.hos.persistance.models.User;
 
 @SuppressWarnings("serial")
-public class HosUserDetails implements UserDetailsWithHashing {
+public class HosUserDetails implements UserDetails {
 
 	private User user;
 	

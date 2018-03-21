@@ -17,6 +17,7 @@ import com.app.hos.persistance.models.User;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.utils.DateTime;
+import com.app.hos.utils.security.SecurityUtils;
 
 @Component
 @Profile("!integration-test")
@@ -38,8 +39,8 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	private void addUser() {
 		User user = new User();
 		user.setName("Lukasz");
-		user.setPassword("pass");
-		
+		user.setHash(SecurityUtils.getRandomSalt(20).toString());
+		user.setSalt(SecurityUtils.getRandomSalt(10).toString());
 		userRepository.save(user);
 	}
 	

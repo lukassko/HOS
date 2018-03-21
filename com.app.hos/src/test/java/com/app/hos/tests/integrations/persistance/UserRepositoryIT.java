@@ -11,6 +11,7 @@ import com.app.hos.persistance.models.Role;
 import com.app.hos.persistance.models.Role.UserRole;
 import com.app.hos.persistance.models.User;
 import com.app.hos.persistance.repository.UserRepository;
+import com.app.hos.utils.security.SecurityUtils;
 
 import javax.transaction.Transactional;
 
@@ -35,7 +36,8 @@ public class UserRepositoryIT {
     public void stage10_saveOneUserAndCheckIfWasSavedTest() {
     	User user = new User();
     	user.setName("admin");
-    	user.setPassword("root");
+    	user.setHash(SecurityUtils.getRandomSalt(20).toString());
+		user.setSalt(SecurityUtils.getRandomSalt(10).toString());
     	
     	Role role1 = new Role(UserRole.USER);
     	Role role2 = new Role(UserRole.ADMIN);

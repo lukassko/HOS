@@ -6,8 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.pojo.UserHash;
-import com.app.hos.security.detailservice.UserDetailsWithHashing;
+import com.app.hos.pojo.UserChallenge;
+import com.app.hos.security.detailservice.UserDetails;
 import com.app.hos.utils.security.SecurityUtils;
 
 @Service
@@ -15,8 +15,8 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		UserDetailsWithHashing userDetail = (UserDetailsWithHashing)authentication.getPrincipal();
-		UserHash userHash = (UserHash)authentication.getCredentials();
+		UserDetails userDetail = (UserDetails)authentication.getPrincipal();
+		UserChallenge userHash = (UserChallenge)authentication.getCredentials();
 
 		if (isChallengeCorrect(userHash,userDetail)) {
 			authentication.setAuthenticated(true);
@@ -27,7 +27,7 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 		return authentication;
 	}
 
-	private boolean isChallengeCorrect(UserHash userHash, UserDetailsWithHashing userHashing) {
+	private boolean isChallengeCorrect(UserChallenge userHash, UserDetails userHashing) {
 		
 		String oneTimeHash = userHash.getHash();
 		

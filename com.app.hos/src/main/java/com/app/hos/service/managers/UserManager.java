@@ -1,6 +1,5 @@
 package com.app.hos.service.managers;
 
-import java.security.SecureRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +24,7 @@ public class UserManager {
 	}
 	
 	public void addUser(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		//user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 }

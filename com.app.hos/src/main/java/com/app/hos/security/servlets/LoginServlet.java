@@ -16,19 +16,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.app.hos.pojo.UserHash;
+import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.authentication.HosUserAuthentication;
-import com.app.hos.security.detailservice.UserDetailsWithHashing;
+import com.app.hos.security.detailservice.UserDetails;
 import com.app.hos.security.states.StatesAuthenticator;
 import com.app.hos.security.states.concretestates.AuthenticatedState;
 
 @SuppressWarnings("serial")
 @WebServlet("/logging")
 public class LoginServlet extends HttpServlet {
-	
+
+	private AuthenticationProvider authenticationProvider;
 	
 	@Autowired
-	private AuthenticationProvider authenticationProvider;
+	public LoginServlet(AuthenticationProvider authenticationProvider) {
+		this.authenticationProvider = authenticationProvider;
+	}
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -37,21 +40,22 @@ public class LoginServlet extends HttpServlet {
 	}
 	
 	@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 	
 	// user try to log in
 	@Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
-		
-		String hash = (String)request.getAttribute("hash");
+
 		String challenge = (String)session.getAttribute("challenge");
-		UserDetailsWithHashing user = (UserDetailsWithHashing)session.getAttribute("user");
+		UserDetails user = (UserDetails)session.getAttribute("user");
 		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
 		
-		UserHash userHash = new UserHash().setHash(hash).setSalt(user.getSalt()).setChallenge(challenge);
+		UserChallenge userHash = new UserChallenge().setHash(user.getHash())
+													.setSalt(user.getSalt())
+													.setChallenge(challenge);
 		
 		try {
 
@@ -67,5 +71,5 @@ public class LoginServlet extends HttpServlet {
 			response.sendError(401,e.getMessage());
 		}
     }
-
+	
 }

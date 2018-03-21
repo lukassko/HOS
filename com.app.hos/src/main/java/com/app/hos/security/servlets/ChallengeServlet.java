@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import com.app.hos.pojo.UserHash;
-import com.app.hos.security.detailservice.UserDetailsWithHashing;
+import com.app.hos.pojo.UserChallenge;
+import com.app.hos.security.detailservice.UserDetails;
 import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.security.SecurityUtils;
 
@@ -43,8 +43,8 @@ public class ChallengeServlet extends HttpServlet {
 		String userName = (String)request.getAttribute("user");
 		try {
 			// find user
-			UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-			UserDetailsWithHashing userHashing = (UserDetailsWithHashing)userDetails;
+			org.springframework.security.core.userdetails.UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+			UserDetails userHashing = (UserDetails)userDetails;
 			
 			String userSalt = userHashing.getSalt();
 			String challenge = SecurityUtils.getRandomSalt().toString();
@@ -55,7 +55,7 @@ public class ChallengeServlet extends HttpServlet {
 			session.setAttribute("user", userHashing);
 			
 			// send back salt and challenge
-			UserHash user = new UserHash().setSalt(userSalt).setChallenge(challenge);
+			UserChallenge user = new UserChallenge().setSalt(userSalt).setChallenge(challenge);
 			String json = JsonConverter.getJson(user);
 			
 			response.setContentType("application/json");
