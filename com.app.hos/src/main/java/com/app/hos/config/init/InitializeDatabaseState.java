@@ -39,8 +39,8 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	private void addUser() {
 		User user = new User();
 		user.setName("Lukasz");
-		user.setHash(SecurityUtils.getRandomSalt(20).toString());
-		user.setSalt(SecurityUtils.getRandomSalt(10).toString());
+		user.setHash(SecurityUtils.getRandomAsString());
+		user.setSalt(SecurityUtils.getRandomAsString());
 		userRepository.save(user);
 	}
 	

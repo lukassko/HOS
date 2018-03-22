@@ -24,9 +24,13 @@ import com.app.hos.utils.security.SecurityUtils;
 @SuppressWarnings("serial")
 @WebServlet("/challenge")
 public class ChallengeServlet extends HttpServlet {
+
+	private UserDetailsService userDetailsService;
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	public ChallengeServlet(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -34,12 +38,14 @@ public class ChallengeServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext (this);
 	}
 	
+	// change level to public for unit testing
 	@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 	
+	// change level to public for unit testing
 	@Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = (String)request.getAttribute("user");
 		try {
 			// find user
@@ -47,7 +53,7 @@ public class ChallengeServlet extends HttpServlet {
 			UserDetails userHashing = (UserDetails)userDetails;
 			
 			String userSalt = userHashing.getSalt();
-			String challenge = SecurityUtils.getRandomSalt().toString();
+			String challenge = SecurityUtils.getRandomAsString();
 			
 			// store challenge and user in session
 			HttpSession session = request.getSession(false);

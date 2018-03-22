@@ -1,13 +1,13 @@
 package com.app.hos.tests.units.security;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -15,16 +15,14 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.app.hos.persistance.models.User;
 import com.app.hos.pojo.UserChallenge;
-import com.app.hos.security.authentication.HosUserAuthentication;
 import com.app.hos.security.detailservice.HosUserDetails;
 import com.app.hos.security.detailservice.UserDetails;
-import com.app.hos.security.servlets.LoginServlet;
-import com.app.hos.security.states.StatesAuthenticator;
+import com.app.hos.security.servlets.ChallengeServlet;
+import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.security.SecurityUtils;
 
 import org.junit.Assert;
@@ -32,54 +30,49 @@ import org.junit.Assert;
 // to make integrations tests use: MockMvc and Embedded Tomcat
 public class ChallengeServletTest {
 	
+	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
+	
 	@Mock
-	private AuthenticationProvider authenticationProvider;
+	private UserDetailsService userDetailsService;
 
-	@InjectMocks
-	private LoginServlet servlet;
+	private ChallengeServlet servlet;
 	
 	@Before
 	public void setUp() throws ServletException {
 		MockitoAnnotations.initMocks(this);
 		MockServletContext context = new MockServletContext();
 		MockServletConfig config = new MockServletConfig(context);
-		servlet = new LoginServlet(authenticationProvider);
+		servlet = new ChallengeServlet(userDetailsService);
 		servlet.init(config);
 	}
 
 	@Test
-	public void test() throws ServletException, IOException {
+	public void servletAfterCorrectAuthenticationShouldRedirectToMain() throws ServletException, IOException {
 		// given
 		User user = new User("Lukasz");
-		String userHash = SecurityUtils.getRandomSalt(24).toString();
-		String userSalt = SecurityUtils.getRandomSalt(5).toString();
+		String userHash = SecurityUtils.getRandomAsString(24);
+		String userSalt = SecurityUtils.getRandomAsString(5);
 		user.setHash(userHash);
 		user.setSalt(userSalt);
 		UserDetails userDetails = new HosUserDetails(user);
-		
-		String challenge = SecurityUtils.getRandomSalt(5).toString();
-		
-		Authentication authenticationResult = new HosUserAuthentication(userDetails)
-														.setCredentials(new UserChallenge().setChallenge(challenge)
-																							.setHash(userHash)
-																							.setSalt(userSalt));
-		authenticationResult.setAuthenticated(true);
-		
-		Mockito.when(authenticationProvider.authenticate(Mockito.any(Authentication.class))).thenReturn(authenticationResult);
-		
+
+		Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(userDetails);
+
 		MockHttpServletRequest request = new MockHttpServletRequest();
-		HttpSession session = request.getSession();
-		session.setAttribute("user", userDetails);
-		session.setAttribute("challenge", challenge);
-		session.setAttribute("authenticator", new StatesAuthenticator());
-		
+		request.setAttribute("user", "Lukasz");
+		request.getSession(true);
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		// when 
 		servlet.doPost(request, response);
 		
 		// then
-		Assert.assertTrue(true);
+		HttpSession session = request.getSession();
+		String challnege = (String)session.getAttribute("challenge");
+		UserChallenge userChallenge = new UserChallenge().setSalt(userSalt).setChallenge(challnege);
+		String jsonChallenge = JsonConverter.getJson(userChallenge);
+		
+		Assert.assertEquals(jsonChallenge, response.getContentAsString());
 	}
 
 }

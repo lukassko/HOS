@@ -36,8 +36,8 @@ public class UserRepositoryIT {
     public void stage10_saveOneUserAndCheckIfWasSavedTest() {
     	User user = new User();
     	user.setName("admin");
-    	user.setHash(SecurityUtils.getRandomSalt(20).toString());
-		user.setSalt(SecurityUtils.getRandomSalt(10).toString());
+    	user.setHash(SecurityUtils.getRandomAsString());
+		user.setSalt(SecurityUtils.getRandomAsString());
     	
     	Role role1 = new Role(UserRole.USER);
     	Role role2 = new Role(UserRole.ADMIN);

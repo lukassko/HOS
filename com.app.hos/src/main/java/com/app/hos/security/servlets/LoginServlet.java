@@ -39,11 +39,12 @@ public class LoginServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext (this);
 	}
 	
+	// change level to public for unit testing
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 	
-	// user try to log in
+	// change level to public for unit testing
 	@Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -64,8 +65,9 @@ public class LoginServlet extends HttpServlet {
 			authentication = authenticationProvider.authenticate(authentication);	
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
 			statesAuthenticator.setAuthentication(authentication);
+			
+			
 			response.sendRedirect("/");
-
 		} catch (AuthenticationException e) {
 			//statesAuthenticator.setState(new AuthenticatingState());
 			response.sendError(401,e.getMessage());
