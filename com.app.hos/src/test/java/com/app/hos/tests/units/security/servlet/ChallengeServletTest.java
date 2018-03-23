@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.security;
+package com.app.hos.tests.units.security.servlet;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.app.hos.persistance.models.User;
 import com.app.hos.pojo.UserChallenge;
@@ -47,7 +48,7 @@ public class ChallengeServletTest {
 	}
 
 	@Test
-	public void servletAfterCorrectAuthenticationShouldRedirectToMain() throws ServletException, IOException {
+	public void servletAfterCorrectChallengingSetJsonWithUserSaltAndChallnege() throws ServletException, IOException {
 		// given
 		User user = new User("Lukasz");
 		String userHash = SecurityUtils.getRandomAsString(24);
@@ -71,8 +72,28 @@ public class ChallengeServletTest {
 		String challnege = (String)session.getAttribute("challenge");
 		UserChallenge userChallenge = new UserChallenge().setSalt(userSalt).setChallenge(challnege);
 		String jsonChallenge = JsonConverter.getJson(userChallenge);
-		
+
+		Assert.assertEquals(200, response.getStatus());
 		Assert.assertEquals(jsonChallenge, response.getContentAsString());
 	}
 
+	@Test
+	public void servletAfterIncorrectChallengingShouldSend401HttpStatus() throws ServletException, IOException {
+		// given
+		
+		Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString()))
+											.thenThrow(new UsernameNotFoundException("Lukasz"));
+		
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		request.setAttribute("user", "Lukasz");
+
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		
+		// when 
+		servlet.doPost(request, response);
+		
+		// then
+		Assert.assertEquals(401, response.getStatus());
+	}
+	
 }

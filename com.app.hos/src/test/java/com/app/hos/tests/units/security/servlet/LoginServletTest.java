@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.security;
+package com.app.hos.tests.units.security.servlet;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;

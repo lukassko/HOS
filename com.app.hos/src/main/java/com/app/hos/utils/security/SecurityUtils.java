@@ -32,7 +32,7 @@ public class SecurityUtils {
     	return Base64.getEncoder().encodeToString(bytes);
     }
     
-	public static String hashString(String originalString)  {
+	public static String hash(String originalString)  {
 		return Hashing.sha256()
 				  .hashString(originalString, StandardCharsets.UTF_8)
 				  .toString();

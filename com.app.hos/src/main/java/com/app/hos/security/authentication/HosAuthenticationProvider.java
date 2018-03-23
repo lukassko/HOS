@@ -27,15 +27,15 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 		return authentication;
 	}
 
-	private boolean isChallengeCorrect(UserChallenge userHash, UserDetails userHashing) {
+	private boolean isChallengeCorrect(UserChallenge userChallenge, UserDetails userDetails) {
 		
-		String oneTimeHash = userHash.getHash();
-		
-		String challenge = userHash.getChallenge();
-		String userStoredHash = userHashing.getHash();
-		String hashedOneTimeRequest = SecurityUtils.hashString(challenge + userStoredHash);
-		
-		return hashedOneTimeRequest.equals(oneTimeHash);
+		String userChallangeHash = userChallenge.getHash(); // calculate in browser (pass hash + salt + challenge)
+		String challenge = userChallenge.getChallenge();
+		String userStoredHash = userDetails.getHash();
+
+		String hashedOneTimeRequest = SecurityUtils.hash(userStoredHash + challenge);
+
+		return hashedOneTimeRequest.equals(userChallangeHash);
 		
 	}
 	

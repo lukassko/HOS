@@ -19,8 +19,12 @@ import com.app.hos.service.managers.UserManager;
 
 public class HosUserDetailsService implements UserDetailsService {
 
-	@Autowired
 	private UserManager userManager;
+	
+	@Autowired
+	public HosUserDetailsService(UserManager userManager) {
+		this.userManager = userManager;
+	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
