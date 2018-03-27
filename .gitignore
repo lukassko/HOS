@@ -2,7 +2,8 @@
 /build/
 /bin/
 target/
- 
+work/
+
 # OS Files #
 .DS_Store
  
