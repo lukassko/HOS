@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.app.hos.utils.security.SecurityUtils;
 
-public class HashingWithJavaScriptAndJavaTest {
+public class HashingWithJavaScriptAndJavaIT {
 
 	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
 	

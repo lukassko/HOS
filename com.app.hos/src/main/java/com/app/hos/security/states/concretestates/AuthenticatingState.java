@@ -20,7 +20,7 @@ public class AuthenticatingState implements AuthenticationState {
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException{
 		
-		HttpServletResponse httpResponse = (HttpServletResponse)request;
+		HttpServletResponse httpResponse = (HttpServletResponse)response;
 		
         if (isChallengeLoggingRequest(request))
         	chain.doFilter(request, response);
@@ -35,6 +35,6 @@ public class AuthenticatingState implements AuthenticationState {
 		String loginURI =  context + "/login";
 		String challnangeURI =  context + "/challenge";
         String userTryUrl = httpRequest.getRequestURI();
-        return userTryUrl.equals(loginURI) || loginURI.equals(challnangeURI);
+        return userTryUrl.equals(loginURI) || userTryUrl.equals(challnangeURI);
 	}
 }
