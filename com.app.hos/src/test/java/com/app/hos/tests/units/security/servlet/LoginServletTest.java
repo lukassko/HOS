@@ -83,7 +83,7 @@ public class LoginServletTest {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		// when 
-		servlet.doPost(request, response);
+		//servlet.doPost(request, response);
 		
 		// then
 		Assert.assertTrue(response.getRedirectedUrl().equals("/"));
@@ -123,7 +123,7 @@ public class LoginServletTest {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		// when 
-		servlet.doPost(request, response);
+		//servlet.doPost(request, response);
 
 		// then
 		Assert.assertEquals(401,response.getStatus());

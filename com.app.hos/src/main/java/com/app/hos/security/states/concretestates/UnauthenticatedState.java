@@ -34,8 +34,9 @@ public class UnauthenticatedState implements AuthenticationState {
         session.setMaxInactiveInterval(300); // 5 minutes
 		session.setAttribute("authenticator", authentication);
 
-		httpResponse.sendRedirect("login");
 		authentication.setState(new AuthenticatingState());
+		
+		httpResponse.sendRedirect("login");
 	}
 
 }

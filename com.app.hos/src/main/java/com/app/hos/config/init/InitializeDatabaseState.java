@@ -3,6 +3,8 @@ package com.app.hos.config.init;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -19,13 +21,13 @@ import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.security.SecurityUtils;
 
-@Component
+//@Component
 @Profile("!integration-test")
 public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
 	private DeviceRepository deviceRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 	

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.DispatcherType;
 import com.app.hos.security.states.StatesAuthenticator;
 
-//@WebFilter("/*")
 @WebFilter(
         urlPatterns = "/*",
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD}
@@ -30,7 +29,8 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
+
+		System.out.println(((HttpServletRequest)request).getRequestURI());
 		StatesAuthenticator statesAuthenticator = getStatesAuthenticator(request);
 		statesAuthenticator.doAuthentication(request, response, chain);
 	}
@@ -43,7 +43,6 @@ public class AuthenticationFilter implements Filter {
 			statesAuthenticator = new StatesAuthenticator();
 		else 
 			statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
-		
 		return statesAuthenticator;
 	}
 

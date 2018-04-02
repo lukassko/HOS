@@ -1,8 +1,12 @@
 package com.app.hos.utils;
 
+import javax.servlet.ServletContext;
+
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
+
+import com.app.hos.security.servlets.LoginServlet;
 
 public class EmbeddedTomcat {
 
@@ -26,13 +30,18 @@ public class EmbeddedTomcat {
 		this.appName = appName;
 	}
 	
-	public void init () {
+	public void initInstance () {
 		tomcat.setPort(port);
         tomcat.setBaseDir(BASE_DIR);
         tomcat.getHost().setAppBase(BASE_DIR);
         tomcat.getHost().setDeployOnStartup(true);
         tomcat.getHost().setAutoDeploy(true);
         tomcat.addWebapp(tomcat.getHost(), "/" + appName, "src/main/webapp");
+        initServletContext();
+	}
+	
+	public void initServletContext() {
+		tomcat.addServlet("/" + appName, "login-servlet", "LoginServlet");
 	}
 	
 	public void start () throws LifecycleException {

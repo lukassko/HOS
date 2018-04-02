@@ -2,6 +2,7 @@ package com.app.hos.security.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,13 +24,21 @@ import com.app.hos.security.states.StatesAuthenticator;
 import com.app.hos.security.states.concretestates.AuthenticatedState;
 
 @SuppressWarnings("serial")
-@WebServlet("/logging")
+@WebServlet(
+		name = "LoginServlet",
+		urlPatterns = {"/login"}
+)
 public class LoginServlet extends HttpServlet {
 
 	private AuthenticationProvider authenticationProvider;
 	
+	public LoginServlet() {
+		System.out.println("LoginServlet creating");
+	}
+	
 	@Autowired
 	public LoginServlet(AuthenticationProvider authenticationProvider) {
+		System.out.println("LoginServlet creating with bean " + authenticationProvider.toString());
 		this.authenticationProvider = authenticationProvider;
 	}
 	
@@ -41,12 +50,14 @@ public class LoginServlet extends HttpServlet {
 	
 	// change level to public for unit testing
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/users/login.jsp");
+		dispatcher.forward(request, response); 
 	}
 	
 	// change level to public for unit testing
 	@Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
 

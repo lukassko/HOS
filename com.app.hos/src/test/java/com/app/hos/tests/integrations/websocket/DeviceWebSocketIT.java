@@ -52,7 +52,7 @@ public class DeviceWebSocketIT {
     @BeforeClass
     public static void setupClass() {
         tomcat = new EmbeddedTomcat();
-        tomcat.init();
+        tomcat.initInstance();
         try {
 			tomcat.start();
 		} catch (LifecycleException e) {

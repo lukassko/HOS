@@ -21,12 +21,10 @@ public class AuthenticatingState implements AuthenticationState {
 			ServletResponse response,FilterChain chain) throws IOException, ServletException{
 		
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
-		
         if (isChallengeLoggingRequest(request))
         	chain.doFilter(request, response);
         else
         	httpResponse.sendError(401, errorMessage);
-        
 	}
 
 	private boolean isChallengeLoggingRequest(ServletRequest request) {
@@ -35,6 +33,6 @@ public class AuthenticatingState implements AuthenticationState {
 		String loginURI =  context + "/login";
 		String challnangeURI =  context + "/challenge";
         String userTryUrl = httpRequest.getRequestURI();
-        return userTryUrl.equals(loginURI) || userTryUrl.equals(challnangeURI);
+        return userTryUrl.equals(loginURI) || userTryUrl.equals(challnangeURI) || userTryUrl.matches("(.*)login.jsp");
 	}
 }
