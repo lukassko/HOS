@@ -53,7 +53,7 @@ public class AuthenticationStatesIT {
     }
 
 	@Test
-	public void stage10_firstRequestForLoginPageShouldReturnProperPageAndAddUnauthenticatedStateToSession () throws Exception {
+	public void stage10_firstNotLoginRequestShouldMakeRedirectAndAddAuthenticatorToSession () throws Exception {
 
 		 MvcResult mvcResult = mockMvc.perform(get("/"))
 				 						.andDo(print())
@@ -71,7 +71,7 @@ public class AuthenticationStatesIT {
 	}
 
 	@Test
-	public void stage20_firstRequestForLoginPageShouldReturnProperPageAndAddUnauthenticatedStateToSession () throws Exception {
+	public void stage20_firstNotLoginRequestShouldMakeRedirectSecondRequestShouldBeLogginAndExpectOkStatus () throws Exception {
 
 		 MvcResult mvcResult = mockMvc.perform(get("/"))
 					.andDo(print())
@@ -83,6 +83,29 @@ public class AuthenticationStatesIT {
          								.andDo(print())
          								//.andExpect(cookie().exists("JSESSIONID"))
          								.andExpect(status().isOk());
+		 
+	}
+	
+	@Test
+	public void stage30_firstRequestForLoginPageShouldReturnProperPageAndAddUnauthenticatedStateToSession () throws Exception {
+
+		 MvcResult mvcResult = mockMvc.perform(get("/"))
+					.andDo(print())
+					.andExpect(status().is3xxRedirection()).andReturn();
+
+		MockHttpSession session = (MockHttpSession) mvcResult.getRequest().getSession();
+		
+		mvcResult = mockMvc.perform(get("/login").session(session))
+         								.andDo(print())
+         								//.andExpect(cookie().exists("JSESSIONID"))
+         								.andExpect(status().isOk()).andReturn();
+		
+		session = (MockHttpSession) mvcResult.getRequest().getSession();
+		
+		mvcResult = mockMvc.perform(post("/challenge").session(session))
+					.andDo(print())
+					//.andExpect(cookie().exists("JSESSIONID"))
+					.andExpect(status().isOk()).andReturn();
 		 
 	}
 }
