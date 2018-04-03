@@ -1,29 +1,14 @@
 package com.app.hos.config;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+public class WebSecurityConfig implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import com.app.hos.security.servlets.LoginServlet;
-
-//@Configuration
-//@Profile("integration-test")
-//@ImportResource("classpath:/web/web-config.xml")
-public class WebSecurityConfig  {
-	
-	//@Bean
-	public ServletRegistrationBean loggingServletBean(AuthenticationProvider authenticationProvider) {
-	    ServletRegistrationBean bean = new ServletRegistrationBean(
-	      new LoginServlet(authenticationProvider), "/login");
-	    bean.setLoadOnStartup(1);
-	    return bean;
+	@Override
+	public void initialize(ConfigurableApplicationContext applicationContext) {
+		// TODO Auto-generated method stub
+		System.out.println("WebSecurityConfig initialize");
 	}
 
 }

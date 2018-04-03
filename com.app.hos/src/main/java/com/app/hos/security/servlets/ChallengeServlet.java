@@ -41,11 +41,13 @@ public class ChallengeServlet extends HttpServlet {
 	// change level to public for unit testing
 	@Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("ChallengeServlet doGet");
 	}
 	
 	// change level to public for unit testing
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("ChallengeServlet doPost");
 		String userName = (String)request.getAttribute("user");
 		try {
 			// find user

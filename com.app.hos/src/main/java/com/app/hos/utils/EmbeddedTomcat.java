@@ -15,11 +15,13 @@ public class EmbeddedTomcat {
 	private final String BASE_DIR = ".";
 	
 	private int port = 8080;
+	
 	private String appName = "HOS";
+	 
+	private final String ctxPath = "/" + appName;
 	
 	public EmbeddedTomcat () {
 		this.tomcat = new Tomcat();
-		
 	}
 	
 	public void setPort (int port) {
@@ -36,12 +38,11 @@ public class EmbeddedTomcat {
         tomcat.getHost().setAppBase(BASE_DIR);
         tomcat.getHost().setDeployOnStartup(true);
         tomcat.getHost().setAutoDeploy(true);
-        tomcat.addWebapp(tomcat.getHost(), "/" + appName, "src/main/webapp");
-        initServletContext();
+        tomcat.addWebapp(tomcat.getHost(),ctxPath , "src/main/webapp");
 	}
 	
 	public void initServletContext() {
-		tomcat.addServlet("/" + appName, "login-servlet", "LoginServlet");
+		tomcat.addServlet(ctxPath, "LoginServlet", new LoginServlet());
 	}
 	
 	public void start () throws LifecycleException {

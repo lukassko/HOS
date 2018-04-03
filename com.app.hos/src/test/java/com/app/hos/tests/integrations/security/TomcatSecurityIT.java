@@ -19,6 +19,7 @@ import com.app.hos.utils.EmbeddedTomcat;
 
 
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.startup.Tomcat;
 
 @Ignore("run only one integration test")
 //@Profile("web-integration-test")
@@ -36,7 +37,7 @@ public class TomcatSecurityIT {
     public static void setupClass() {
         tomcat = new EmbeddedTomcat();
         tomcat.initInstance();
-        
+
         try {
 			tomcat.start();
 		} catch (LifecycleException e) {
