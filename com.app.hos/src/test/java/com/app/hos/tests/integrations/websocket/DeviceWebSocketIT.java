@@ -24,7 +24,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import com.app.hos.utils.EmbeddedTomcat;
+import com.app.hos.utils.embeddedserver.EmbeddedTomcat;
 
 import java.lang.reflect.Type;
 import static java.util.Arrays.asList;

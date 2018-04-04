@@ -27,6 +27,8 @@ public class ChallengeServlet extends HttpServlet {
 
 	private UserDetailsService userDetailsService;
 	
+	public ChallengeServlet() {}
+	
 	@Autowired
 	public ChallengeServlet(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;

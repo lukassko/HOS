@@ -97,6 +97,7 @@
 	    <scope>test</scope>
 	</dependency>
 	
+	
     <!-- Testing database dependencies -->
     <dependency>
 	    <groupId>org.hsqldb</groupId>
@@ -114,6 +115,20 @@
 	  <artifactId>hibernate4-sqlite-dialect</artifactId>
 	  <version>0.1.2</version>
 	</dependency>
+	
+	<dependency>
+		<groupId>org.jboss.shrinkwrap</groupId>
+		<artifactId>shrinkwrap-api</artifactId>
+		<version>1.2.6</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss.shrinkwrap</groupId>
+		<artifactId>shrinkwrap-impl-base</artifactId>
+		<version>1.2.6</version>
+		<scope>test</scope>
+	</dependency>
+		
 	
 	<!-- Spring MVC dependencies -->
 	<dependency>
@@ -292,7 +307,11 @@
 		<version>${tomcat.version}</version>
 		<scope>test</scope>
 	</dependency>
-	
+		<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>tomcat-catalina</artifactId>
+	    <version>7.0.27</version>
+	</dependency>
 	<!-- WebSockets dependencies -->
 
 	<dependency>

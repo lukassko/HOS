@@ -15,13 +15,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.WebSecurityConfig;
-import com.app.hos.utils.EmbeddedTomcat;
-
+import com.app.hos.utils.embeddedserver.EmbeddedTomcat;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 //@Profile("web-integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration

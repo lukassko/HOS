@@ -1,11 +1,10 @@
-package com.app.hos.utils;
-
-import javax.servlet.ServletContext;
+package com.app.hos.utils.embeddedserver;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 
+import com.app.hos.security.servlets.ChallengeServlet;
 import com.app.hos.security.servlets.LoginServlet;
 
 public class EmbeddedTomcat {
@@ -43,6 +42,7 @@ public class EmbeddedTomcat {
 	
 	public void initServletContext() {
 		tomcat.addServlet(ctxPath, "LoginServlet", new LoginServlet());
+		tomcat.addServlet(ctxPath, "ChallengeServlet", new ChallengeServlet());
 	}
 	
 	public void start () throws LifecycleException {

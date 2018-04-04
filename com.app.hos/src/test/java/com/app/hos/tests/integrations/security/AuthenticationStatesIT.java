@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 //import org.springframework.test.context.support.AnnotationConfigContextLoader;
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(
