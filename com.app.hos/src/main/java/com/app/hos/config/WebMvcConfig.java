@@ -18,7 +18,6 @@ import com.app.hos.web.HosHttpMessageConverter;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
-	
 	@Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(new HosHttpMessageConverter());

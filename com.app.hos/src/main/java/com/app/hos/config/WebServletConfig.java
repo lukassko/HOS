@@ -7,13 +7,10 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
 
-public class WebSecurityConfig2 implements WebApplicationInitializer  {
+public class WebServletConfig implements WebApplicationInitializer  {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		System.out.println("WOOOOOOOOOORK");
-		
+		System.out.println("WebServletConfig_WebApplicationInitializer");
 	}
-
-
 }

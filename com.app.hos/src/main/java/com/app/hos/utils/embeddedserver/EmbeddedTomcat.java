@@ -11,7 +11,7 @@ public class EmbeddedTomcat {
 
 	private Tomcat tomcat;
 	
-	private final String BASE_DIR = ".";
+	private String baseDir = ".";
 	
 	private int port = 8080;
 	
@@ -31,15 +31,22 @@ public class EmbeddedTomcat {
 		this.appName = appName;
 	}
 	
+	public void setBaseDir(String baseDir) {
+		this.baseDir = baseDir;
+	}
+	
+	// maybe add some context
+	//Context ctx = tomcat.addContext(contextPath, baseDir);
+	//ServletContext sc = ctx.getServletContext();
 	public void initInstance () {
 		tomcat.setPort(port);
-        tomcat.setBaseDir(BASE_DIR);
-        tomcat.getHost().setAppBase(BASE_DIR);
+        tomcat.setBaseDir(baseDir);
+        tomcat.getHost().setAppBase(baseDir);
         tomcat.getHost().setDeployOnStartup(true);
         tomcat.getHost().setAutoDeploy(true);
         tomcat.addWebapp(tomcat.getHost(),ctxPath , "src/main/webapp");
 	}
-	
+
 	public void initServletContext() {
 		tomcat.addServlet(ctxPath, "LoginServlet", new LoginServlet());
 		tomcat.addServlet(ctxPath, "ChallengeServlet", new ChallengeServlet());
