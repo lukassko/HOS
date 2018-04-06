@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.WebSecurityConfig;
+import com.app.hos.security.servlets.LoginServlet;
 import com.app.hos.utils.embeddedserver.EmbeddedTomcat;
 import com.app.hos.utils.embeddedserver.WarDeployer;
 import com.meterware.httpunit.WebConversation;
@@ -53,7 +54,7 @@ public class TomcatSecurityIT {
     public static void setupTomcat() throws Exception {
         tomcat = new EmbeddedTomcat();
         tomcat.initInstance();
-        
+        tomcat.addServlet(LoginServlet.class, "/login");
 /*        File webApp = new File(tomcatWorkingDir, appName);
         File oldWebApp = new File(webApp.getAbsolutePath());
         FileUtils.deleteDirectory(oldWebApp);
@@ -78,7 +79,16 @@ public class TomcatSecurityIT {
     public void stage10_testHttpUnit() throws IOException, SAXException {
     	System.out.println("stage10_testHttpUnit START!");
     	WebConversation wc = new WebConversation();
-    	WebResponse resp = wc.getResponse("http://localhost:8080/HOS/");
+    	WebResponse resp = wc.getResponse("http://localhost:8080/HOS/devices");
+    	LOG.info(Integer.toString(resp.getResponseCode()));
+    	LOG.info(resp.getText());
+    }
+    
+    @Test
+    public void stage20_testOwnServlet() throws IOException, SAXException {
+    	System.out.println("stage20_testOwnServlet START!");
+    	WebConversation wc = new WebConversation();
+    	WebResponse resp = wc.getResponse("http://localhost:8080/HOS/login");
     	LOG.info(Integer.toString(resp.getResponseCode()));
     	LOG.info(resp.getText());
     }

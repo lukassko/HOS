@@ -11,6 +11,7 @@ public class MainController {
 
 	@RequestMapping(value = "/", method=RequestMethod.GET)
 	public String showMainPage() {
+		System.out.println("MainController showMainPage");
 		return "main/main";
 	}
 	
@@ -31,6 +32,7 @@ public class MainController {
 	
 	@RequestMapping(value = "/devices", method = RequestMethod.GET)
 	public String getDevices(Model model) {
+		System.out.println("MainController devices");
 		return "system/devices";
 	}
 	
