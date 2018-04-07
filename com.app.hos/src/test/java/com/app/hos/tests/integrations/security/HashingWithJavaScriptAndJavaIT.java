@@ -14,10 +14,12 @@ import javax.script.ScriptEngineManager;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.app.hos.utils.security.SecurityUtils;
 
+@Ignore
 public class HashingWithJavaScriptAndJavaIT {
 
 	protected final Logger LOG = Logger.getLogger(this.getClass().getName());

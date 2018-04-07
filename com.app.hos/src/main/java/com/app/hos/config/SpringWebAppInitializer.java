@@ -12,7 +12,6 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class SpringWebAppInitializer implements WebApplicationInitializer {
 
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		System.out.println("-----------------------------");
 		AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
         appContext.register(ApplicationContextConfig.class);
         
@@ -23,8 +22,6 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher",
                 new DispatcherServlet(appContext));
         dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
-         
-}
-
+        dispatcher.addMapping("/");  
+	}
 }

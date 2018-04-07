@@ -1,20 +1,18 @@
 package com.app.hos.utils.embeddedserver;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
-import javax.servlet.ServletContext;
+import javax.servlet.Filter;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
-import org.springframework.web.servlet.DispatcherServlet;
-
-import com.app.hos.security.filters.AuthenticationFilter;
-import com.app.hos.security.servlets.ChallengeServlet;
-import com.app.hos.security.servlets.LoginServlet;
+import org.apache.tomcat.util.descriptor.web.FilterDef;
+import org.apache.tomcat.util.descriptor.web.FilterMap;
 
 public class EmbeddedTomcat {
 
@@ -45,10 +43,7 @@ public class EmbeddedTomcat {
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;
 	}
-	
-	// maybe add some context
-	//Context ctx = tomcat.addContext(contextPath, baseDir);
-	//ServletContext sc = ctx.getServletContext();
+
 	public void initInstance () {
 		tomcat.setPort(port);
         tomcat.setBaseDir(baseDir);
@@ -56,22 +51,40 @@ public class EmbeddedTomcat {
         tomcat.getHost().setDeployOnStartup(true);
         tomcat.getHost().setAutoDeploy(true);
         context = tomcat.addWebapp(tomcat.getHost(),contextPath , "src/main/webapp");
-        //context = tomcat.addContext(contextPath, baseDir);
 	}
-
-	public void addServlet(Class<? extends HttpServlet> clazz, String mapping) throws Exception {
+	
+	public void addServlet(Class<? extends HttpServlet> clazz) throws Exception {
 		Constructor<?> ctor = clazz.getConstructor();
 		HttpServlet servlet = (HttpServlet)ctor.newInstance();
-
-		String name = clazz.getSimpleName();
-		System.out.println(name);
-		Tomcat.addServlet(context, name , servlet);
-		context.addServletMapping(mapping, name);
-		//ServletContext servletContext = context.getServletContext();
-		//servletContext.addFilter("test", new AuthenticationFilter());
-
-		//tomcat.addServlet(ctxPath, "LoginServlet", new LoginServlet());
-		//tomcat.addServlet(ctxPath, "ChallengeServlet", new ChallengeServlet());
+		WebServlet webServlet = clazz.getAnnotation(WebServlet.class);
+		String servletName = webServlet.name();
+		String [] mapping = webServlet.urlPatterns();
+		Tomcat.addServlet(context, servletName , servlet);
+		context.addServletMappingDecoded(mapping[0], servletName);
+	}
+	
+	public void addFilter(Class<? extends Filter> clazz) {
+		WebFilter webFilter = clazz.getAnnotation(WebFilter.class);
+		String filterName = webFilter.filterName();
+		String [] mapping = webFilter.urlPatterns();
+		FilterDef filterDef = createFilterDef(filterName, clazz.getName());
+		FilterMap filterMap = createFilterMap(filterName, mapping[0]);
+		context.addFilterDef(filterDef);
+		context.addFilterMap(filterMap);
+	}
+	
+	private FilterDef createFilterDef(String filterName,String filterClass) {
+	    FilterDef filterDef = new FilterDef();
+	    filterDef.setFilterName(filterName);
+	    filterDef.setFilterClass(filterClass);
+	    return filterDef;
+	}	
+	
+	private FilterMap createFilterMap(String filterName, String urlPattern) {
+	    FilterMap filterMap = new FilterMap();
+	    filterMap.setFilterName(filterName);
+	    filterMap.addURLPattern(urlPattern);
+	    return filterMap;
 	}
 	
 	public void start () throws LifecycleException {

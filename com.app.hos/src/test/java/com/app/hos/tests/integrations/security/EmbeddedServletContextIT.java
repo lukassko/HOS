@@ -8,60 +8,42 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.xml.sax.SAXException;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.config.WebSecurityConfig;
+import com.app.hos.security.filters.AuthenticationFilter;
+import com.app.hos.security.servlets.ChallengeServlet;
 import com.app.hos.security.servlets.LoginServlet;
 import com.app.hos.utils.embeddedserver.EmbeddedTomcat;
-import com.app.hos.utils.embeddedserver.WarDeployer;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebResponse;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.startup.Tomcat;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 //@Ignore("run only one integration test")
-//@Profile("web-integration-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-//@ContextConfiguration(classes = {WebSocketConfig.class})
-@ContextConfiguration(classes = {ApplicationContextConfig.class, WebSecurityConfig.class})
+@ContextConfiguration(classes = {ApplicationContextConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TomcatSecurityIT {
+public class EmbeddedServletContextIT {
 
 	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
 	
 	private static EmbeddedTomcat tomcat;
 	
-	//private static String tomcatWorkingDir = System.getProperty("java.io.tmpdir");
-	private static String tomcatWorkingDir = ".";
-	
-	private static String appName = "HOS";
-	
-	private static WarDeployer deployer;
-	
     @BeforeClass
-    public static void setupTomcat() throws Exception {
+    public static void setupAndStartTomcat() throws Exception {
         tomcat = new EmbeddedTomcat();
         tomcat.initInstance();
-        tomcat.addServlet(LoginServlet.class, "/login");
-/*        File webApp = new File(tomcatWorkingDir, appName);
-        File oldWebApp = new File(webApp.getAbsolutePath());
-        FileUtils.deleteDirectory(oldWebApp);
-        deployer = new WarDeployer("HOS");
-        deployer.deployWarToLocation(new File(tomcatWorkingDir + "/" + appName + ".war"));
-        */
-        
+        tomcat.addServlet(LoginServlet.class);
+        //tomcat.addServlet(ChallengeServlet.class);
+        tomcat.addFilter(AuthenticationFilter.class);
 		tomcat.start();
     }
     

@@ -22,7 +22,10 @@ import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.security.SecurityUtils;
 
 @SuppressWarnings("serial")
-@WebServlet("/challenge")
+@WebServlet(
+		name = "ChallengeServlet", 
+		urlPatterns = "/challenge"
+)
 public class ChallengeServlet extends HttpServlet {
 
 	private UserDetailsService userDetailsService;

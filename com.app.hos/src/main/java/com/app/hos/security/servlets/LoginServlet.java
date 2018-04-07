@@ -32,13 +32,10 @@ public class LoginServlet extends HttpServlet {
 
 	private AuthenticationProvider authenticationProvider;
 	
-	public LoginServlet() {
-		System.out.println("LoginServlet creating");
-	}
+	public LoginServlet() {}
 	
 	@Autowired
 	public LoginServlet(AuthenticationProvider authenticationProvider) {
-		System.out.println("LoginServlet creating with bean " + authenticationProvider.toString());
 		this.authenticationProvider = authenticationProvider;
 	}
 	
