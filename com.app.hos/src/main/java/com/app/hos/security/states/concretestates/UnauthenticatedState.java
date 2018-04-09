@@ -24,7 +24,7 @@ public class UnauthenticatedState implements AuthenticationState {
 		
 		authentication.setAuthentication(null);
 		
-		HttpServletResponse httpResponse = (HttpServletResponse)response;
+		//HttpServletResponse httpResponse = (HttpServletResponse)response;
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		
 		 //get the old session and invalidate if exists
@@ -36,11 +36,11 @@ public class UnauthenticatedState implements AuthenticationState {
         HttpSession session = httpRequest.getSession(true);
         session.setMaxInactiveInterval(300); // 5 minutes
 		session.setAttribute("authenticator", authentication);
-
+		
 		authentication.setState(new AuthenticatingState());
 		
-		//redirectToLogin(request,response);
-		httpResponse.sendRedirect("login");
+		redirectToLogin(request,response);
+		//httpResponse.sendRedirect("login");
 	}
 
 	private void redirectToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {

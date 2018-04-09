@@ -39,7 +39,7 @@
 </head>
 <body>
 	<div class="login-pane">
-		<form class="form" action="logging" method="POST">
+		<form id="login-form" class="form" action="challenge" method="POST">
 			<input type="text" name="user" placeholder="username"/>
 			<input type="password" name="password"  placeholder="password"/>
 			<input type="submit" value="LOG IN"/>

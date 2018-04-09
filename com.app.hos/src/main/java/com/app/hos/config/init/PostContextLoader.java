@@ -2,12 +2,14 @@ package com.app.hos.config.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.app.hos.service.exceptions.handler.HOSExceptionHandlerFactory;
 import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
 
+@Profile("!web-integration-test")
 @Component
 public class PostContextLoader implements ApplicationListener<ContextRefreshedEvent> {
 	

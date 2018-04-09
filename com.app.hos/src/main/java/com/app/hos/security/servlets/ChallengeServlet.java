@@ -53,7 +53,7 @@ public class ChallengeServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("ChallengeServlet doPost");
-		String userName = (String)request.getAttribute("user");
+		String userName = (String)request.getParameter("user");
 		try {
 			// find user
 			org.springframework.security.core.userdetails.UserDetails userDetails = userDetailsService.loadUserByUsername(userName);

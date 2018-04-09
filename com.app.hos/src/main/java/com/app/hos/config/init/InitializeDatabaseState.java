@@ -22,7 +22,8 @@ import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.security.SecurityUtils;
 
 //@Component
-@Profile("!integration-test")
+//@Profile("!integration-test")
+@Profile("!web-integration-test")
 public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired

@@ -17,7 +17,11 @@ public class ApplicationContextConfig {
 	
 	@Configuration
 	@Profile("web-integration-test")
-	@ComponentScan({"com.app.hos.config*", "com.app.hos.service.websocket*"})
+	@ComponentScan({
+		"com.app.hos.config*", 
+		"com.app.hos.service.websocket*",
+		"com.app.hos.security*"
+	})
     static class WebIntegrationTestConfig
     { }
 }
