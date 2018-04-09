@@ -58,12 +58,15 @@ public class EmbeddedServletContextIT {
     }
 
     @Test
-    public void stage10_testHttpUnit() throws IOException, SAXException {
+    public void stage10_callDeviceShouldRedirectToLoginPageWithNewSessionIfUserIsNotLogin() throws IOException, SAXException {
     	System.out.println("stage10_testHttpUnit START!");
     	WebConversation wc = new WebConversation();
-    	WebResponse resp = wc.getResponse("http://localhost:8080/HOS/devices");
-    	LOG.info(Integer.toString(resp.getResponseCode()));
-    	LOG.info(resp.getText());
+    	WebResponse response = wc.getResponse("http://localhost:8080/HOS/devices");
+    	LOG.info(Integer.toString(response.getResponseCode()));
+    	LOG.info(response.getText());
+    	System.out.println(response.getNewCookieValue("JSESSIONID"));
+    	Assert.assertEquals(302, response.getResponseCode());
+    	Assert.assertNotNull(response.getNewCookieValue("JSESSIONID"));
     }
     
     @Test

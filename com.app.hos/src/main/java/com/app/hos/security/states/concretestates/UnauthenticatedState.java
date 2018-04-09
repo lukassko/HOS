@@ -3,6 +3,7 @@ package com.app.hos.security.states.concretestates;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -18,6 +19,8 @@ public class UnauthenticatedState implements AuthenticationState {
 	@Override
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException {
+		
+		System.out.println("UnauthenticatedState");
 		
 		authentication.setAuthentication(null);
 		
@@ -36,7 +39,12 @@ public class UnauthenticatedState implements AuthenticationState {
 
 		authentication.setState(new AuthenticatingState());
 		
+		//redirectToLogin(request,response);
 		httpResponse.sendRedirect("login");
 	}
 
+	private void redirectToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/users/login.jsp");
+		dispatcher.forward(request, response); 
+	}
 }
