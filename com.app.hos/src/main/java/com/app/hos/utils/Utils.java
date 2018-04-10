@@ -21,7 +21,7 @@ public class Utils {
     	generated = (double)((int) generated);
 		return generated /100;
 	}
-
+    
    // public static Object getObjectFromContext(String beanName) {
     //	return ApplicationContextProvider.getApplicationContext().getBean(beanName);
    // }

@@ -7,7 +7,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.pojo.UserChallenge;
-import com.app.hos.security.detailservice.UserDetails;
 import com.app.hos.utils.security.SecurityUtils;
 
 @Service
@@ -15,10 +14,9 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		UserDetails userDetail = (UserDetails)authentication.getPrincipal();
 		UserChallenge userHash = (UserChallenge)authentication.getCredentials();
 
-		if (isChallengeCorrect(userHash,userDetail)) {
+		if (isChallengeCorrect(userHash)) {
 			authentication.setAuthenticated(true);
 		} else {
 			throw new BadCredentialsException("Invalid user password");
@@ -27,15 +25,15 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 		return authentication;
 	}
 
-	private boolean isChallengeCorrect(UserChallenge userChallenge, UserDetails userDetails) {
-		
-		String userChallangeHash = userChallenge.getHash(); // calculate in browser (pass hash + salt + challenge)
+	private boolean isChallengeCorrect(UserChallenge userChallenge) {
+		// calculate in browser hash((hash(pass + salt) + challenge))
+		String userOneTimeRequest = userChallenge.getOneTimeRequest(); 
 		String challenge = userChallenge.getChallenge();
-		String userStoredHash = userDetails.getHash();
+		String userHash = userChallenge.getHash();
 
-		String hashedOneTimeRequest = SecurityUtils.hash(userStoredHash + challenge);
+		String hashedOneTimeRequest = SecurityUtils.hash(userHash + challenge);
 
-		return hashedOneTimeRequest.equals(userChallangeHash);
+		return hashedOneTimeRequest.equals(userOneTimeRequest);
 		
 	}
 	

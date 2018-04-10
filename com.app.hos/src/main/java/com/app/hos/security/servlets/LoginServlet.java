@@ -58,30 +58,35 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("LoginServlet doPost");
 		
+		String oneTimeChallengeResponse = (String)request.getParameter("challange");
+		
 		HttpSession session = request.getSession(false);
 
 		String challenge = (String)session.getAttribute("challenge");
 		UserDetails user = (UserDetails)session.getAttribute("user");
+		
 		StatesAuthenticator statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
 		
 		UserChallenge userHash = new UserChallenge().setHash(user.getHash())
 													.setSalt(user.getSalt())
-													.setChallenge(challenge);
+													.setChallenge(challenge)
+													.setOneTimeRequest(oneTimeChallengeResponse);
 		
 		try {
-
 			Authentication authentication = new HosUserAuthentication(user).setCredentials(userHash);
-			
 			authentication = authenticationProvider.authenticate(authentication);	
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
 			statesAuthenticator.setAuthentication(authentication);
-			
-			
-			response.sendRedirect("/");
+			forwardToMain(request,response);
 		} catch (AuthenticationException e) {
 			//statesAuthenticator.setState(new AuthenticatingState());
 			response.sendError(401,e.getMessage());
 		}
     }
+	
+	private void forwardToMain(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/main/main.jsp");
+		dispatcher.forward(request, response); 
+	}
 	
 }

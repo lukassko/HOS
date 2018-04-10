@@ -3,13 +3,10 @@ package com.app.hos.config.init;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Connection;

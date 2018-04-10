@@ -33,13 +33,13 @@ public class AuthenticatedState implements AuthenticationState {
 		if (isSessionExpired(request)) {
 			// redirect to login page, request should go through filter
 			// in filter StatesAuthenticator should be created and new HttpSession where StatesAuthenticator will be stored
-			redirectToLogin(request,response);
+			forwardToLogin(request,response);
 			return;
 		}
 		
 		if (isRequesting(request, "/logout")) {
 			destroySession(request);
-			redirectToLogin(request,response);
+			forwardToLogin(request,response);
 			return;
 		}
 		
@@ -53,7 +53,7 @@ public class AuthenticatedState implements AuthenticationState {
 		chain.doFilter(request, response);
 	}
 
-	private void redirectToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
+	private void forwardToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
 		// use sendRedirect or forward, must be go through filter to  create new session and set UnauthenticatedState
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/users/login.jsp");
 		dispatcher.forward(request, response); 

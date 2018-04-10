@@ -1,8 +1,6 @@
 package com.app.hos.service.managers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +11,6 @@ import com.app.hos.persistance.repository.UserRepository;
 @Transactional
 public class UserManager {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -24,7 +19,6 @@ public class UserManager {
 	}
 	
 	public void addUser(User user) {
-		//user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 }

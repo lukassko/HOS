@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.app.hos.utils.security.SecurityUtils;
+
 import javax.persistence.JoinColumn;
 
 @Table(name = "users")
@@ -73,6 +76,12 @@ public class User extends BaseEntity  {
 	}
 
 	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+	
+	public void setPassword(String password) {
+		String salt = SecurityUtils.getRandomAsString();
+		this.hash = SecurityUtils.hash(password + salt);
 		this.salt = salt;
 	}
 

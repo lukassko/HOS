@@ -8,6 +8,8 @@ public class UserChallenge {
 
 	private String hash;
 	
+	private String oneTimeRequest;
+
 	public String getSalt() {
 		return salt;
 	}
@@ -32,6 +34,15 @@ public class UserChallenge {
 
 	public UserChallenge setHash(String hash) {
 		this.hash = hash;
+		return this;
+	}
+	
+	public String getOneTimeRequest() {
+		return oneTimeRequest;
+	}
+
+	public UserChallenge setOneTimeRequest(String oneTimeRequest) {
+		this.oneTimeRequest = oneTimeRequest;
 		return this;
 	}
 

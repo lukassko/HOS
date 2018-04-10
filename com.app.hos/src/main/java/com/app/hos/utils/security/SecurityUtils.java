@@ -3,6 +3,8 @@ package com.app.hos.utils.security;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.hash.Hashing;
 
@@ -36,5 +38,17 @@ public class SecurityUtils {
 		return Hashing.sha256()
 				  .hashString(originalString, StandardCharsets.UTF_8)
 				  .toString();
+	}
+
+	public static Map<String,String> getCookies(String rawCookie) {
+		Map<String,String> cookies = new HashMap<>();
+		String[] rawCookieParams = rawCookie.split(";");
+		for(String rawCookieNameAndValue : rawCookieParams) {
+	    	String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
+	    	String key = rawCookieNameAndValuePair[0];
+	    	String value = rawCookieNameAndValuePair[1];
+	    	cookies.put(key, value);
+		} 
+		return cookies;
 	}
 }
