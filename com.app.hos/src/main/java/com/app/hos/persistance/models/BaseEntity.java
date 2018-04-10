@@ -1,5 +1,7 @@
 package com.app.hos.persistance.models;
 
+import java.io.Serializable;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -7,9 +9,10 @@ import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@SuppressWarnings("serial")
 @MappedSuperclass
-public class BaseEntity {
-
+public class BaseEntity implements Serializable {
+	
 	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

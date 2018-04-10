@@ -8,6 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -145,7 +148,6 @@ public class EmbeddedServletContextIT {
     	// get response
     	LOG.info(response.getText());
     	LOG.info(response.getResponseMessage());
-    	
     	Assert.assertEquals("User not found", response.getResponseMessage());
     	Assert.assertEquals(401, response.getResponseCode());
     }
@@ -155,10 +157,9 @@ public class EmbeddedServletContextIT {
     												throws MalformedURLException, IOException, SAXException {
     	
     	System.out.println("stage50");
-    	
-    	final String PASS = "Lukasz";
-    	User user = new User(PASS);
-    	user.setPassword("password");
+    	final String PASS = "password";
+    	User user = new User("Lukasz");
+    	user.setPassword(PASS);
     	userManager.addUser(user);
 
     	WebConversation client = new WebConversation();
@@ -183,12 +184,11 @@ public class EmbeddedServletContextIT {
     	
     	// get response
     	LOG.info(response.getText());
-    	LOG.info(response.getResponseMessage());
     	Assert.assertEquals("application/json", response.getContentType());
     	String receivedJson = response.getText();
     	UserChallenge userChallenge = JsonConverter.getObject(receivedJson, UserChallenge.class);
     	String oneTimeChallengeResponse = getOneTimeChallengeResponse(userChallenge, PASS);
-    	
+
     	// create request
     	request = new PostMethodWebRequest("http://localhost:8080/HOS/login");
     	request.setParameter("challenge", oneTimeChallengeResponse);

@@ -28,11 +28,12 @@ import com.app.hos.utils.security.SecurityUtils;
 )
 public class ChallengeServlet extends HttpServlet {
 
+	@Autowired
 	private UserDetailsService userDetailsService;
 	
 	public ChallengeServlet() {}
 	
-	@Autowired
+	//@Autowired
 	public ChallengeServlet(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
@@ -76,6 +77,7 @@ public class ChallengeServlet extends HttpServlet {
 			response.getWriter().write(json);
 			
 		} catch(UsernameNotFoundException e) {
+			System.out.println(e.toString());
 			response.sendError(401, e.getMessage());
 		}
     }

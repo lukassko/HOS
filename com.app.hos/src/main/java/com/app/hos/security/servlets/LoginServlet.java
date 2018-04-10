@@ -30,11 +30,12 @@ import com.app.hos.security.states.concretestates.AuthenticatedState;
 )
 public class LoginServlet extends HttpServlet {
 
+	@Autowired
 	private AuthenticationProvider authenticationProvider;
 	
 	public LoginServlet() {}
 	
-	@Autowired
+	//@Autowired
 	public LoginServlet(AuthenticationProvider authenticationProvider) {
 		this.authenticationProvider = authenticationProvider;
 	}
@@ -59,7 +60,6 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("LoginServlet doPost");
 		
 		String oneTimeChallengeResponse = (String)request.getParameter("challange");
-		
 		HttpSession session = request.getSession(false);
 
 		String challenge = (String)session.getAttribute("challenge");
@@ -71,7 +71,6 @@ public class LoginServlet extends HttpServlet {
 													.setSalt(user.getSalt())
 													.setChallenge(challenge)
 													.setOneTimeRequest(oneTimeChallengeResponse);
-		
 		try {
 			Authentication authentication = new HosUserAuthentication(user).setCredentials(userHash);
 			authentication = authenticationProvider.authenticate(authentication);	
@@ -79,7 +78,6 @@ public class LoginServlet extends HttpServlet {
 			statesAuthenticator.setAuthentication(authentication);
 			forwardToMain(request,response);
 		} catch (AuthenticationException e) {
-			//statesAuthenticator.setState(new AuthenticatingState());
 			response.sendError(401,e.getMessage());
 		}
     }

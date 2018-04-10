@@ -15,6 +15,7 @@ import com.app.hos.utils.security.SecurityUtils;
 
 import javax.persistence.JoinColumn;
 
+@SuppressWarnings("serial")
 @Table(name = "users")
 @Entity
 public class User extends BaseEntity  {

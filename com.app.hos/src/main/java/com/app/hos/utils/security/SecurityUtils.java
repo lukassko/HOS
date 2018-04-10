@@ -46,7 +46,12 @@ public class SecurityUtils {
 		for(String rawCookieNameAndValue : rawCookieParams) {
 	    	String[] rawCookieNameAndValuePair = rawCookieNameAndValue.split("=");
 	    	String key = rawCookieNameAndValuePair[0];
-	    	String value = rawCookieNameAndValuePair[1];
+	    	String value;
+	    	try {
+	    		value = rawCookieNameAndValuePair[1];
+	    	} catch(Exception e) {
+	    		value = null;
+	    	}
 	    	cookies.put(key, value);
 		} 
 		return cookies;

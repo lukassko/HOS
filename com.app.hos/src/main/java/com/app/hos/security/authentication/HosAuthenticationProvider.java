@@ -30,11 +30,8 @@ public class HosAuthenticationProvider implements AuthenticationProvider {
 		String userOneTimeRequest = userChallenge.getOneTimeRequest(); 
 		String challenge = userChallenge.getChallenge();
 		String userHash = userChallenge.getHash();
-
 		String hashedOneTimeRequest = SecurityUtils.hash(userHash + challenge);
-
 		return hashedOneTimeRequest.equals(userOneTimeRequest);
-		
 	}
 	
 	@Override

@@ -46,4 +46,10 @@ public class UserChallenge {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return "UserChallenge [salt=" + salt + ", challenge=" + challenge + ", hash=" + hash + ", oneTimeRequest="
+				+ oneTimeRequest + "]";
+	}
+
 }
