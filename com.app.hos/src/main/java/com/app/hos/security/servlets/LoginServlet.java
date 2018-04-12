@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 	// change level to public for unit testing
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/users/login.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/security/login.jsp");
 		dispatcher.forward(request, response); 
 	}
 	

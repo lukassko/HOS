@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page session="false"%>
 <!DOCTYPE html>
 <html>
@@ -36,7 +37,7 @@
 			cursor: pointer;
 		}
 	</style>
-	
+	<script src="<c:url value="/resources/scripts/security.js" />"></script>
 	<script type="text/javascript">
 	
 		function doCall(url,arg, callback) {
@@ -49,33 +50,40 @@
 		        	   }
 		           }
 		           else if (xmlhttp.status == 400) {
-		           		alert('There was an error 400');
+		        	   console.log('There was an error 400');
 		           }
 		           else {
-		           		alert('something else other than 200 was returned');
+		        	   console.log('something else other than 200 was returned');
 		           }
 		        }
 		    };
-		
 		    xmlhttp.open("POST", url, true);
+		    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		    xmlhttp.send(arg);
 		}
 		
 		function doChallenge() {
 			var user = document.getElementById('name').value;
 			var params = "user=" + user;
-			var url = "/challenge";
+			var url = "challenge";
 			doCall(url, params, doAuthentication);
+			return false;
 		}
 		
 		function doAuthentication (response) {
-			alert(response);
-			var password = document.getElementById('password').value;
-			var challengeresponse = calculateOneTimeChallnege();
-			//var params = JSON!
-			var url = "/login";
-			doCall();
+			var url = "login";
+			var params = "challenge=" + calculateOneTimeChallnege(response);
+			doCall(url,params);
 		}
+		
+		function calculateOneTimeChallnege(response) {
+			console.log(response);
+			var password = document.getElementById('password').value;
+			var hashing = JSON.parse(response);
+			var toHash = password + hashing.salt;
+			var hash = sha256(toHash);
+			return sha256(hash + hashing.challenge);
+		};
 		
 	</script>
 </head>

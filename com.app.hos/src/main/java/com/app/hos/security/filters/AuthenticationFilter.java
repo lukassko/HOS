@@ -31,7 +31,6 @@ public class AuthenticationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		StatesAuthenticator statesAuthenticator = getStatesAuthenticator(request);
-		System.out.println(statesAuthenticator.toString());
 		statesAuthenticator.doAuthentication(request, response, chain);
 	}
 
@@ -43,6 +42,7 @@ public class AuthenticationFilter implements Filter {
 			statesAuthenticator = new StatesAuthenticator();
 		else 
 			statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
+			
 		return statesAuthenticator;
 	}
 
