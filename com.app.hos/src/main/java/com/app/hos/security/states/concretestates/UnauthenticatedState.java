@@ -19,9 +19,7 @@ public class UnauthenticatedState implements AuthenticationState {
 	@Override
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException {
-		
-		System.out.println("UnauthenticatedState");
-		
+				
 		authentication.setAuthentication(null);
 		
 		//HttpServletResponse httpResponse = (HttpServletResponse)response;

@@ -19,7 +19,6 @@ public class AuthenticatingState implements AuthenticationState {
 	@Override
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws IOException, ServletException{
-		System.out.println("AuthenticatingState");
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
         if (isChallengeLoggingRequest(request))
         	chain.doFilter(request, response);

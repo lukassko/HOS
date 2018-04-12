@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.Connection;
@@ -16,10 +17,9 @@ import com.app.hos.persistance.models.User;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.utils.security.SecurityUtils;
 
-//@Component
-//@Profile("!integration-test")
+@Component
+//@Profile({"!web-integration-test", "!integration-test"})
 @Profile("!web-integration-test")
 public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -37,10 +37,8 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	}
 	
 	private void addUser() {
-		User user = new User();
-		user.setName("Lukasz");
-		user.setHash(SecurityUtils.getRandomAsString());
-		user.setSalt(SecurityUtils.getRandomAsString());
+		User user = new User("Lukasz");
+		user.setPassword("admin");
 		userRepository.save(user);
 	}
 	

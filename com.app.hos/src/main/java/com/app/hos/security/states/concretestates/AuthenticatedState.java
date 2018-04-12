@@ -20,7 +20,6 @@ public class AuthenticatedState implements AuthenticationState {
 	private Authentication authentication;
 	
 	public AuthenticatedState(Authentication authentication) {
-		System.out.println("AuthenticatedState");
 		this.authentication = authentication;
 	}
 

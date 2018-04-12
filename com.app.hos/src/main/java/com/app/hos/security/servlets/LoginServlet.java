@@ -49,7 +49,6 @@ public class LoginServlet extends HttpServlet {
 	// change level to public for unit testing
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("LoginServlet doGet");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/users/login.jsp");
 		dispatcher.forward(request, response); 
 	}
@@ -57,9 +56,9 @@ public class LoginServlet extends HttpServlet {
 	// change level to public for unit testing
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("LoginServlet doPost");
 		
-		String oneTimeChallengeResponse = (String)request.getParameter("challange");
+		String oneTimeChallengeResponse = (String)request.getParameter("challenge");
+
 		HttpSession session = request.getSession(false);
 
 		String challenge = (String)session.getAttribute("challenge");

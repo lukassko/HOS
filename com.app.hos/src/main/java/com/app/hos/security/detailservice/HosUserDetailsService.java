@@ -36,7 +36,7 @@ public class HosUserDetailsService implements UserDetailsService {
 			userDetails.setAuthorities(getGrantedAuthorities(user));
 			return userDetails;
 		} catch (NoResultException e) {
-			throw new UsernameNotFoundException(userName);
+			throw new UsernameNotFoundException("User not found: "+userName);
 		}
 	}
 

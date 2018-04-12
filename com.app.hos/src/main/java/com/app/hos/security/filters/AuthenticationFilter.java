@@ -30,8 +30,8 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println(((HttpServletRequest)request).getRequestURI());
 		StatesAuthenticator statesAuthenticator = getStatesAuthenticator(request);
+		System.out.println(statesAuthenticator.toString());
 		statesAuthenticator.doAuthentication(request, response, chain);
 	}
 

@@ -4,13 +4,14 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,6 +28,7 @@ import com.app.hos.utils.embeddedserver.EmbeddedTomcat;
 import com.app.hos.utils.json.JsonConverter;
 import com.app.hos.utils.security.SecurityUtils;
 import com.meterware.httpunit.GetMethodWebRequest;
+import com.meterware.httpunit.HttpException;
 import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebForm;
@@ -38,6 +40,8 @@ import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.transaction.Transactional;
+
 import org.apache.catalina.LifecycleException;
 
 //@Ignore("run only one integration test")
@@ -48,6 +52,9 @@ import org.apache.catalina.LifecycleException;
 public class EmbeddedServletContextIT {
 
 	protected final Logger LOG = Logger.getLogger(this.getClass().getName());
+	
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 	
 	@Autowired
 	private UserManager userManager;
@@ -75,6 +82,17 @@ public class EmbeddedServletContextIT {
     }
 
     @Test
+    public void stage5_makeRequestWithJSSessionIdCookieWhichNotExistsOnServerSideShouldReturnUnauthenticatedSateAndCreateNewSession() 
+    																							throws IOException, SAXException {
+    	WebConversation client = new WebConversation();
+    	String invalidSessionId = SecurityUtils.getRandomAsString();
+    	client.addCookie("JSESSIONID", invalidSessionId);
+    	WebRequest request = new GetMethodWebRequest("http://localhost:8080/HOS/");
+    	WebResponse response = client.getResponse(request);
+    	Assert.assertEquals(200, response.getResponseCode());
+    }
+    
+    @Test
     public void stage10_callDeviceShouldForwardToLoginPageWithNewSessionIfUserIsNotLogin() throws IOException, SAXException {
     	WebConversation client = new WebConversation();
     	WebRequest request = new GetMethodWebRequest("http://localhost:8080/HOS/devices");
@@ -99,9 +117,11 @@ public class EmbeddedServletContextIT {
     }
     
     @Test
-    public void stage30_callNotChallengeNorLoginAfterChangeStateToUnauthenticatedStateShouldReturnUnauthorizedRequestError() 
+    public void stage30_callNotChallengeNorLoginAfterChangeStateToAuthenticatingStateShouldReturnUnauthorizedRequestError() 
     																	throws IOException, SAXException {
-    	System.out.println("stage30");
+    	// expected
+    	exception.expect(HttpException.class);
+    	
     	WebConversation client = new WebConversation();
     	
     	// create request
@@ -117,14 +137,16 @@ public class EmbeddedServletContextIT {
     	client.addCookie("JSESSIONID", sessionId);
     	// get response
     	response = client.getResponse(request);
-    	System.out.println(response.getResponseCode());
-    	Assert.assertEquals(200, response.getResponseCode());
     }
     
     @Test
     public void stage40_callChallengeWithInvalidUserShouldReturn401ErrorCodeWithUserNotFoundMessage() 
     																		throws IOException, SAXException {
-    	System.out.println("stage40");
+    	final String USR_NAME = "Luki";
+    	
+    	// expected
+    	exception.expect(HttpException.class);
+        
     	WebConversation client = new WebConversation();
     	
     	// create request
@@ -142,21 +164,16 @@ public class EmbeddedServletContextIT {
     	
     	// create request
     	WebForm loginForm = forms[0];
-    	loginForm.setParameter("user", "Luki");
-    	response = loginForm.submit();
+    	loginForm.setParameter("user", USR_NAME);
     	
     	// get response
-    	LOG.info(response.getText());
-    	LOG.info(response.getResponseMessage());
-    	Assert.assertEquals("User not found", response.getResponseMessage());
-    	Assert.assertEquals(401, response.getResponseCode());
+    	response = loginForm.submit();
     }
     
     @Test
-    public void stage50_callChallengeWithValidUserShouldReturnNewTemporaryHashForUser() 
-    												throws MalformedURLException, IOException, SAXException {
-    	
-    	System.out.println("stage50");
+    @DirtiesContext
+    public void stage50_callLoginWithValidUserChallengeShouldReturn200Status() 
+    												throws MalformedURLException, IOException, SAXException {    	
     	final String PASS = "password";
     	User user = new User("Lukasz");
     	user.setPassword(PASS);
@@ -192,7 +209,55 @@ public class EmbeddedServletContextIT {
     	// create request
     	request = new PostMethodWebRequest("http://localhost:8080/HOS/login");
     	request.setParameter("challenge", oneTimeChallengeResponse);
+
+    	// get response
+    	response = client.getResponse(request);
     	
+    	Assert.assertEquals(200, response.getResponseCode());
+    }
+    
+    @Test
+    @DirtiesContext
+    public void stage60_callLoginWithInvalidUserChallengeShouldReturnErrorCode() 
+    												throws MalformedURLException, IOException, SAXException {   
+    	final String PASS = "password";
+    	User user = new User("Lukasz");
+    	user.setPassword(PASS);
+    	userManager.addUser(user);
+
+    	// expected
+    	exception.expect(HttpException.class);
+    	
+    	WebConversation client = new WebConversation();
+    	
+    	// create request
+    	WebRequest request = new GetMethodWebRequest("http://localhost:8080/HOS/login");
+    	
+    	// get response
+    	WebResponse response = client.getResponse(request);
+    	Map<String,String> cookies = SecurityUtils.getCookies(response.getHeaderField("SET-COOKIE"));
+    	String sessionId = cookies.get("JSESSIONID");
+    	Assert.assertNotNull(sessionId);
+    	
+    	client.addCookie("JSESSIONID", sessionId);
+    	WebForm[] forms = response.getForms();
+    	Assert.assertEquals(1, forms.length);
+    	
+    	// create request
+    	WebForm loginForm = forms[0];
+    	loginForm.setParameter("user", user.getName());
+    	response = loginForm.submit();
+    	
+    	// get response
+    	Assert.assertEquals("application/json", response.getContentType());
+    	String receivedJson = response.getText();
+    	JsonConverter.getObject(receivedJson, UserChallenge.class);
+    	String oneTimeChallengeResponse = SecurityUtils.getRandomAsString(); // generate invalid challenge
+
+    	// create request
+    	request = new PostMethodWebRequest("http://localhost:8080/HOS/login");
+    	request.setParameter("challenge", oneTimeChallengeResponse);
+
     	// get response
     	response = client.getResponse(request);
     }
