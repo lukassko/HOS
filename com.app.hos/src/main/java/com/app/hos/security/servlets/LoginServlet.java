@@ -75,7 +75,8 @@ public class LoginServlet extends HttpServlet {
 			authentication = authenticationProvider.authenticate(authentication);	
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
 			statesAuthenticator.setAuthentication(authentication);
-			forwardToMain(request,response);
+			response.setStatus(200);
+			//forwardToMain(request,response);
 		} catch (AuthenticationException e) {
 			response.sendError(401,e.getMessage());
 		}

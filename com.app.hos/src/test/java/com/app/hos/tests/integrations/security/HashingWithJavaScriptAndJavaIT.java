@@ -54,10 +54,22 @@ public class HashingWithJavaScriptAndJavaIT {
     }
 	
 	@Test
+    public void hashFromJavaAndJSShouldBeEqualsWithConcat() throws Exception {
+        Invocable invocable = (Invocable)engine;
+        String challnege = "+F6naz6TXSitusBJvuovf6ZtATrjAJZPRD2fboRwvcM=";
+        String hash = "5593220c751cd6ad0ac4f220f6f08e133652a5d58412f5b895a61d5860f5f7ae"; 
+        String jsHash = (String)invocable.invokeFunction("sha256", hash + challnege);
+        String javaHash = SecurityUtils.hash(hash + challnege);
+        Assert.assertEquals(jsHash, javaHash);
+    }
+	
+	@Test
     public void hashFromJavaAndJSShouldBeDifferents() throws Exception {
         Invocable invocable = (Invocable)engine;
         String jsHash = (String)invocable.invokeFunction("sha256", "password1");
         String javaHash = SecurityUtils.hash("password2");
         Assert.assertNotEquals(jsHash, javaHash);
     }
+	
+	
 }

@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -44,7 +45,7 @@ import javax.transaction.Transactional;
 
 import org.apache.catalina.LifecycleException;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {ApplicationContextConfig.class})
