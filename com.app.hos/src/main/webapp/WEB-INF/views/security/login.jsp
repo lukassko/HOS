@@ -43,20 +43,7 @@
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
-					var status = xmlhttp.status;
-					if (status == 200) {
-						callback(status,xmlhttp.response);
-					}
-					else if (status == 400) {
-						console.log('There was an error 400');
-					}
-					else if (status == 401) {
-						showErrorMessage(xmlhttp.responseText);
-						console.log('There was an error 401' + xmlhttp.responseText);
-					}
-					else {
-						console.log('something else other than 200 was returned');
-					}
+					callback(xmlhttp.status,xmlhttp.response);
 				}
 			};
 			xmlhttp.open(type, url, true);
@@ -72,22 +59,26 @@
 		function doChallenge() {
 			var user = document.getElementById('name').value;
 			var params = "user=" + user;
-			doCall("POST",url,doAuthentication,params);
+			doCall("POST","challenge",doAuthentication,params);
 			return false;
 		}
 		
 		function doAuthentication (status,response) {
-			var url = "login";
-			var params = "challenge=" + calculateOneTimeChallnege(response);
-			doCall("POST",url,verifyAuthentication,params);
+			if (status == 200) {
+				var params = "challenge=" + calculateOneTimeChallnege(response);
+				doCall("POST","login",getMain,params);
+			} else {
+				showErrorMessage("Invalid user name.");
+			}
 		}
 		
-		function verifyAuthentication (status,response) {
-			doCall("GET","/",loadHtml);
-		}
-		
-		function loadHtml (status,response) {
-			document.write(response);
+		function getMain (status,response) {
+			if (status == 200) {
+				window.location.replace("/HOS/");
+			} else {
+				showErrorMessage("Invalid user password.");
+			}
+			
 		}
 
 		function calculateOneTimeChallnege(response) {
@@ -98,8 +89,8 @@
 			return sha256(hash + hashing.challenge);
 		};
 		
-		function showErrorMessage (message) {
-			document.getElementById("error-msg").innerHTML = message;
+		function showErrorMessage (msg) {
+			document.getElementById("error-msg").innerHTML = msg;
 		}
 		
 	</script>

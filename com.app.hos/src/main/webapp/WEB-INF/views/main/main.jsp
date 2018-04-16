@@ -142,6 +142,16 @@
 			<span> Active page: </span>
 			<span id="active-page"> Dashboard </span>
 			<span id="system-info">Testowa wiadomosc: polaczone 5 urzadzen</span>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lukasz <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+
 		</div>
 		<div id="container">
 			Hello WORLD

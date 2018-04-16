@@ -197,6 +197,14 @@ html, body {
 	display: none;
 }
 
+#user-info {
+	color: $primaryFontColor;
+	font-size: 20px;
+	position: fixed;
+	right: 0;
+	padding-right: 20px;
+}
+
 #container {
 	position: fixed;
 	top: 50px;
