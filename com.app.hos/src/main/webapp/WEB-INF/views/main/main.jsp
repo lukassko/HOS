@@ -38,6 +38,7 @@
 	<script src="<c:url value="/resources/scripts/managers/commandManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/devicesManager.js" />"></script>
 	<script src="<c:url value="/resources/scripts/charts/chart.js" />"></script>
+	<script src="<c:url value="/resources/scripts/doAjaxCall.js" />"></script>
 	<script>
 		
 	var activePage = 'dashboard';
@@ -70,6 +71,13 @@
 		    });
 		});
 		hosWebsocket.connect(getAllDevices);
+		
+		new DeviceStatusCall(
+			function(status, response) {
+			console.log("active user " + status);
+			}
+		).send();
+		
 	});
 	
 	var intervalID = setInterval(function(){
@@ -141,16 +149,19 @@
 		<div id="user-bar" class="user-bar">
 			<span> Active page: </span>
 			<span id="active-page"> Dashboard </span>
-			<span id="system-info">Testowa wiadomosc: polaczone 5 urzadzen</span>
-
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lukasz <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="#">Logout</a></li>
-					</ul>
-				</li>
-			</ul>
+			
+			<div style="display:flex; float: right;">
+				<span id="system-info"></span>
+				<ul class="nav navbar-nav navbar-right" style="padding: 0px 10px 0px 0px;">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lukasz <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			
 
 		</div>
 		<div id="container">

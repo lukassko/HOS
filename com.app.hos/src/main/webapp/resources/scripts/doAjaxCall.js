@@ -51,6 +51,22 @@ function DeleteDeviceCall (serial,callback) {
 	};
 };
 
+function GetActiveUserCall (callback) {
+	AjaxCall.call(this);
+	
+	this.url = "user/getactive";
+	this.type = "GET";
+	this.contentData = {};
+	
+	this.onSuccess = function (status, response) {
+		callback(status, response);
+	};
+	
+	this.onFailed = function (status, response) {
+		callback(status, response);
+	};
+};
+
 DeviceStatusCall.prototype = Object.create(AjaxCall.prototype);
 DeleteDeviceCall.prototype = Object.create(AjaxCall.prototype);
-
+GetActiveUserCall.prototype = Object.create(AjaxCall.prototype);

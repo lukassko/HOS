@@ -15,7 +15,6 @@
 	<script src="<c:url value="/resources/scripts/objects/progressCircle.js" />"></script>
 	<script src="<c:url value="/resources/scripts/objects/datePicker.js" />"></script>
 	<script src="<c:url value="/resources/scripts/managers/deviceControlsManager.js" />"></script>
-	<script src="<c:url value="/resources/scripts/ajax/deviceStatuses.js" />"></script>
 	<script src="<c:url value="/resources/scripts/charts/chartsApi.js" />"></script>
 
 	<script>
