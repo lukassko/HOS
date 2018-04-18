@@ -16,7 +16,7 @@ AjaxCall.prototype.send = function () {
 		that.onSuccess(response.status,response);
 	})
 	.fail(function(response) {
-		that.onFailed(response.status,response.responseText);
+		that.onFailed(response.status,response);
 	});
 };
 
@@ -42,8 +42,8 @@ function DeleteDeviceCall (serial,callback) {
 	this.type = "DELETE";
 	this.contentData = {};
 	
-	this.onSuccess = function (status, response) {
-		callback(status, response);
+	this.onSuccess = function (response) {
+		callback(200, response);
 	};
 	
 	this.onFailed = function (status, response) {
@@ -58,8 +58,24 @@ function GetActiveUserCall (callback) {
 	this.type = "GET";
 	this.contentData = {};
 	
-	this.onSuccess = function (status, response) {
+	this.onSuccess = function (response) {
+		callback(200, response);
+	};
+	
+	this.onFailed = function (status, response) {
 		callback(status, response);
+	};
+};
+
+function LogoutUserCall (callback) {
+	AjaxCall.call(this);
+	
+	this.url = "user/logout";
+	this.type = "GET";
+	this.contentData = {};
+	
+	this.onSuccess = function (response) {
+		callback(200, response);
 	};
 	
 	this.onFailed = function (status, response) {
@@ -70,3 +86,4 @@ function GetActiveUserCall (callback) {
 DeviceStatusCall.prototype = Object.create(AjaxCall.prototype);
 DeleteDeviceCall.prototype = Object.create(AjaxCall.prototype);
 GetActiveUserCall.prototype = Object.create(AjaxCall.prototype);
+LogoutUserCall.prototype = Object.create(AjaxCall.prototype);

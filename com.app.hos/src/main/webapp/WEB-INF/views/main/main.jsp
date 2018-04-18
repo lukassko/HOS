@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page session="false"%>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,6 +45,8 @@
 	var activePage = 'dashboard';
 	
 	$(document).ready(function() {
+		
+		window.history.replaceState("", "", "/HOS/");
 		
 		// loaded here beacuse it use jQuery, therefore must be load after jQuery is loaded
 		$.getScript("webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js", function() {
@@ -91,13 +94,12 @@
 	}
 	
 	window.addEventListener("beforeunload", function (e) {
-		var dialogText = 'Dialog text here';
+		var dialogText = 'Are you sure to leave page?';
 		e.returnValue = dialogText;
 		return dialogText;                             
 	}); 
 	
-	window.addEventListener("onunload", function (e) {
-		console.log('onunload');
+	window.addEventListener("unload", function (e) {
 		clearInterval(intervalID);
 		hosWebsocket.disconnect();
 	}); 
@@ -153,7 +155,7 @@
 			<div style="display:flex; float: right;">
 				<span id="system-info"></span>
 				<div class="dropdown">
-					<div id="user-name" class="dropbtn"></div>
+					<div id="user-name" class="dropbtn">${user-name}</div>
 					<div id="user-dropdown" class="dropdown-content">
 						<a href="#home">Logout</a>
 						<a href="#about">About</a>
