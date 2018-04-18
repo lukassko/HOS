@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page session="false"%>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +46,8 @@
 	
 	$(document).ready(function() {
 		
+		window.history.replaceState("", "", "/HOS/");
+		
 		// loaded here beacuse it use jQuery, therefore must be load after jQuery is loaded
 		$.getScript("webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js", function() {
 			$.getScript("resources/scripts/prototyping.js");
@@ -72,9 +75,9 @@
 		});
 		hosWebsocket.connect(getAllDevices);
 		
-		new DeviceStatusCall(
+		new GetActiveUserCall(
 			function(status, response) {
-			console.log("active user " + status);
+			console.log("active user " + response.name);
 			}
 		).send();
 		
@@ -91,13 +94,12 @@
 	}
 	
 	window.addEventListener("beforeunload", function (e) {
-		var dialogText = 'Dialog text here';
+		var dialogText = 'Are you sure to leave page?';
 		e.returnValue = dialogText;
 		return dialogText;                             
 	}); 
 	
-	window.addEventListener("onunload", function (e) {
-		console.log('onunload');
+	window.addEventListener("unload", function (e) {
 		clearInterval(intervalID);
 		hosWebsocket.disconnect();
 	}); 
@@ -154,7 +156,7 @@
 				<span id="system-info"></span>
 				<ul class="nav navbar-nav navbar-right" style="padding: 0px 10px 0px 0px;">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lukasz <span class="caret"></span></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user-name} <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Logout</a></li>
 						</ul>
