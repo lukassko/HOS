@@ -7,6 +7,10 @@ function getTimeAsString(year,month,day,hour,minute,second){
 	return year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
 }
 
+function setUserName(name) {
+	$("#user-name").text(name);
+};
+
 
 function setSystemInfo(message) {
 	$("#system-info").text(message);

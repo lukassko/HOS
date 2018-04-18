@@ -13,7 +13,7 @@ AjaxCall.prototype.send = function () {
 	    data        : this.contentData
 	})
 	.done(function(response) {
-		that.onSuccess(response);
+		that.onSuccess(response.status,response);
 	})
 	.fail(function(response) {
 		that.onFailed(response.status,response.responseText);
@@ -26,8 +26,8 @@ function DeviceStatusCall (serial,from,to,callback) {
 	this.type = "GET";
 	this.contentData = {};
 	
-	this.onSuccess = function (response) {
-		callback(200, response);
+	this.onSuccess = function (status,response) {
+		callback(status, response);
 	};
 	
 	this.onFailed = function (status, response) {

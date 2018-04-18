@@ -130,6 +130,47 @@ html, body {
   .main-container {
     width: calc(100% - 300px); } }
 
+/* DROP DOWN */
+.dropdown .dropbtn {
+  color: #d19b3d;
+  border: none;
+  cursor: pointer;
+  padding: 0px 16px; }
+
+.dropdown .dropbtn:hover, .dropdown .dropbtn:focus {
+  background-color: #4f5b69;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease; }
+
+div.dropdown {
+  position: relative;
+  display: inline-block;
+  height: 100%; }
+
+.dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1; }
+
+.dropdown .dropdown-content a {
+  color: black;
+  padding: 0px 16px;
+  text-decoration: none;
+  display: block; }
+
+.dropdown a:hover {
+  background-color: #ddd; }
+
+.show {
+  display: block; }
+
 /* MAIN VIEW */
 .main-container {
   height: 100%; }

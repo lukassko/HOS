@@ -72,9 +72,9 @@
 		});
 		hosWebsocket.connect(getAllDevices);
 		
-		new DeviceStatusCall(
+		new GetActiveUserCall(
 			function(status, response) {
-			console.log("active user " + status);
+				setUserName(response.name);
 			}
 		).send();
 		
@@ -152,22 +152,22 @@
 			
 			<div style="display:flex; float: right;">
 				<span id="system-info"></span>
-				<ul class="nav navbar-nav navbar-right" style="padding: 0px 10px 0px 0px;">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lukasz <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Logout</a></li>
-						</ul>
-					</li>
-				</ul>
+				<div class="dropdown">
+					<div id="user-name" class="dropbtn"></div>
+					<div id="user-dropdown" class="dropdown-content">
+						<a href="#home">Logout</a>
+						<a href="#about">About</a>
+						<a href="#contact">Contact</a>
+					</div>
+				</div>
 			</div>
+		</div>
 			
 
-		</div>
-		<div id="container">
-			Hello WORLD
-		</div> 
 	</div>
+	<div id="container">
+			Hello WORLD
+	</div> 
 
 </body>
 </html>
