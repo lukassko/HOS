@@ -99,6 +99,10 @@ public class HosUserDetails implements UserDetails {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "HosUserDetails [user=" + user + "]";
+	}
 
 
 }

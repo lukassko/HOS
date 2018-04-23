@@ -76,15 +76,8 @@ public class LoginServlet extends HttpServlet {
 			statesAuthenticator.setState(new AuthenticatedState(authentication));
 			statesAuthenticator.setAuthentication(authentication);
 			response.setStatus(200);
-			//forwardToMain(request,response);
 		} catch (AuthenticationException e) {
 			response.sendError(401,e.getMessage());
 		}
     }
-	
-	private void forwardToMain(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/main/main.jsp");
-		dispatcher.forward(request, response); 
-	}
-	
 }

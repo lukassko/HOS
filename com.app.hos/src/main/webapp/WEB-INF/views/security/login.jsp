@@ -39,6 +39,8 @@
 	<script src="<c:url value="/resources/scripts/security.js" />"></script>
 	<script type="text/javascript">
 	
+		window.history.replaceState("", "", "/HOS/");
+		
 		function doCall(type,url,callback,arg) {
 			var xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function() {

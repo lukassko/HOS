@@ -30,13 +30,13 @@ public class AuthenticatedState implements AuthenticationState {
 		if (isSessionExpired(request)) {
 			// redirect to login page, request should go through filter
 			// in filter StatesAuthenticator should be created and new HttpSession where StatesAuthenticator will be stored
-			forwardTo("users/login",request,response);
+			forwardTo("security/login",request,response);
 			return;
 		}
 		
 		if (isRequesting(request, "/logout")) {
 			destroySession(request);
-			forwardTo("users/login",request,response);
+			forwardTo("security/login",request,response);
 			return;
 		}
 		
@@ -45,7 +45,6 @@ public class AuthenticatedState implements AuthenticationState {
 			forwardTo("main/main",request,response);
 			return;
 		}
-		
 		// check principal, roles and allowed operation
 			// thats why Authentication object in constructor
 		chain.doFilter(request, response);
@@ -59,9 +58,10 @@ public class AuthenticatedState implements AuthenticationState {
 	private boolean isRequesting(ServletRequest request, String requestPath) {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		String context = httpRequest.getContextPath();
-		String logoutURI =  context + requestPath;
+		String requestURI =  context + requestPath;
         String userUrl = httpRequest.getRequestURI();
-        return logoutURI.equals(userUrl);
+        System.out.println("requestURI " + requestURI);
+        return requestURI.equals(userUrl);
 	}
 
 	private void destroySession(ServletRequest request) {

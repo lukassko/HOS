@@ -15,10 +15,13 @@ import com.app.hos.security.states.StatesAuthenticator;
 public class MainController {
 	
 	@RequestMapping(value = "/", method=RequestMethod.GET)
-	public String showMainPage(HttpServletRequest request, Model jspModel) {
+	public String showMainPage(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		UserDetails user = (UserDetails)session.getAttribute("user");
-		jspModel.addAttribute("user-name", user.getUsername());
+		System.out.println(user.toString());
+		System.out.println(user.getUsername());
+		model.addAttribute("name", user.getUsername());
+		model.addAttribute("user", user);
 		return "main/main";
 	}
 	

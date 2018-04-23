@@ -51,6 +51,7 @@
 		// loaded here beacuse it use jQuery, therefore must be load after jQuery is loaded
 		$.getScript("webjars/bootstrap-daterangepicker/2.1.19/js/bootstrap-daterangepicker.js", function() {
 			$.getScript("resources/scripts/prototyping.js");
+			$.getScript("resources/scripts/viewUtils.js");
 		});
 		$.getScript("resources/scripts/plugins.js");
 		
@@ -147,27 +148,28 @@
 	     </div>
 	</div>
 	
-	<div class="main-container">
-		<div id="user-bar" class="user-bar">
+	<div class="main-container" style="z-index: 1;">
+		<div id="user-bar" class="user-bar" style="z-index: 2;">
 			<span> Active page: </span>
 			<span id="active-page"> Dashboard </span>
 			
 			<div style="display:flex; float: right;">
 				<span id="system-info"></span>
 				<div class="dropdown">
-					<div id="user-name" class="dropbtn">${user-name}</div>
-					<div id="user-dropdown" class="dropdown-content">
-						<a href="#home">Logout</a>
-						<a href="#about">About</a>
-						<a href="#contact">Contact</a>
+					<div id="user-name" class="dropbtn">${name}
+						<span class="caret" style= "margin: 0px 0px 0px 5px;"></span>
+					</div>
+					<div id="user-dropdown" class="dropdown-content" >
+						<a href="logout">Logout</a>
+						<a href="#">About</a>
+						<a href="#">Contact</a>
 					</div>
 				</div>
 			</div>
 		</div>
-			
 
 	</div>
-	<div id="container">
+	<div id="container" style="z-index: 1;">
 			Hello WORLD
 	</div> 
 

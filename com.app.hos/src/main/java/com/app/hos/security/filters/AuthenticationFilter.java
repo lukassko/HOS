@@ -38,11 +38,14 @@ public class AuthenticationFilter implements Filter {
 		StatesAuthenticator statesAuthenticator;
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpSession session = request.getSession(false);
-		if (session == null) 
+		if (session == null) {
 			statesAuthenticator = new StatesAuthenticator();
-		else 
+		} else {
 			statesAuthenticator = (StatesAuthenticator)session.getAttribute("authenticator");
-			
+			if (statesAuthenticator == null) {
+				statesAuthenticator = new StatesAuthenticator();
+			}
+		}
 		return statesAuthenticator;
 	}
 

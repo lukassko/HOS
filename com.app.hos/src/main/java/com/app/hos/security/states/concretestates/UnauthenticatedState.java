@@ -38,11 +38,10 @@ public class UnauthenticatedState implements AuthenticationState {
 		authentication.setState(new AuthenticatingState());
 		
 		forwardToLogin(request,response);
-		//httpResponse.sendRedirect("login");
 	}
 
 	private void forwardToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/security/login.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/security/login.jsp");
 		dispatcher.forward(request, response); 
 	}
 }
