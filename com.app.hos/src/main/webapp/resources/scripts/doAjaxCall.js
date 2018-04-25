@@ -8,8 +8,8 @@ AjaxCall.prototype.send = function () {
 	$.ajax({
 		url         : this.url,
 	    type        : this.type,
-	    contentType : 'aplication/json', //data type which is send
-	    dataType    : 'json', //expected data type
+	    contentType : this.contentType, //data type which is send
+	    dataType    : this.dataType, //expected data type
 	    data        : this.contentData
 	})
 	.done(function(response) {
@@ -20,11 +20,30 @@ AjaxCall.prototype.send = function () {
 	});
 };
 
+function GetViewCall (page,callback) {
+	AjaxCall.call(this);
+	this.url = page;
+	this.type = "GET";
+	this.contentData = {};
+	this.contentType = {};
+	this.dataType = {};
+	
+	this.onSuccess = function (status,response) {
+		callback(status, response);
+	};
+	
+	this.onFailed = function (status, response) {
+		callback(status, response);
+	};
+};
+
 function DeviceStatusCall (serial,from,to,callback) {
 	AjaxCall.call(this);
 	this.url = "devices/statuses/"+ serial +"?from=" + from + "&to=" + to;
 	this.type = "GET";
 	this.contentData = {};
+	this.contentType = 'aplication/json';
+	this.dataType = 'json';
 	
 	this.onSuccess = function (status,response) {
 		callback(status, response);
@@ -41,6 +60,8 @@ function DeleteDeviceCall (serial,callback) {
 	this.url = "devices/statuses/"+ serial;
 	this.type = "DELETE";
 	this.contentData = {};
+	this.contentType = 'aplication/json';
+	this.dataType = 'json';
 	
 	this.onSuccess = function (response) {
 		callback(200, response);
@@ -57,6 +78,8 @@ function GetActiveUserCall (callback) {
 	this.url = "user/getactive";
 	this.type = "GET";
 	this.contentData = {};
+	this.contentType = 'aplication/json';
+	this.dataType = 'json';
 	
 	this.onSuccess = function (response) {
 		callback(200, response);
@@ -73,6 +96,8 @@ function LogoutUserCall (callback) {
 	this.url = "user/logout";
 	this.type = "GET";
 	this.contentData = {};
+	this.contentType = 'aplication/json';
+	this.dataType = 'json';
 	
 	this.onSuccess = function (response) {
 		callback(200, response);
@@ -83,6 +108,7 @@ function LogoutUserCall (callback) {
 	};
 };
 
+GetViewCall.prototype = Object.create(AjaxCall.prototype);
 DeviceStatusCall.prototype = Object.create(AjaxCall.prototype);
 DeleteDeviceCall.prototype = Object.create(AjaxCall.prototype);
 GetActiveUserCall.prototype = Object.create(AjaxCall.prototype);

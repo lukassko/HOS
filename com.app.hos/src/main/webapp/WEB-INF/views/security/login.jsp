@@ -8,6 +8,8 @@
 	<style>
 		body {
 			background-color: #2e353d;
+			box-sizing: border-box;
+			font-family: Arial, Helvetica, sans-serif;
 		}
 		.pane {
 			padding: 8% 0 0;
@@ -35,6 +37,16 @@
 			padding: 15px;
 			cursor: pointer;
 		}
+		
+		#error-msg {
+			background-color: #23282e;
+			color: yellow;
+			font-size: 20px;
+			width: 100%;
+			display: inline-block;
+			text-align: center;
+		}
+		
 	</style>
 	<script src="<c:url value="/resources/scripts/security.js" />"></script>
 	<script type="text/javascript">
@@ -80,7 +92,6 @@
 			} else {
 				showErrorMessage("Invalid user password.");
 			}
-			
 		}
 
 		function calculateOneTimeChallnege(response) {
@@ -104,8 +115,7 @@
 			<input id="password" type="password" name="password"  placeholder="password"/>
 			<input type="submit" value="LOG IN"/>
 		</form>
-		<span id="error-msg"></span>
+		<div id="error-msg"></div>
 	</div>
-	<!--  <div id="error-msg" class="pane"></div> -->
 </body>
 </html>

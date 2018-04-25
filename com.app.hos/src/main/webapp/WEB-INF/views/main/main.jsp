@@ -61,14 +61,24 @@
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
-		    	var request = $.get(page);
-
-		    	$.get(page, function(data) {
+		    	//var request = $.get(page);
+	
+		    	$.get(page, function(data,status) {
+		    		console.log(status);
 		    		$('#container').html(data)
 		    		activePage = page;
 				}).fail(function(jqXHR, textStatus, errorThrown) {
-					setSystemInfo("Error requesting page: " + page);
-				});
+					switch (jqXHR.status) {
+						case 401:
+							onWindowUnload(null);
+							writeDocumentContent(jqXHR.responseText);
+							//window.removeEventListener("beforeunload",onBeforeWindowUnload);
+							//window.location.replace("/HOS/");
+							break;
+						default:
+							setSystemInfo("Error requesting page: " + page);
+					}
+				}); 
 		    	
 		    	var title = $(this).text();
 		    	$('#active-page').text(title);
@@ -76,13 +86,19 @@
 		});
 		hosWebsocket.connect(getAllDevices);
 		
-		new GetActiveUserCall(
-			function(status, response) {
-				setUserName(response.name);
-			}
-		).send();
-		
+		//new GetActiveUserCall(
+		//	function(status, response) {
+		//		setUserName(response.name);
+		//	}
+		//).send();
 	});
+	
+	
+	function writeDocumentContent(doc) {
+		document.open();
+	    document.write(doc);
+	    document.close();  
+	};
 	
 	var intervalID = setInterval(function(){
 		getAllDevices();
@@ -94,17 +110,23 @@
         hosWebsocket.sendCommand(command);
 	}
 	
-	window.addEventListener("beforeunload", function (e) {
-		var dialogText = 'Are you sure to leave page?';
-		e.returnValue = dialogText;
-		return dialogText;                             
-	}); 
+	window.addEventListener("unload", onWindowUnload); 
 	
-	window.addEventListener("unload", function (e) {
-		clearInterval(intervalID);
-		hosWebsocket.disconnect();
-	}); 
+	window.addEventListener("beforeunload",onBeforeWindowUnload); 
 
+	function onBeforeWindowUnload (event) {
+		var dialogText = 'Are you sure to leave a page?';
+		e.returnValue = dialogText;
+		return dialogText;          
+	}
+	
+	function onWindowUnload (event) {
+		clearInterval(intervalID);
+		hosWebsocket.disconnect();          
+	}
+
+	
+	
 	</script>
 	<title>HOS</title>
 </head>

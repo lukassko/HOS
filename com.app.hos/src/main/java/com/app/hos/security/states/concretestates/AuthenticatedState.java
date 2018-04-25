@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,7 @@ public class AuthenticatedState implements AuthenticationState {
 	public void doAuthentication(StatesAuthenticator authentication,ServletRequest request, 
 			ServletResponse response,FilterChain chain) throws ServletException, IOException {
 	
-		if (isSessionExpired(request)) {
+		if (isSessionValid(request)) {
 			// redirect to login page, request should go through filter
 			// in filter StatesAuthenticator should be created and new HttpSession where StatesAuthenticator will be stored
 			forwardTo("security/login",request,response);
@@ -51,6 +52,7 @@ public class AuthenticatedState implements AuthenticationState {
 	}
 
 	private void forwardTo(String page, ServletRequest request,ServletResponse response) throws ServletException, IOException {
+		System.out.println("AuthenticatedState-forwardToLogin");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/" + page + ".jsp");
 		dispatcher.forward(request, response); 
 	}
@@ -60,7 +62,6 @@ public class AuthenticatedState implements AuthenticationState {
 		String context = httpRequest.getContextPath();
 		String requestURI =  context + requestPath;
         String userUrl = httpRequest.getRequestURI();
-        System.out.println("requestURI " + requestURI);
         return requestURI.equals(userUrl);
 	}
 
@@ -72,7 +73,7 @@ public class AuthenticatedState implements AuthenticationState {
         }
 	}
 	
-	private boolean isSessionExpired(ServletRequest request) {
+	private boolean isSessionValid(ServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpSession session = httpRequest.getSession(false);
         if (session == null && httpRequest.getRequestedSessionId() != null && !httpRequest.isRequestedSessionIdValid()) 

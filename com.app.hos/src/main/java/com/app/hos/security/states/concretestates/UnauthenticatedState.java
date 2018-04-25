@@ -32,16 +32,26 @@ public class UnauthenticatedState implements AuthenticationState {
         }
         //generate a new session
         HttpSession session = httpRequest.getSession(true);
-        session.setMaxInactiveInterval(300); // 5 minutes
+        session.setMaxInactiveInterval(30); // 5 minutes 300
 		session.setAttribute("authenticator", authentication);
 		
 		authentication.setState(new AuthenticatingState());
 		
-		forwardToLogin(request,response);
+		if (isRequestContainUserName(request)) 
+			authentication.doAuthentication(httpRequest, response, chain);
+		else 
+			forwardToLogin(request,response);
+	}
+	
+	private boolean isRequestContainUserName(ServletRequest request) {
+		return request.getParameter("user") != null;
 	}
 
 	private void forwardToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
+		System.out.println("UnauthenticatedState-forwardToLogin");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/security/login.jsp");
-		dispatcher.forward(request, response); 
+		HttpServletResponse httpResponse = (HttpServletResponse)response;
+		httpResponse.setStatus(401);
+		dispatcher.forward(request, httpResponse); 
 	}
 }
