@@ -115,7 +115,14 @@
 			<input id="password" type="password" name="password"  placeholder="password"/>
 			<input type="submit" value="LOG IN"/>
 		</form>
-		<div id="error-msg"></div>
+		
+		<div id="error-msg">
+			<c:choose>
+			    <c:when test= "${response.getStatus() == 401}">
+			        Session expired
+			    </c:when>
+			</c:choose>
+		</div>
 	</div>
 </body>
 </html>

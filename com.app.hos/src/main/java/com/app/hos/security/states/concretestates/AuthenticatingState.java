@@ -28,7 +28,6 @@ public class AuthenticatingState implements AuthenticationState {
 	}
 
 	private void forwardToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
-		System.out.println("AuthenticatingState-forwardToLogin");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/security/login.jsp");
 		dispatcher.forward(request, response); 
 	}

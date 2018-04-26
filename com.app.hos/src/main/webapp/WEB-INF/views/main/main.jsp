@@ -61,36 +61,18 @@
 		    	$('li.active').removeClass('active');
 		    	$(this).addClass('active');
 		    	var page = $(this).attr("data-target");
-		    	//var request = $.get(page);
-	
-		    	$.get(page, function(data,status) {
-		    		console.log(status);
-		    		$('#container').html(data)
+
+		    	new GetViewCall(page,function(status,response){
+		    		$('#container').html(response)
 		    		activePage = page;
-				}).fail(function(jqXHR, textStatus, errorThrown) {
-					switch (jqXHR.status) {
-						case 401:
-							onWindowUnload(null);
-							writeDocumentContent(jqXHR.responseText);
-							//window.removeEventListener("beforeunload",onBeforeWindowUnload);
-							//window.location.replace("/HOS/");
-							break;
-						default:
-							setSystemInfo("Error requesting page: " + page);
-					}
-				}); 
-		    	
+		    	}).send();
+
 		    	var title = $(this).text();
 		    	$('#active-page').text(title);
 		    });
 		});
-		hosWebsocket.connect(getAllDevices);
 		
-		//new GetActiveUserCall(
-		//	function(status, response) {
-		//		setUserName(response.name);
-		//	}
-		//).send();
+		hosWebsocket.connect(getAllDevices);
 	});
 	
 	
@@ -98,6 +80,8 @@
 		document.open();
 	    document.write(doc);
 	    document.close();  
+	    console.log('After');
+	    console.log(window);
 	};
 	
 	var intervalID = setInterval(function(){
@@ -116,7 +100,7 @@
 
 	function onBeforeWindowUnload (event) {
 		var dialogText = 'Are you sure to leave a page?';
-		e.returnValue = dialogText;
+		event.returnValue = dialogText;
 		return dialogText;          
 	}
 	
@@ -125,8 +109,6 @@
 		hosWebsocket.disconnect();          
 	}
 
-	
-	
 	</script>
 	<title>HOS</title>
 </head>

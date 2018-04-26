@@ -48,7 +48,6 @@ public class UnauthenticatedState implements AuthenticationState {
 	}
 
 	private void forwardToLogin(ServletRequest request,ServletResponse response) throws ServletException, IOException {
-		System.out.println("UnauthenticatedState-forwardToLogin");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/security/login.jsp");
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
 		httpResponse.setStatus(401);
