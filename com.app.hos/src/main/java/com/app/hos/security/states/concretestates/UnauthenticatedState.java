@@ -32,7 +32,7 @@ public class UnauthenticatedState implements AuthenticationState {
         }
         //generate a new session
         HttpSession session = httpRequest.getSession(true);
-        session.setMaxInactiveInterval(30); // 5 minutes 300
+        session.setMaxInactiveInterval(300); // 5 minutes 300
 		session.setAttribute("authenticator", authentication);
 		
 		authentication.setState(new AuthenticatingState());

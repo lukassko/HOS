@@ -18,8 +18,6 @@ public class MainController {
 	public String showMainPage(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		UserDetails user = (UserDetails)session.getAttribute("user");
-		System.out.println(user.toString());
-		System.out.println(user.getUsername());
 		model.addAttribute("name", user.getUsername());
 		model.addAttribute("user", user);
 		return "main/main";

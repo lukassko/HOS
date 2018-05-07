@@ -46,11 +46,39 @@
 			display: inline-block;
 			text-align: center;
 		}
+
+		#loader {
+			height: 4px;
+			width: 100%;
+			position: relative;
+			background-color: #DDD;
+			overflow: hidden;
+		}
+		
+		#loader:before{
+		  	display: block;
+		  	position: absolute;
+		  	content: "";
+		  	left: -200px;
+		  	width: 200px;
+		  	height: 4px;
+		  	background-color: orange;
+		  	animation: loading 2s linear infinite;
+		}
+
+		@keyframes loading {
+		    from {left: -200px; width: 30%;}
+		    50% {width: 30%;}
+		    70% {width: 70%;}
+		    80% {left: 50%;}
+		    95% {left: 120%;}
+		    to {left: 100%;}
+		}
 		
 	</style>
 	<script src="<c:url value="/resources/scripts/security.js" />"></script>
 	<script type="text/javascript">
-	
+
 		window.history.replaceState("", "", "/HOS/");
 		
 		function doCall(type,url,callback,arg) {
@@ -71,6 +99,7 @@
 		}
 		
 		function doChallenge() {
+			showLoader();
 			var user = document.getElementById('name').value;
 			var params = "user=" + user;
 			doCall("POST","challenge",doAuthentication,params);
@@ -82,6 +111,7 @@
 				var params = "challenge=" + calculateOneTimeChallnege(response);
 				doCall("POST","login",getMain,params);
 			} else {
+				hideLoader();
 				showErrorMessage("Invalid user name.");
 			}
 		}
@@ -90,6 +120,7 @@
 			if (status == 200) {
 				window.location.replace("/HOS/");
 			} else {
+				hideLoader();
 				showErrorMessage("Invalid user password.");
 			}
 		}
@@ -102,14 +133,23 @@
 			return sha256(hash + hashing.challenge);
 		};
 		
-		function showErrorMessage (msg) {
+		function showErrorMessage(msg) {
 			document.getElementById("error-msg").innerHTML = msg;
+		}
+		
+		function showLoader() {
+		    document.getElementById("loader").style.display = "block";
+		}
+		
+		function hideLoader() {
+			document.getElementById("loader").style.display = "none";
 		}
 		
 	</script>
 </head>
-<body>
+<body onload="hideLoader()">
 	<div class="pane">
+		<div id="loader"></div>
 		<form id="login-form" class="form" action="challenge" method="POST" onsubmit="return doChallenge();">
 			<input id="name" type="text" name="user" placeholder="username"/>
 			<input id="password" type="password" name="password"  placeholder="password"/>

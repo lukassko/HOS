@@ -1,3 +1,7 @@
+.modal, .modal-backdrop {
+    position: absolute !important;
+}
+
 .navbar-inverse {
 	border-style:none;
 	margin-bottom:10px;

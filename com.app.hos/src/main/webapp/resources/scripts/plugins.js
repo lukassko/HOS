@@ -1,5 +1,14 @@
 (function ( $ ) {
 
+	$.fn.showModal = function () {
+		$(this).find(".modal").modal("show");
+		$(this).css("position","relative");
+		$('.modal-backdrop').appendTo($(this));  
+		$('body').removeClass("modal-open")
+		$('body').css("padding-right",""); 
+		return this;
+	}
+	
 	$.fn.disable = function() {
 		return this.each(function() {
 			$(this).css('opacity', '0.6');
