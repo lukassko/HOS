@@ -9,7 +9,9 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Repository
@@ -18,14 +20,24 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	@PersistenceContext
 	private EntityManager manager;
 	
+	@Override
+	public void save(DeviceTypeEntity type) {
+		saveEntity(type);
+	}
+	
+	@Override
 	public void save(Device device) {
-		if(device.isNew()) {
-			manager.persist(device);
-		} else {
-			manager.merge(device);
-		}
+		saveEntity(device);
 	}
 
+	private <T extends BaseEntity> void saveEntity(T entity) {
+		if(entity.isNew()) {
+			manager.persist(entity);
+		} else {
+			manager.merge(entity);
+		}
+	}
+	
 	public Device find(int id) {
 		return manager.find(Device.class, id);
 	}

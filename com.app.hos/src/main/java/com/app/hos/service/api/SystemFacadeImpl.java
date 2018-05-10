@@ -86,7 +86,7 @@ public class SystemFacadeImpl implements SystemFacade  {
 				commandThread = new Runnable() {
 					public void run() {
 						NewDevice device = (NewDevice)command.getResult();
-						deviceManager.openDeviceConnection(headers, device.getName(), command.getSerialId());
+						deviceManager.openDeviceConnection(headers, device.getName(), command.getSerialId(),device.getType());
 						sendCommand(connectionId,type);
 					}
 				};

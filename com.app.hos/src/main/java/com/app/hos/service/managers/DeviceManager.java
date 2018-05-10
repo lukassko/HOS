@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
+import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.share.utils.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,11 @@ import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Service
@@ -31,7 +32,7 @@ public class DeviceManager {
 	private DeviceRepository deviceRepository;
 		
 	//need to find device at first, later create if not exist
-	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial) {
+	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial, DeviceType type) {
 		//System.out.println("\n\nRun real method openDeviceConnection!\n\n");
 		Connection connection = createNewConnection(messageHeaders);
 		try {
@@ -39,7 +40,7 @@ public class DeviceManager {
 			device.setConnection(connection);
 			connection.setDevice(device);
 		} catch (NoResultException e) {
-			Device device = createNewDevice(messageHeaders,name,serial);
+			Device device = createNewDevice(messageHeaders,name,serial,type);
 			device.setConnection(connection);
 			connection.setDevice(device);
 			deviceRepository.save(device);
@@ -110,8 +111,10 @@ public class DeviceManager {
 		return new Connection(connectionId, hostname, ip, remotePort, connectionTime);
 	}
 	
-	private Device createNewDevice(MessageHeaders headers, String name, String serial) {
-		Device device = new Device(name,serial);
+	private Device createNewDevice(MessageHeaders headers, String name, String serial,DeviceType type) {
+		// find device type in db, its tenporary
+		DeviceTypeEntity deviceTypeEntity = new DeviceTypeEntity(type);
+		Device device = new Device(name,serial,deviceTypeEntity);
 		Connection connection = createNewConnection(headers);
 		device.setConnection(connection);
 		return device;

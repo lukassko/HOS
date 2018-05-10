@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models.command;
+package com.app.hos.persistance.models.device;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.app.hos.persistance.models.BaseEntity;
+import com.app.hos.persistance.models.command.CommandTypeEntity;
 import com.app.hos.share.command.type.DeviceType;
 
 @Table(name = "device_type")
@@ -27,12 +28,14 @@ public class DeviceTypeEntity extends BaseEntity  {
 	
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinTable(
-		name = "device_command", 
+		name = "device_type_command_type", 
 		joinColumns = { @JoinColumn(name = "device_type_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "command_type_id") }
 	)
 	private Set<CommandTypeEntity> commands = new HashSet<CommandTypeEntity>();
 
+	public DeviceTypeEntity() {}
+	
 	public DeviceTypeEntity (DeviceType type) {
 		this.type = type;
 	}

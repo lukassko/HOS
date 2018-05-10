@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface Command {
+public @interface CommandDescriptor {
 	CommandType type();
 	DeviceType [] device();
 }

@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
+import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.share.utils.DateTime;
 
 @Component
@@ -46,7 +48,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 
 		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("Lukasz Device", "serial_1");
+		Device device = new Device("Lukasz Device", "serial_1",new DeviceTypeEntity(DeviceType.PHONE));
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -57,7 +59,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost2", "192.168.0.89", 43219, new DateTime());
-		device = new Device("Smartphone123", "serial_2");
+		device = new Device("Smartphone123", "serial_2",new DeviceTypeEntity(DeviceType.SERVER));
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -68,7 +70,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost3", "192.168.0.66", 7893, new DateTime());
-		device = new Device("Device 1", "serial_3");
+		device = new Device("Device 1", "serial_3",new DeviceTypeEntity(DeviceType.TV));
 		
 		connection.setDevice(device);
 		device.setConnection(connection);

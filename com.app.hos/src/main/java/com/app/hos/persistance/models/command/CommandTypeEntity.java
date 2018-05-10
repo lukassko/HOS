@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.app.hos.persistance.models.BaseEntity;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.share.command.type.CommandType;
 
 @Table(name = "commands_type")
@@ -25,6 +26,8 @@ public class CommandTypeEntity extends BaseEntity  {
 
 	@ManyToMany(mappedBy = "commands", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private Set<DeviceTypeEntity> devices = new HashSet<>();
+	
+	public CommandTypeEntity() {}
 	
 	public CommandTypeEntity(CommandType type) {
 		this.type = type;

@@ -3,9 +3,12 @@ package com.app.hos.persistance.repository;
 import java.util.Collection;
 
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 
 public interface DeviceRepository {
 
+	public void save(DeviceTypeEntity type);
+	
 	public void save(Device device);
 	
 	public Collection<Device> findAll();

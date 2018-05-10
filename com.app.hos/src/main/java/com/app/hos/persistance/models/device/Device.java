@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,9 +19,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.connection.Connection;
 
+@SuppressWarnings("serial")
 @Table(name = "devices")
 @Entity
 public class Device extends BaseEntity  {
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name = "device_type_id")
+	private DeviceTypeEntity type;
 	
 	@NotEmpty
 	@Column(nullable = false)
@@ -39,9 +45,10 @@ public class Device extends BaseEntity  {
 
 	public Device(){}
 	
-	public Device(String name, String serial) {
+	public Device(String name, String serial, DeviceTypeEntity type) {
 		this.name = name;
 		this.serial = serial;
+		this.type = type;
 	}
 
 	public Connection getConnection() {

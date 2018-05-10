@@ -1,21 +1,24 @@
 package com.app.hos.share.command.builder_v2;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.command.CommandTypeEntity;
-import com.app.hos.persistance.models.command.DeviceTypeEntity;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
+import com.app.hos.persistance.repository.CommandRepository;
+import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.AbstractMapFactory;
-import com.app.hos.service.websocket.command.future.FutureCommand;
-import com.app.hos.service.websocket.command.future.WebCommandFactory;
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.share.command.builder.AbstractCommandBuilder;
+import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandBuilder;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
@@ -23,49 +26,43 @@ import com.app.hos.utils.Utils;
 
 // NEED TESTING !!
 @Service
-@SuppressWarnings("rawtypes")
-public class CommandFactory implements AbstractMapFactory {
+@Transactional
+public class CommandFactory implements AbstractMapFactory<CommandType,Class<? extends AbstractCommandBuilder>, Command> {
 
-	private static CommandBuilder commandBuilder = new CommandBuilder();
+	@Autowired
+	private CommandRepository commandRepository;
 	
-	private final Map<CommandType, CommandBuilderWrapper> factories = new LinkedHashMap<>();
+	@Autowired
+	private DeviceRepository deviceRepository;
 	
+	private CommandBuilder commandBuilder = new CommandBuilder();
+	
+	private final Map<CommandType, Class<? extends AbstractCommandBuilder>> factories = new LinkedHashMap<>();
+
 	@Override
-	public Object get(Object key) {
-		String stringType = (String)key;
-		CommandType commandType;
-		try {          
-			commandType = CommandType.valueOf(stringType);
-	    } catch (IllegalArgumentException e) {
+	public synchronized Command get(CommandType key) {
+		Class<? extends AbstractCommandBuilder> factoryClazz = factories.get(key);
+		try {
+			commandBuilder.setCommandBuilder(factoryClazz.newInstance());
+		} catch (ReflectiveOperationException e) {
 	    	return null;
-	    }
-		CommandBuilderWrapper factory = factories.get(commandType);
-		commandBuilder.setCommandBuilder(factory.getBuilderInstance());
+		}
 		return commandBuilder.createCommand();
 	}
 
 	@Override
-	public void add(Object key, Object value) {
-		String stringType = (String)key;
-		CommandType commandType;
-		try {          
-			commandType = CommandType.valueOf(stringType);
-	    } catch (IllegalArgumentException e) {
-	    	throw new RuntimeException("Invalid value for enum " + stringType);
-	    }
-		CommandBuilderWrapper builder = (CommandBuilderWrapper)value;
-		factories.put(commandType, builder);
+	public void add(CommandType key, Class<? extends AbstractCommandBuilder> value) {
+		factories.put(key, value);
 	}
-
+	
 	@Override
 	public void register(String packageToScan) {
 		Map<DeviceType,DeviceTypeEntity> devices = new HashMap<>();
-		
-		List<String> factories =  Utils.scanForAnnotation(Command.class,packageToScan);
+		List<String> factories =  Utils.scanForAnnotation(CommandDescriptor.class,packageToScan);
 		for(String factory : factories) {
 			try {
 				Class<?> facotryClazz = Utils.getClass(factory);
-				Command annotation = facotryClazz.getAnnotation(Command.class);
+				CommandDescriptor annotation = facotryClazz.getAnnotation(CommandDescriptor.class);
 				CommandType commandType = annotation.type();
 				CommandTypeEntity commandTypeEntity = new CommandTypeEntity(commandType);
 				DeviceType [] devicesType = annotation.device();
@@ -79,9 +76,20 @@ public class CommandFactory implements AbstractMapFactory {
 					}
 					deviceTypeEntity.addCommandType(commandTypeEntity);
 					commandTypeEntity.addDeviceType(deviceTypeEntity);
+					persistsEntity(deviceTypeEntity);
 				}
-			} catch (BeansException e) {}
+				persistsEntity(commandTypeEntity);
+			} catch (BeansException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	
+	
+	private void persistsEntity(BaseEntity entity) {
+		if (entity instanceof CommandTypeEntity) 
+			commandRepository.save((CommandTypeEntity)entity);
+		if (entity instanceof DeviceTypeEntity) 
+			deviceRepository.save((DeviceTypeEntity)entity);
+	}
 }
