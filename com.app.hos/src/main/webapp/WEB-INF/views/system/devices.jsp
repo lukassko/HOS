@@ -51,6 +51,20 @@
 			
 			deviceManager.selectFirst();
 	
+			$('.nav > li > a').each(function() {
+				$(this).on("click", function() {
+					var layout = $(this).attr("data-target");
+					$('div.container').addClass('hide');
+					$('#' + layout).removeClass('hide');
+				});
+			});
+			$('.dropdown > .dropdown-menu  a').each(function() {
+				$(this).on("click", function() {
+					$('.view-container').showModal();
+				});
+			});
+		});
+		
 	</script>
 </head>
 <body> 
@@ -60,73 +74,66 @@
 	</div>
 	
 	<div class="device-panel">
-		<div class="container" style="height:100%; width:100%">
-			<div class="row">
-				<div class="col-12">
-					<nav class="navbar navbar-inverse device-property">
-					  <div class="container-fluid">
-					    <!-- Brand and toggle get grouped for better mobile display -->
-					    <div class="navbar-header">
-					      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-					        <span class="sr-only">Toggle navigation</span>
-					        <span class="icon-bar"></span>
-					        <span class="icon-bar"></span>
-					        <span class="icon-bar"></span>
-					      </button>
-					      <div class="navbar-brand">Brand</div>
-					    </div>
-					
-					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					      <ul class="nav navbar-nav">
-					      
-					      <!-- class="active" -->
-					        <li><a href="#">Status</a></li>
-					        <li><a href="#">History</a></li>
-					        <li class="dropdown">
-					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commands <span class="caret"></span></a>
-					          <ul class="dropdown-menu">
-					            <li><a href="#" data-toggle="modal" data-target="#commands-poopup">Show commands</a></li>
-					            <li><a href="#">Commands history</a></li>
-					            <li role="separator" class="divider"></li>
-					            <li><a href="#">Separated link</a></li>
-					            <li role="separator" class="divider"></li>
-					            <li><a href="#">One more separated link</a></li>
-					          </ul>
-					        </li>
-					      </ul>
-					      <form class="navbar-form navbar-left">
-					        <div class="form-group">
-					          <input type="text" class="form-control" placeholder="Search">
-					        </div>
-					        <button type="submit" class="btn btn-default">Submit</button>
-					      </form>
-					      <ul class="nav navbar-nav navbar-right">
-					        <li class="dropdown">
-					          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
-					          <ul class="dropdown-menu">
-					            <li><a href="#">Disconnect</a></li>
-					            <li><a href="#">Remove</a></li>
-					            <li><a href="#">Block</a></li>
-					            <li role="separator" class="divider"></li>
-					            <li><a href="#">Separated link</a></li>
-					          </ul>
-					        </li>
-					      </ul>
-					    </div>
-					  </div>
-					</nav>
+		<nav class="navbar navbar-inverse device-property">
+			<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="navbar-brand">Brand</div>
+				</div>
+							
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">			      
+						<li><a href="#" data-target="status-layout">Status</a></li>
+						<li><a href="#">History</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commands <span class="caret"></span></a>
+							<ul class="dropdown-menu">								
+								<li><a href="#">Show commands</a>
+								</li>
+								<li><a href="#">Commands history</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#">Separated link</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#">One more separated link</a></li>
+							</ul>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left">
+						<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Disconnect</a></li>
+							<li><a href="#">Remove</a></li>
+							<li><a href="#">Block</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+						</li>
+					</ul>
 				</div>
 			</div>
-			<!-- <div> -->
-				<div class="row">
-					<div class="col-12">
-						<div class="device-block device-property" style="width: 200px;height:200px ">
-							<div class="usage usage-info">
-					        	CPU
-					        </div>
-							<div class="my-progress" data-usage-type="cpu">
-							 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
-							</div>
+		</nav>
+		<div id="status-layout" class="container" style="height:100%; width:100%">
+			<div class="row">
+				<div class="col-12">
+					<div class="device-block device-property" style="width: 200px;height:200px ">
+						<div class="usage usage-info">
+				        	CPU
+				        </div>
+						<div class="my-progress" data-usage-type="cpu">
+						 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 						</div>
 						<div class="device-block device-property" style="width:200px;height:200px ">
 							<div class="usage usage-info">
@@ -177,25 +184,24 @@
 						</div>
 					</div>
 				</div>
-			<!-- </div> -->
-					<!-- Modal window -->
-			<div id="commands-poopup" class="modal fade" role="dialog">
-		  	<div class="modal-dialog">
-		
-		    <!-- Modal content-->
-		    <div class="modal-content">
-		    <div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal">&times;</button>
-		    <h4 class="modal-title">Modal Header</h4>
-		    </div>
-		    <div class="modal-body">
-		    <p>Some text in the modal.</p>
-		    </div>
-		    <div class="modal-footer">
-		    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		    </div>
-		    </div>
-		  	</div>
+			</div>
+		</div>	
+		<!-- Modal window -->
+		<div id="commands-poopup" class="modal fade" role="dialog">
+			<div class="modal-dialog">		
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Modal Header</h4>
+					</div>
+					<div class="modal-body">
+						<p>Some text in the modal.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
