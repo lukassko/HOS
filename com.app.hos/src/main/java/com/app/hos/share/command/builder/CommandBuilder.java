@@ -1,5 +1,6 @@
 package com.app.hos.share.command.builder;
 
+// thread safe ??
 public class CommandBuilder {
 
     private AbstractCommandBuilder commandBuilder;
@@ -8,16 +9,12 @@ public class CommandBuilder {
         this.commandBuilder = commandBuilder;
     }
 
-    public Command getCommand() {
-        return commandBuilder.getCommand();
-    }
-
-    public void createCommand () {
+    public synchronized Command createCommand () {
         String clientId = "SERVER_01";
         String clientName = "MAIN_SERVER";
-        commandBuilder.createCommand(clientId, clientName);
-        commandBuilder.setCommandType();
-        commandBuilder.setResult();
-        commandBuilder.setStatus();
+        return commandBuilder.createCommand(clientId, clientName)
+		        				.setCommandType()
+		        				.setResult()
+		        				.setStatus().getCommand();
     }
 }

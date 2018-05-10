@@ -7,9 +7,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.HistoryConnection;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.connection.HistoryConnection;
+import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.share.utils.DateTime;

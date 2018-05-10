@@ -19,7 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.xml.sax.SAXException;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.filters.AuthenticationFilter;
 import com.app.hos.security.servlets.ChallengeServlet;

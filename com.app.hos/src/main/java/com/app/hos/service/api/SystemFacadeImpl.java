@@ -15,9 +15,9 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.integration.server.Server;

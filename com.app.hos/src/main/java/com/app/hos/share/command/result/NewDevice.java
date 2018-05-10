@@ -2,14 +2,12 @@ package com.app.hos.share.command.result;
 
 import java.io.Serializable;
 
+import com.app.hos.share.command.type.DeviceType;
+
 public class NewDevice implements Result, Serializable {
 
 	private static final long serialVersionUID = 2L;
 
-	public enum DeviceType {
-		SERVER,TELEPHONE,TV
-	}
-	
     private String name;
     
     private String type;

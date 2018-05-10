@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.app.hos.persistance.models.Role;
-import com.app.hos.persistance.models.Role.UserRole;
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.Role;
+import com.app.hos.persistance.models.user.User;
+import com.app.hos.persistance.models.user.Role.UserRole;
 import com.app.hos.security.detailservice.HosUserDetails;
 import com.app.hos.security.detailservice.HosUserDetailsService;
 import com.app.hos.service.managers.UserManager;

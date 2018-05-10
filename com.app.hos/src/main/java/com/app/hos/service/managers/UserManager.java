@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.UserRepository;
 
 @Service

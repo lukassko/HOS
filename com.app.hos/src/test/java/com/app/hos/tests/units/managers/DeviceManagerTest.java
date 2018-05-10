@@ -19,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;

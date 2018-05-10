@@ -30,8 +30,7 @@ public class CommandFactory {
 		}else  {
 			commandBuilder.setCommandBuilder(new UnknownCommandBuilder());
 		}
-		commandBuilder.createCommand();
- 		return commandBuilder.getCommand();
+		return commandBuilder.createCommand();
 	}
 	
 }

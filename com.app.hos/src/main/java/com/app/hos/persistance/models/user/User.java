@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models;
+package com.app.hos.persistance.models.user;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.utils.security.SecurityUtils;
 
 import javax.persistence.JoinColumn;

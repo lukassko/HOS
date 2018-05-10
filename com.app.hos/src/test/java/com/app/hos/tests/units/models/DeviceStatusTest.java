@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.Utils;
 

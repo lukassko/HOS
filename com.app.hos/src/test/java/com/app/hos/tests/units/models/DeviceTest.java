@@ -3,8 +3,8 @@ package com.app.hos.tests.units.models;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
 import com.app.hos.share.utils.DateTime;
 
 import java.util.Set;

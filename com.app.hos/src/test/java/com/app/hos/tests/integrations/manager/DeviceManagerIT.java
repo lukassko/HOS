@@ -24,9 +24,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;

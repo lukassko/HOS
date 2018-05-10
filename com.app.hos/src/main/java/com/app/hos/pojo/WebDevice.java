@@ -1,7 +1,7 @@
 package com.app.hos.pojo;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
 
 /**
  * POJO class to send Device object 

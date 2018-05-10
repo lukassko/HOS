@@ -6,9 +6,9 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.persistance.models.Role;
-import com.app.hos.persistance.models.Role.UserRole;
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.Role;
+import com.app.hos.persistance.models.user.User;
+import com.app.hos.persistance.models.user.Role.UserRole;
 
 public class UserTest {
 

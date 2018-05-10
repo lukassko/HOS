@@ -23,7 +23,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockRequestDispatcher;
 import org.springframework.security.core.Authentication;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.authentication.HosUserAuthentication;
 import com.app.hos.security.detailservice.HosUserDetails;

@@ -7,9 +7,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.persistance.models.Role;
-import com.app.hos.persistance.models.Role.UserRole;
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.Role;
+import com.app.hos.persistance.models.user.User;
+import com.app.hos.persistance.models.user.Role.UserRole;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.utils.security.SecurityUtils;
 

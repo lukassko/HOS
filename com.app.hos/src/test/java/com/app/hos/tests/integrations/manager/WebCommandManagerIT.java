@@ -26,7 +26,7 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.websocket.WebSocketManager;

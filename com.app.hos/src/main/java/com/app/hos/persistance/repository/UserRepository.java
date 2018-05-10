@@ -1,6 +1,6 @@
 package com.app.hos.persistance.repository;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 
 public interface UserRepository {
 	

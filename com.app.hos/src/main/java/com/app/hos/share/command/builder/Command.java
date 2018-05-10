@@ -5,7 +5,6 @@ import com.app.hos.share.command.type.CommandType;
 
 import java.io.Serializable;
 
-
 // GENERIC TYPE -> public class Command<T extends Serializable> implements Serializable {...}
 public class Command implements Serializable {
 

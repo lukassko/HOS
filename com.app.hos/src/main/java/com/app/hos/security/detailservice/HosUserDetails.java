@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 
 @SuppressWarnings("serial")
 public class HosUserDetails implements UserDetails {

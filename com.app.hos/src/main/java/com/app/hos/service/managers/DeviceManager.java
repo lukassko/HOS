@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Service

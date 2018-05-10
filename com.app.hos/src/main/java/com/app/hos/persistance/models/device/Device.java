@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models;
+package com.app.hos.persistance.models.device;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.app.hos.persistance.models.BaseEntity;
+import com.app.hos.persistance.models.connection.Connection;
 
 @Table(name = "devices")
 @Entity

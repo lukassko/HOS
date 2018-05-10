@@ -1,6 +1,6 @@
 package com.app.hos.share.command.decorators;
 
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.type.CommandType;

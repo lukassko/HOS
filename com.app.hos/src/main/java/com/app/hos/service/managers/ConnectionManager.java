@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.HistoryConnection;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;

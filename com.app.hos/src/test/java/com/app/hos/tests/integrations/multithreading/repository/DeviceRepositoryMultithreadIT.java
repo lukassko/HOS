@@ -8,8 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 import java.util.ArrayList;

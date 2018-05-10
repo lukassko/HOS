@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models;
+package com.app.hos.persistance.models.user;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.app.hos.persistance.models.BaseEntity;
+
+@SuppressWarnings("serial")
 @Table(name = "roles")
 @Entity
 public class Role extends BaseEntity {

@@ -19,7 +19,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.authentication.HosUserAuthentication;
 import com.app.hos.security.detailservice.HosUserDetails;

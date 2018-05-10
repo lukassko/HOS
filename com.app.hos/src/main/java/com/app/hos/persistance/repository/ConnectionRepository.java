@@ -2,8 +2,8 @@ package com.app.hos.persistance.repository;
 
 import java.util.Collection;
 
-import com.app.hos.persistance.models.Connection;
-import com.app.hos.persistance.models.HistoryConnection;
+import com.app.hos.persistance.models.connection.Connection;
+import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.share.utils.DateTime;
 
 public interface ConnectionRepository {

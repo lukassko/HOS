@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models;
+package com.app.hos.persistance.models.connection;
 
 import java.util.Date;
 
@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
 

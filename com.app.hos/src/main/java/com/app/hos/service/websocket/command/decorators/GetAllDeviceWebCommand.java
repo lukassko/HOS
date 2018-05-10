@@ -4,8 +4,8 @@ package com.app.hos.service.websocket.command.decorators;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.app.hos.persistance.models.Device;
-import com.app.hos.persistance.models.DeviceStatus;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.pojo.WebDevice;
 import com.app.hos.service.websocket.command.builder.WebCommand;
 import com.app.hos.utils.json.JsonConverter;

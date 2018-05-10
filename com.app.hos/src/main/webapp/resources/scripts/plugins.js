@@ -4,7 +4,7 @@
 		$(this).find(".modal").modal("show");
 		$(this).css("position","relative");
 		$('.modal-backdrop').appendTo($(this));  
-		$('body').removeClass("modal-open")
+		$('body').removeClass("modal-open");
 		$('body').css("padding-right",""); 
 		return this;
 	}

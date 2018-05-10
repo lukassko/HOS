@@ -18,7 +18,7 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.detailservice.HosUserDetails;
 import com.app.hos.security.detailservice.UserDetails;

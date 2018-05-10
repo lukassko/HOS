@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.pojo.UserChallenge;
 import com.app.hos.security.authentication.HosAuthenticationProvider;
 import com.app.hos.security.authentication.HosUserAuthentication;

@@ -3,8 +3,8 @@ package com.app.hos.tests.units.models;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.persistance.models.Role;
-import com.app.hos.persistance.models.Role.UserRole;
+import com.app.hos.persistance.models.user.Role;
+import com.app.hos.persistance.models.user.Role.UserRole;
 
 public class RoleTest {
 

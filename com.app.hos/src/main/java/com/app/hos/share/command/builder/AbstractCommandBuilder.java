@@ -21,7 +21,7 @@ public abstract class AbstractCommandBuilder {
         return this.command;
     }
     
-    public void createCommand (String clientId, String clientName) {
+    public AbstractCommandBuilder createCommand (String clientId, String clientName) {
         String serverName;
         try {
             InetAddress localMachine = java.net.InetAddress.getLocalHost();
@@ -31,14 +31,16 @@ public abstract class AbstractCommandBuilder {
         }
         this.command = new Command();
         command.setSerialId(serverName);
+        return this;
     }
 
-	public void setResult() {
+	public AbstractCommandBuilder setResult() {
 		this.command.setResult(new Message(exceptionMessage));
+		return this;
 	};
 	
-    public abstract void setCommandType ();
+    public abstract AbstractCommandBuilder setCommandType ();
 	
-	public abstract void setStatus();
+	public abstract AbstractCommandBuilder setStatus();
 	
 }

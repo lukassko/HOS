@@ -1,6 +1,6 @@
 package com.app.hos.service.exceptions;
 
-import com.app.hos.persistance.models.Connection;
+import com.app.hos.persistance.models.connection.Connection;
 
 public class HistoryConnectionException extends HOSException {
 

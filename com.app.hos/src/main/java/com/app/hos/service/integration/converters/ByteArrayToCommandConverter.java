@@ -24,8 +24,7 @@ public class ByteArrayToCommandConverter implements Serializer<Command>, Deseria
 			cmd = (Command) ois.readObject();
 		} catch (Exception e) {
 			commandBuilder.setCommandBuilder(new BadConversionCommandBuilder(e.toString()));
-			commandBuilder.createCommand();
-			cmd = commandBuilder.getCommand();
+			cmd =commandBuilder.createCommand();
 		} 
 		return cmd;
 	}

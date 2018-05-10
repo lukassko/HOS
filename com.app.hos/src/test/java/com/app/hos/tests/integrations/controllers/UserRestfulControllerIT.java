@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.security.authentication.HosUserAuthentication;
 import com.app.hos.security.detailservice.HosUserDetails;
 import com.app.hos.security.states.StatesAuthenticator;

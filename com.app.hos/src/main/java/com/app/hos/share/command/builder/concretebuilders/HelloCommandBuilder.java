@@ -5,21 +5,23 @@ import java.net.UnknownHostException;
 
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
 import com.app.hos.share.command.result.NewDevice;
-import com.app.hos.share.command.result.NewDevice.DeviceType;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.command.type.DeviceType;
 
 public class HelloCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
-	public void setCommandType() {
+	public AbstractCommandBuilder setCommandType() {
 	    String type = CommandType.HELLO.toString();
 	    command.setCommandType(type);
+	    return this;
 	}
 
 	@Override
-	public void setResult() {
+	public AbstractCommandBuilder setResult() {
 	  	NewDevice newDevice = new NewDevice(getName(),getType());
 	    command.setResult(newDevice);
+	    return this;
 	}
 
 	private DeviceType getType() {
@@ -38,8 +40,9 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 	}
 	
 	@Override
-	public void setStatus() {
+	public AbstractCommandBuilder setStatus() {
 		command.setStatus(true);
+		return this;
 	}
 
 }

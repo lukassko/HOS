@@ -6,7 +6,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.app.hos.persistance.models.User;
+import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.UserRepository;
 
 @Repository

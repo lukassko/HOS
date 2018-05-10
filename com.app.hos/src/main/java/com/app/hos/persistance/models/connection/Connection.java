@@ -1,4 +1,4 @@
-package com.app.hos.persistance.models;
+package com.app.hos.persistance.models.connection;
 
 import java.util.Date;
 
@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.app.hos.persistance.models.BaseEntity;
+import com.app.hos.persistance.models.device.Device;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;

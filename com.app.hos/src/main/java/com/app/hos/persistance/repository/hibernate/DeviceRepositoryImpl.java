@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
-import com.app.hos.persistance.models.Device;
+import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 @Repository

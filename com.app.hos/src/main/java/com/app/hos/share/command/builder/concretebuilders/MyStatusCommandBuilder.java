@@ -7,17 +7,21 @@ import com.app.hos.share.command.type.CommandType;
 public class MyStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
-	public void setCommandType() {
+	public AbstractCommandBuilder setCommandType() {
 		String type = CommandType.MY_STATUS.toString();
 		command.setCommandType(type);
+		return this;
 	}
 
 	@Override
-	public void setResult() {}
+	public AbstractCommandBuilder setResult() {
+		return this;
+	}
 	
 	@Override
-	public void setStatus() {
+	public AbstractCommandBuilder setStatus() {
 		command.setStatus(true);
+		return this;
 	}
 	
 }

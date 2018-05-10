@@ -1,8 +1,14 @@
-package com.app.hos.share.command.builder.concretebuilders;
+package com.app.hos.share.command.builder_v2.concretebuilders;
 
 import com.app.hos.share.command.builder.AbstractCommandBuilder;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.command.type.DeviceType;
 
+@Command(
+	device={DeviceType.SERVER, DeviceType.PHONE, DeviceType.TV}, 
+	type=CommandType.GET_STATUS
+)
 public class GetStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
