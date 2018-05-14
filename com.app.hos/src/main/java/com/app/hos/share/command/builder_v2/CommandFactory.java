@@ -1,10 +1,10 @@
 package com.app.hos.share.command.builder_v2;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeansException;
@@ -57,7 +57,6 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 	
 	@Override
 	public void register(String packageToScan) {
-		Map<DeviceType,DeviceTypeEntity> devices = new HashMap<>();
 		List<String> factories =  Utils.scanForAnnotation(CommandDescriptor.class,packageToScan);
 		for(String factory : factories) {
 			try {
@@ -68,15 +67,13 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 				DeviceType [] devicesType = annotation.device();
 				for (DeviceType deviceType : devicesType) {
 					DeviceTypeEntity deviceTypeEntity;
-					if (devices.containsKey(deviceType)) {
-						deviceTypeEntity = devices.get(deviceType);
-					} else {
+					try {
+						deviceTypeEntity = deviceRepository.findType(deviceType);
+					} catch (PersistenceException e) {
 						deviceTypeEntity = new DeviceTypeEntity(deviceType);
-						devices.put(deviceType, deviceTypeEntity);
 					}
 					deviceTypeEntity.addCommandType(commandTypeEntity);
 					commandTypeEntity.addDeviceType(deviceTypeEntity);
-					persistsEntity(deviceTypeEntity);
 				}
 				persistsEntity(commandTypeEntity);
 			} catch (BeansException e) {

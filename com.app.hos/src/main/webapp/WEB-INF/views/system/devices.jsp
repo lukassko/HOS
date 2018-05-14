@@ -129,63 +129,58 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="device-block device-property" style="width: 200px;height:200px ">
-						<div class="usage usage-info">
-				        	CPU
-				        </div>
+						<div class="usage usage-info">CPU</div>
 						<div class="my-progress" data-usage-type="cpu">
 						 	<canvas id="bar-cpu" class = "bar" width="150" height="150"></canvas>
 						</div>
-						<div class="device-block device-property" style="width:200px;height:200px ">
-							<div class="usage usage-info">
-					        	RAM
-					        </div>
-							<div class="my-progress" data-usage-type="ram">
-							 	<canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
-							</div>
-						</div>
-						<table class="detail-table">
-							<tr class="detail-table-row">
-								<td class="detail-table-cell" style="width:50%;">
-									<div class="device-property">
-								        <div class="usage usage-info">Connection time</div>
-								        <div id="connection-time" class="usage usage-info-value">xxxx-xx-xx xx:xx:xx</div>
-									</div>
-								</td>
-								<td class="detail-table-cell" style="width:30%;">
-									<div class="device-property">
-								        <div class="usage usage-info ">IP Address</div>
-								        <div id="ip-address" class="usage usage-info-value">xxx.xxx.xxx.xxx</div>
-									</div>
-								</td>
-								<td class="detail-table-cell" style="width:20%;">
-									<div class="device-property">
-								        <div class="usage usage-info">Port no</div>
-								        <div id="port-number" class="usage usage-info-value">xxx</div>
-									</div>
-								</td>
-							</tr>
-							<tr class="detail-table-row">
-								<td colspan="3" class="detail-table-cell">
-									<div class="device-property"></div>
-								</td>
-							</tr>
-						</table>
 					</div>
+					<div class="device-block device-property" style="width:200px;height:200px ">
+						<div class="usage usage-info">RAM</div>
+						<div class="my-progress" data-usage-type="ram">
+							 <canvas id="bar-ram" class = "bar" width="150" height="150"></canvas>
+						</div>
+					</div>
+					<table class="detail-table">
+						<tr class="detail-table-row">
+							<td class="detail-table-cell" style="width:50%;">
+								<div class="device-property">
+							        <div class="usage usage-info">Connection time</div>
+							        <div id="connection-time" class="usage usage-info-value">xxxx-xx-xx xx:xx:xx</div>
+								</div>
+							</td>
+							<td class="detail-table-cell" style="width:30%;">
+								<div class="device-property">
+								       <div class="usage usage-info ">IP Address</div>
+							        <div id="ip-address" class="usage usage-info-value">xxx.xxx.xxx.xxx</div>
+									</div>
+							</td>
+							<td class="detail-table-cell" style="width:20%;">
+								<div class="device-property">
+							        <div class="usage usage-info">Port no</div>
+							        <div id="port-number" class="usage usage-info-value">xxx</div>
+									</div>
+							</td>
+						</tr>
+						<tr class="detail-table-row">
+							<td colspan="3" class="detail-table-cell">
+								<div class="device-property"></div>
+							</td>
+						</tr>
+					</table>
 				</div>
-				
-				<div class="row" style="margin-top:10px; height: calc(100% - 280px);">
-					<div class="col-12 device-property" style="height:100%;">
-						<div class="center-left" style="padding-left: 10px; height: 50px;">
-							<div id="report-range" data-type="status"></div>
-						</div>
-						<div style="height:calc(100% - 50px);">
-							<div id="ram-chart" style="height:50%;"></div>
-							<div id="cpu-chart" style="height:50%;"></div>
-						</div>
+			</div>
+			<div class="row" style="margin-top:10px; height: calc(100% - 280px);">
+				<div class="col-12 device-property" style="height:100%;">
+					<div class="center-left" style="padding-left: 10px; height: 50px;">
+						<div id="report-range" data-type="status"></div>
+					</div>
+					<div style="height:calc(100% - 50px);">
+						<div id="ram-chart" style="height:50%;"></div>
+						<div id="cpu-chart" style="height:50%;"></div>
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 		<!-- Modal window -->
 		<div id="commands-poopup" class="modal fade" role="dialog">
 			<div class="modal-dialog">		

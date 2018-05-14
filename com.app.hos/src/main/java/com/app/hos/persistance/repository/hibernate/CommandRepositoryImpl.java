@@ -22,4 +22,9 @@ public class CommandRepositoryImpl implements CommandRepository {
 			manager.merge(type);
 		}
 	}
+
+	@Override
+	public CommandTypeEntity find(int id) {
+		return manager.find(CommandTypeEntity.class, id);
+	}
 }

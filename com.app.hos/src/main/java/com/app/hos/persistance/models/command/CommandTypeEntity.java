@@ -24,7 +24,10 @@ public class CommandTypeEntity extends BaseEntity  {
 	@Enumerated(EnumType.STRING)
 	private CommandType type;
 
-	@ManyToMany(mappedBy = "commands", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "commands", 
+				fetch = FetchType.LAZY,
+				cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+	)
 	private Set<DeviceTypeEntity> devices = new HashSet<>();
 	
 	public CommandTypeEntity() {}

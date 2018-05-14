@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,10 +24,13 @@ public class DeviceTypeEntity extends BaseEntity  {
 
 	private static final long serialVersionUID = 1L;
 	
+	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
 	private DeviceType type;
 	
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY,
+				cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+	)
 	@JoinTable(
 		name = "device_type_command_type", 
 		joinColumns = { @JoinColumn(name = "device_type_id") }, 
