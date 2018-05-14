@@ -17,6 +17,7 @@ public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
 	}
 	
 	public WebCommand call() throws Exception {
+		System.out.println("GetAllDeviceWebCommand CALL");
 		Map<Device, DeviceStatus> devicesStatuses = devicesApi.getConnectedDevices();
 		
 		Map<WebDevice, DeviceStatus> webDevicesStatuses =  new TreeMap<>(

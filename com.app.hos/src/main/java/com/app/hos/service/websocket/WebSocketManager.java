@@ -38,6 +38,7 @@ public class WebSocketManager {
 
 	}
 	
+	// wrapper class get future
 	private void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommandException {
 		Callable<WebCommand> executableCommand = futureWebCommandFactory.get(command);
 		executeCommand(callback,session,executableCommand);

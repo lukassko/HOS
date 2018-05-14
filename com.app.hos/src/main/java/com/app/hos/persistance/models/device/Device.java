@@ -24,7 +24,7 @@ import com.app.hos.persistance.models.connection.Connection;
 @Entity
 public class Device extends BaseEntity  {
 	
-	@ManyToOne(optional=false)
+	@ManyToOne(cascade=CascadeType.ALL)//(optional=false)
 	@JoinColumn(name = "device_type_id")
 	private DeviceTypeEntity type;
 	

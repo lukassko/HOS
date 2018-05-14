@@ -9,11 +9,12 @@ import com.app.hos.service.websocket.command.future.WebCommandFactory;
 import com.app.hos.service.websocket.command.type.WebCommandType;
 import com.app.hos.utils.Utils;
 
-@FutureCommand(type = WebCommandType.GET_ALL_DEVICES)
+//@FutureCommand(type = WebCommandType.GET_ALL_DEVICES)
 public class GetAllDeviceWebCommandFactory implements WebCommandFactory {
 
 	@Override
 	public Callable<WebCommand> get(WebCommand command) {
+		System.out.println("GetAllDeviceWebCommandFactory GET");
 		return (GetAllDeviceWebCommand)Utils.getObjectFromContext("allDeviceFutureCommand",command);
 	}
 

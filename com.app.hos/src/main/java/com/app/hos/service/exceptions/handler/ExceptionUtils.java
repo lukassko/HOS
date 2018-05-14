@@ -19,7 +19,7 @@ public class ExceptionUtils {
 	
 	@SuppressWarnings("unchecked")
 	public static void handle(final Throwable throwable, final boolean throwRuntimeException) {
-		HOSExceptionHandlerInfo info = exceptionHandlerFactory.getHandler(throwable);
+		HOSExceptionHandlerInfo info = exceptionHandlerFactory.get(throwable);
 		if (info != null) {
 			info.getHandler().handle(throwable, throwRuntimeException);
 		} else {
