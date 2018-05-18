@@ -71,6 +71,12 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	public Collection<Device> findAllTypes() {
+		Query query = this.manager.createQuery("SELECT dt FROM DeviceTypeEntity dt");
+		return query.getResultList();
+	}
+	
 	// update api
 	public void updateDeviceNameByDeviceId(int id, String name) {
 		Device device = find(id);

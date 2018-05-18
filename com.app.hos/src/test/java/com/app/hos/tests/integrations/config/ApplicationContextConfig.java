@@ -16,11 +16,11 @@ import com.app.hos.service.aspects.AutoInjectDependecyAspect;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder.WebCommandFactory;
-import com.app.hos.service.websocket.command.builder.concretebuilders.GetAllDevicesWebCommandBuilder;
 import com.app.hos.service.websocket.command.builder.concretebuilders.RemoveDeviceWebCommandBuilder;
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.concretebuilders.GetAllDevicesWebCommandBuilder;
 
 @Configuration
 @ComponentScan("com.app.hos.service.websocket.*")

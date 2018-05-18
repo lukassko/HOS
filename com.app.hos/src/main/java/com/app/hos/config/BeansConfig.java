@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
 import com.app.hos.utils.ApplicationContextProvider;
 
@@ -15,9 +15,9 @@ import com.app.hos.utils.ApplicationContextProvider;
 @Profile("!web-integration-test")
 public class BeansConfig {
 
-	@Bean("allDeviceFutureCommand")
-	@Profile("!web-integration-test")
-	@Scope("prototype")
+	//@Bean("allDeviceFutureCommand")
+	//@Profile("!web-integration-test")
+	//@Scope("prototype")
 	public GetAllDeviceWebCommand getAllDevicesWebCommand(WebCommand command) {
 	    return new GetAllDeviceWebCommand(command);
 	}

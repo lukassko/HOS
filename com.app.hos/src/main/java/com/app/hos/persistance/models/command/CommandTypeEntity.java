@@ -1,7 +1,7 @@
 package com.app.hos.persistance.models.command;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class CommandTypeEntity extends BaseEntity  {
 				fetch = FetchType.LAZY,
 				cascade = {CascadeType.PERSIST, CascadeType.MERGE}
 	)
-	private Set<DeviceTypeEntity> devices = new HashSet<>();
+	private List<DeviceTypeEntity> devices = new LinkedList<>();
 	
 	public CommandTypeEntity() {}
 	
@@ -44,11 +44,11 @@ public class CommandTypeEntity extends BaseEntity  {
 		this.type = type;
 	}
 
-	public Set<DeviceTypeEntity> getDevices() {
+	public List<DeviceTypeEntity> getDevices() {
 		return devices;
 	}
 
-	public void setDevices(Set<DeviceTypeEntity> devices) {
+	public void setDevices(List<DeviceTypeEntity> devices) {
 		this.devices = devices;
 	}
 

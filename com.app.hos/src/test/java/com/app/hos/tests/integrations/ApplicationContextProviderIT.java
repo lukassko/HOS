@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 
 @Ignore("run only one integration test")
@@ -29,14 +29,14 @@ public class ApplicationContextProviderIT {
 	
 	@Test
 	public void stage10_checkIfGetBeanWillReturnNonNullObject() {
-		Assert.assertNotNull(Utils.getObjectFromContext("hosServer"));
-		Assert.assertNotNull(Utils.getObjectFromContext(DeviceManager.class));
-		Assert.assertNotNull(Utils.getObjectFromContext(DeviceRepository.class));
+		Assert.assertNotNull(ReflectionUtils.getObjectFromContext("hosServer"));
+		Assert.assertNotNull(ReflectionUtils.getObjectFromContext(DeviceManager.class));
+		Assert.assertNotNull(ReflectionUtils.getObjectFromContext(DeviceRepository.class));
 	}	
 	
 	@Test(expected = NoSuchBeanDefinitionException.class)
 	public void stage20_checkIfGetBeanWillThrowExcpetion() {
-		Utils.getObjectFromContext("thereIsNoSuchBean");
+		ReflectionUtils.getObjectFromContext("thereIsNoSuchBean");
 	}	
 
 }

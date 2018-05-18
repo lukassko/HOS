@@ -1,8 +1,8 @@
-package com.app.hos.service.websocket.command.builder;
+package com.app.hos.service.websocket.command.builder_v2;
 
 import java.io.Serializable;
 
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.service.websocket.command.WebCommandType;
 
 public class WebCommand implements Serializable {
 

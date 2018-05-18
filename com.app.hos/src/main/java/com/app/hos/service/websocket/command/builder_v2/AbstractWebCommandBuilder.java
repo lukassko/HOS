@@ -1,4 +1,4 @@
-package com.app.hos.service.websocket.command.builder;
+package com.app.hos.service.websocket.command.builder_v2;
 
 public abstract class AbstractWebCommandBuilder {
 
@@ -15,16 +15,18 @@ public abstract class AbstractWebCommandBuilder {
         return this.command;
     }
     
-	public void createCommand () {
+	public AbstractWebCommandBuilder createCommand () {
 		this.command = new WebCommand();
+		return this;
 	}
-	
-	public abstract void setCommandType();
-	
-	public abstract void setStatus ();
-	
-	public void setMessage () {
-		this.command.setMessage(this.exceptionMessage);
-	};
 
+	public AbstractWebCommandBuilder setMessage () {
+		this.command.setMessage(this.exceptionMessage);
+		return this;
+	};
+	
+	public abstract AbstractWebCommandBuilder setCommandType();
+	
+	public abstract AbstractWebCommandBuilder setStatus ();
+	
 }

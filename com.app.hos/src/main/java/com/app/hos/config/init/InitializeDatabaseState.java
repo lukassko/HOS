@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +24,18 @@ import com.app.hos.share.utils.DateTime;
 @Component
 //@Profile({"!web-integration-test", "!integration-test"})
 @Profile("!web-integration-test")
-public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent> {
+public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
 	@Autowired
 	private DeviceRepository deviceRepository;
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Override
+	public int getOrder() {
+		return 10;
+	}
 	
 	@Override
 	@Transactional
@@ -45,10 +51,10 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	}
 	
 	private void addDevice() {
-
+		DeviceTypeEntity deviceType = deviceRepository.findType(DeviceType.PHONE);
 		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("Lukasz Device", "serial_1",new DeviceTypeEntity(DeviceType.PHONE));
+		Device device = new Device("Lukasz Device", "serial_1",deviceType);
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -59,7 +65,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost2", "192.168.0.89", 43219, new DateTime());
-		device = new Device("Smartphone123", "serial_2",new DeviceTypeEntity(DeviceType.SERVER));
+		device = new Device("Smartphone123", "serial_2",deviceType);
 		
 		connection.setDevice(device);
 		device.setConnection(connection);
@@ -70,7 +76,7 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
     			"localhost3", "192.168.0.66", 7893, new DateTime());
-		device = new Device("Device 1", "serial_3",new DeviceTypeEntity(DeviceType.TV));
+		device = new Device("Device 1", "serial_3",deviceType);
 		
 		connection.setDevice(device);
 		device.setConnection(connection);

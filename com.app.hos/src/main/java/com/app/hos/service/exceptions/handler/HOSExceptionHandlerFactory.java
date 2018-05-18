@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.exceptions.handler.instance.DefaultExceptionHandler;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 @SuppressWarnings("rawtypes")
 @Service
@@ -57,12 +57,12 @@ public class HOSExceptionHandlerFactory implements AbstractMapFactory<Class<? ex
 
 	@Override
 	public void register(String path) {
-		List<String> handlers =  Utils.scanForAnnotation(ExceptionHandler.class,path);
+		List<String> handlers =  ReflectionUtils.scanForAnnotation(ExceptionHandler.class,path);
 		for(String handler : handlers) {
 			try {
-				Class<?> hanlderClazz = Utils.getClass(handler);
-				HOSExceptionHandler excpetionHandler = (HOSExceptionHandler)Utils.getObjectFromContext(hanlderClazz);
-				Class exceptoinClazz = Utils.getGenericParamter(handler);
+				Class<?> hanlderClazz = ReflectionUtils.getClass(handler);
+				HOSExceptionHandler excpetionHandler = (HOSExceptionHandler)ReflectionUtils.getObjectFromContext(hanlderClazz);
+				Class exceptoinClazz = ReflectionUtils.getGenericParamter(handler);
 				add(exceptoinClazz, excpetionHandler);
 			} catch (BeansException e) {}
 			

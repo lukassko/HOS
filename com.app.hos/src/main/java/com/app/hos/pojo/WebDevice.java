@@ -11,6 +11,8 @@ public class WebDevice {
 
 	private Integer id;
 	
+	private String type;
+	
 	private String name;
 	
 	private String serial;
@@ -22,6 +24,7 @@ public class WebDevice {
 		this.name = device.getName();
 		this.serial = device.getSerial();
 		this.connection = device.getConnection();
+		this.type = device.getDeviceType().getType().name();
 	}
 
 	public Integer getId() {
@@ -54,5 +57,13 @@ public class WebDevice {
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;
-	}	
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

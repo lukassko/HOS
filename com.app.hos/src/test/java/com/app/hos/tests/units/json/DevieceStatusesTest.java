@@ -12,6 +12,8 @@ import org.junit.Test;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
+import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.json.JsonConverter;
 
@@ -23,7 +25,7 @@ public class DevieceStatusesTest {
 	public static void prepareDataTest () {
 		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device testDevice = new Device("Device1", "98547kjyy1");
+		Device testDevice = new Device("Device1", "98547kjyy1", new DeviceTypeEntity(DeviceType.PHONE));
 		connection.setId(1);
 		testDevice.setId(1);
 		connection.setDevice(testDevice);
@@ -36,7 +38,7 @@ public class DevieceStatusesTest {
 	
 		connection = new Connection("192.168.0.22:23452-09:oa9:sd1", 
     			"localhost2", "192.168.0.22", 23452, new DateTime());
-		testDevice = new Device("Device2", "98547kjyy12");
+		testDevice = new Device("Device2", "98547kjyy12",new DeviceTypeEntity(DeviceType.PHONE));
 		connection.setId(2);
 		testDevice.setId(2);
 		connection.setDevice(testDevice);

@@ -24,9 +24,9 @@ import com.app.hos.persistance.models.connection.Connection;
 @Entity
 public class Device extends BaseEntity  {
 	
-	@ManyToOne(cascade=CascadeType.ALL)//(optional=false)
+	@ManyToOne
 	@JoinColumn(name = "device_type_id")
-	private DeviceTypeEntity type;
+	private DeviceTypeEntity deviceType;
 	
 	@NotEmpty
 	@Column(nullable = false)
@@ -48,7 +48,7 @@ public class Device extends BaseEntity  {
 	public Device(String name, String serial, DeviceTypeEntity type) {
 		this.name = name;
 		this.serial = serial;
-		this.type = type;
+		this.deviceType = type;
 	}
 
 	public Connection getConnection() {
@@ -67,6 +67,14 @@ public class Device extends BaseEntity  {
 			this.connection.setConnectionTime(connection.getConnectionTime());
 			this.connection.setEndConnectionTime(connection.getEndConnectionTime());
 		}
+	}
+
+	public DeviceTypeEntity getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(DeviceTypeEntity type) {
+		this.deviceType = type;
 	}
 
 	public String getName() {
@@ -128,6 +136,11 @@ public class Device extends BaseEntity  {
 				return false;
 		} else if (!connection.equals(other.connection))
 			return false;
+		if (deviceType == null) {
+			if (other.deviceType != null)
+				return false;
+		} else if (deviceType.getType() != other.deviceType.getType())
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -143,8 +156,7 @@ public class Device extends BaseEntity  {
 
 	@Override
 	public String toString() {
-		return "Device [name=" + name + ", serial=" + serial + ", connection=" + connection + "]";
+		return "Device [type=" + deviceType.getType().name() + ", name=" + name + ", serial=" + serial + ", connection=" + connection + "]";
 	}
-
 
 }

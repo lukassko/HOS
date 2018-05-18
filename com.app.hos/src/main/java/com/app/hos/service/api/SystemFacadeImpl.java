@@ -18,18 +18,19 @@ import org.springframework.stereotype.Service;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.managers.command.CommandManager;
-import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandFactory;
+import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.utils.DateTime;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 @Service
 public class SystemFacadeImpl implements SystemFacade  {
@@ -46,6 +47,9 @@ public class SystemFacadeImpl implements SystemFacade  {
 	@Autowired
 	private Server server;
 
+	@Autowired
+	private AbstractMapFactory<CommandType,
+									Class<? extends AbstractCommandBuilder>, Command> commandFactory;
 	
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
 	
@@ -61,7 +65,7 @@ public class SystemFacadeImpl implements SystemFacade  {
 	public void setCommandManager(CommandManager commandManager) {
 		this.commandManager = commandManager;
 	}
-	
+
 	// commands API
 	@Override
 	public void receivedCommand(final MessageHeaders headers, final Command command) {
@@ -111,7 +115,7 @@ public class SystemFacadeImpl implements SystemFacade  {
 
 	@Override
 	public void sendCommand(String connectionId, CommandType type) {
-		Command command = CommandFactory.getCommand(type);
+		Command command = commandFactory.get(type);
 		server.sendMessage(createMessage(connectionId, command));
 	}
 	
@@ -164,7 +168,7 @@ public class SystemFacadeImpl implements SystemFacade  {
 	}
 		
 	private AbstractConnectionFactory getConnectionFactory() {
-		return (AbstractConnectionFactory)Utils.getObjectFromContext("hosServer");
+		return (AbstractConnectionFactory)ReflectionUtils.getObjectFromContext("hosServer");
 	}
 
 }

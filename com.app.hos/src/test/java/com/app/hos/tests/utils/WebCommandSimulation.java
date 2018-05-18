@@ -1,6 +1,6 @@
 package com.app.hos.tests.utils;
 
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 
 public class WebCommandSimulation extends FutureWebCommandDecorator {

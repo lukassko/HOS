@@ -1,5 +1,4 @@
-package com.app.hos.service.websocket.command.builder;
-
+package com.app.hos.service.websocket.command.builder_v2;
 
 public class WebCommandBuilder {
 
@@ -13,10 +12,11 @@ public class WebCommandBuilder {
         return commandBuilder.getCommand();
     }
 	
-	 public void createCommand () {
-		 commandBuilder.createCommand();
-		 commandBuilder.setCommandType();
-		 commandBuilder.setStatus();
-		 commandBuilder.setMessage();
+	 public WebCommand createCommand () {
+		 return commandBuilder.createCommand()
+				 				.setCommandType()
+				 				.setStatus()
+				 				.setMessage()
+				 				.getCommand();
 	 }
 }

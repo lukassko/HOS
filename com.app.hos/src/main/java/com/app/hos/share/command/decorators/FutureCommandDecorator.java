@@ -2,7 +2,7 @@ package com.app.hos.share.command.decorators;
 
 import java.util.concurrent.Callable;
 
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 
 public abstract class FutureCommandDecorator implements Callable<Command> {
 	

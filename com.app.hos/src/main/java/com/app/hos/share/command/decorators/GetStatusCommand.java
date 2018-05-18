@@ -1,9 +1,6 @@
 package com.app.hos.share.command.decorators;
 
-import com.app.hos.persistance.models.device.DeviceStatus;
-import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandFactory;
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.command.builder_v2.Command;
 
 public class GetStatusCommand extends FutureCommandDecorator {
 	
@@ -17,9 +14,10 @@ public class GetStatusCommand extends FutureCommandDecorator {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Command command = CommandFactory.getCommand(CommandType.MY_STATUS);
-		command.setResult(new DeviceStatus(12.6, 12.3));
-		return command;
+		//Command command = CommandFactory.getCommand(CommandType.MY_STATUS);
+		//command.setResult(new DeviceStatus(12.6, 12.3));
+		//return command;
+		return null;
 	}
 
 }

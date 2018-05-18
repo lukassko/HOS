@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.share.command.FutureCommandFactory;
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.decorators.FutureCommandDecorator;
 import com.app.hos.share.command.result.Message;
 

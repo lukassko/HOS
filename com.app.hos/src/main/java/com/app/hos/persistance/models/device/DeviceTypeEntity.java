@@ -1,7 +1,7 @@
 package com.app.hos.persistance.models.device;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +36,7 @@ public class DeviceTypeEntity extends BaseEntity  {
 		joinColumns = { @JoinColumn(name = "device_type_id") }, 
 		inverseJoinColumns = { @JoinColumn(name = "command_type_id") }
 	)
-	private Set<CommandTypeEntity> commands = new HashSet<CommandTypeEntity>();
+	private List<CommandTypeEntity> commands = new LinkedList<CommandTypeEntity>();
 
 	public DeviceTypeEntity() {}
 	
@@ -52,11 +52,11 @@ public class DeviceTypeEntity extends BaseEntity  {
 		this.type = type;
 	}
 
-	public Set<CommandTypeEntity> getCommands() {
+	public List<CommandTypeEntity> getCommands() {
 		return commands;
 	}
 
-	public void setCommands(Set<CommandTypeEntity> commands) {
+	public void setCommands(List<CommandTypeEntity> commands) {
 		this.commands = commands;
 	}
 

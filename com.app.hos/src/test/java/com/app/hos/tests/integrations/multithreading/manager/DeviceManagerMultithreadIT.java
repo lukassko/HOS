@@ -28,7 +28,7 @@ import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.integrations.config.ApplicationContextConfig;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -107,7 +107,7 @@ public class DeviceManagerMultithreadIT {
 		
 		Callable<Void> callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_1", status);
 				return null;
 			}
@@ -117,7 +117,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_1", status);
 				return null;
 			}
@@ -127,7 +127,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_1", status);
 				return null;
 			}
@@ -137,7 +137,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_2", status);
 				return null;
 			}
@@ -147,7 +147,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_2", status);
 				return null;
 			}
@@ -157,7 +157,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_3", status);
 				return null;
 			}
@@ -167,7 +167,7 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
+				DeviceStatus status = new DeviceStatus(new DateTime(), ReflectionUtils.generateRandomDouble(), ReflectionUtils.generateRandomDouble());
 				manager.addDeviceStatus("serial_device_3", status);
 				return null;
 			}

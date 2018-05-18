@@ -166,8 +166,8 @@ public class Utils {
 		long timestamp = new DateTime().getTimestamp();
 		for (int i = 0; i < size; i++) {
 			statuses.add(new DeviceStatus(new DateTime(timestamp), 
-								com.app.hos.utils.Utils.generateRandomDouble(), 
-									com.app.hos.utils.Utils.generateRandomDouble()));
+								com.app.hos.utils.ReflectionUtils.generateRandomDouble(), 
+									com.app.hos.utils.ReflectionUtils.generateRandomDouble()));
 			timestamp = timestamp - DIFF;
 		}
 		return statuses;

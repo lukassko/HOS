@@ -6,9 +6,9 @@ import com.app.hos.service.exceptions.WebSocketJsonException;
 import com.app.hos.service.exceptions.handler.ExceptionHandler;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandler;
 import com.app.hos.service.websocket.WebCommandCallback;
-import com.app.hos.service.websocket.command.builder.WebCommand;
-import com.app.hos.service.websocket.command.builder.WebCommandFactory;
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.service.websocket.command.WebCommandType;
+import com.app.hos.service.websocket.command.builder_v2.WebCommandFactory;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 
 
 @ExceptionHandler
@@ -19,7 +19,7 @@ public class WebSocketJsonExceptionHandler implements HOSExceptionHandler<WebSoc
 		Session session = throwable.getSession();
 		WebCommandCallback callback = throwable.getCallback();
 		String message = throwable.getMessage();
-		WebCommand cmd = WebCommandFactory.getCommand(WebCommandType.JSON_EXCEPTION, message);
+		WebCommand cmd = WebCommandFactory.get(WebCommandType.JSON_EXCEPTION, message);
 		if (session != null && callback != null) {
 			callback.onReady(session, cmd);
 		}

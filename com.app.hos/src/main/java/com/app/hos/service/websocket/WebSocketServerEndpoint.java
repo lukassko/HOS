@@ -17,7 +17,7 @@ import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.app.hos.service.exceptions.WebSocketException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.utils.json.JsonConverter;
 
 //decoders = WebCommandDecoder.class, encoders = WebCommandEncoder.class,

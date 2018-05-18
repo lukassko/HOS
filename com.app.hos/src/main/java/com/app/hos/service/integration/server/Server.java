@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 
 @Service 
 public class Server {

@@ -17,12 +17,9 @@ import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.CommandRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.AbstractMapFactory;
-import com.app.hos.share.command.builder.AbstractCommandBuilder;
-import com.app.hos.share.command.builder.Command;
-import com.app.hos.share.command.builder.CommandBuilder;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 // NEED TESTING !!
 @Service
@@ -37,30 +34,30 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 	
 	private CommandBuilder commandBuilder = new CommandBuilder();
 	
-	private final Map<CommandType, Class<? extends AbstractCommandBuilder>> factories = new LinkedHashMap<>();
+	private final Map<CommandType, Class<? extends AbstractCommandBuilder>> builders = new LinkedHashMap<>();
 
 	@Override
-	public synchronized Command get(CommandType key) {
-		Class<? extends AbstractCommandBuilder> factoryClazz = factories.get(key);
+	public Command get(CommandType key) {
+		Class<? extends AbstractCommandBuilder> factoryClazz = builders.get(key);
 		try {
 			commandBuilder.setCommandBuilder(factoryClazz.newInstance());
 		} catch (ReflectiveOperationException e) {
-	    	return null;
+	    	return null; // <- TO REFATOR
 		}
 		return commandBuilder.createCommand();
 	}
 
 	@Override
 	public void add(CommandType key, Class<? extends AbstractCommandBuilder> value) {
-		factories.put(key, value);
+		builders.put(key, value);
 	}
 	
 	@Override
 	public void register(String packageToScan) {
-		List<String> factories =  Utils.scanForAnnotation(CommandDescriptor.class,packageToScan);
+		List<String> factories =  ReflectionUtils.scanForAnnotation(CommandDescriptor.class,packageToScan);
 		for(String factory : factories) {
 			try {
-				Class<?> facotryClazz = Utils.getClass(factory);
+				Class<?> facotryClazz = ReflectionUtils.getClass(factory);
 				CommandDescriptor annotation = facotryClazz.getAnnotation(CommandDescriptor.class);
 				CommandType commandType = annotation.type();
 				CommandTypeEntity commandTypeEntity = new CommandTypeEntity(commandType);

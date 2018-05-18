@@ -13,7 +13,7 @@ import org.springframework.messaging.MessageHeaders;
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.service.managers.ConnectionManager;
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
 
 @Aspect

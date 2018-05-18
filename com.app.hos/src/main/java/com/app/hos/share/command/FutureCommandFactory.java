@@ -3,13 +3,13 @@ package com.app.hos.share.command;
 import java.util.concurrent.Callable;
 
 import com.app.hos.service.exceptions.NotExecutableCommandException;
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.WebCommandType;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.GetAllDeviceWebCommand;
-import com.app.hos.service.websocket.command.type.WebCommandType;
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.decorators.GetStatusCommand;
 import com.app.hos.share.command.type.CommandType;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 
 public class FutureCommandFactory {
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.exceptions.WebSocketJsonException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
 import com.app.hos.utils.json.JsonConverter;
@@ -38,7 +38,6 @@ public class WebSocketManager {
 
 	}
 	
-	// wrapper class get future
 	private void executeCommand(WebCommandCallback callback, Session session, WebCommand command) throws NotExecutableCommandException {
 		Callable<WebCommand> executableCommand = futureWebCommandFactory.get(command);
 		executeCommand(callback,session,executableCommand);

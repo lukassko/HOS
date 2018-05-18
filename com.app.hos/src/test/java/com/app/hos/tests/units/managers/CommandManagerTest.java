@@ -20,8 +20,8 @@ import org.springframework.messaging.Message;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.managers.command.CommandManager;
-import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
 
 @Ignore("run only one integration test")
@@ -61,7 +61,7 @@ public class CommandManagerTest {
 	public void executeCommandManagerWithHelloCommand() {
 		Mockito.doNothing().when(server).sendMessage(Mockito.any(Message.class));
 		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.any(String.class), Mockito.any(String.class));
-		Command command = CommandFactory.getCommand(CommandType.HELLO);
+		Command command = CallableCommandFactory.getCommand(CommandType.HELLO);
 		//manager.executeCommand(headers, command);
 		
 		Mockito.verify(server, Mockito.times(1)).sendMessage(Mockito.any(Message.class));

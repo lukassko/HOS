@@ -33,8 +33,8 @@ import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.command.builder.Command;
 import com.app.hos.share.command.builder.CommandFactory;
+import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
 
 
@@ -74,7 +74,7 @@ public class ConnectionAspectIT {
 	
 	@Test
 	public void testOpenConnectionAspect() {	
-		Command command = CommandFactory.getCommand(CommandType.HELLO);
+		Command command = CallableCommandFactory.getCommand(CommandType.HELLO);
 		String connectionId = "192.168.0.12:3456:123:asd:dsa:213";
 		String serial = command.getSerialId();
 		

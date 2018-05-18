@@ -5,9 +5,10 @@ import java.util.concurrent.Callable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.app.hos.service.api.DevicesApi;
-import com.app.hos.service.websocket.command.builder.WebCommand;
+import com.app.hos.service.websocket.command.builder_v2.WebCommand;
+import com.app.hos.service.websocket.command.future.CallableInstance;
 
-public abstract class FutureWebCommandDecorator implements Callable<WebCommand> {
+public abstract class FutureWebCommandDecorator implements Callable<WebCommand>, CallableInstance<WebCommand> {
 	
 	@Autowired
 	protected DevicesApi devicesApi;
@@ -25,5 +26,8 @@ public abstract class FutureWebCommandDecorator implements Callable<WebCommand> 
 	public void setCommand(WebCommand command) {
 		this.command = command;
 	}
-
+	
+	public FutureWebCommandDecorator getInstance() {
+		return this;
+	}
 }

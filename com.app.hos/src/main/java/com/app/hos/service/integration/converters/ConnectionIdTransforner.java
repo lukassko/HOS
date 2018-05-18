@@ -4,7 +4,7 @@ import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
-import com.app.hos.share.command.builder.Command;
+import com.app.hos.share.command.builder_v2.Command;
 
 public class ConnectionIdTransforner {
 	

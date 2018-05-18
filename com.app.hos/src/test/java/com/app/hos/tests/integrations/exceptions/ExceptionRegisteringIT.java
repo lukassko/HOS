@@ -19,7 +19,7 @@ import com.app.hos.service.exceptions.handler.HOSExceptionHandler;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandlerFactory;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandlerInfo;
 import com.app.hos.service.exceptions.handler.instance.WebSocketJsonExceptionHandler;
-import com.app.hos.utils.Utils;
+import com.app.hos.utils.ReflectionUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 
 @Ignore("run only one integration test")
@@ -42,7 +42,7 @@ public class ExceptionRegisteringIT {
 	public void stage20_checkIfhandlersClassExists() {
 		List<String> handlers = findHandlers();
 		for(String handler : handlers) {
-			Assert.assertNotNull(Utils.getClass(handler));
+			Assert.assertNotNull(ReflectionUtils.getClass(handler));
 		}
 	}
 	
@@ -51,10 +51,10 @@ public class ExceptionRegisteringIT {
 	public void stage30_checkIfhandlersClassExistsInSpringContext() {
 		List<String> handlers = findHandlers();
 		for(String handler : handlers) {
-			Class<?> hanlderClazz = Utils.getClass(handler);
-			Object bean = Utils.getObjectFromContext(hanlderClazz);
+			Class<?> hanlderClazz = ReflectionUtils.getClass(handler);
+			Object bean = ReflectionUtils.getObjectFromContext(hanlderClazz);
 			HOSExceptionHandler excpetionHandler = (HOSExceptionHandler)bean;
-			Class exceptoinClazz = Utils.getGenericParamter(handler);
+			Class exceptoinClazz = ReflectionUtils.getGenericParamter(handler);
 			Assert.assertNotNull(exceptoinClazz);
 			Assert.assertNotNull(excpetionHandler);
 		}
@@ -65,9 +65,9 @@ public class ExceptionRegisteringIT {
 	public void stage40_checkIfhandlersForJsonParseExistsInSpringContext() {
 		List<String> handlers = findHandlers();
 		for(String handler : handlers) {
-			Class<?> hanlderClazz = Utils.getClass(handler);
+			Class<?> hanlderClazz = ReflectionUtils.getClass(handler);
 			if (hanlderClazz.equals(WebSocketJsonExceptionHandler.class)) {
-				Class exceptoinClazz = Utils.getGenericParamter(handler);
+				Class exceptoinClazz = ReflectionUtils.getGenericParamter(handler);
 				Assert.assertTrue(exceptoinClazz.equals(JsonParseException.class));
 				return;
 			}
@@ -84,6 +84,6 @@ public class ExceptionRegisteringIT {
 	
 	private List<String> findHandlers() {
 	    String[] packages = {"com.app.hos.utils.exceptions.handler.instance"};
-		return Utils.scanForAnnotation(ExceptionHandler.class,packages);
+		return ReflectionUtils.scanForAnnotation(ExceptionHandler.class,packages);
 	}
 }

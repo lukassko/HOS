@@ -1,4 +1,4 @@
-package com.app.hos.share.command.builder;
+package com.app.hos.share.command.builder_v2;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -21,7 +21,7 @@ public abstract class AbstractCommandBuilder {
         return this.command;
     }
     
-    public AbstractCommandBuilder createCommand (String clientId, String clientName) {
+    public AbstractCommandBuilder createCommand () {
         String serverName;
         try {
             InetAddress localMachine = java.net.InetAddress.getLocalHost();

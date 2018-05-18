@@ -1,13 +1,16 @@
-package com.app.hos.share.command.builder.concretebuilders;
+package com.app.hos.share.command.builder_v2.concretebuilders;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import com.app.hos.share.command.builder.AbstractCommandBuilder;
+import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
+import com.app.hos.share.command.builder_v2.CommandDescriptor;
 import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.utils.Utils;
 
+@CommandDescriptor(
+		device={DeviceType.SERVER, DeviceType.PHONE, DeviceType.TV}, 
+		type=CommandType.HELLO
+	)
 public class HelloCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
@@ -29,14 +32,7 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 	}
 	
 	private String getName() {
-	  	String name;
-	    try {
-	        InetAddress localMachine = java.net.InetAddress.getLocalHost();
-	        name = localMachine.getHostName();
-	    } catch (UnknownHostException e) {
-	      	name = "Unknown";
-	    }
-	    return name;
+	  	return Utils.getHostName();
 	}
 	
 	@Override

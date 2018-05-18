@@ -6,10 +6,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.app.hos.service.websocket.command.type.WebCommandType;
+import com.app.hos.service.websocket.command.WebCommandType;
 
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface FutureCommand {
-	WebCommandType  type();
+	WebCommandType type();
 }

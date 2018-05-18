@@ -1,4 +1,4 @@
-package com.app.hos.share.command.builder;
+package com.app.hos.share.command.builder_v2;
 
 import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.type.CommandType;
