@@ -30,7 +30,6 @@ public class FutureWebCommandFactory
 	private ApplicationContext applicationContext;
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Callable<WebCommand> get(Object command) {
 		if (!(command instanceof WebCommand))
 			throw new IllegalArgumentException();
@@ -39,10 +38,7 @@ public class FutureWebCommandFactory
 		WebCommandType type = cmd.getType(); 
 		String beanName = beans.get(type);
 		Object obj = ReflectionUtils.getObjectFromContext(beanName,command);
-		//CallableInstance<WebCommand> callable = (CallableInstance<WebCommand>)obj;
-		//return callable.getCallable(cmd);
-		FutureWebCommandDecorator futureCommand = (FutureWebCommandDecorator)obj;
-		return futureCommand.getInstance();
+		return (FutureWebCommandDecorator)obj;
 	}
 
 	@Override

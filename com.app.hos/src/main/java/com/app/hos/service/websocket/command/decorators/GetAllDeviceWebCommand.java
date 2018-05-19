@@ -2,7 +2,6 @@ package com.app.hos.service.websocket.command.decorators;
 
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
@@ -38,11 +37,6 @@ public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
 		command.setMessage(JsonConverter.getJson(webDevicesStatuses));
 		
 		return command;
-	}
-
-	@Override
-	public Callable<WebCommand> getCallable(WebCommand webCommand) {
-		return this;
 	}
 
 }
