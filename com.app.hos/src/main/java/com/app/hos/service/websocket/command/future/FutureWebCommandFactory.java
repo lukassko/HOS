@@ -24,7 +24,6 @@ import com.app.hos.utils.ReflectionUtils;
 public class FutureWebCommandFactory 
 		implements AbstractMapFactory<Object,String, Callable<WebCommand>>, ApplicationContextAware {
 	
-	// String as bean name
 	private final Map<WebCommandType, String> beans = new LinkedHashMap<>();
 	
 	private ApplicationContext applicationContext;
@@ -32,7 +31,7 @@ public class FutureWebCommandFactory
 	@Override
 	public Callable<WebCommand> get(Object command) {
 		if (!(command instanceof WebCommand))
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Expected WebCommand instance but was " + command.getClass().getName());
 		
 		WebCommand cmd = (WebCommand) command;
 		WebCommandType type = cmd.getType(); 
@@ -44,7 +43,8 @@ public class FutureWebCommandFactory
 	@Override
 	public void add(Object key, String value) {
 		if (!(key instanceof WebCommandType))
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Expected WebCommandType instance but was " + key.getClass().getName());
+		
 		WebCommandType type = (WebCommandType) key;
 		beans.put(type, value);
 	}

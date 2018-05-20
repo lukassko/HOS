@@ -2,6 +2,8 @@ package com.app.hos.share.command.builder_v2.concretebuilders;
 
 import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
 import com.app.hos.share.command.builder_v2.CommandDescriptor;
+import com.app.hos.share.command.result.Message;
+import com.app.hos.share.command.result.Result;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
 
@@ -11,8 +13,10 @@ import com.app.hos.share.command.type.DeviceType;
 )
 public class BadConversionCommandBuilder extends AbstractCommandBuilder {
 
+	private String message = null;
+	
 	public BadConversionCommandBuilder(String message) {
-		super(message);
+		this.message = message;
 	}
 	
 	@Override
@@ -24,7 +28,8 @@ public class BadConversionCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public AbstractCommandBuilder setResult() {
-		command.setResult(null);
+		Result result = new Message(this.message);
+		command.setResult(result);
 		return this;
 	}
 

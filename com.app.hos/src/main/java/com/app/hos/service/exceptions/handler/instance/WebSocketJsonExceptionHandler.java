@@ -10,7 +10,6 @@ import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder_v2.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 
-
 @ExceptionHandler
 public class WebSocketJsonExceptionHandler implements HOSExceptionHandler<WebSocketJsonException>{
 	
@@ -23,7 +22,13 @@ public class WebSocketJsonExceptionHandler implements HOSExceptionHandler<WebSoc
 		if (session != null && callback != null) {
 			callback.onReady(session, cmd);
 		}
-		
+		if (throwRuntimeException) {
+			if (throwable instanceof RuntimeException) {
+				throw (RuntimeException) throwable;
+			} else {
+				throw new RuntimeException(throwable);
+			}
+		}
 	}
 
 }

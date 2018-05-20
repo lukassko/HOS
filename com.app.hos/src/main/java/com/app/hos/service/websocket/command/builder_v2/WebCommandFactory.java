@@ -7,13 +7,12 @@ public class WebCommandFactory {
 
 	private static WebCommandBuilder webCommandBuilder = new WebCommandBuilder();
 	
-	
 	public static WebCommand get(WebCommandType commantType) {
 		return WebCommandFactory.get(commantType, null);
 	}
 	
 	public static WebCommand get(WebCommandType commantType, String message) {
-		AbstractWebCommandBuilder builder = commantType.create();
+		AbstractWebCommandBuilder builder = commantType.create(message);
 		webCommandBuilder.setCommandBuilder(builder);
 		return webCommandBuilder.createCommand();
 	}

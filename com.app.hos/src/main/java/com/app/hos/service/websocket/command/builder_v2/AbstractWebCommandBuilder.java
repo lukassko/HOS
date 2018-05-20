@@ -3,12 +3,12 @@ package com.app.hos.service.websocket.command.builder_v2;
 public abstract class AbstractWebCommandBuilder {
 
 	protected WebCommand command;
-	protected String exceptionMessage = null;
+	protected String message = null;
 	
 	public AbstractWebCommandBuilder() {}
 	
 	public AbstractWebCommandBuilder(String message) {
-		this.exceptionMessage = message;
+		this.message = message;
 	}
 	
     public WebCommand getCommand() {
@@ -21,7 +21,7 @@ public abstract class AbstractWebCommandBuilder {
 	}
 
 	public AbstractWebCommandBuilder setMessage () {
-		this.command.setMessage(this.exceptionMessage);
+		this.command.setMessage(this.message);
 		return this;
 	};
 	

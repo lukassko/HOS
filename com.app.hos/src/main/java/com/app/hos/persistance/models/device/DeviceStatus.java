@@ -1,6 +1,5 @@
 package com.app.hos.persistance.models.device;
 
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -12,8 +11,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.share.command.result.Result;

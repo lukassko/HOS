@@ -22,19 +22,11 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public AbstractCommandBuilder setResult() {
-	  	NewDevice newDevice = new NewDevice(getName(),getType());
+	  	NewDevice newDevice = new NewDevice(Utils.getHostName(),DeviceType.SERVER);
 	    command.setResult(newDevice);
 	    return this;
 	}
 
-	private DeviceType getType() {
-		return DeviceType.SERVER;
-	}
-	
-	private String getName() {
-	  	return Utils.getHostName();
-	}
-	
 	@Override
 	public AbstractCommandBuilder setStatus() {
 		command.setStatus(true);

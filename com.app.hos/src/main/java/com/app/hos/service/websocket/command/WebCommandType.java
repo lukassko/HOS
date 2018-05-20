@@ -10,9 +10,9 @@ import com.app.hos.service.websocket.command.builder_v2.concretebuilders.GetAllD
 // AD1: JSON_EXCEPTION should stay, for example when cannot convert json object (it is broken)
 public enum WebCommandType implements SimpleFactory<AbstractWebCommandBuilder>{
 	
-	RESPONSE(() -> null),
-	JSON_EXCEPTION(() -> null),
-	GET_ALL_DEVICES(() -> new GetAllDevicesWebCommandBuilder());
+	RESPONSE((message) -> null),
+	JSON_EXCEPTION((message) -> null),
+	GET_ALL_DEVICES((message) -> new GetAllDevicesWebCommandBuilder(message));
 	//GET_DEVICE_STATUSES(() -> null),  -> REST API
 	//REMOVE_DEVICE(() -> null), -> REST API
 	//BLOCK_DEVICE(() -> null), -> REST API
@@ -25,8 +25,8 @@ public enum WebCommandType implements SimpleFactory<AbstractWebCommandBuilder>{
 	}
 	
 	@Override
-	public AbstractWebCommandBuilder create() {
-		return factory.create();
+	public AbstractWebCommandBuilder create(String message) {
+		return factory.create(message);
 	}
 	
 }

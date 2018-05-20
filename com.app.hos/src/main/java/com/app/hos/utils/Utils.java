@@ -1,14 +1,17 @@
 package com.app.hos.utils;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
+
+import com.sun.management.OperatingSystemMXBean;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("restriction")
 public class Utils {
 
 	private static Properties properties = new Properties();
@@ -34,6 +37,23 @@ public class Utils {
 	
 	public static String getSystemProperty (String property) {
 		return properties.getProperty(property);
+	}
+	
+	private static OperatingSystemMXBean getOperatingSystemBean () {
+		Object opearingSystemBeans = ManagementFactory.getOperatingSystemMXBean();
+	    return (OperatingSystemMXBean) opearingSystemBeans;
+	}
+	
+	public static double getCpuUsage() {
+		OperatingSystemMXBean opearingSystemBeans = getOperatingSystemBean();
+		return opearingSystemBeans.getProcessCpuLoad() * 100;
+	}
+	
+	public static double getRamUsage() {
+		OperatingSystemMXBean opearingSystemBeans = getOperatingSystemBean();
+		long total = opearingSystemBeans.getTotalPhysicalMemorySize();
+		long free = opearingSystemBeans.getFreePhysicalMemorySize();
+		return (1 - (free / (double)total)) * 100;
 	}
 	
     public static double generateRandomDouble() { 

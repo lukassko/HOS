@@ -1,6 +1,6 @@
 package com.app.hos.share.command.builder_v2;
 
-// thread safe ??
+// TODO: thread safe ??
 public class CommandBuilder {
 
     private AbstractCommandBuilder commandBuilder;

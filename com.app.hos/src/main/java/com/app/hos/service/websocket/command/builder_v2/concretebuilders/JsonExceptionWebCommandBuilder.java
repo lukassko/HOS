@@ -3,21 +3,21 @@ package com.app.hos.service.websocket.command.builder_v2.concretebuilders;
 import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder_v2.AbstractWebCommandBuilder;
 
-public class GetAllDevicesWebCommandBuilder extends AbstractWebCommandBuilder {
+public class JsonExceptionWebCommandBuilder extends AbstractWebCommandBuilder {
 	
-	public GetAllDevicesWebCommandBuilder(String message) {
+	public JsonExceptionWebCommandBuilder(String message) {
 		super(message);
 	}
 	
 	@Override
 	public AbstractWebCommandBuilder setCommandType() {
-		command.setType(WebCommandType.GET_ALL_DEVICES);
+		command.setType(WebCommandType.JSON_EXCEPTION);
 		return this;
 	}
 
 	@Override
 	public AbstractWebCommandBuilder setStatus() {
-		command.setStatus(true);
+		command.setStatus(false);
 		return this;
 	}
 }
