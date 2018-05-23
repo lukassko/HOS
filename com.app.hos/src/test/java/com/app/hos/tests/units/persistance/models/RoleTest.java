@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.models;
+package com.app.hos.tests.units.persistance.models;
 
 import org.junit.Assert;
 import org.junit.Test;

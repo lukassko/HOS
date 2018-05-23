@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.command;
+package com.app.hos.tests.units.share.commands;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.utils.Utils;
 
-public class BuildersTest {
+public class CommandBuildersTest {
 
 	CommandBuilder commandBuilder = new CommandBuilder();
 	

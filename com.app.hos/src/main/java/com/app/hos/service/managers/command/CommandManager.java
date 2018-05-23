@@ -10,29 +10,30 @@ import org.springframework.stereotype.Service;
 
 import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
-import com.app.hos.share.command.FutureCommandFactory;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.decorators.FutureCommandDecorator;
+import com.app.hos.share.command.future.FutureCommandFactory;
 import com.app.hos.share.command.result.Message;
-
 
 @Service
 public class CommandManager {
 
 	private final int THREAD_COUNT = 4;
 	
+	private FutureCommandFactory futureCommandFactory = new FutureCommandFactory();
+	
 	@Autowired
 	private CommandsApi commandsApi;
 	
 	// setters
-	public void setSystemFacade(CommandsApi commandsApi) {
+	public CommandManager(CommandsApi commandsApi) {
 		this.commandsApi = commandsApi;
 	}
 
 	private ExecutorService commandExecutor = Executors.newFixedThreadPool(THREAD_COUNT);
 
 	public void executeCommand(String connectionId, Command command) throws NotExecutableCommandException {
-		Callable<Command> executableCommand = FutureCommandFactory.getCommand(command);
+		Callable<Command> executableCommand = futureCommandFactory.get(command);
 		executeCommand(connectionId,executableCommand);
 	}
 	

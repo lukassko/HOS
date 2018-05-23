@@ -5,19 +5,36 @@ import java.lang.reflect.ParameterizedType;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 
-public class ReflectionUtils {
+public class ReflectionUtils implements ApplicationContextAware {
 
-/*    public static Object getObjectFromContext(String beanName) {
-    	return ApplicationContextProvider.getApplicationContext().getBean(beanName);
-    }
-    */
+	private static ApplicationContext applicationContext;
+	
+	public static void addObjectToContext (Class<?> clazz, String scope) {
+		ConfigurableListableBeanFactory beanFactory = ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
+		BeanDefinitionRegistry registry = ((BeanDefinitionRegistry )beanFactory);
+		
+		String beanName = clazz.getSimpleName();
+		GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+		beanDefinition.setBeanClass(clazz);
+		beanDefinition.setScope(scope);
+
+		registry.registerBeanDefinition(beanName,beanDefinition);
+	}
+	
     public static Object getObjectFromContext(String beanName, Object...bean) {
     	return ApplicationContextProvider.getApplicationContext().getBean(beanName,bean);
     }
@@ -81,4 +98,8 @@ public class ReflectionUtils {
 		return foundClazz;
     }
 
+    @Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		ReflectionUtils.applicationContext = applicationContext;
+	}
 }

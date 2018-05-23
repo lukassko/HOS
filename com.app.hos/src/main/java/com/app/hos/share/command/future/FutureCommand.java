@@ -1,15 +1,15 @@
-package com.app.hos.service.websocket.command.future;
+package com.app.hos.share.command.future;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import com.app.hos.share.command.type.CommandType;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import com.app.hos.service.websocket.command.WebCommandType;
 
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface FutureCommand {
-	WebCommandType type();
+	CommandType type();
 }

@@ -6,13 +6,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Service;
 
 import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.websocket.command.WebCommandType;
@@ -20,13 +13,10 @@ import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 import com.app.hos.utils.ReflectionUtils;
 
-@Service
 public class FutureWebCommandFactory 
-		implements AbstractMapFactory<Object,String, Callable<WebCommand>>, ApplicationContextAware {
+		implements AbstractMapFactory<Object,String, Callable<WebCommand>> {
 	
 	private final Map<WebCommandType, String> beans = new LinkedHashMap<>();
-	
-	private ApplicationContext applicationContext;
 	
 	@Override
 	public Callable<WebCommand> get(Object command) {
@@ -51,29 +41,17 @@ public class FutureWebCommandFactory
 
 	@Override
 	public void register(String path) {
-		List<String> commands =  ReflectionUtils.scanForAnnotation(FutureCommand.class,path);
-		ConfigurableListableBeanFactory beanFactory = ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
-		BeanDefinitionRegistry registry = ((BeanDefinitionRegistry )beanFactory);
+		List<String> commands =  ReflectionUtils.scanForAnnotation(FutureWebCommand.class,path);
 		for(String command : commands) {
 			try {
 				Class<?> clazz = ReflectionUtils.getClass(command);
-				FutureCommand annotation = clazz.getAnnotation(FutureCommand.class);
+				FutureWebCommand annotation = clazz.getAnnotation(FutureWebCommand.class);
 				WebCommandType type = annotation.type();
 				String beanName = clazz.getSimpleName();
-				
-				GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-				beanDefinition.setBeanClass(clazz);
-				beanDefinition.setScope("prototype");
-
-				registry.registerBeanDefinition(beanName,beanDefinition);
+				ReflectionUtils.addObjectToContext(clazz, "prototype");
 				add(type,beanName);
 			} catch (BeansException e) {}
 		}
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 
 }

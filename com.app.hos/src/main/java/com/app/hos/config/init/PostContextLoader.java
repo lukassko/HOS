@@ -30,8 +30,9 @@ public class PostContextLoader implements ApplicationListener<ContextRefreshedEv
 	private AbstractMapFactory<CommandType, Class<? extends AbstractCommandBuilder>, Command> commandFactory;
 	
 	@Autowired
-	private AbstractMapFactory<Object,String, Callable<WebCommand>> futureCommandFactory;
+	private AbstractMapFactory<Object,String, Callable<WebCommand>> futureWebCommandFactory;
 	
+	private AbstractMapFactory<Object,String, Callable<Command>> futureCommandFactory;
 	@Override
 	public int getOrder() {
 		return 0;
@@ -41,7 +42,8 @@ public class PostContextLoader implements ApplicationListener<ContextRefreshedEv
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		exceptionHandlerFactory.register("com.app.hos.utils.exceptions.handler");
 		commandFactory.register("com.app.hos.share.command.builder_v2.concretebuilders");
-		futureCommandFactory.register("com.app.hos.service.websocket.command.decorators");
+		futureWebCommandFactory.register("com.app.hos.service.websocket.command.decorators");
+		futureCommandFactory.register("com.app.hos.share.command.decorators");
 	}
 
 }

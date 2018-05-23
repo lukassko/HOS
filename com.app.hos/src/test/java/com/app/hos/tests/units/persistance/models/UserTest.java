@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.models;
+package com.app.hos.tests.units.persistance.models;
 
 import java.util.HashSet;
 import java.util.Set;

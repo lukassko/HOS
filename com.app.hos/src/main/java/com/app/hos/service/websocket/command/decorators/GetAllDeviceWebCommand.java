@@ -8,10 +8,10 @@ import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.pojo.WebDevice;
 import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
-import com.app.hos.service.websocket.command.future.FutureCommand;
+import com.app.hos.service.websocket.command.future.FutureWebCommand;
 import com.app.hos.utils.json.JsonConverter;
 
-@FutureCommand(type = WebCommandType.GET_ALL_DEVICES)
+@FutureWebCommand(type = WebCommandType.GET_ALL_DEVICES)
 public class GetAllDeviceWebCommand extends FutureWebCommandDecorator {
 	
 	public GetAllDeviceWebCommand(WebCommand command) {
