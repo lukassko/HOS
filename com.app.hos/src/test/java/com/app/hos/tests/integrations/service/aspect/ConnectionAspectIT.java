@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.aspect;
+package com.app.hos.tests.integrations.service.aspect;
 
 import java.util.HashMap;
 import java.util.Map;

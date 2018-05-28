@@ -31,7 +31,6 @@ import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
-import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
 

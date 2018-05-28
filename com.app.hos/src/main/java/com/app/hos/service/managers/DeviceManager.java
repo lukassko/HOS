@@ -33,7 +33,6 @@ public class DeviceManager {
 		
 	//need to find device at first, later create if not exist
 	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial, DeviceType type) {
-		//System.out.println("\n\nRun real method openDeviceConnection!\n\n");
 		Connection connection = createNewConnection(messageHeaders);
 		try {
 			Device device = deviceRepository.findBySerialNumber(serial);

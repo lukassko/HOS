@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.websocket;
+package com.app.hos.tests.integrations.service.websocket;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;

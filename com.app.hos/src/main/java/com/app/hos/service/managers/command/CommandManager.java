@@ -25,7 +25,8 @@ public class CommandManager {
 	@Autowired
 	private CommandsApi commandsApi;
 	
-	// setters
+	public CommandManager() {}
+	
 	public CommandManager(CommandsApi commandsApi) {
 		this.commandsApi = commandsApi;
 	}

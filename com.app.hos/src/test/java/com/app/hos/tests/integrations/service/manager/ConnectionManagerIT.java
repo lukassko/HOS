@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.manager;
+package com.app.hos.tests.integrations.service.manager;
 
 import java.util.HashMap;
 import java.util.LinkedList;

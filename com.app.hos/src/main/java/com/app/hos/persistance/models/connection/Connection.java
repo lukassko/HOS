@@ -54,6 +54,17 @@ public class Connection extends BaseEntity {
 	
 	public Connection() {}
 	
+	//use only this constructor, rest to delete!
+	public Connection(Builder builder) {
+		this.connectionId = builder.connectionId;
+		this.hostname = builder.hostname;
+		this.ip = builder.ip;
+		this.remotePort = builder.remotePort;
+		this.connectionTime = DateTimeConverter.getDate(builder.connectionTime);
+		this.endConnectionTime = DateTimeConverter.getDate(builder.endConnectionTime);
+		this.device = builder.device;
+	}
+	
 	public Connection(String connectionId, String hostname, String ip, int remotePort, Date connectionTime) {
 		this.connectionId = connectionId;
 		this.hostname = hostname;
@@ -180,20 +191,61 @@ public class Connection extends BaseEntity {
 	public String toString() {
 		return "Connection [connectionId=" + connectionId + ", hostname=" + hostname + ", ip=" + ip + ", remotePort="
 				+ remotePort + ", connectionTime=" + connectionTime;
-	}
-
-	public HistoryConnection createHistoryConnection() throws HistoryConnectionException {
-		if (endConnectionTime == null) 
-			throw new HistoryConnectionException(this);
-
-		HistoryConnection connection = new HistoryConnection();
-		connection.setConnectionTime(connectionTime);
-		connection.setEndConnectionTime(endConnectionTime);
-		connection.setDeviceId(device.getId());
-		connection.setIp(ip);
-		connection.setRemotePort(remotePort);
-		
-		return connection;
-	}
+	}	
 	
+	public static class Builder {
+
+		private String connectionId;
+		
+		private String hostname;
+
+		private String ip;
+
+		private Integer remotePort;
+
+		private DateTime connectionTime;
+
+		private DateTime endConnectionTime;
+		
+		private Device device;
+		
+		public Builder connectionId(String connectionId) {
+			this.connectionId = connectionId;
+			return this;
+		}
+		
+		public Builder hostname(String hostname) {
+			this.hostname = hostname;
+			return this;
+		}
+		
+		public Builder ip(String ip) {
+			this.ip = ip;
+			return this;
+		}
+		
+		public Builder remotePort(Integer remotePort) {
+			this.remotePort = remotePort;
+			return this;
+		}
+		
+		public Builder connectionTime(DateTime connectionTime) {
+			this.connectionTime = connectionTime;
+			return this;
+		}
+		
+		public Builder endConnectionTime(DateTime endConnectionTime) {
+			this.endConnectionTime = endConnectionTime;
+			return this;
+		}
+		
+		public Builder device(Device device) {
+			this.device = device;
+			return this;
+		}
+		
+		public Connection build() {
+			return new Connection(this);
+		}
+	}
 }

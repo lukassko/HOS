@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.manager;
+package com.app.hos.tests.integrations.service.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

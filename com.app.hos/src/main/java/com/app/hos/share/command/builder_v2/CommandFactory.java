@@ -41,10 +41,10 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 		Class<? extends AbstractCommandBuilder> factoryClazz = builders.get(key);
 		try {
 			commandBuilder.setCommandBuilder(factoryClazz.newInstance());
+			return commandBuilder.createCommand();
 		} catch (ReflectiveOperationException e) {
-	    	return null; // <- TO REFATOR
+	    	return null;
 		}
-		return commandBuilder.createCommand();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.exceptions;
+package com.app.hos.tests.integrations.service.exceptions;
 
 import java.util.List;
 

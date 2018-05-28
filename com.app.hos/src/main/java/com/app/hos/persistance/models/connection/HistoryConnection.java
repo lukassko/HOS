@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.app.hos.persistance.models.BaseEntity;
+import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
 
@@ -76,6 +77,21 @@ public class HistoryConnection extends BaseEntity {
 	
 	public void setEndConnectionTime(Date endConnectionTime) {
 		this.endConnectionTime = endConnectionTime;
+	}
+	
+	// static factory method
+	public static HistoryConnection getHistoryCnnection (Connection connection) throws HistoryConnectionException {
+		if (connection.getEndConnectionTime() == null) 
+			throw new HistoryConnectionException(connection);
+
+		HistoryConnection historyConnection = new HistoryConnection();
+		historyConnection.setConnectionTime(DateTimeConverter.getDate(connection.getConnectionTime()));
+		historyConnection.setEndConnectionTime(DateTimeConverter.getDate(connection.getEndConnectionTime()));
+		historyConnection.setDeviceId(connection.getDevice().getId());
+		historyConnection.setIp(connection.getIp());
+		historyConnection.setRemotePort(connection.getRemotePort());
+		
+		return historyConnection;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.manager;
+package com.app.hos.tests.integrations.service.manager;
 
 import java.io.IOException;
 import java.util.HashMap;

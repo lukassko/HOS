@@ -52,8 +52,13 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 	
 	private void addDevice() {
 		DeviceTypeEntity deviceType = deviceRepository.findType(DeviceType.PHONE);
-		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
+		Connection connection = new Connection.Builder().connectionId("192.168.0.21:23451-09:oa9:sd1")
+														.hostname("localhost1")
+														.ip("192.168.0.21")
+														.remotePort(23451)
+														.connectionTime(new DateTime())
+														.build();
+		
 		Device device = new Device("Lukasz Device", "serial_1",deviceType);
 		
 		connection.setDevice(device);
@@ -62,9 +67,14 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		device.setDeviceStatuses(generateRandomStatus(24, 3600000));
 		
 		deviceRepository.save(device);
+			
+		connection = new Connection.Builder().connectionId("192.168.0.21:23451-09:oa9:sd2")
+												.hostname("localhost2")
+												.ip("192.168.0.89")
+												.remotePort(43219)
+												.connectionTime(new DateTime())
+												.build();
 		
-		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
-    			"localhost2", "192.168.0.89", 43219, new DateTime());
 		device = new Device("Smartphone123", "serial_2",deviceType);
 		
 		connection.setDevice(device);
@@ -74,8 +84,13 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		
 		deviceRepository.save(device);
 		
-		connection = new Connection("192.168.0.21:23451-09:oa9:sd2", 
-    			"localhost3", "192.168.0.66", 7893, new DateTime());
+		connection = new Connection.Builder().connectionId("192.168.0.21:23451-09:oa9:sd2")
+												.hostname("localhost3")
+												.ip("192.168.0.66")
+												.remotePort(7893)
+												.connectionTime(new DateTime())
+												.build();
+		
 		device = new Device("Device 1", "serial_3",deviceType);
 		
 		connection.setDevice(device);

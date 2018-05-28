@@ -34,7 +34,7 @@ public class ConnectionManager {
 		Connection connection = connectionRepository.findConnectionById(connectionId);
 		connection.setEndConnectionTime(new DateTime());
 		try {
-			HistoryConnection historyConnection = connection.createHistoryConnection();
+			HistoryConnection historyConnection = HistoryConnection.getHistoryCnnection(connection);
 			connectionRepository.save(historyConnection);
 		} catch (HistoryConnectionException e) {
 			ExceptionUtils.handle(e);
