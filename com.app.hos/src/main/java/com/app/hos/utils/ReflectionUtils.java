@@ -5,13 +5,11 @@ import java.lang.reflect.ParameterizedType;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -19,11 +17,11 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 
-public class ReflectionUtils implements ApplicationContextAware {
 
-	private static ApplicationContext applicationContext;
+public class ReflectionUtils {
 	
 	public static void addObjectToContext (Class<?> clazz, String scope) {
+		ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 		ConfigurableListableBeanFactory beanFactory = ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
 		BeanDefinitionRegistry registry = ((BeanDefinitionRegistry )beanFactory);
 		
@@ -98,8 +96,4 @@ public class ReflectionUtils implements ApplicationContextAware {
 		return foundClazz;
     }
 
-    @Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		ReflectionUtils.applicationContext = applicationContext;
-	}
 }

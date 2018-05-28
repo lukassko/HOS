@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.springframework.beans.BeansException;
+import org.springframework.stereotype.Service;
 
 import com.app.hos.service.AbstractMapFactory;
 
@@ -14,6 +15,7 @@ import com.app.hos.share.command.decorators.FutureCommandDecorator;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.ReflectionUtils;
 
+@Service
 public class FutureCommandFactory 
 		implements AbstractMapFactory<Object,String, Callable<Command>> {
 	

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.springframework.beans.BeansException;
+import org.springframework.stereotype.Service;
 
 import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.websocket.command.WebCommandType;
@@ -13,6 +14,7 @@ import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.decorators.FutureWebCommandDecorator;
 import com.app.hos.utils.ReflectionUtils;
 
+@Service
 public class FutureWebCommandFactory 
 		implements AbstractMapFactory<Object,String, Callable<WebCommand>> {
 	

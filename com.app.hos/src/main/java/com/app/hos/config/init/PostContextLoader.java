@@ -3,6 +3,7 @@ package com.app.hos.config.init;
 import java.util.concurrent.Callable;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -30,9 +31,13 @@ public class PostContextLoader implements ApplicationListener<ContextRefreshedEv
 	private AbstractMapFactory<CommandType, Class<? extends AbstractCommandBuilder>, Command> commandFactory;
 	
 	@Autowired
+	//@Qualifier("futureWebCommandFactory")
 	private AbstractMapFactory<Object,String, Callable<WebCommand>> futureWebCommandFactory;
 	
+	@Autowired
+	//@Qualifier("futureCommandFactory")
 	private AbstractMapFactory<Object,String, Callable<Command>> futureCommandFactory;
+	
 	@Override
 	public int getOrder() {
 		return 0;
