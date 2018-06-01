@@ -2,7 +2,7 @@ package com.app.hos.utils.converters;
 
 import java.util.Date;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 
 public class DateTimeConverter {
 

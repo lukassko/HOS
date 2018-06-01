@@ -22,9 +22,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -71,7 +68,7 @@ public class WebCommandManagerMultithreadIT {
 	@BeforeClass
 	public static void initTest() {
 		command = new WebCommand();
-		command.setStatus(true);
+		command.setStatus(true);	
 		command.setType(WebCommandType.GET_ALL_DEVICES);
 		testExecutableCommand = new WebCommandSimulation(command); 
 	}

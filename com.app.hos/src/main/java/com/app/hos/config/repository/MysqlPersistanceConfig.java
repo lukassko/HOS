@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -34,9 +33,9 @@ public class MysqlPersistanceConfig {
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-		emf.setPersistenceUnitName("myslq_persistance");
+		emf.setPersistenceUnitName("mysql");
 		emf.setDataSource(dataSource());
-		emf.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
+		emf.setPackagesToScan("com.app.hos.persistance.*");
 		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		emf.setJpaProperties(hibernateProperties());
 		emf.afterPropertiesSet();

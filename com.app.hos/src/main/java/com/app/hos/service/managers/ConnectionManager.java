@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
-import com.app.hos.share.utils.DateTime;
 
 @Service
 //@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
@@ -34,7 +34,7 @@ public class ConnectionManager {
 		Connection connection = connectionRepository.findConnectionById(connectionId);
 		connection.setEndConnectionTime(new DateTime());
 		try {
-			HistoryConnection historyConnection = HistoryConnection.getHistoryCnnection(connection);
+			HistoryConnection historyConnection = HistoryConnection.getInstance(connection);
 			connectionRepository.save(historyConnection);
 		} catch (HistoryConnectionException e) {
 			ExceptionUtils.handle(e);

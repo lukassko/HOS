@@ -2,7 +2,7 @@ package com.app.hos.utils.json.serializers;
 
 import java.io.IOException;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;

@@ -27,8 +27,8 @@ import javax.websocket.RemoteEndpoint.Basic;
 
 import org.junit.Assert;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.device.DeviceStatus;
-import com.app.hos.share.utils.DateTime;
 
 public class Utils {
 
@@ -166,8 +166,8 @@ public class Utils {
 		long timestamp = new DateTime().getTimestamp();
 		for (int i = 0; i < size; i++) {
 			statuses.add(new DeviceStatus(new DateTime(timestamp), 
-								com.app.hos.utils.ReflectionUtils.generateRandomDouble(), 
-									com.app.hos.utils.ReflectionUtils.generateRandomDouble()));
+								com.app.hos.utils.Utils.generateRandomDouble(), 
+									com.app.hos.utils.Utils.generateRandomDouble()));
 			timestamp = timestamp - DIFF;
 		}
 		return statuses;

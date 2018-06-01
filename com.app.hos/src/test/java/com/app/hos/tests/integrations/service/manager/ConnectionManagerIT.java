@@ -22,18 +22,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.utils.DateTime;
-import com.app.hos.tests.integrations.config.ApplicationContextConfig;
+import com.app.hos.share.command.type.DeviceType;
 
 @Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConnectionManagerIT {
@@ -55,7 +56,7 @@ public class ConnectionManagerIT {
 		headerMap.put(IpHeaders.REMOTE_PORT,3456);
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "serial_main_device");
+		device = new Device("Device1", "serial_main_device", new DeviceTypeEntity(DeviceType.PHONE));
 	}
 	
 	private List<Device> getDevices() {
@@ -67,7 +68,7 @@ public class ConnectionManagerIT {
 	
 	@Test
 	public void stage10_generateHistoryConnectionShouldReturnProperDateTimeForConnectionAndInsertToDb() {
-		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial());
+		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial(), DeviceType.PHONE);
 		List<Device> devices = getDevices();
 		Assert.assertTrue(devices.size() == 1);
 		Connection connection = devices.get(0).getConnection();
@@ -105,7 +106,7 @@ public class ConnectionManagerIT {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial());
+		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
 		List<Device> devices = getDevices();
 		Assert.assertTrue(devices.size() == 1);
 		Connection connection = devices.get(0).getConnection();

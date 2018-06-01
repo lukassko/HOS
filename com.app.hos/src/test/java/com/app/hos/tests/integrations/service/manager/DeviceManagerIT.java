@@ -24,13 +24,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.share.command.type.DeviceType;
 
 // get Collection of Devices when there is no device in database 
 // get statuses from device from DB and getting from Map (check what with id field)
@@ -66,7 +68,7 @@ public class DeviceManagerIT {
 		headerMap.put(IpHeaders.REMOTE_PORT,3456);
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "serial_main_device");
+		device = new Device("Device1", "serial_main_device",new DeviceTypeEntity(DeviceType.PHONE));
 	}
 
 	@Test
@@ -78,7 +80,7 @@ public class DeviceManagerIT {
 
 	@Test
 	public void stage10_createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
-		manager.openDeviceConnection(headers, device.getName(), device.getSerial());
+		manager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
 		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
 		Assert.assertEquals(1, devices.size());
 		device = devices.get(0);
@@ -152,9 +154,9 @@ public class DeviceManagerIT {
 	public void stage45_addStatusToMultiDeviceAndChekLastOneStatus() throws InterruptedException {
 		Map<Device,DeviceStatus> latestStauses = new HashMap<Device, DeviceStatus>();
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
-		manager.openDeviceConnection(headers, "device_2", "serial_device_2");
-		manager.openDeviceConnection(headers, "device_3", "serial_device_3");
+		manager.openDeviceConnection(headers, "device_1", "serial_device_1",DeviceType.PHONE);
+		manager.openDeviceConnection(headers, "device_2", "serial_device_2",DeviceType.PHONE);
+		manager.openDeviceConnection(headers, "device_3", "serial_device_3",DeviceType.PHONE);
 
 		manager.addDeviceStatus("serial_device_1", new DeviceStatus(new DateTime(),1.32, 48.64));
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.39, 38.41);
@@ -198,7 +200,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage50_addMultiStatusWithDifferentTimeAndCheckIfMethodReturnProperSizeForGivenPeriod() {
-		manager.openDeviceConnection(headers, "device_4", "serial_device_4");
+		manager.openDeviceConnection(headers, "device_4", "serial_device_4",DeviceType.PHONE);
 		
 		//24 statuses, with one hour resolutions
 		List<DeviceStatus> generatedStatuses = com.app.hos.tests.utils.Utils.generateRandomStatus(24, 3600000);
@@ -232,7 +234,7 @@ public class DeviceManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1");
+		manager.openDeviceConnection(headers, "device_1", "serial_device_1",DeviceType.PHONE);
 		
 		Device newConnectedDevice = deviceRepository.findBySerialNumber("serial_device_1");
 		Connection oldConnection = oldConnectedDevice.getConnection();

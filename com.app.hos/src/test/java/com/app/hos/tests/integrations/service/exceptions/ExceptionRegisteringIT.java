@@ -77,9 +77,9 @@ public class ExceptionRegisteringIT {
 	
 	@Test
 	public void stage50_checkIfhandlersExistsInFacorty() {
-		HOSExceptionHandlerInfo handlerInfo = exceptionHandlerFactory.getHandler(JsonParseException.class);
+		HOSExceptionHandlerInfo handlerInfo = exceptionHandlerFactory.get(JsonParseException.class);
 		Assert.assertNotNull(handlerInfo);
-		Assert.assertNotNull(exceptionHandlerFactory.getHandler(JsonParseException.class));
+		Assert.assertNotNull(exceptionHandlerFactory.get(JsonParseException.class));
 	}
 	
 	private List<String> findHandlers() {

@@ -8,9 +8,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.share.command.type.DeviceType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +28,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import com.app.hos.share.utils.DateTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -52,7 +53,7 @@ public class DeviceRepositoryMultithreadIT {
     public void beforeClass() {
 		Connection connection1 = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device1 = new Device("Device1", "98547kjyy1");
+		Device device1 = new Device("Device1", "98547kjyy1",new DeviceTypeEntity(DeviceType.PHONE));
 		
 		connection1.setDevice(device1);
 		device1.setConnection(connection1);
@@ -60,14 +61,14 @@ public class DeviceRepositoryMultithreadIT {
 		Connection connection2 = new Connection("192.168.0.22:23452-09:oa9:sd2", 
     			"localhost2", "192.168.0.22", 23452, new DateTime());
 		
-		Device device2 = new Device("Device2", "98547kjyy2");
+		Device device2 = new Device("Device2", "98547kjyy2",new DeviceTypeEntity(DeviceType.PHONE));
 		
 		connection2.setDevice(device2);
 		device2.setConnection(connection2);
 		
 		Connection connection3 = new Connection("192.168.0.23:23453-09:oa9:sd3", 
     			"localhost3", "192.168.0.23", 23453, new DateTime());
-		Device device3 = new Device("Device3", "98547kjyy3");
+		Device device3 = new Device("Device3", "98547kjyy3",new DeviceTypeEntity(DeviceType.PHONE));
     	
 		connection3.setDevice(device3);
 		device3.setConnection(connection3);

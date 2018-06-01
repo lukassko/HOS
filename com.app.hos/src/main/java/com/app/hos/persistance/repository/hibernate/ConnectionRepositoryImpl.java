@@ -8,10 +8,10 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.persistance.repository.ConnectionRepository;
-import com.app.hos.share.utils.DateTime;
 
 @Repository
 public class ConnectionRepositoryImpl implements ConnectionRepository {

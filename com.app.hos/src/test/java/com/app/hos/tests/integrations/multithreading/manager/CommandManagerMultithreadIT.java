@@ -32,6 +32,7 @@ import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.builder_v2.Command;
+import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 
 @Ignore("run only one integration test")
@@ -49,6 +50,10 @@ public class CommandManagerMultithreadIT {
 	@Mock
 	private SystemFacade systemFacade;
 	
+	@Mock
+	private CommandFactory commandFactory;
+	
+	
 	@Before
     public void initMocks(){
 		MockitoAnnotations.initMocks(this);
@@ -62,7 +67,7 @@ public class CommandManagerMultithreadIT {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);
 
-		Command command = CallableCommandFactory.getCommand(CommandType.GET_STATUS);
+		Command command = commandFactory.get(CommandType.GET_STATUS);
 		commandManager.executeCommand("any string", command);
 
 		boolean ended;
@@ -81,7 +86,7 @@ public class CommandManagerMultithreadIT {
 	
 	@Test(expected = NotExecutableCommandException.class)
 	public void stage10_tryToExecuteNotExecutableCommandShouldThrowExecption() throws NotExecutableCommandException {
-		Command command = CallableCommandFactory.getCommand(CommandType.HELLO);
+		Command command = commandFactory.get(CommandType.HELLO);
 		commandManager.executeCommand("any string", command);
 	}
 	
@@ -90,8 +95,8 @@ public class CommandManagerMultithreadIT {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(2);
 		
-		Command command1 = CallableCommandFactory.getCommand(CommandType.GET_STATUS);
-		Command command2 = CallableCommandFactory.getCommand(CommandType.GET_STATUS);
+		Command command1 = commandFactory.get(CommandType.GET_STATUS);
+		Command command2 = commandFactory.get(CommandType.GET_STATUS);
 		
 		commandManager.executeCommand("any string", command1);
 		commandManager.executeCommand("any string", command2);

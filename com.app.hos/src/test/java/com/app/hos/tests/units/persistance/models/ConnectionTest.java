@@ -3,8 +3,8 @@ package com.app.hos.tests.units.persistance.models;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
-import com.app.hos.share.utils.DateTime;
 
 public class ConnectionTest {
 	

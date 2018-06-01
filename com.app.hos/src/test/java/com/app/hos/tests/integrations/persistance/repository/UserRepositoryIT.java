@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance;
+package com.app.hos.tests.integrations.persistance.repository;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,47 +19,31 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+//@Profile("!web-integration-test")
 @Configuration
-@ComponentScan({"com.app.hos.logging.*","com.app.hos.persistance.*"})
+@PropertySource({ "classpath:persistance/properties/mysql.properties" })
+@ComponentScan("com.app.hos.tests.integrations.persistance.*")
 @EnableTransactionManagement
 public class PersistanceConfig {
 
-	@Configuration
-	@Profile("test-hsqldb")
-	@PropertySource({ "classpath:persistance/properties/hsqldb.properties" })
-    static class Hsqldb
-    { }
-	
-	@Configuration
-	@Profile({"test-sqlite"})
-	@PropertySource({ "classpath:persistance/properties/sqlite-test.properties" })
-    static class SQLite
-    { }
-	
-	@Configuration
-	@Profile({"integration-test"})
-	@PropertySource({ "classpath:persistance/properties/mysql.properties" })
-    static class Mysql
-    { }
-	
 	@Autowired
 	private Environment env;
-
+	
 	@Primary
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-	   em.setDataSource(dataSource());
-	   em.setPackagesToScan(new String[] { "com.app.hos.persistance.*" });
-	   em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-	   em.setJpaProperties(hibernateProperties());
-	   em.afterPropertiesSet();
-	   return em.getObject();
+		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+		emf.setPersistenceUnitName("mysql");
+		emf.setDataSource(dataSource());
+		emf.setPackagesToScan("com.app.hos.tests.integrations.persistance.*");
+		emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		emf.setJpaProperties(hibernateProperties());
+		emf.afterPropertiesSet();
+		return emf.getObject();
 	}
-		
 	
 	@Primary
-	@Bean(name = "testEntityManager")
+	@Bean
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }
@@ -75,7 +58,7 @@ public class PersistanceConfig {
 	   dataSource.setPassword(env.getProperty("jdbc.pass"));
 	   return dataSource;
 	}
-
+	 
 	@Primary
 	@Bean
     JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
@@ -84,20 +67,23 @@ public class PersistanceConfig {
         return transactionManager;
     }
 
+
+	@SuppressWarnings("serial")
 	Properties hibernateProperties() {
 	      return new Properties() {
-	         {
-	        	 setProperty("hibernate.hbm2ddl.auto",
-	   	            env.getProperty("hibernate.hbm2ddl.auto"));
-	   	         setProperty("hibernate.show_sql", 
-	   	            env.getProperty("hibernate.show_sql"));
-	   	         setProperty("hibernate.format_sql", 
-	   	  	        env.getProperty("hibernate.format_sql"));
-	   	         setProperty("hibernate.dialect",
-	   	            env.getProperty("hibernate.dialect"));
-	   	         setProperty("hibernate.globally_quoted_identifiers",
-	   	            "true");
+			{
+	            setProperty("hibernate.hbm2ddl.auto",
+	              env.getProperty("hibernate.hbm2ddl.auto"));
+	            setProperty("hibernate.show_sql", 
+	              env.getProperty("hibernate.show_sql"));
+	            setProperty("hibernate.format_sql", 
+	  	          env.getProperty("hibernate.format_sql"));
+	            setProperty("hibernate.dialect",
+	              env.getProperty("hibernate.dialect"));
+	            //setProperty("hibernate.globally_quoted_identifiers",
+	            // "true");
 	         }
 	      };
 	   }
+	
 }

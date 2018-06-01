@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance;
+package com.app.hos.tests.integrations.persistance.repository;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;

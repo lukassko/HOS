@@ -12,9 +12,11 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.share.command.result.Result;
-import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,8 +34,9 @@ public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus>
 	
 	@NotNull
 	@Column(name="time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date time;
+	//@Temporal(TemporalType.TIMESTAMP)
+	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
+	private DateTime time;
 	
 	@NotNull
 	@JsonProperty("ram")
@@ -48,20 +51,26 @@ public class DeviceStatus extends BaseEntity implements Comparable<DeviceStatus>
 	public DeviceStatus() {}
 	
 	public DeviceStatus(double ramUsage, double cpuUsage) {
-		this.time = new Date();
+		this.time = new DateTime();
 		this.ramUsage = ramUsage;
 		this.cpuUsage = cpuUsage;
 	}
 
-	
-    public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
-		this.time = new Timestamp(time.getTimestamp());
+	public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
+		this.time = time;
 		this.ramUsage = ramUsage;
 		this.cpuUsage = cpuUsage;
 	}
+	
+    //public DeviceStatus(DateTime time, double ramUsage, double cpuUsage) {
+	//	this.time = new Timestamp(time.getTimestamp());
+	///	this.ramUsage = ramUsage;
+	//	this.cpuUsage = cpuUsage;
+	//}
 
 	public DateTime getTime() {
-		return DateTimeConverter.getDateTime(time);
+		//return DateTimeConverter.getDateTime(time);
+		return this.time;
 	}
 
 	@Override

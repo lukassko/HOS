@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

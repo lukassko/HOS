@@ -11,6 +11,7 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
@@ -19,7 +20,6 @@ import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.command.type.DeviceType;
-import com.app.hos.share.utils.DateTime;
 
 @Component
 //@Profile({"!web-integration-test", "!integration-test"})

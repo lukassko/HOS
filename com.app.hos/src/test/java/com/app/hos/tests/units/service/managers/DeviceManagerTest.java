@@ -19,12 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.share.command.type.DeviceType;
 
 @Ignore("run only one integration test")
 public class DeviceManagerTest {
@@ -48,7 +50,7 @@ public class DeviceManagerTest {
 		headerMap.put(IpHeaders.REMOTE_PORT,3456);
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "123123123");
+		device = new Device("Device1", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
 		connection= new Connection("192.168.0.12:3456:123:asd:dsa:213", 
 				"localhost", "192.168.0.12", 3456, new DateTime());
 		device.setConnection(connection);
@@ -57,7 +59,7 @@ public class DeviceManagerTest {
 	@Before
     public void setUpTest() {
         MockitoAnnotations.initMocks(this);
-        manager.openDeviceConnection(headers, device.getName(), device.getSerial());
+        manager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
     }
 	
 	@Test

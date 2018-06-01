@@ -3,7 +3,7 @@ package com.app.hos.utils.json.deserializers;
 import java.io.IOException;
 import java.util.Date;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

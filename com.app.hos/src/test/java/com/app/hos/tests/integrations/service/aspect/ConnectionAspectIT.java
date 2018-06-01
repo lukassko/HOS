@@ -33,9 +33,10 @@ import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.command.builder.CommandFactory;
 import com.app.hos.share.command.builder_v2.Command;
+import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.command.type.DeviceType;
 
 
 @Ignore("run only one integration test")
@@ -51,6 +52,9 @@ public class ConnectionAspectIT {
 	@InjectMocks
 	@Autowired
 	private SystemFacade systemFacade;
+	
+	@Mock
+	private CommandFactory commandFactory;
 	
 	@Mock
 	private DeviceManager deviceManager;
@@ -74,7 +78,7 @@ public class ConnectionAspectIT {
 	
 	@Test
 	public void testOpenConnectionAspect() {	
-		Command command = CallableCommandFactory.getCommand(CommandType.HELLO);
+		Command command = commandFactory.get(CommandType.HELLO);
 		String connectionId = "192.168.0.12:3456:123:asd:dsa:213";
 		String serial = command.getSerialId();
 		
@@ -86,7 +90,7 @@ public class ConnectionAspectIT {
 		MessageHeaders headers = new MessageHeaders(headerMap);
 
 		
-		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.anyString() , Mockito.anyString());
+		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.anyString() , Mockito.anyString(), Mockito.any(DeviceType.class));
 		Mockito.doNothing().when(server).sendMessage(Mockito.<Message<Command>>any());
 
 		systemFacade.receivedCommand(headers, command);

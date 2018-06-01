@@ -26,14 +26,15 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.websocket.WebSocketManager;
 import com.app.hos.service.websocket.command.WebCommandType;
-import com.app.hos.service.websocket.command.builder.WebCommandFactory;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.service.websocket.command.builder_v2.WebCommandFactory;
+import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.tests.utils.Utils;
 import com.app.hos.utils.json.JsonConverter;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -63,7 +64,7 @@ public class WebCommandManagerIT {
 		final List<WebCommand> sentCommands = new LinkedList<>();
 		
 		WebCommandType type = WebCommandType.GET_ALL_DEVICES;
-		WebCommand command = WebCommandFactory.getCommand(type);
+		WebCommand command = WebCommandFactory.get(type);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {
@@ -99,9 +100,9 @@ public class WebCommandManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		deviceManager.openDeviceConnection(headers, "device_1", "serial_device_1");
+		deviceManager.openDeviceConnection(headers, "device_1", "serial_device_1", DeviceType.PHONE);
 		
-		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
+		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {
@@ -136,7 +137,7 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.2, 13.4);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
-		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
+		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {
@@ -169,7 +170,7 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),11.65, 33.1);
 		deviceManager.addDeviceStatus("serial_device_1", status);
 		
-		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
+		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {
@@ -206,9 +207,9 @@ public class WebCommandManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost_1");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		deviceManager.openDeviceConnection(headers, "device_2", "serial_device_2");
+		deviceManager.openDeviceConnection(headers, "device_2", "serial_device_2",DeviceType.PHONE);
 		
-		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
+		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {
@@ -241,7 +242,7 @@ public class WebCommandManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),29.15, 89.13);
 		deviceManager.addDeviceStatus("serial_device_2", status);
 		
-		WebCommand command = WebCommandFactory.getCommand(WebCommandType.GET_ALL_DEVICES);
+		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
 		
 		webSocketManager.executeCommand((s, c) -> {

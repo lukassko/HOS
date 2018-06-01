@@ -1,12 +1,8 @@
 package com.app.hos.tests.units.service.managers;
 
-import java.util.concurrent.CountDownLatch;
-
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;

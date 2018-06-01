@@ -18,11 +18,11 @@ import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.logging.repository.LoggingRepository;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
-import com.app.hos.share.utils.DateTime;
 import com.app.hos.tests.utils.Thrower;
 
 

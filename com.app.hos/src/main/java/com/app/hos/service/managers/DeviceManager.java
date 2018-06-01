@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.persistence.NoResultException;
 
 import com.app.hos.share.command.type.DeviceType;
-import com.app.hos.share.utils.DateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.ip.IpHeaders;
@@ -18,6 +17,7 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;

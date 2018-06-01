@@ -6,9 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.service.exceptions.HistoryConnectionException;
-import com.app.hos.share.utils.DateTime;
 import com.app.hos.utils.converters.DateTimeConverter;
 
 @Table(name = "finalised_connections")
@@ -80,7 +80,7 @@ public class HistoryConnection extends BaseEntity {
 	}
 	
 	// static factory method
-	public static HistoryConnection getHistoryCnnection (Connection connection) throws HistoryConnectionException {
+	public static HistoryConnection getInstance(Connection connection) throws HistoryConnectionException {
 		if (connection.getEndConnectionTime() == null) 
 			throw new HistoryConnectionException(connection);
 

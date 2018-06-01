@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.utils.json.deserializers.DateTimeJsonDeserializer;
 import com.app.hos.utils.json.serializers.DateJsonSerializer;
 import com.app.hos.utils.json.serializers.DateTimeJsonSerializer;

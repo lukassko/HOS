@@ -1,4 +1,4 @@
-package com.app.hos.share.utils;
+package com.app.hos.persistance.custom;
 
 import java.io.Serializable;
 

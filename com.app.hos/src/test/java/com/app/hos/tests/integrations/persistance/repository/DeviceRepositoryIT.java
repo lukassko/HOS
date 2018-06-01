@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance;
+package com.app.hos.tests.integrations.persistance.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +8,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
 
 import java.util.Collection;
@@ -19,8 +21,6 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
-
-import com.app.hos.share.utils.DateTime;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -44,7 +44,7 @@ public class DeviceRepositoryIT {
     public static void beforeClass() {
 		Connection connection1 = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device1 = new Device("Device1", "98547kjyy1");
+		Device device1 = new Device("Device1", "98547kjyy1", new DeviceTypeEntity());
 		
 		connection1.setDevice(device1);
 		device1.setConnection(connection1);
@@ -52,14 +52,14 @@ public class DeviceRepositoryIT {
 		Connection connection2 = new Connection("192.168.0.22:23452-09:oa9:sd2", 
     			"localhost2", "192.168.0.22", 23452, new DateTime());
 		
-		Device device2 = new Device("Device2", "98547kjyy2");
+		Device device2 = new Device("Device2", "98547kjyy2",new DeviceTypeEntity());
 		
 		connection2.setDevice(device2);
 		device2.setConnection(connection2);
 		
 		Connection connection3 = new Connection("192.168.0.23:23453-09:oa9:sd3", 
     			"localhost3", "192.168.0.23", 23453, new DateTime());
-		Device device3 = new Device("Device3", "98547kjyy3");
+		Device device3 = new Device("Device3", "98547kjyy3",new DeviceTypeEntity());
     	
 		connection3.setDevice(device3);
 		device3.setConnection(connection3);
@@ -85,7 +85,7 @@ public class DeviceRepositoryIT {
     public void stage2_saveDeviceShouldThrowExceptionTest() {
     	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("DeviceTest", "98547kjyy1");
+		Device device = new Device("DeviceTest", "98547kjyy1",new DeviceTypeEntity());
 		device.setSerial(null);
 		connection.setDevice(device);
 		deviceRepository.save(device);
@@ -143,7 +143,7 @@ public class DeviceRepositoryIT {
     public void stage8_saveDeviceShouldThrowExceptionWithValidationTest() {
     	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
     			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("", "");
+		Device device = new Device("", "",null);
 		connection.setDevice(device);
 		deviceRepository.save(device);
     }

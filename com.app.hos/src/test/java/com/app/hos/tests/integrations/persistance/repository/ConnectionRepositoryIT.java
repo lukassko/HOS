@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance;
+package com.app.hos.tests.integrations.persistance.repository;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +7,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.config.repository.MysqlPersistanceConfig;
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.connection.HistoryConnection;
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.service.exceptions.HistoryConnectionException;
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.share.command.type.DeviceType;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -48,7 +50,7 @@ public class ConnectionRepositoryIT {
 		Connection connection3 = new Connection("192.168.0.23:23453-09:oa9:sd3", 
     			"localhost3", "192.168.0.23", 23453, new DateTime());
 		
-		Device device = new Device("Device1", "98547kjyy1");
+		Device device = new Device("Device1", "98547kjyy1", new DeviceTypeEntity(DeviceType.PHONE));
 		device.setId(1);
 		
 		DateTime endConnectionTime = new DateTime();
@@ -76,7 +78,7 @@ public class ConnectionRepositoryIT {
 	//@Test(expected=HistoryConnectionException.class)
 	public void saveMethodShouldThrowHistoryConnectionExceptionTest () throws HistoryConnectionException {
 		Connection connection = connectionList.get(0);
-		HistoryConnection historyConnection = connection.createHistoryConnection();
+		HistoryConnection historyConnection = HistoryConnection.getInstance(connection);
 		//connection.setEndConnectionTime(null);
 		connectionRepository.save(historyConnection);
 	}
@@ -86,7 +88,7 @@ public class ConnectionRepositoryIT {
 	public void saveMethodShouldInsertConnectionToDb () throws HistoryConnectionException {
 		Connection connection = connectionList.get(0);
 		Device device = devicesList.get(0);
-		connectionRepository.save(connection.createHistoryConnection());
+		connectionRepository.save(HistoryConnection.getInstance(connection));
 		Collection<HistoryConnection> connections = connectionRepository.findAllHistoryConnectionsByDeviceId(device.getId());
 		List<HistoryConnection> connectionsList = new LinkedList<HistoryConnection>(connections);
 		Assert.assertEquals(1,connectionsList.size());
@@ -99,9 +101,9 @@ public class ConnectionRepositoryIT {
 		Connection connection1 = connectionList.get(0);
 		Connection connection2 = connectionList.get(1);
 		Connection connection3 = connectionList.get(2);
-		connectionRepository.save(connection1.createHistoryConnection());
-		connectionRepository.save(connection2.createHistoryConnection());
-		connectionRepository.save(connection3.createHistoryConnection());
+		connectionRepository.save(HistoryConnection.getInstance(connection1));
+		connectionRepository.save(HistoryConnection.getInstance(connection2));
+		connectionRepository.save(HistoryConnection.getInstance(connection3));
 		Collection<HistoryConnection> connections = connectionRepository.findAllHistoryConnectionsByDeviceId(device.getId());
 		List<HistoryConnection> connectionsList = new LinkedList<HistoryConnection>(connections);
 		Assert.assertEquals(3,connectionsList.size());

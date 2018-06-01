@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.api.DevicesApi;
 import com.app.hos.service.api.SystemFacade;
-import com.app.hos.share.utils.DateTime;
 
 @Controller
 public class DeviceRestfulController {

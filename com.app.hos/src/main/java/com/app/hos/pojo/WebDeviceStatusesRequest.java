@@ -1,6 +1,6 @@
 package com.app.hos.pojo;
 
-import com.app.hos.share.utils.DateTime;
+import com.app.hos.persistance.custom.DateTime;
 
 /**
  * POJO class to send request over JSON
