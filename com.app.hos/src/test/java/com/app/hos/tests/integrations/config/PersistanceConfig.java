@@ -19,7 +19,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//@Profile("!web-integration-test")
 @Configuration
 @PropertySource({ "classpath:persistance/properties/mysql.properties" })
 @ComponentScan("com.app.hos.tests.integrations.persistance.*")
@@ -72,16 +71,13 @@ public class PersistanceConfig {
 	Properties hibernateProperties() {
 	      return new Properties() {
 			{
-	            setProperty("hibernate.hbm2ddl.auto",
-	              env.getProperty("hibernate.hbm2ddl.auto"));
+	            setProperty("hibernate.hbm2ddl.auto","create-drop");
 	            setProperty("hibernate.show_sql", 
 	              env.getProperty("hibernate.show_sql"));
 	            setProperty("hibernate.format_sql", 
 	  	          env.getProperty("hibernate.format_sql"));
 	            setProperty("hibernate.dialect",
 	              env.getProperty("hibernate.dialect"));
-	            //setProperty("hibernate.globally_quoted_identifiers",
-	            // "true");
 	         }
 	      };
 	   }

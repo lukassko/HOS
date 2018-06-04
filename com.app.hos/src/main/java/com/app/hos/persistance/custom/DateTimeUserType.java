@@ -1,10 +1,10 @@
 package com.app.hos.persistance.custom;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
@@ -51,7 +51,7 @@ public class DateTimeUserType implements UserType{
 	@Override
 	public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner)
 			throws HibernateException, SQLException {
-		Date date = rs.getDate(names[0]); 
+		Timestamp date = rs.getTimestamp(names[0]); 
 		if (date == null) {
 			return null;
 		}
@@ -67,8 +67,9 @@ public class DateTimeUserType implements UserType{
         }
 		if (!(value instanceof DateTime))
             throw new UnsupportedOperationException("Can't convert " + value.getClass());
+		
 		long timestamp = ((DateTime)value).getTimestamp();
-		ps.setDate(index, new Date(timestamp));
+		ps.setTimestamp(index, new Timestamp(timestamp));
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class DateTimeUserType implements UserType{
 
 	@Override
 	public int[] sqlTypes() {
-		return new int[] {Types.DATE};
+		return new int[] {Types.TIMESTAMP};
 	}
 
 }
