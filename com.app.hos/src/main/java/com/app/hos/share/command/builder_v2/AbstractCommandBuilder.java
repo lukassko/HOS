@@ -1,7 +1,5 @@
 package com.app.hos.share.command.builder_v2;
 
-import com.app.hos.utils.Utils;
-
 public abstract class AbstractCommandBuilder {
 
     protected Command command;
@@ -13,9 +11,7 @@ public abstract class AbstractCommandBuilder {
     }
     
     public AbstractCommandBuilder createCommand () {
-        String serverName = Utils.getHostName();
         this.command = new Command();
-        command.setSerialId(serverName);
         return this;
     }
 

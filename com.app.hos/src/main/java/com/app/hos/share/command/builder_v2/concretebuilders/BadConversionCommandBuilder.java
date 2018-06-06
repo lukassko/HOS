@@ -21,7 +21,7 @@ public class BadConversionCommandBuilder extends AbstractCommandBuilder {
 	
 	@Override
 	public AbstractCommandBuilder setCommandType() {
-		String type = CommandType.BAD_COMMAND_CONVERSION.toString();
+		String type = CommandType.BAD_CONVERSION.toString();
 		command.setCommandType(type);
 		return this;
 	}

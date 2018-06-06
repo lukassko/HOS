@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance.models;
+package com.app.hos.tests.integrations.persistance.models.custom;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.Table;
@@ -47,17 +46,13 @@ public class DateTimeIT {
 		// when
 		em.persist(entityBeforeSave);
 		em.flush();
-		
-		em.clear();
-		
+		em.clear();		
+
+		// then
 		Query query = em.createQuery("SELECT dt FROM TestDateTimeEntity_v1 dt");
 		entityAfterRetrive = (TestDateTimeEntity_v1)query.getSingleResult();
-	
-		// then
 		DateTime selectedTime = entityAfterRetrive.getTime1();
 		Assert.assertEquals(time, selectedTime);
-		
-		//em.createQuery("DROP TABLE test_datetime_v1").executeUpdate();
 	}
 	
 	@Test
@@ -72,19 +67,16 @@ public class DateTimeIT {
 		// when
 		em.persist(entityBeforeSave);
 		em.flush();
-		
 		em.clear();
 		
+		// then
 		Query query = em.createQuery("SELECT dt FROM TestDateTimeEntity_v2 dt");
 		entityAfterRetrive = (TestDateTimeEntity_v2)query.getSingleResult();
-	
-		// then
+
 		DateTime selectedTime1 = entityAfterRetrive.getTime1();
 		DateTime selectedTime2 = entityAfterRetrive.getTime2();
 		Assert.assertEquals(time1, selectedTime1);
 		Assert.assertEquals(time2, selectedTime2);
-		
-		//em.createQuery("DROP TABLE test_datetime_v2").executeUpdate();
 	}
 
 	@Test
@@ -99,13 +91,12 @@ public class DateTimeIT {
 		// when
 		em.persist(entityBeforeSave);
 		em.flush();
-		
 		em.clear();
 		
+		// then
 		Query query = em.createQuery("SELECT dt FROM TestDateTimeEntity_v3 dt");
 		entityAfterRetrive = (TestDateTimeEntity_v3)query.getSingleResult();
-	
-		// then
+
 		DateTime selectedTime1 = entityAfterRetrive.getTime1();
 		DateTime selectedTime2 = entityAfterRetrive.getTime3();
 		Assert.assertEquals(time1, selectedTime1);
@@ -132,6 +123,10 @@ public class DateTimeIT {
 		
 		public DateTime getTime1() {
 			return this.time1;
+		}
+		
+		public void setTime1(DateTime time) {
+			this.time1 = time;
 		}
  	}
 	

@@ -20,10 +20,11 @@ public class HelloCommandBuilder extends AbstractCommandBuilder {
 	    return this;
 	}
 
+	// TODO Implement
 	@Override
 	public AbstractCommandBuilder setResult() {
-	  	NewDevice newDevice = new NewDevice(Utils.getHostName(),DeviceType.SERVER);
-	    command.setResult(newDevice);
+	  	//NewDevice newDevice = new NewDevice(Utils.getHostName(),DeviceType.SERVER);
+	   // command.setResult(newDevice);
 	    return this;
 	}
 

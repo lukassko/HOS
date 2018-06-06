@@ -8,8 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -18,8 +16,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.device.Device;
-import com.app.hos.service.exceptions.HistoryConnectionException;
-import com.app.hos.utils.converters.DateTimeConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "connections")
@@ -43,12 +39,10 @@ public class Connection extends BaseEntity {
 
 	@NotNull
 	@Column(name="connection_time")
-	//@Temporal(TemporalType.TIMESTAMP)
 	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime connectionTime;
 
 	@Column(name="end_connection_time")
-	//@Temporal(TemporalType.TIMESTAMP)
 	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime endConnectionTime;
 	
@@ -59,27 +53,17 @@ public class Connection extends BaseEntity {
 	
 	public Connection() {}
 	
-	//use only this constructor, rest to delete!
+	// TODO: use only this constructor, rest to delete!
 	public Connection(Builder builder) {
 		this.connectionId = builder.connectionId;
 		this.hostname = builder.hostname;
 		this.ip = builder.ip;
 		this.remotePort = builder.remotePort;
-		//this.connectionTime = DateTimeConverter.getDate(builder.connectionTime);
-		//this.endConnectionTime = DateTimeConverter.getDate(builder.endConnectionTime);
 		this.connectionTime = builder.connectionTime;
 		this.endConnectionTime = builder.endConnectionTime;
 		this.device = builder.device;
 	}
-	
-	public Connection(String connectionId, String hostname, String ip, int remotePort, Date connectionTime) {
-		this.connectionId = connectionId;
-		this.hostname = hostname;
-		this.ip = ip;
-		this.remotePort = remotePort;
-		//this.connectionTime = connectionTime;
-	}
-	
+		
 	public Connection(String connectionId, String hostname, String ip, int remotePort, DateTime connectionTime) {
 		this.connectionId = connectionId;
 		this.hostname = hostname;
@@ -122,22 +106,18 @@ public class Connection extends BaseEntity {
 	}
 
 	public DateTime getConnectionTime() {
-		//return DateTimeConverter.getDateTime(connectionTime);
 		return this.connectionTime;
 	}
 
 	public void setConnectionTime(DateTime connectionTime) {
-		//this.connectionTime = DateTimeConverter.getDate(connectionTime);
 		this.connectionTime = connectionTime;
 	}
 
 	public DateTime getEndConnectionTime() {
-		//return DateTimeConverter.getDateTime(endConnectionTime);
 		return this.endConnectionTime;
 	}
 
 	public void setEndConnectionTime(DateTime endConnectionTime) {
-		//this.endConnectionTime =  DateTimeConverter.getDate(endConnectionTime);
 		this.endConnectionTime =  endConnectionTime;
 	}
 

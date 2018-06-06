@@ -9,18 +9,9 @@ import java.io.Serializable;
 public class Command implements Serializable {
 
     private static final long serialVersionUID = 2L;
-    private String serialId;
     private String commandType;
     private Result result;
     private boolean status;
-
-	public void setSerialId (String serialId) {
-        this.serialId = serialId;
-    }
-
-    public String getSerialId() {
-        return serialId;
-    }
 
     public String getCommandType() {
         return commandType;

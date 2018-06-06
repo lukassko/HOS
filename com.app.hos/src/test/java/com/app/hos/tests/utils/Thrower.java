@@ -9,7 +9,7 @@ import com.app.hos.share.command.type.CommandType;
 public class Thrower {
 	
 	public void throwNotExeccutableCommandException () {
-		throw new NotExecutableCommandException(CommandType.UNKNOWN_COMMAND);
+		throw new NotExecutableCommandException(CommandType.UNKNOWN);
 	}
 	
 	public void throwHistoryConnectionException (Connection connection) {

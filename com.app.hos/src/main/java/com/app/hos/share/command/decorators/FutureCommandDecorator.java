@@ -2,21 +2,21 @@ package com.app.hos.share.command.decorators;
 
 import java.util.concurrent.Callable;
 
-import com.app.hos.share.command.builder_v2.Command;
+import com.app.hos.share.command.CommandInfo;
 
-public abstract class FutureCommandDecorator implements Callable<Command> {
+public abstract class FutureCommandDecorator implements Callable<CommandInfo> {
 
-	protected Command command;
+	protected CommandInfo commandInfo;
 	
-	public FutureCommandDecorator(Command command) {
-		this.command = command;
+	public FutureCommandDecorator(CommandInfo commandInfo) {
+		this.commandInfo = commandInfo;
 	}
 
-	public Command getCommand() {
-		return command;
+	public CommandInfo getCommand() {
+		return commandInfo;
 	}
 
-	public void setCommand(Command command) {
-		this.command = command;
+	public void setCommand(CommandInfo commandInfo) {
+		this.commandInfo = commandInfo;
 	}
 }

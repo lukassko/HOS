@@ -9,11 +9,9 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
-import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.share.command.result.NewDevice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.ip.IpHeaders;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,17 +30,17 @@ public class DeviceManager {
 	private DeviceRepository deviceRepository;
 		
 	//need to find device at first, later create if not exist
-	public void openDeviceConnection(MessageHeaders messageHeaders, String name, String serial, DeviceType type) {
-		Connection connection = createNewConnection(messageHeaders);
+	public void openDeviceConnection(String connectionId, NewDevice device) {
+		Connection connection = createConnection(connectionId,device);
 		try {
-			Device device = deviceRepository.findBySerialNumber(serial);
-			device.setConnection(connection);
-			connection.setDevice(device);
+			Device dev = deviceRepository.findBySerialNumber(device.getSerialId());
+			dev.setConnection(connection);
+			connection.setDevice(dev);
 		} catch (NoResultException e) {
-			Device device = createNewDevice(messageHeaders,name,serial,type);
-			device.setConnection(connection);
-			connection.setDevice(device);
-			deviceRepository.save(device);
+			Device dev = createNewDevice(device);
+			dev.setConnection(connection);
+			connection.setDevice(dev);
+			deviceRepository.save(dev);
 		}
 	}
 
@@ -101,22 +99,21 @@ public class DeviceManager {
 		deviceRepository.remove(device);
 	}
 
-	private Connection createNewConnection(MessageHeaders headers) {
-		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
-		String ip = headers.get(IpHeaders.IP_ADDRESS).toString();
-	    int remotePort = (Integer) headers.get(IpHeaders.REMOTE_PORT);
-	    String hostname = headers.get(IpHeaders.HOSTNAME).toString();
+	private Connection createConnection(String connectionId, NewDevice device) {
 		DateTime connectionTime = new DateTime();
-		return new Connection(connectionId, hostname, ip, remotePort, connectionTime);
+		return new Connection.Builder().connectionId(connectionId)
+										.ip(device.getIp())
+										.remotePort(device.getPort())
+										.hostname(device.getName())
+										.connectionTime(connectionTime).build();
 	}
 	
-	private Device createNewDevice(MessageHeaders headers, String name, String serial,DeviceType type) {
+
+	
+	private Device createNewDevice(NewDevice newDevice) {
 		// find device type in db, its tenporary
-		DeviceTypeEntity deviceTypeEntity = new DeviceTypeEntity(type);
-		Device device = new Device(name,serial,deviceTypeEntity);
-		Connection connection = createNewConnection(headers);
-		device.setConnection(connection);
-		return device;
+		DeviceTypeEntity deviceTypeEntity = new DeviceTypeEntity(newDevice.getType());
+		return new Device(newDevice.getName(),newDevice.getSerialId(),deviceTypeEntity);
 	}
 
 }

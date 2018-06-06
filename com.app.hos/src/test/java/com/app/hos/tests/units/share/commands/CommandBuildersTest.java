@@ -33,7 +33,7 @@ public class CommandBuildersTest {
 										.setStatus().getCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.BAD_COMMAND_CONVERSION, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getEnumeratedCommandType());
 		Assert.assertFalse(command.getStatus());
 		
 		Message message = (Message)command.getResult();
@@ -52,7 +52,7 @@ public class CommandBuildersTest {
 		Command command = commandBuilder.createCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.BAD_COMMAND_CONVERSION, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getEnumeratedCommandType());
 		Assert.assertFalse(command.getStatus());
 			
 		Message message = (Message)command.getResult();

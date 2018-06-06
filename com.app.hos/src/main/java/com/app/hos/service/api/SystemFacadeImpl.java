@@ -2,9 +2,6 @@ package com.app.hos.service.api;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +18,13 @@ import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
-import com.app.hos.service.exceptions.handler.ExceptionUtils;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.managers.command.CommandManager;
+import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
 import com.app.hos.share.command.builder_v2.Command;
-import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.ReflectionUtils;
 
@@ -50,10 +46,8 @@ public class SystemFacadeImpl implements SystemFacade  {
 	@Autowired
 	private AbstractMapFactory<CommandType,
 									Class<? extends AbstractCommandBuilder>, Command> commandFactory;
-	
-	private ExecutorService commandExecutor = Executors.newFixedThreadPool(4);
-	
-	// setters - used to test for Mocks (try to remove)
+
+	// TODO setters - used to test for Mocks (try to remove)
 	public void setDeviceManager(DeviceManager deviceManager) {
 		this.deviceManager = deviceManager;
 	}
@@ -69,50 +63,21 @@ public class SystemFacadeImpl implements SystemFacade  {
 	// commands API
 	@Override
 	public void receivedCommand(final MessageHeaders headers, final Command command) {
-		final CommandType type = CommandType.valueOf(command.getCommandType());
-		if (type.isExecutable()) {
-			String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
-			try {
-				commandManager.executeCommand(connectionId, command);
-			} catch (NotExecutableCommandException e) {
-				ExceptionUtils.handle(e);
-			}
-		} else {
-			final String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
-			Runnable commandThread = null;
-			if (CommandType.BAD_COMMAND_CONVERSION == type) { // send information about bad command serialization
-				commandThread = new Runnable() {
-					public void run() {
-						sendCommand(connectionId,type);
-					}
-				};
-			} else if (CommandType.HELLO == type) { // create new device and send 'Hello' response
-				commandThread = new Runnable() {
-					public void run() {
-						NewDevice device = (NewDevice)command.getResult();
-						deviceManager.openDeviceConnection(headers, device.getName(), command.getSerialId(),device.getType());
-						sendCommand(connectionId,type);
-					}
-				};
-				
-			} else if (CommandType.MY_STATUS == type) { // add new status to database for device
-				commandThread = new Runnable() {
-					public void run() {
-						DeviceStatus status = (DeviceStatus)command.getResult();
-						deviceManager.addDeviceStatus(command.getSerialId(), status);
-					}
-				};
-			} else { // send unknown command information
-				commandThread = new Runnable() {
-					public void run() {
-						sendCommand(connectionId,CommandType.UNKNOWN_COMMAND);
-					}
-				};
-			}
-			commandExecutor.execute(commandThread);
+		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
+		CommandInfo commandInfo = new CommandInfo(connectionId, command);
+		try {
+			commandManager.executeCommand(commandInfo);
+		} catch (NotExecutableCommandException e) {
+			sendCommand(connectionId,CommandType.UNKNOWN);
+			//ExceptionUtils.handle(e);
 		}
 	}
 
+	@Override
+	public void sendCommand(CommandInfo command) {
+		// TODO Auto-generated method stub
+	}
+	
 	@Override
 	public void sendCommand(String connectionId, CommandType type) {
 		Command command = commandFactory.get(type);

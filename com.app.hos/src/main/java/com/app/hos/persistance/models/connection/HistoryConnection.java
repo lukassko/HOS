@@ -1,6 +1,5 @@
 package com.app.hos.persistance.models.connection;
 
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.Table;
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.service.exceptions.HistoryConnectionException;
-import com.app.hos.utils.converters.DateTimeConverter;
 
 @Table(name = "finalised_connections")
 @Entity
@@ -25,11 +23,10 @@ public class HistoryConnection extends BaseEntity {
 	private int remotePort;
 
 	@Column(name="begin_connection_time",nullable=false)
-	private Date beginConnectionTime;
+	private DateTime beginConnectionTime;
 
 	@Column(name="end_connection_time",nullable=false)
-	private Date endConnectionTime;
-
+	private DateTime endConnectionTime;
 	
 	public int getDeviceId() {
 		return deviceId;
@@ -55,27 +52,23 @@ public class HistoryConnection extends BaseEntity {
 		this.remotePort = remotePort;
 	}
 
-	public Date getConnectionTime() {
+	public DateTime getConnectionTime() {
 		return beginConnectionTime;
 	}
 
 	public DateTime getConnectionDateTime() {
-		return DateTimeConverter.getDateTime(this.beginConnectionTime);	
+		return this.beginConnectionTime;	
 	}
 	
-	public void setConnectionTime(Date connectionTime) {
+	public void setConnectionTime(DateTime connectionTime) {
 		this.beginConnectionTime = connectionTime;
 	}
 
-	public Date getEndConnectionTime() {
+	public DateTime getEndConnectionTime() {
 		return endConnectionTime;
 	}
-
-	public DateTime getEndConnectionDateTime() {
-		return DateTimeConverter.getDateTime(this.endConnectionTime);
-	}
 	
-	public void setEndConnectionTime(Date endConnectionTime) {
+	public void setEndConnectionTime(DateTime endConnectionTime) {
 		this.endConnectionTime = endConnectionTime;
 	}
 	
@@ -85,8 +78,8 @@ public class HistoryConnection extends BaseEntity {
 			throw new HistoryConnectionException(connection);
 
 		HistoryConnection historyConnection = new HistoryConnection();
-		historyConnection.setConnectionTime(DateTimeConverter.getDate(connection.getConnectionTime()));
-		historyConnection.setEndConnectionTime(DateTimeConverter.getDate(connection.getEndConnectionTime()));
+		historyConnection.setConnectionTime(connection.getConnectionTime());
+		historyConnection.setEndConnectionTime(connection.getEndConnectionTime());
 		historyConnection.setDeviceId(connection.getDevice().getId());
 		historyConnection.setIp(connection.getIp());
 		historyConnection.setRemotePort(connection.getRemotePort());
@@ -96,8 +89,8 @@ public class HistoryConnection extends BaseEntity {
 	
 	@Override
 	public int hashCode() {
-		long beginConnectionTime = this.beginConnectionTime.getTime();
-		long endConnectionTime = this.endConnectionTime.getTime();
+		long beginConnectionTime = this.beginConnectionTime.getTimestamp();
+		long endConnectionTime = this.endConnectionTime.getTimestamp();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (beginConnectionTime ^ (beginConnectionTime >>> 32));
