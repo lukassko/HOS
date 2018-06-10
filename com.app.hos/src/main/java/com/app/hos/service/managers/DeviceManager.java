@@ -21,6 +21,7 @@ import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
 @Service
 @Transactional
@@ -28,15 +29,14 @@ public class DeviceManager {
 	
 	@Autowired
 	private DeviceRepository deviceRepository;
-		
-	//need to find device at first, later create if not exist
+
 	public void openDeviceConnection(String connectionId, NewDevice device) {
 		Connection connection = createConnection(connectionId,device);
 		try {
-			Device dev = deviceRepository.findBySerialNumber(device.getSerialId());
+			Device dev = deviceRepository.find(device.getSerialId());
 			dev.setConnection(connection);
 			connection.setDevice(dev);
-		} catch (NoResultException e) {
+		} catch (RuntimeException e) {
 			Device dev = createNewDevice(device);
 			dev.setConnection(connection);
 			connection.setDevice(dev);
@@ -44,8 +44,6 @@ public class DeviceManager {
 		}
 	}
 
-	// sort statuses by time and get the latest status of device; 
-	// TEST SORTING WITH JUNIT
 	public Map<Device, DeviceStatus> getConnectedDevices() {
 		Map<Device, DeviceStatus> deviceStatus = new HashMap<Device, DeviceStatus>();
 		Collection<Device> devices = deviceRepository.findAll();
@@ -56,42 +54,46 @@ public class DeviceManager {
 	}
 	
 	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
-		
 		List<DeviceStatus> sortedStatus = new LinkedList<DeviceStatus>();
-		
 		try {
-			List<DeviceStatus> statuses = deviceRepository.findBySerialNumber(serial).getDeviceStatuses();
+			List<DeviceStatus> statuses = deviceRepository.find(serial).getDeviceStatuses();
 			statuses.forEach(status -> {
 				DateTime date = status.getTime();
 				if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
 					sortedStatus.add(status);			
 			});
-			
 			Collections.sort(sortedStatus);
-			
 		} catch (NoResultException e) {
-			
+			ExceptionUtils.handle(e);
 		}
-		
-		
 		return sortedStatus;
 	}
 	
 	public void addDeviceStatus(String serial, DeviceStatus deviceStatus) {
-		Device device = findDeviceBySerial(serial);
-		List<DeviceStatus> statuses = device.getDeviceStatuses();
-		statuses.add(deviceStatus);
-		//deviceRepository.save(device);
-		// i suppose that need to call 'save' method on device
+		Device device = findDevice(serial);
+		if (device != null) {
+			List<DeviceStatus> statuses = device.getDeviceStatuses();
+			statuses.add(deviceStatus);
+		}
 	}
 
-	public Device findDeviceBySerial(String serial) {
+	public Device findDevice(int id) {
 		Device device;
-		//try {
-			device = deviceRepository.findBySerialNumber(serial);
-		//} catch (NoResultException e) {
-		//	device = null;
-		//}
+		try {
+			device = deviceRepository.find(id);
+		} catch (RuntimeException e) {
+			device = null;
+		}
+		return device;
+	}
+	
+	public Device findDevice(String serial) {
+		Device device;
+		try {
+			device = deviceRepository.find(serial);
+		} catch (RuntimeException e) {
+			device = null;
+		}
 		return device;
 	}
 	
@@ -100,20 +102,16 @@ public class DeviceManager {
 	}
 
 	private Connection createConnection(String connectionId, NewDevice device) {
-		DateTime connectionTime = new DateTime();
 		return new Connection.Builder().connectionId(connectionId)
 										.ip(device.getIp())
 										.remotePort(device.getPort())
 										.hostname(device.getName())
-										.connectionTime(connectionTime).build();
+										.connectionTime(new DateTime()).build();
 	}
 	
-
-	
 	private Device createNewDevice(NewDevice newDevice) {
-		// find device type in db, its tenporary
-		DeviceTypeEntity deviceTypeEntity = new DeviceTypeEntity(newDevice.getType());
-		return new Device(newDevice.getName(),newDevice.getSerialId(),deviceTypeEntity);
+		DeviceTypeEntity deviceType = deviceRepository.findType(newDevice.getType());
+		return new Device(newDevice.getName(),newDevice.getSerialId(),deviceType);
 	}
 
 }

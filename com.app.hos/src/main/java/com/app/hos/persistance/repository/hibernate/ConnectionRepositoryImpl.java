@@ -21,7 +21,7 @@ public class ConnectionRepositoryImpl implements ConnectionRepository {
 	
 	// CONNECTION
 
-	public Connection findConnectionById(String connectionId) {
+	public Connection find(String connectionId) {
 		TypedQuery<Connection> query = manager.createQuery("SELECT c FROM Connection c WHERE c.connectionId = :connectionId", Connection.class);
 		return query.setParameter("connectionId", connectionId).getSingleResult();
 	}

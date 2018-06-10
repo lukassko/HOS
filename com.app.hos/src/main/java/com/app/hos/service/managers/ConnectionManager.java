@@ -14,15 +14,21 @@ import com.app.hos.service.exceptions.HistoryConnectionException;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
 @Service
-//@Scope(proxyMode=ScopedProxyMode.TARGET_CLASS)
 @Transactional
 public class ConnectionManager {
 	
 	@Autowired
 	private ConnectionRepository connectionRepository;
 
-	public Connection findConectionByid(String connectionId) {
-		return connectionRepository.findConnectionById(connectionId);
+	public Connection findConnection(String connectionId) {
+		Connection connection;
+		try {
+			connection = connectionRepository.find(connectionId);
+		} catch (IllegalArgumentException e) {
+			// no device find
+			connection = null;
+		}
+		return connection;
 	}
 	
 	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id) {
@@ -31,7 +37,7 @@ public class ConnectionManager {
 	
 	// update connection time in 'connection' table, add HistoryConnection
 	public void finalizeConnection(String connectionId){
-		Connection connection = connectionRepository.findConnectionById(connectionId);
+		Connection connection = connectionRepository.find(connectionId);
 		connection.setEndConnectionTime(new DateTime());
 		try {
 			HistoryConnection historyConnection = HistoryConnection.getInstance(connection);

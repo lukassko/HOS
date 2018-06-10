@@ -16,6 +16,8 @@ public interface DeviceRepository {
 	public void save(Device device);
 
 	public Device find(int id);
+
+	public Device find(String serial);
 	
 	public DeviceTypeEntity findType(int id);
 	
@@ -24,8 +26,6 @@ public interface DeviceRepository {
 	public Collection<Device> findAll();
 	
 	public void remove(Device device);
-	
-	public Device findBySerialNumber(String serial);
 	
 	public void updateDeviceNameByDeviceId(int id,String name);
 	

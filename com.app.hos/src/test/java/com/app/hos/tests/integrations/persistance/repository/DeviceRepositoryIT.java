@@ -112,13 +112,13 @@ public class DeviceRepositoryIT {
     
     @Test
     public void stage5_findDeviceBySerialTest() {
-    	Device device = deviceRepository.findBySerialNumber("98547kjyy2");
+    	Device device = deviceRepository.find("98547kjyy2");
     	Assert.assertNotNull(device);
     }
     
     @Test(expected=NoResultException.class)
     public void stage6_findDeviceBySerialShouldThrowExceptionTest() {
-    	deviceRepository.findBySerialNumber("98547kffff");
+    	deviceRepository.find("98547kffff");
     }
     
     @Test

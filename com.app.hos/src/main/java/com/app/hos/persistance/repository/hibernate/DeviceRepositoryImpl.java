@@ -60,7 +60,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		return query.getSingleResult();
 	}
 	
-	public Device findBySerialNumber(String serial) {
+	public Device find(String serial) {
 		TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
 		return query.setParameter("serial", serial).getSingleResult();
 	}
@@ -84,7 +84,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	public void updateDeviceNameBySerialNo(String serial, String name) {
-		Device device = findBySerialNumber(serial);
+		Device device = find(serial);
 		device.setName(name);
 	}
 	

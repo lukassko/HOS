@@ -7,14 +7,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.ip.IpHeaders;
 import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.share.command.builder_v2.Command;
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.share.command.result.NewDevice;
 
 @Aspect
 public class ConnectionAspect extends Logger {
@@ -30,35 +29,28 @@ public class ConnectionAspect extends Logger {
 		super(repository);
 	}
 	
-	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.receivedCommand(..)) && args(headers,command)")
-	public void newCommandPointcut(MessageHeaders headers, Command command) {}
+	@Pointcut("execution(* com.app.hos.service.managers.DeviceManager.openDeviceConnection(..)) && args(connectionId,device)")
+	public void newConnectionPointcut(MessageHeaders headers, Command command) {}
 	
 	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
-	@Before("newCommandPointcut(headers,command)")
-	public void newCommandReceive(JoinPoint point,MessageHeaders headers, Command command) {
-		CommandType type = command.getEnumeratedCommandType();
-		if (type.equals(CommandType.HELLO))
-			logAndSaveMessage(point, Level.INFO, command.getSerialId(), getConnectionLogFromHeaders(ConnectionEvent.OPEN,headers));
+	@Before("newConnectionPointcut(connectionId,device)")
+	public void newConnectionPointcutImpl(JoinPoint point,String connectionId, NewDevice device) {
+		logAndSaveMessage(point, Level.INFO, device.getSerialId(), getConnectionLog(ConnectionEvent.OPEN,device));
 	}
 
 	@Before("closeConnectionPointcut(connectionId)")
-	public void closeConnection(JoinPoint point, String connectionId) {
-		//try {
-			Connection connection = connectionManager.findConectionByid(connectionId);
-			logAndSaveMessage(point, Level.INFO, connection.getDevice().getSerial(),getConnectionLog(ConnectionEvent.CLOSE,connection));
-		//} catch (Exception e) {
-		//	e.printStackTrace();
-		//}
-
+	public void closeConnectionPointcutImpl(JoinPoint point, String connectionId) {
+		Connection connection = connectionManager.findConnection(connectionId);
+		logAndSaveMessage(point, Level.INFO, connection.getDevice().getSerial(),getConnectionLog(ConnectionEvent.CLOSE,connection));
 	}
 
-	private String getConnectionLogFromHeaders(ConnectionEvent event, MessageHeaders headers) {
+	private String getConnectionLog(ConnectionEvent event, NewDevice device) {
 		StringBuilder message = new StringBuilder();
 		message.append("Connection " + event.toString());
-		message.append("; IP " + headers.get(IpHeaders.IP_ADDRESS));
-		message.append("; Port " + (Integer) headers.get(IpHeaders.REMOTE_PORT));
+		message.append("; IP " + device.getIp());
+		message.append("; Port " + device.getPort());
 		return message.toString();
 	}
 	

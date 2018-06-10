@@ -8,7 +8,7 @@ import com.app.hos.persistance.models.connection.HistoryConnection;
 
 public interface ConnectionRepository {
 
-	public Connection findConnectionById(String connectionId);
+	public Connection find(String connectionId);
 	
 	public void save(HistoryConnection connection);
 	

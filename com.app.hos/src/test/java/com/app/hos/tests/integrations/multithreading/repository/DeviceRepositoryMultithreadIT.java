@@ -171,11 +171,11 @@ public class DeviceRepositoryMultithreadIT {
 			allDone.await();
 
 			// test if threads done their job!
-			Device device = deviceRepository.findBySerialNumber("98547kjyy1");
+			Device device = deviceRepository.find("98547kjyy1");
 	    	Assert.assertEquals(syncDevices.getDeviceNameForSerialNumber("98547kjyy1"),device.getName());
-	    	device = deviceRepository.findBySerialNumber("98547kjyy2");
+	    	device = deviceRepository.find("98547kjyy2");
 	    	Assert.assertEquals(syncDevices.getDeviceNameForSerialNumber("98547kjyy2"),device.getName());
-	    	device = deviceRepository.findBySerialNumber("98547kjyy3");
+	    	device = deviceRepository.find("98547kjyy3");
 	    	Assert.assertEquals(syncDevices.getDeviceNameForSerialNumber("98547kjyy3"),device.getName());
     	} catch (Exception e) { 
     		 exceptions.add(e);

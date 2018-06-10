@@ -65,17 +65,21 @@ public class SystemFacadeImpl implements SystemFacade  {
 	public void receivedCommand(final MessageHeaders headers, final Command command) {
 		String connectionId = headers.get(IpHeaders.CONNECTION_ID).toString();
 		CommandInfo commandInfo = new CommandInfo(connectionId, command);
+		Connection connection = connectionManager.findConnection(connectionId);
+		if (connection != null) {
+			Device device = connection.getDevice();
+			commandInfo.setDeviceId(device.getId());
+		} 
 		try {
 			commandManager.executeCommand(commandInfo);
 		} catch (NotExecutableCommandException e) {
 			sendCommand(connectionId,CommandType.UNKNOWN);
-			//ExceptionUtils.handle(e);
 		}
 	}
 
 	@Override
-	public void sendCommand(CommandInfo command) {
-		// TODO Auto-generated method stub
+	public void sendCommand(CommandInfo commandInfo) {
+		server.sendMessage(createMessage(commandInfo.getConnectionId(), commandInfo.getCommand()));
 	}
 	
 	@Override
@@ -108,7 +112,7 @@ public class SystemFacadeImpl implements SystemFacade  {
 	@Override
 	@Transactional
 	public boolean removeDevice(String serial) {
-		Device device = deviceManager.findDeviceBySerial(serial);
+		Device device = deviceManager.findDevice(serial);
 		Connection connection = device.getConnection();
 		if (closeConnection(connection.getConnectionId())) {
 			deviceManager.removeDevice(device);
