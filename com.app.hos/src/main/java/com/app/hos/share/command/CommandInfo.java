@@ -11,8 +11,13 @@ public class CommandInfo {
 	private Command command;
 
 	public CommandInfo(String connectionId, Command command) {
+		this(connectionId,command,0);
+	}
+	
+	public CommandInfo(String connectionId, Command command, int deviceId) {
 		this.connectionId = connectionId;
 		this.command = command;
+		this.deviceId = deviceId;
 	}
 
 	public String getConnectionId() {

@@ -27,6 +27,7 @@ import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.managers.DeviceManager;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.utils.ReflectionUtils;
 import com.app.hos.utils.Utils;
@@ -50,13 +51,8 @@ public class DeviceManagerMultithreadIT {
 		
 		Callable<Void> callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				Map<String,Object> headerMap = new HashMap<String, Object>();
-				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.1:1111:123:asd:dsa:213");
-				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.1");
-				headerMap.put(IpHeaders.REMOTE_PORT,1111);
-				headerMap.put(IpHeaders.HOSTNAME,"localhost_1");
-				final MessageHeaders headers = new MessageHeaders(headerMap);
-				manager.openDeviceConnection(headers, "device_1", "serial_device_1", DeviceType.SERVER);
+				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
+				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
 				return null;
 			}
 		};
@@ -65,13 +61,8 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				Map<String,Object> headerMap = new HashMap<String, Object>();
-				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.2:2222:123:asd:dsa:213");
-				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.2");
-				headerMap.put(IpHeaders.REMOTE_PORT,2222);
-				headerMap.put(IpHeaders.HOSTNAME,"localhost_2");
-				final MessageHeaders headers = new MessageHeaders(headerMap);
-				manager.openDeviceConnection(headers, "device_2", "serial_device_2",DeviceType.SERVER);
+				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
+				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
 				return null;
 			}
 		};
@@ -80,13 +71,8 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				Map<String,Object> headerMap = new HashMap<String, Object>();
-				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.3:3333:123:asd:dsa:213");
-				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.3");
-				headerMap.put(IpHeaders.REMOTE_PORT,3333);
-				headerMap.put(IpHeaders.HOSTNAME,"localhost_3");
-				final MessageHeaders headers = new MessageHeaders(headerMap);
-				manager.openDeviceConnection(headers, "device_3", "serial_device_3",DeviceType.SERVER);
+				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
+				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
 				return null;
 			}
 		};
@@ -216,13 +202,8 @@ public class DeviceManagerMultithreadIT {
 		
 		callable = new Callable<Void>() {
 			public Void call() throws Exception {
-				Map<String,Object> headerMap = new HashMap<String, Object>();
-				headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.4:4444:123:asd:dsa:213");
-				headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.4");
-				headerMap.put(IpHeaders.REMOTE_PORT,4444);
-				headerMap.put(IpHeaders.HOSTNAME,"localhost_4");
-				final MessageHeaders headers = new MessageHeaders(headerMap);
-				manager.openDeviceConnection(headers, "device_4", "serial_device_4", DeviceType.PHONE);
+				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
+				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
 				return null;
 			}
 		};

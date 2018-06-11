@@ -9,7 +9,7 @@ import com.app.hos.share.command.type.DeviceType;
 
 @CommandDescriptor(
 		device={DeviceType.SERVER, DeviceType.PHONE, DeviceType.TV}, 
-		type=CommandType.GET_STATUS
+		type=CommandType.BAD_CONVERSION
 )
 public class BadConversionCommandBuilder extends AbstractCommandBuilder {
 

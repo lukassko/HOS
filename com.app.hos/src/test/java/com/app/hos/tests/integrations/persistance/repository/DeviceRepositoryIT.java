@@ -3,7 +3,6 @@ package com.app.hos.tests.integrations.persistance.repository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -13,17 +12,12 @@ import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.share.command.type.DeviceType;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
-
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
@@ -35,116 +29,54 @@ import org.junit.runners.MethodSorters;
 @Transactional
 public class DeviceRepositoryIT {
 
-	private static List<Device> devicesList = new LinkedList<Device>();
-	
 	@Autowired
     private DeviceRepository deviceRepository;
 	
-	@BeforeClass
-    public static void beforeClass() {
-		Connection connection1 = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device1 = new Device("Device1", "98547kjyy1", new DeviceTypeEntity());
+	@Test
+	public void saveDeviceWithNullAsConnectionFieldShouldThrowException() {
+		// given
+		DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
+		Device device = new Device("device_1", "serial_1", type);
+		device.setConnection(null);
 		
-		connection1.setDevice(device1);
-		device1.setConnection(connection1);
-		
-		Connection connection2 = new Connection("192.168.0.22:23452-09:oa9:sd2", 
-    			"localhost2", "192.168.0.22", 23452, new DateTime());
-		
-		Device device2 = new Device("Device2", "98547kjyy2",new DeviceTypeEntity());
-		
-		connection2.setDevice(device2);
-		device2.setConnection(connection2);
-		
-		Connection connection3 = new Connection("192.168.0.23:23453-09:oa9:sd3", 
-    			"localhost3", "192.168.0.23", 23453, new DateTime());
-		Device device3 = new Device("Device3", "98547kjyy3",new DeviceTypeEntity());
-    	
-		connection3.setDevice(device3);
-		device3.setConnection(connection3);
-		
-    	devicesList.add(device1);
-    	devicesList.add(device2);
-    	devicesList.add(device3);
-    }
-    
-    @Test
-    @Rollback(true)
-    public void stage1_saveOneDeviceTest() {
-    	Device device = devicesList.get(0);
-    	deviceRepository.save(device);
-    	Collection<Device> devices = deviceRepository.findAll();
-    	List<Device> deviceList = new LinkedList<Device>(devices);
-    	Assert.assertFalse(deviceList.isEmpty());
-    	Assert.assertEquals(device.getName(),deviceList.get(0).getName());
-    }
-    
-    @Test(expected=ConstraintViolationException.class)
-    @Rollback(true)
-    public void stage2_saveDeviceShouldThrowExceptionTest() {
-    	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("DeviceTest", "98547kjyy1",new DeviceTypeEntity());
-		device.setSerial(null);
-		connection.setDevice(device);
+		// when
 		deviceRepository.save(device);
-    }
-    
-    @Test
-    @Rollback(false)
-    public void stage3_saveDevicesTest() {
-    	deviceRepository.save(devicesList.get(0));
-    	deviceRepository.save(devicesList.get(1));
-    	deviceRepository.save(devicesList.get(2));
-    	Collection<Device> devices = deviceRepository.findAll();
-    	List<Device> deviceList = new LinkedList<Device>(devices);
-    	Assert.assertEquals(3,deviceList.size());
-    }
-    
-    @Test
-    public void stage4_findDeviceByIdTest() {
-    	Device device1 = deviceRepository.find(1);
-    	Device device2 = deviceRepository.find(10);
-    	Assert.assertNotNull(device1);
-    	Assert.assertNull(device2);
-    }
-    
-    @Test
-    public void stage5_findDeviceBySerialTest() {
-    	Device device = deviceRepository.find("98547kjyy2");
-    	Assert.assertNotNull(device);
-    }
-    
-    @Test(expected=NoResultException.class)
-    public void stage6_findDeviceBySerialShouldThrowExceptionTest() {
-    	deviceRepository.find("98547kffff");
-    }
-    
-    @Test
-    @Rollback(false)
-    public void stage7_updateDeviceWithNewConnectionTest() {
-    	Connection connection4 = new Connection("192.168.0.24:23454-09:oa9:sd4", 
-    			"localhost4", "192.168.0.24", 23454, new DateTime());
-    
-    	Device device = deviceRepository.find(1);
-    	Connection connection = device.getConnection();
-    	connection.setConnectionId(connection4.getConnectionId());
-    	connection.setHostname(connection4.getHostname());
-    	connection.setIp(connection4.getIp());
-    	connection.setRemotePort(connection4.getRemotePort());
-    	//connection.setConnectionTime(connection4.getConnectionTime());
-    	deviceRepository.save(device);
-    	
-    	Assert.assertEquals(connection4.getConnectionId(),connection.getConnectionId());
-    }
-    
-    @Test(expected=ConstraintViolationException.class)
-    public void stage8_saveDeviceShouldThrowExceptionWithValidationTest() {
-    	Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device device = new Device("", "",null);
-		connection.setDevice(device);
+		
+		// then
+			// expected exception
+	}
+	
+	@Test
+	public void saveDeviceWithValidConnectionFieldShouldInsertEntityToDb() {
+		// given
+		String serial = "serial_1";
+		String name = "device_1";
+		DeviceType type = DeviceType.PHONE;
+		DeviceTypeEntity typeEntity = deviceRepository.findType(type);
+		Device device = new Device(name, serial, typeEntity);
+		Connection connection = new Connection.Builder()
+												.connectionId("connection_id")
+												.connectionTime(new DateTime())
+												.hostname("hostname")
+												.ip("192.168.0.21")
+												.remotePort(1234)
+												.device(device)
+												.build();
+		device.setConnection(connection);
+		
+		// when
 		deviceRepository.save(device);
-    }
+		
+			// TODO try to clear cache in some way
+		
+			// these select are not from cache
+		Device foundBySerial = deviceRepository.find(serial);
+		List<Device> foundAll = deviceRepository.findAll();
+		
+		// then
+		Assert.assertNotNull(foundBySerial);
+		Assert.assertTrue(foundAll.size() > 0);
+		Assert.assertEquals(name,foundBySerial.getName());
+		Assert.assertEquals(typeEntity,foundBySerial.getDeviceType());
+	}
 }

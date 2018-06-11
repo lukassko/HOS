@@ -9,7 +9,7 @@ import com.app.hos.utils.Utils;
 
 @CommandDescriptor(
 		device={DeviceType.SERVER, DeviceType.PHONE, DeviceType.TV}, 
-		type=CommandType.GET_STATUS
+		type=CommandType.MY_STATUS
 	)
 public class MyStatusCommandBuilder extends AbstractCommandBuilder {
 

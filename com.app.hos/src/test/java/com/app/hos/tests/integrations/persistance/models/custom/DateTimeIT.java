@@ -25,8 +25,9 @@ import javax.transaction.Transactional;
 import org.hibernate.annotations.Type;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistanceConfig.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

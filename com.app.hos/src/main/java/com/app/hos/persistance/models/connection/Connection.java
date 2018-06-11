@@ -24,20 +24,16 @@ public class Connection extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty
 	@Column(name="connection_id")
 	private String connectionId;
 	
 	private String hostname;
-	
-	@NotEmpty
+
 	private String ip;
-	
-	@NotNull
+
 	@Column(name="remote_port")
 	private Integer remotePort;
 
-	@NotNull
 	@Column(name="connection_time")
 	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime connectionTime;

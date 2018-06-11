@@ -54,7 +54,7 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 	
 	@Override
 	public void register(String packageToScan) {
-		List<String> factories =  ReflectionUtils.scanForAnnotation(CommandDescriptor.class,packageToScan);
+		List<String> factories = ReflectionUtils.scanForAnnotation(CommandDescriptor.class,packageToScan);
 		for(String factory : factories) {
 			try {
 				Class<?> facotryClazz = ReflectionUtils.getClass(factory);

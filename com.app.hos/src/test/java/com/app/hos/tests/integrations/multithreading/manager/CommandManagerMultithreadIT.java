@@ -31,6 +31,7 @@ import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
+import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
@@ -68,7 +69,8 @@ public class CommandManagerMultithreadIT {
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);
 
 		Command command = commandFactory.get(CommandType.GET_STATUS);
-		commandManager.executeCommand("any string", command);
+		CommandInfo cmdInfo = new CommandInfo("connection_id", command);
+		commandManager.executeCommand(cmdInfo);
 
 		boolean ended;
 		try {
@@ -87,7 +89,8 @@ public class CommandManagerMultithreadIT {
 	@Test(expected = NotExecutableCommandException.class)
 	public void stage10_tryToExecuteNotExecutableCommandShouldThrowExecption() throws NotExecutableCommandException {
 		Command command = commandFactory.get(CommandType.HELLO);
-		commandManager.executeCommand("any string", command);
+		CommandInfo cmdInfo = new CommandInfo("connection_id", command);
+		commandManager.executeCommand(cmdInfo);
 	}
 	
 	@Test
@@ -97,9 +100,10 @@ public class CommandManagerMultithreadIT {
 		
 		Command command1 = commandFactory.get(CommandType.GET_STATUS);
 		Command command2 = commandFactory.get(CommandType.GET_STATUS);
-		
-		commandManager.executeCommand("any string", command1);
-		commandManager.executeCommand("any string", command2);
+		CommandInfo cmdInfo1 = new CommandInfo("connection_id", command1);
+		CommandInfo cmdInfo2 = new CommandInfo("connection_id", command2);
+		commandManager.executeCommand(cmdInfo1);
+		commandManager.executeCommand(cmdInfo2);
 		
 		boolean ended;
 		try {

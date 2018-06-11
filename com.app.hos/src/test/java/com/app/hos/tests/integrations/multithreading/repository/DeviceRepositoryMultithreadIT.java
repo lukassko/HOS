@@ -146,7 +146,6 @@ public class DeviceRepositoryMultithreadIT {
 						
 						String serial = syncDevices.getDevice().getSerial();
 						String newName = Thread.currentThread().getName();
-						deviceRepository.updateDeviceNameBySerialNo(serial,newName);
 						syncDevices.setDeviceName(serial,newName);
 						
 						// end thread action there!

@@ -26,6 +26,7 @@ public class Device extends BaseEntity  {
 	
 	@ManyToOne
 	@JoinColumn(name = "device_type_id")
+	@Column(nullable = false)
 	private DeviceTypeEntity deviceType;
 	
 	@NotEmpty
@@ -37,6 +38,7 @@ public class Device extends BaseEntity  {
 	private String serial;
 	
 	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Column(nullable = false)
 	private Connection connection;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)

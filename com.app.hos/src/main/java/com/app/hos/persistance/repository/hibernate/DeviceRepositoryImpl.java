@@ -1,10 +1,9 @@
 package com.app.hos.persistance.repository.hibernate;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -24,7 +23,6 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	private EntityManager manager;
 	
 	// save api
-	
 	@Override
 	public void save(DeviceTypeEntity type) {
 		saveEntity(type);
@@ -54,40 +52,37 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	@Override
-	public DeviceTypeEntity findType(DeviceType type) throws NoResultException, NonUniqueResultException {
-		TypedQuery<DeviceTypeEntity> query = manager.createQuery("SELECT dt FROM DeviceTypeEntity dt WHERE dt.type = :type",DeviceTypeEntity.class);
-		query.setParameter("type", type);
-		return query.getSingleResult();
+	public DeviceTypeEntity findType(DeviceType type) {
+		try {
+			TypedQuery<DeviceTypeEntity> query = manager.createQuery("SELECT dt FROM DeviceTypeEntity dt WHERE dt.type = :type",DeviceTypeEntity.class);
+			return query.setParameter("type", type).getSingleResult();
+		} catch(NoResultException e) {
+			return null;
+		}
 	}
 	
 	public Device find(String serial) {
-		TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
-		return query.setParameter("serial", serial).getSingleResult();
+		try {
+			TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
+			return query.setParameter("serial", serial).getSingleResult();
+		} catch(NoResultException e) {
+			return null;
+		}
 	}
 	
+	
 	@SuppressWarnings("unchecked")
-	public Collection<Device> findAll() {
+	public List<Device> findAll() {
 		Query query = this.manager.createQuery("SELECT d FROM Device d");
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<Device> findAllTypes() {
+	public List<DeviceTypeEntity> findAllTypes() {
 		Query query = this.manager.createQuery("SELECT dt FROM DeviceTypeEntity dt");
 		return query.getResultList();
 	}
-	
-	// update api
-	public void updateDeviceNameByDeviceId(int id, String name) {
-		Device device = find(id);
-		device.setName(name);
-	}
 
-	public void updateDeviceNameBySerialNo(String serial, String name) {
-		Device device = find(serial);
-		device.setName(name);
-	}
-	
 	//remove api
 	//remove device and all associated data such as statuses and connection
 	public void remove(Device device) {

@@ -30,18 +30,19 @@ public class DeviceManager {
 	@Autowired
 	private DeviceRepository deviceRepository;
 
-	public void openDeviceConnection(String connectionId, NewDevice device) {
-		Connection connection = createConnection(connectionId,device);
-		try {
-			Device dev = deviceRepository.find(device.getSerialId());
-			dev.setConnection(connection);
-			connection.setDevice(dev);
-		} catch (RuntimeException e) {
-			Device dev = createNewDevice(device);
+	public void openDeviceConnection(String connectionId, NewDevice newDevice) {
+		Connection connection = createConnection(connectionId,newDevice);
+		Device device = deviceRepository.find(newDevice.getSerialId());
+		if (device != null) {
+			device.setConnection(connection);
+			connection.setDevice(device);
+		} else {
+			Device dev = createNewDevice(newDevice);
 			dev.setConnection(connection);
 			connection.setDevice(dev);
 			deviceRepository.save(dev);
 		}
+	
 	}
 
 	public Map<Device, DeviceStatus> getConnectedDevices() {
@@ -78,23 +79,11 @@ public class DeviceManager {
 	}
 
 	public Device findDevice(int id) {
-		Device device;
-		try {
-			device = deviceRepository.find(id);
-		} catch (RuntimeException e) {
-			device = null;
-		}
-		return device;
+		return deviceRepository.find(id);
 	}
 	
 	public Device findDevice(String serial) {
-		Device device;
-		try {
-			device = deviceRepository.find(serial);
-		} catch (RuntimeException e) {
-			device = null;
-		}
-		return device;
+		return deviceRepository.find(serial);
 	}
 	
 	public void removeDevice(Device device) {
