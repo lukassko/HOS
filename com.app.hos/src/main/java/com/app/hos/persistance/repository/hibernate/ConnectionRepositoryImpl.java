@@ -36,12 +36,12 @@ public class ConnectionRepositoryImpl implements ConnectionRepository {
 		}
 	}
 	
-	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id) {
+	public Collection<HistoryConnection> findHistoryConnectionsForDevice(int id) {
 		TypedQuery<HistoryConnection> query = manager.createQuery("SELECT c FROM HistoryConnection c WHERE c.deviceId = :id ORDER BY c.endConnectionTime ASC", HistoryConnection.class);
 		return query.setParameter("id", id).getResultList();
 	}
 
-	public Collection<HistoryConnection> findHistoryConnectionsForTimePeriod(DateTime from, DateTime to) {
+	public Collection<HistoryConnection> findHistoryConnectionsForPeriod(DateTime from, DateTime to) {
 		// TODO Auto-generated method stub
 		return null;
 	}

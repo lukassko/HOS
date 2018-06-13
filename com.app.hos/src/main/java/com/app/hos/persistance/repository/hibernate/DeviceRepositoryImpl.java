@@ -42,8 +42,19 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 	
 	// find api
+	@Override
 	public Device find(int id) {
 		return manager.find(Device.class, id);
+	}
+
+	@Override
+	public Device find(String serial) {
+		try {
+			TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
+			return query.setParameter("serial", serial).getSingleResult();
+		} catch(NoResultException e) {
+			return null;
+		}
 	}
 	
 	@Override
@@ -60,24 +71,16 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			return null;
 		}
 	}
-	
-	public Device find(String serial) {
-		try {
-			TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
-			return query.setParameter("serial", serial).getSingleResult();
-		} catch(NoResultException e) {
-			return null;
-		}
-	}
-	
-	
+		
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<Device> findAll() {
 		Query query = this.manager.createQuery("SELECT d FROM Device d");
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<DeviceTypeEntity> findAllTypes() {
 		Query query = this.manager.createQuery("SELECT dt FROM DeviceTypeEntity dt");
 		return query.getResultList();
@@ -85,6 +88,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
 	//remove api
 	//remove device and all associated data such as statuses and connection
+	@Override
 	public void remove(Device device) {
 		if (device.isNew()) return;
 		if (!manager.contains(device))

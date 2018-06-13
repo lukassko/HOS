@@ -34,6 +34,7 @@ import com.app.hos.service.websocket.WebSocketManager;
 import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.builder_v2.WebCommandFactory;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.tests.utils.Utils;
 import com.app.hos.utils.json.JsonConverter;
@@ -100,7 +101,7 @@ public class WebCommandManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		deviceManager.openDeviceConnection(headers, "device_1", "serial_device_1", DeviceType.PHONE);
+		deviceManager.openDeviceConnection("connectionId", new NewDevice("serial", "name", DeviceType.PHONE, "ip", 123));
 		
 		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);
@@ -207,7 +208,7 @@ public class WebCommandManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost_1");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		deviceManager.openDeviceConnection(headers, "device_2", "serial_device_2",DeviceType.PHONE);
+		deviceManager.openDeviceConnection("connectionId", new NewDevice("serial", "name", DeviceType.PHONE, "ip", 123));
 		
 		WebCommand command = WebCommandFactory.get(WebCommandType.GET_ALL_DEVICES);
 		String message = JsonConverter.getJson(command);

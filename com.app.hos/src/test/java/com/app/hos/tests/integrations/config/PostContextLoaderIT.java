@@ -1,5 +1,9 @@
 package com.app.hos.tests.integrations.config;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -9,18 +13,33 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.app.hos.config.ApplicationContextConfig;
+import com.app.hos.config.init.PostContextLoader;
+import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.models.command.CommandTypeEntity;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.CommandRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.service.exceptions.handler.HOSExceptionHandlerFactory;
+import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
+import com.app.hos.share.command.builder_v2.CommandFactory;
+import com.app.hos.share.command.future.FutureCommandFactory;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.utils.ApplicationContextProvider;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationContextConfig.class})
+@ContextConfiguration(
+		classes = {
+				ApplicationContextProvider.class,
+				MysqlPersistanceConfig.class,
+				PostContextLoader.class,
+				CommandFactory.class,
+				HOSExceptionHandlerFactory.class,
+				FutureWebCommandFactory.class,
+				FutureCommandFactory.class})
 @ActiveProfiles("integration-test")
+@Transactional
 public class PostContextLoaderIT {
 	
 	@Autowired
@@ -28,6 +47,9 @@ public class PostContextLoaderIT {
 	
 	@Autowired
 	private CommandRepository commandRepository;
+	
+	// TODO: test ExceptionHandlerFactory FutureWebCommandFactory FutureCommandFactory
+	// Already tested: CommandFactory
 	
 	@Test
 	public void afterContextStartedCommandFactoryShouldAddPossibleDeviceTypesToDb () {
@@ -38,11 +60,13 @@ public class PostContextLoaderIT {
 		DeviceTypeEntity phoneType = deviceRepositiry.findType(DeviceType.PHONE);
 		DeviceTypeEntity serverType = deviceRepositiry.findType(DeviceType.SERVER);
 		DeviceTypeEntity tvType = deviceRepositiry.findType(DeviceType.TV);
+		List<DeviceTypeEntity> allTypes = deviceRepositiry.findAllTypes();
 		
 		//then
 		Assert.assertNotNull(phoneType);
 		Assert.assertNotNull(serverType);
 		Assert.assertNotNull(tvType);
+		Assert.assertEquals(3, allTypes.size());
 	}
 	
 	@Test

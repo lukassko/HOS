@@ -32,7 +32,7 @@ public class ConnectionManager {
 	}
 	
 	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id) {
-		return connectionRepository.findAllHistoryConnectionsByDeviceId(id);
+		return connectionRepository.findHistoryConnectionsForDevice(id);
 	}
 	
 	// update connection time in 'connection' table, add HistoryConnection

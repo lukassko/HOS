@@ -30,6 +30,7 @@ import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.DeviceType;
 
 @Ignore("run only one integration test")
@@ -68,7 +69,7 @@ public class ConnectionManagerIT {
 	
 	@Test
 	public void stage10_generateHistoryConnectionShouldReturnProperDateTimeForConnectionAndInsertToDb() {
-		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial(), DeviceType.PHONE);
+		deviceManager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		List<Device> devices = getDevices();
 		Assert.assertTrue(devices.size() == 1);
 		Connection connection = devices.get(0).getConnection();
@@ -106,7 +107,7 @@ public class ConnectionManagerIT {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		deviceManager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
+		deviceManager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		List<Device> devices = getDevices();
 		Assert.assertTrue(devices.size() == 1);
 		Connection connection = devices.get(0).getConnection();

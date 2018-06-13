@@ -1,17 +1,14 @@
 package com.app.hos.persistance.models.connection;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
@@ -25,16 +22,18 @@ public class Connection extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="connection_id")
+	@NotBlank
 	private String connectionId;
 	
 	private String hostname;
-
+	
+	@NotBlank
 	private String ip;
 
-	@Column(name="remote_port")
+	@Column(name="remote_port",nullable = false)
 	private Integer remotePort;
 
-	@Column(name="connection_time")
+	@Column(name="connection_time",nullable = false)
 	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime connectionTime;
 
@@ -65,8 +64,6 @@ public class Connection extends BaseEntity {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.remotePort = remotePort;
-		//this.connectionTime = DateTimeConverter.getDate(connectionTime);
-		//this.connectionTime = connectionTime;
 	}
 
 	public String getConnectionId() {

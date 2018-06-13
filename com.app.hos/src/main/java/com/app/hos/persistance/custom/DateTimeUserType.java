@@ -11,7 +11,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
-public class DateTimeUserType implements UserType{
+public class DateTimeUserType implements UserType {
 
 	@Override
 	public Object assemble(Serializable cached, Object value) throws HibernateException {
@@ -35,7 +35,7 @@ public class DateTimeUserType implements UserType{
 
 	@Override
 	public boolean equals(Object object1, Object object2) throws HibernateException {
-		return object1.equals(object2);
+		return (object1 == object2) || ((object1 != null) && (object2 != null) && (object1.equals(object2)));
 	}
 
 	@Override

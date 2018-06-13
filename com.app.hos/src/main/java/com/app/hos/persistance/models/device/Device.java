@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.connection.Connection;
@@ -26,19 +25,15 @@ public class Device extends BaseEntity  {
 	
 	@ManyToOne
 	@JoinColumn(name = "device_type_id")
-	@Column(nullable = false)
 	private DeviceTypeEntity deviceType;
 	
-	@NotEmpty
-	@Column(nullable = false)
+	@NotBlank
 	private String name;
 	
-	@NotEmpty
-	@Column(nullable = false)
+	@NotBlank
 	private String serial;
 	
 	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Column(nullable = false)
 	private Connection connection;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)

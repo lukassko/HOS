@@ -15,7 +15,7 @@ public class ApplicationContextConfig {
 	@Configuration
 	@Profile("!web-integration-test")
 	@ComponentScan("com.app.hos*")
-    static class NoWebIntegrationTestConfig
+    static class NoWebIntegrationConfig
     { }
 	
 	@Configuration
@@ -25,7 +25,7 @@ public class ApplicationContextConfig {
 		"com.app.hos.service.websocket*",
 		"com.app.hos.security*"
 	})
-    static class WebIntegrationTestConfig
+    static class WebIntegrationConfig
     { 
 		@Bean
 		public UserManager getUserManager() {

@@ -58,6 +58,25 @@ public class DateTimeIT {
 	
 	@Test
 	@Transactional
+	public void stage05_saveTestEntityWithNullAsDateTime () {
+		// given
+		TestDateTimeEntity_v1 entityBeforeSave = new TestDateTimeEntity_v1(null);
+		TestDateTimeEntity_v1 entityAfterRetrive = null;
+		
+		// when
+		em.persist(entityBeforeSave);
+		em.flush();
+		em.clear();		
+
+		// then
+		Query query = em.createQuery("SELECT dt FROM TestDateTimeEntity_v1 dt WHERE dt.time1 IS NULL");
+		entityAfterRetrive = (TestDateTimeEntity_v1)query.getSingleResult();
+		Assert.assertNull(entityAfterRetrive.getTime1());
+	}
+	
+	
+	@Test
+	@Transactional
 	public void stage10_saveTestEntityWithMultiDateTimeFieldsAndCheckIfDateTimeIsValid () {
 		// given
 		DateTime time1 = new DateTime();

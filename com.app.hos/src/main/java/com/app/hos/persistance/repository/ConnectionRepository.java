@@ -12,8 +12,8 @@ public interface ConnectionRepository {
 	
 	public void save(HistoryConnection connection);
 	
-	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id); 
+	public Collection<HistoryConnection> findHistoryConnectionsForDevice(int id); 
 	
-	public Collection<HistoryConnection> findHistoryConnectionsForTimePeriod(DateTime from, DateTime to); 
+	public Collection<HistoryConnection> findHistoryConnectionsForPeriod(DateTime from, DateTime to); 
 	
 }

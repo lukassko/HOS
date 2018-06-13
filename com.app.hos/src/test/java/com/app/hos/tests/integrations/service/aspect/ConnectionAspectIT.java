@@ -35,6 +35,7 @@ import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.builder_v2.CommandFactory;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
 
@@ -80,7 +81,6 @@ public class ConnectionAspectIT {
 	public void testOpenConnectionAspect() {	
 		Command command = commandFactory.get(CommandType.HELLO);
 		String connectionId = "192.168.0.12:3456:123:asd:dsa:213";
-		String serial = command.getSerialId();
 		
 		Map<String,Object> headerMap = new HashMap<String, Object>();
 		headerMap.put(IpHeaders.CONNECTION_ID,connectionId);
@@ -89,15 +89,13 @@ public class ConnectionAspectIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 
-		
-		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.any(MessageHeaders.class), Mockito.anyString() , Mockito.anyString(), Mockito.any(DeviceType.class));
+		Mockito.doNothing().when(deviceManager).openDeviceConnection(Mockito.anyString(), Mockito.any(NewDevice.class));
 		Mockito.doNothing().when(server).sendMessage(Mockito.<Message<Command>>any());
 
 		systemFacade.receivedCommand(headers, command);
 		
 		// select logs
 		Assert.assertTrue(loggingRepository.findAll().size() == 1 );
-		Assert.assertTrue(loggingRepository.findLogForDevice(serial).size() == 1);
 		Assert.assertTrue(loggingRepository.findLogForLevel(Level.INFO).size() == 1);
 		
 		// check if mock works and no devices was inserted to database

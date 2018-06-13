@@ -66,6 +66,8 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 					DeviceTypeEntity deviceTypeEntity;
 					try {
 						deviceTypeEntity = deviceRepository.findType(deviceType);
+						if (deviceTypeEntity == null) 
+							deviceTypeEntity = new DeviceTypeEntity(deviceType);
 					} catch (PersistenceException e) {
 						deviceTypeEntity = new DeviceTypeEntity(deviceType);
 					}

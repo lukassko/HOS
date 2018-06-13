@@ -32,6 +32,7 @@ import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.ConnectionRepository;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
+import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.DeviceType;
 
 // get Collection of Devices when there is no device in database 
@@ -80,7 +81,7 @@ public class DeviceManagerIT {
 
 	@Test
 	public void stage10_createDeviceMethodShouldCallDeviceRepositorySaveMethod() {
-		manager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		List<Device> devices = new ArrayList<Device>(deviceRepository.findAll());
 		Assert.assertEquals(1, devices.size());
 		device = devices.get(0);
@@ -154,9 +155,9 @@ public class DeviceManagerIT {
 	public void stage45_addStatusToMultiDeviceAndChekLastOneStatus() throws InterruptedException {
 		Map<Device,DeviceStatus> latestStauses = new HashMap<Device, DeviceStatus>();
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1",DeviceType.PHONE);
-		manager.openDeviceConnection(headers, "device_2", "serial_device_2",DeviceType.PHONE);
-		manager.openDeviceConnection(headers, "device_3", "serial_device_3",DeviceType.PHONE);
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 
 		manager.addDeviceStatus("serial_device_1", new DeviceStatus(new DateTime(),1.32, 48.64));
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.39, 38.41);
@@ -200,7 +201,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage50_addMultiStatusWithDifferentTimeAndCheckIfMethodReturnProperSizeForGivenPeriod() {
-		manager.openDeviceConnection(headers, "device_4", "serial_device_4",DeviceType.PHONE);
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		
 		//24 statuses, with one hour resolutions
 		List<DeviceStatus> generatedStatuses = com.app.hos.tests.utils.Utils.generateRandomStatus(24, 3600000);
@@ -234,7 +235,7 @@ public class DeviceManagerIT {
 		headerMap.put(IpHeaders.HOSTNAME,"localhost");
 		MessageHeaders headers = new MessageHeaders(headerMap);
 		
-		manager.openDeviceConnection(headers, "device_1", "serial_device_1",DeviceType.PHONE);
+		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		
 		Device newConnectedDevice = deviceRepository.find("serial_device_1");
 		Connection oldConnection = oldConnectedDevice.getConnection();
