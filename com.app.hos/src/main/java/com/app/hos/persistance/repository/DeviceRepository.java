@@ -15,6 +15,8 @@ public interface DeviceRepository {
 	public Device find(int id);
 
 	public Device find(String serial);
+
+	public Device findByConnection(String connectionId);
 	
 	public DeviceTypeEntity findType(int id);
 	

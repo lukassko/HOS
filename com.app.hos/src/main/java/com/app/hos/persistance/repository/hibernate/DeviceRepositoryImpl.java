@@ -96,4 +96,14 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		manager.remove(device);
 	}
 
+	@Override
+	public Device findByConnection(String connectionId) {
+		try {
+			String queryStr = "SELECT d FROM Device d LEFT JOIN d.connection c WHERE c.connectionId = :connectionId";
+			TypedQuery<Device> query = manager.createQuery(queryStr, Device.class);
+			return query.setParameter("connectionId", connectionId).getSingleResult();
+		} catch(NoResultException e) {
+			return null;
+		}
+	}
 }

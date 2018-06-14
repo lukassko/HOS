@@ -11,15 +11,19 @@ import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
-import com.app.hos.service.managers.ConnectionManager;
+import com.app.hos.persistance.models.device.Device;
+import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.result.NewDevice;
 
+/*
+ *  Log information about new and closed connections
+ */
 @Aspect
 public class ConnectionAspect extends Logger {
 	
 	@Autowired
-	private ConnectionManager connectionManager;
+	private DeviceManager deviceManager;
 	
 	public enum ConnectionEvent {
 		OPEN,CLOSE
@@ -42,8 +46,8 @@ public class ConnectionAspect extends Logger {
 
 	@Before("closeConnectionPointcut(connectionId)")
 	public void closeConnectionPointcutImpl(JoinPoint point, String connectionId) {
-		Connection connection = connectionManager.findConnection(connectionId);
-		logAndSaveMessage(point, Level.INFO, connection.getDevice().getSerial(),getConnectionLog(ConnectionEvent.CLOSE,connection));
+		Device device = deviceManager.findDeviceByConnection(connectionId);
+		logAndSaveMessage(point, Level.INFO, device.getSerial(),getConnectionLog(ConnectionEvent.CLOSE,device.getConnection()));
 	}
 
 	private String getConnectionLog(ConnectionEvent event, NewDevice device) {

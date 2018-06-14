@@ -1,6 +1,6 @@
 package com.app.hos.persistance.repository;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.connection.Connection;
@@ -12,8 +12,8 @@ public interface ConnectionRepository {
 	
 	public void save(HistoryConnection connection);
 	
-	public Collection<HistoryConnection> findHistoryConnectionsForDevice(int id); 
+	public List<HistoryConnection> findHistoryConnectionsForDevice(int id); 
 	
-	public Collection<HistoryConnection> findHistoryConnectionsForPeriod(DateTime from, DateTime to); 
+	public List<HistoryConnection> findHistoryConnectionsForPeriod(DateTime from, DateTime to); 
 	
 }

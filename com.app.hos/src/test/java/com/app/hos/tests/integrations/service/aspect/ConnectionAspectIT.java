@@ -39,7 +39,6 @@ import com.app.hos.share.command.result.NewDevice;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.share.command.type.DeviceType;
 
-
 @Ignore("run only one integration test")
 @WebAppConfiguration 
 @ContextConfiguration(classes = {ApplicationContextConfig.class})

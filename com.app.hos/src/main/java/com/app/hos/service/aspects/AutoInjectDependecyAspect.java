@@ -34,7 +34,6 @@ public class AutoInjectDependecyAspect implements ApplicationContextAware {
     
     //@Before( "constructor()" )
     public void injectAutoWiredFields( JoinPoint aPoint ) {
-    	System.out.println("EXECUTE");
         Class theClass = aPoint.getTarget().getClass();
         try{
             Field[] theFields = theClass.getDeclaredFields();

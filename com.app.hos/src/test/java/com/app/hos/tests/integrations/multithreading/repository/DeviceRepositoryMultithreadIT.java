@@ -51,23 +51,35 @@ public class DeviceRepositoryMultithreadIT {
 	
 	@Before
     public void beforeClass() {
-		Connection connection1 = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
+		Connection connection1 = new Connection.Builder().connectionId("192.168.0.22:23452-09:oa9:sd2")
+															.hostname("localhost2")
+															.ip("192.168.0.22")
+															.remotePort(23452)
+															.connectionTime(new DateTime())
+															.build();
 		Device device1 = new Device("Device1", "98547kjyy1",new DeviceTypeEntity(DeviceType.PHONE));
 		
 		connection1.setDevice(device1);
 		device1.setConnection(connection1);
 		
-		Connection connection2 = new Connection("192.168.0.22:23452-09:oa9:sd2", 
-    			"localhost2", "192.168.0.22", 23452, new DateTime());
+		Connection connection2 = new Connection.Builder().connectionId("192.168.0.22:23452-09:oa9:sd2")
+															.hostname("localhost2")
+															.ip("192.168.0.22")
+															.remotePort(23452)
+															.connectionTime(new DateTime())
+															.build();
 		
 		Device device2 = new Device("Device2", "98547kjyy2",new DeviceTypeEntity(DeviceType.PHONE));
 		
 		connection2.setDevice(device2);
 		device2.setConnection(connection2);
 		
-		Connection connection3 = new Connection("192.168.0.23:23453-09:oa9:sd3", 
-    			"localhost3", "192.168.0.23", 23453, new DateTime());
+		Connection connection3 = new Connection.Builder().connectionId("192.168.0.22:23452-09:oa9:sd2")
+															.hostname("localhost2")
+															.ip("192.168.0.22")
+															.remotePort(23452)
+															.connectionTime(new DateTime())
+															.build();
 		Device device3 = new Device("Device3", "98547kjyy3",new DeviceTypeEntity(DeviceType.PHONE));
     	
 		connection3.setDevice(device3);

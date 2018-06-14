@@ -2,10 +2,8 @@ package com.app.hos.persistance.models.connection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
@@ -21,7 +19,7 @@ public class Connection extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="connection_id")
+	@Column(name="connection_id", nullable = false)
 	@NotBlank
 	private String connectionId;
 	
@@ -42,13 +40,11 @@ public class Connection extends BaseEntity {
 	private DateTime endConnectionTime;
 	
 	@JsonIgnore
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="device_id")
+	@Transient
 	private Device device;
 	
 	public Connection() {}
 	
-	// TODO: use only this constructor, rest to delete!
 	public Connection(Builder builder) {
 		this.connectionId = builder.connectionId;
 		this.hostname = builder.hostname;
@@ -57,13 +53,6 @@ public class Connection extends BaseEntity {
 		this.connectionTime = builder.connectionTime;
 		this.endConnectionTime = builder.endConnectionTime;
 		this.device = builder.device;
-	}
-		
-	public Connection(String connectionId, String hostname, String ip, int remotePort, DateTime connectionTime) {
-		this.connectionId = connectionId;
-		this.hostname = hostname;
-		this.ip = ip;
-		this.remotePort = remotePort;
 	}
 
 	public String getConnectionId() {

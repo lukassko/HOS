@@ -86,6 +86,10 @@ public class DeviceManager {
 		return deviceRepository.find(serial);
 	}
 	
+	public Device findDeviceByConnection(String connectionId) {
+		return deviceRepository.findByConnection(connectionId);
+	}
+	
 	public void removeDevice(Device device) {
 		deviceRepository.remove(device);
 	}

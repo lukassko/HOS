@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -33,7 +34,9 @@ public class Device extends BaseEntity  {
 	@NotBlank
 	private String serial;
 	
-	@OneToOne(mappedBy = "device",cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name = "connection_id",nullable=false)
+	@NotNull
 	private Connection connection;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)

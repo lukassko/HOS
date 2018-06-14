@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance.models.custom;
+package com.app.hos.tests.integrations.persistance.models;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

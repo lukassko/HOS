@@ -19,7 +19,6 @@ import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.future.FutureCommandFactory;
 import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.utils.ApplicationContextProvider;
-import static org.hamcrest.core.IsNot.*;
 import static org.hamcrest.core.IsCollectionContaining.*;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
 		classes = {
@@ -55,7 +54,7 @@ public class DeviceRepositoryIT {
 		// given
 		DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
 
-		Device device = new Device("device_0",null, type);
+		Device device = new Device("device_00",null, type);
 		device.setConnection(null);
 		
 		// when
@@ -70,7 +69,7 @@ public class DeviceRepositoryIT {
 		// given
 		DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
 
-		Device device = new Device("device_1","", type);
+		Device device = new Device("device_01","", type);
 		device.setConnection(null);
 		
 		// when
@@ -85,7 +84,7 @@ public class DeviceRepositoryIT {
 	public void test02_saveDeviceWithConnectionWithNullConnectionIdFieldShouldThrowException() {
 		// given
 		DeviceTypeEntity typeEntity = deviceRepository.findType(DeviceType.PHONE);
-		Device device = new Device("device_2", "serial_2", typeEntity);
+		Device device = new Device("device_02", "serial_02", typeEntity);
 		Connection connection = new Connection.Builder()
 												.connectionId(null)
 												.connectionTime(new DateTime())
@@ -107,7 +106,7 @@ public class DeviceRepositoryIT {
 	public void test03_saveDeviceWithConnectionWithEmptyConnectionIdFieldShouldThrowException() {
 		// given
 		DeviceTypeEntity typeEntity = deviceRepository.findType(DeviceType.PHONE);
-		Device device = new Device("device_3", "serial_3", typeEntity);
+		Device device = new Device("device_03", "serial_03", typeEntity);
 		Connection connection = new Connection.Builder()
 												.connectionId("")
 												.connectionTime(new DateTime())
@@ -129,7 +128,7 @@ public class DeviceRepositoryIT {
 	public void test04_saveDeviceWithConnectionWithNullConnectionTimeFieldShouldThrowException() {
 		// given
 		DeviceTypeEntity typeEntity = deviceRepository.findType(DeviceType.PHONE);
-		Device device = new Device("device_4", "serial_4", typeEntity);
+		Device device = new Device("device_04", "serial_04", typeEntity);
 		Connection connection = new Connection.Builder()
 												.connectionId("connection_id")
 												.connectionTime(null)
@@ -147,10 +146,10 @@ public class DeviceRepositoryIT {
 			// expected exception
 	}
 	
-	@Test
-	public void test05_saveDeviceWithNullAsConnectionFieldAddEntityToDb() {
+	@Test(expected=ConstraintViolationException.class)
+	public void test05_saveDeviceWithNullAsConnectionFieldShouldThrowException() {
 		// given
-		String serial = "serial_5";
+		String serial = "serial_05";
 		DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
 
 		Device device = new Device("device_05",serial, type);
@@ -158,13 +157,9 @@ public class DeviceRepositoryIT {
 		
 		// when
 		deviceRepository.save(device);
-		Device foundBySerial = deviceRepository.find(serial);
-		List<Device> foundAll = deviceRepository.findAll();
 		
 		// then
-		Assert.assertNotNull(foundBySerial);
-		Assert.assertEquals(device,foundBySerial);
-		Assert.assertTrue(foundAll.size() == 1);
+			// expected exception
 	}
 	
 	@Test
@@ -172,10 +167,11 @@ public class DeviceRepositoryIT {
 		// given
 		String serial = "serial_10";
 		String name = "device_10";
+		String connectionId = "connection_id_10";
 		DeviceTypeEntity typeEntity = deviceRepository.findType(DeviceType.PHONE);
 		Device device = new Device(name, serial, typeEntity);
 		Connection connection = new Connection.Builder()
-												.connectionId("connection_id")
+												.connectionId(connectionId)
 												.connectionTime(new DateTime())
 												.hostname("hostname")
 												.ip("192.168.0.21")
@@ -189,13 +185,16 @@ public class DeviceRepositoryIT {
 		
 			// these select are not from cache		
 		Device foundBySerial = deviceRepository.find(serial);
+		Device foundByConnection = deviceRepository.findByConnection(connectionId);
 		List<Device> foundAll = deviceRepository.findAll();
 		
 		// then
 		Assert.assertNotNull(foundBySerial);
-		Assert.assertTrue(foundAll.size() == 2);
+		Assert.assertNotNull(foundByConnection);
+		Assert.assertTrue(foundAll.size() == 1);
 		Assert.assertThat(foundAll, hasItem(device));
-		Assert.assertEquals(name,foundBySerial.getName());
+		Assert.assertEquals(device,foundBySerial);
+		Assert.assertEquals(device,foundByConnection);
 		Assert.assertEquals(typeEntity,foundBySerial.getDeviceType());
 		Assert.assertEquals(connection,foundBySerial.getConnection());
 	}
@@ -203,19 +202,15 @@ public class DeviceRepositoryIT {
 	@Test
 	public void test20_removeDeviceShouldRemoveEntityFromDb() {
 		// given
-		DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
+			// find device from previous test
+		Device device = deviceRepository.find("serial_10");
 
-		Device device = new Device("device_20","serial_20", type);
-		device.setConnection(null);
-		deviceRepository.save(device);
-		
 		// when
 		deviceRepository.remove(device);
 		List<Device> foundAll = deviceRepository.findAll();
 		
 		// then
-		Assert.assertTrue(foundAll.size() == 2);
-		Assert.assertThat(foundAll, not(hasItem(device)));
+		Assert.assertTrue(foundAll.size() == 0);
 	}
 	
 	@Test
@@ -223,8 +218,10 @@ public class DeviceRepositoryIT {
 		// given
 		// when
 		Device foundBySerial = deviceRepository.find("non_existsing_serial");
+		Device foundByConnection = deviceRepository.findByConnection("non_existsing_connection");
 		
 		// then
 		Assert.assertNull(foundBySerial);
+		Assert.assertNull(foundByConnection);
 	}
 }

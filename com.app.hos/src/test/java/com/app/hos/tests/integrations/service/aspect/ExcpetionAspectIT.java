@@ -54,8 +54,14 @@ public class ExcpetionAspectIT {
 	public void stage20_checkIfLogWillOccureInDbBeforeExceptionHandlingForNotExeccutableCommand() {	
 		
 		try {
-			thrower.throwHistoryConnectionException(new Connection("192.168.0.22:23452-09:oa9:sd2", 
-	    			"localhost2", "192.168.0.22", 23452, new DateTime()));
+			Connection connection = new Connection.Builder().connectionId("192.168.0.22:23452-09:oa9:sd2")
+															.hostname("localhost2")
+															.ip("192.168.0.22")
+															.remotePort(23452)
+															.connectionTime(new DateTime())
+															.build();
+																	
+			thrower.throwHistoryConnectionException(connection);
 		} catch(HistoryConnectionException e) {
 			ExceptionUtils.handle(e);
 		}

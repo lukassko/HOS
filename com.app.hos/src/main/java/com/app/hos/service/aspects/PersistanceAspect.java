@@ -21,7 +21,7 @@ public class PersistanceAspect extends Logger {
 	public void addNewDevicePointcut(Device device) {}
 
 	@Before("addNewDevicePointcut(device)")
-	public void addNewDevice(JoinPoint point,Device device) {
+	public void addNewDevicePointcutImpl(JoinPoint point,Device device) {
 		if (device.isNew()) {
 			logAndSaveMessage(point, Level.INFO, device.getSerial(),"New device added.");
 		} 
@@ -31,13 +31,8 @@ public class PersistanceAspect extends Logger {
 	public void updateDevicePointcut(String serial, String name) {}
 	
 	@Before("updateDevicePointcut(serial,name)")
-	public void updateDevice(JoinPoint point,String serial, String name) {
+	public void updateDevicePointcutImpl(JoinPoint point,String serial, String name) {
 		logAndSaveMessage(point, Level.INFO, serial,"Device was updated.");
 	}
 	
-//	@AfterThrowing(pointcut="databaseExceptionPointcut()", throwing="exception")
-//	public void logException(JoinPoint point, Throwable exception) {
-//		//logAndSaveMessage(point, Level.WARNING,exception.getMessage());
-//	}
-
 }

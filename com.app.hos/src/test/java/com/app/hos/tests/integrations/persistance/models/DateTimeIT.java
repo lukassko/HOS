@@ -1,4 +1,4 @@
-package com.app.hos.tests.integrations.persistance.models.custom;
+package com.app.hos.tests.integrations.persistance.models;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +79,7 @@ public class DateTimeIT {
 	@Transactional
 	public void stage10_saveTestEntityWithMultiDateTimeFieldsAndCheckIfDateTimeIsValid () {
 		// given
-		DateTime time1 = new DateTime();
+		DateTime time1 = new DateTime(1528987979);
 		DateTime time2 = new DateTime(time1.getTimestamp() + 2000);
 		TestDateTimeEntity_v2 entityBeforeSave = new TestDateTimeEntity_v2(time1,time2);
 		TestDateTimeEntity_v2 entityAfterRetrive = null;

@@ -4,11 +4,16 @@ package com.app.hos.persistance.models.connection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.service.exceptions.HistoryConnectionException;
 
+// immutable object
 @Table(name = "finalised_connections")
 @Entity
 public class HistoryConnection extends BaseEntity {
@@ -16,23 +21,26 @@ public class HistoryConnection extends BaseEntity {
 	@Column(name="device_id",nullable=false)
 	private int deviceId;
 	
-	@Column(name="ip",nullable=false)
+	@Column(name="ip")
+	@NotBlank
 	private String ip;
 
 	@Column(name="remote_port",nullable=false)
 	private int remotePort;
 
-	@Column(name="begin_connection_time",nullable=false)
+	@Column(name="begin_connection_time", nullable=false)
+	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime beginConnectionTime;
 
-	@Column(name="end_connection_time",nullable=false)
+	@Column(name="end_connection_time", nullable=false)
+	@Type(type = "com.app.hos.persistance.custom.DateTimeUserType")
 	private DateTime endConnectionTime;
 	
 	public int getDeviceId() {
 		return deviceId;
 	}
 
-	public void setDeviceId(int deviceId) {
+	private void setDeviceId(int deviceId) {
 		this.deviceId = deviceId;
 	}
 
@@ -40,7 +48,7 @@ public class HistoryConnection extends BaseEntity {
 		return ip;
 	}
 
-	public void setIp(String ip) {
+	private void setIp(String ip) {
 		this.ip = ip;
 	}
 
@@ -48,7 +56,7 @@ public class HistoryConnection extends BaseEntity {
 		return remotePort;
 	}
 
-	public void setRemotePort(int remotePort) {
+	private void setRemotePort(int remotePort) {
 		this.remotePort = remotePort;
 	}
 
@@ -60,7 +68,7 @@ public class HistoryConnection extends BaseEntity {
 		return this.beginConnectionTime;	
 	}
 	
-	public void setConnectionTime(DateTime connectionTime) {
+	private void setConnectionTime(DateTime connectionTime) {
 		this.beginConnectionTime = connectionTime;
 	}
 
@@ -68,7 +76,7 @@ public class HistoryConnection extends BaseEntity {
 		return endConnectionTime;
 	}
 	
-	public void setEndConnectionTime(DateTime endConnectionTime) {
+	private void setEndConnectionTime(DateTime endConnectionTime) {
 		this.endConnectionTime = endConnectionTime;
 	}
 	
