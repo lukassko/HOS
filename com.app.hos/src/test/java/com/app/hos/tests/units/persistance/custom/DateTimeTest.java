@@ -1,4 +1,4 @@
-package com.app.hos.tests.units.utils;
+package com.app.hos.tests.units.persistance.custom;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,9 +12,6 @@ import org.junit.Test;
 
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.utils.json.JsonConverter;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class DateTimeTest {
 	
@@ -82,14 +79,4 @@ public class DateTimeTest {
        Assert.assertEquals(dateBefore, dateAfter);
     }
 	
-	@Test
-	public void printTimestamp()  {
-		DateTime dateTime = new DateTime();
-		long timestamp = dateTime.getTimestamp();
-		System.out.println(dateTime);
-		System.out.println(timestamp);
-		DateTime newDateTime = new DateTime(timestamp - 900000);
-		System.out.println(newDateTime);
-		System.out.println(newDateTime.getTimestamp());
-	}
 }

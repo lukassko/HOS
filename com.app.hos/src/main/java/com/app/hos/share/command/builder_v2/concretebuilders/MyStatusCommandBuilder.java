@@ -15,8 +15,7 @@ public class MyStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public AbstractCommandBuilder setCommandType() {
-		String type = CommandType.MY_STATUS.toString();
-		command.setCommandType(type);
+		command.setCommandType(CommandType.MY_STATUS);
 		return this;
 	}
 

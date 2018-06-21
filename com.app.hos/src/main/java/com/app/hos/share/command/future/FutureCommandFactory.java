@@ -29,7 +29,7 @@ public class FutureCommandFactory
 		
 		CommandInfo cmdInfo = (CommandInfo) command;
 		Command cmd = cmdInfo.getCommand();
-		CommandType type = cmd.getEnumeratedCommandType(); 
+		CommandType type = cmd.getCommandType(); 
 		String beanName = beans.get(type);
 		
 		if (beanName == null) {

@@ -5,12 +5,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+
 import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.managers.command.CommandManager;
+import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.decorators.FutureCommandDecorator;
 import com.app.hos.share.command.decorators.GetStatusCommand;
@@ -34,17 +37,19 @@ public class CommandManagerTest {
 		// given
 		String connectionId = "connection_id";
 		Command command = new Command();
-		command.setCommandType(CommandType.MY_STATUS.name());
-		FutureCommandDecorator futureCommand = new GetStatusCommand(command);
+		command.setCommandType(CommandType.GET_STATUS);
+		CommandInfo cmdInfo = new CommandInfo(connectionId, command);
 		
-		doNothing().when(commandsApi).sendCommand(connectionId,command);
-		doReturn(futureCommand).when(futureCommandFactory).get(command);
+		FutureCommandDecorator futureCommand = new GetStatusCommand(cmdInfo);
+		
+		doNothing().when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
+		doReturn(futureCommand).when(futureCommandFactory).get(cmdInfo);
 
 		// when
-		manager.executeCommand(connectionId, command);
-
+		manager.executeCommand(cmdInfo);
+		
 		// then
-		verify(commandsApi,timeout(2000)).sendCommand(connectionId, command);
+		verify(commandsApi,timeout(2000)).sendCommand(Mockito.any(CommandInfo.class));
 		
 		DeviceStatus status = (DeviceStatus)command.getResult();
 		assertTrue(status.getCpuUsage() >= 0);
@@ -53,5 +58,4 @@ public class CommandManagerTest {
 		assertTrue(status.getRamUsage() >= 0);
 		assertTrue(status.getRamUsage() <= 100);
 	}
-
 }
