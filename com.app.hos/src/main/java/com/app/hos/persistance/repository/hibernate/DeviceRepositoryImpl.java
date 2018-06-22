@@ -9,7 +9,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.device.Device;

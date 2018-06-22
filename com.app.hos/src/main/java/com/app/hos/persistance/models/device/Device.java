@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -27,7 +28,7 @@ public class Device extends BaseEntity  {
 	@ManyToOne
 	@JoinColumn(name = "device_type_id")
 	private DeviceTypeEntity deviceType;
-	
+
 	@NotBlank
 	private String name;
 	

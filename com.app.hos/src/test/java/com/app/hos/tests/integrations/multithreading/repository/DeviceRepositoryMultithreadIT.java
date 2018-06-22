@@ -27,15 +27,9 @@ import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.utils.ApplicationContextProvider;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -43,9 +37,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
 //@Ignore("run only one integration test")
@@ -82,6 +74,19 @@ public class DeviceRepositoryMultithreadIT {
     	List<Future<Void>> futures = new ArrayList<Future<Void>>();
     	
     	// when
+    	final String serial = "serial_10";
+    	DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
+		Device device = new Device("device_10", serial, type);
+		Connection connection = new Connection.Builder()
+												.connectionId("connection_id")
+												.connectionTime(new DateTime())
+												.hostname("hostname")
+												.ip("192.168.0.21")
+												.remotePort(1234)
+												.device(device)
+												.build();
+		device.setConnection(connection);
+		
     	for (int x = 0; x < threadCount; x++) {
     		Callable<Void> callable = new Callable<Void>() {
 				public Void call() throws Exception {
@@ -90,27 +95,11 @@ public class DeviceRepositoryMultithreadIT {
 					transactionTemplate.execute(new TransactionCallback<Void>() {
 					    @Override
 					    public Void doInTransaction(TransactionStatus status) {
-					    	String serial = "serial_10";
 					    	Device device = deviceRepository.find(serial);
-							if (device == null) {
-								DeviceTypeEntity type = deviceRepository.findType(DeviceType.PHONE);
-								device = new Device("device_10", serial, type);
-								Connection connection = new Connection.Builder()
-																		.connectionId("connection_id")
-																		.connectionTime(new DateTime())
-																		.hostname("hostname")
-																		.ip("192.168.0.21")
-																		.remotePort(1234)
-																		.device(device)
-																		.build();
-								device.setConnection(connection);
-								deviceRepository.save(device);
-							}
 							device.setName("thread_" + Thread.currentThread().getName());
 							return null;
 					    }
 					});
-					
 					return null;
 				}
     
@@ -130,7 +119,12 @@ public class DeviceRepositoryMultithreadIT {
     	}
     	executorService.shutdown();
     	
+    	List<Device> devices = deviceRepository.findAll();
+    	
         // then
     	Assert.assertTrue(exceptions.isEmpty());
+    	Assert.assertEquals(1, devices.size());
+    	Device selectedDevice = devices.get(0);
+    	Assert.assertTrue(selectedDevice.getName().matches("thread_(.*)"));
     }    
 }

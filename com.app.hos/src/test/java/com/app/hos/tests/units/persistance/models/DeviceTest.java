@@ -19,38 +19,65 @@ public class DeviceTest {
 	
 	@Test
 	public void compareTwoDevicesShouldReturnTrue() {
-
-		Connection connection= new Connection("192.168.0.12:3456:123:asd:dsa:213", 
-				"localhost", "192.168.0.12", 3456, new DateTime());
 		
-		Device device_1 = new Device("Device1", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
-		Device device_2 = new Device("Device1", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
+		//given
+		String name = "device";
+		String serial = "serial";
+
+		Device device_1 = new Device(name, serial,new DeviceTypeEntity(DeviceType.PHONE));
+		Device device_2 = new Device(name, serial,new DeviceTypeEntity(DeviceType.PHONE));
+		
+		Connection connection = new Connection.Builder()
+												.connectionId("connection_id")
+												.connectionTime(new DateTime())
+												.hostname("hostname")
+												.ip("192.168.0.21")
+												.remotePort(1234)
+												.device(null)
+												.build();
+		
+
 		
 		device_1.setConnection(connection);
 		device_2.setConnection(connection);
 		
+		// when 
+		// then
 		Assert.assertEquals(device_1, device_2);
 	}
 	
 	@Test
 	public void compareTwoDevicesShouldReturnFalse() {
-		Connection connection= new Connection("192.168.0.12:3456:123:asd:dsa:233", 
-				"localhost", "192.168.0.12", 3456, new DateTime());
 		
-		Device device_1 = new Device("Device1", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
-		Device device_2 = new Device("Device2", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
+		//given
+		String serial = "serial";
+		Connection connection = new Connection.Builder()
+										.connectionId("connection_id")
+										.connectionTime(new DateTime())
+										.hostname("hostname")
+										.ip("192.168.0.21")
+										.remotePort(1234)
+										.device(null)
+										.build();
+			
+		Device device_1 = new Device("name1", serial,new DeviceTypeEntity(DeviceType.PHONE));
+		Device device_2 = new Device("name2", serial,new DeviceTypeEntity(DeviceType.PHONE));
 		
 		device_1.setConnection(connection);
 		device_2.setConnection(connection);
 		
+		// when 
+		// then
 		Assert.assertNotEquals(device_1, device_2);
 	}
 	
 	@Test
 	public void testHibernateValidation() {
-		//target.setName(null);
-		Device device = new Device("Name","",new DeviceTypeEntity(DeviceType.PHONE));
-        Set<ConstraintViolation<Device>> constraintViolations = validator.validate(device);
+		// given
+		Device device = new Device("name","",new DeviceTypeEntity(DeviceType.PHONE));
+		// when
+		Set<ConstraintViolation<Device>> constraintViolations = validator.validate(device);
+		// then
         Assert.assertEquals(constraintViolations.size(), 1);
 	}
 	
