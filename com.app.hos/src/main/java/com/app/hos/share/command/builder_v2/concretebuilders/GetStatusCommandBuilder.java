@@ -13,8 +13,7 @@ public class GetStatusCommandBuilder extends AbstractCommandBuilder {
 
 	@Override
 	public AbstractCommandBuilder setCommandType() {
-		String type = CommandType.GET_STATUS.toString();
-		command.setCommandType(type);
+		command.setCommandType(CommandType.GET_STATUS);
 		return this;
 	}
 

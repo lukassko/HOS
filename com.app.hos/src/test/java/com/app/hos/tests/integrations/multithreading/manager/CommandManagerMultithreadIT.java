@@ -83,7 +83,7 @@ public class CommandManagerMultithreadIT {
 		ArgumentCaptor<Command> commandCaptor = ArgumentCaptor.forClass(Command.class);
 		Mockito.verify(systemFacade, Mockito.times(1)).sendCommand(Mockito.anyString(), commandCaptor.capture());
 		Command sendCommand = commandCaptor.getValue();
-		Assert.assertTrue(sendCommand.getEnumeratedCommandType()==CommandType.MY_STATUS);
+		Assert.assertTrue(sendCommand.getCommandType()==CommandType.MY_STATUS);
 	}
 	
 	@Test(expected = NotExecutableCommandException.class)
@@ -118,7 +118,7 @@ public class CommandManagerMultithreadIT {
 		
 		List<Command> commands = commandCaptor.getAllValues();
 		Assert.assertTrue(commands.size() == 2);
-		Assert.assertTrue(commandCaptor.getValue().getEnumeratedCommandType()==CommandType.MY_STATUS);
+		Assert.assertTrue(commandCaptor.getValue().getCommandType()==CommandType.MY_STATUS);
 	}
 
 	private CountDownLatch prepareTestWithCountDownLatch(int commandsAmount) {

@@ -26,14 +26,14 @@ public class CommandBuildersTest {
 		String msg = "Some massage";
 		BadConversionCommandBuilder builder = new BadConversionCommandBuilder(msg);
 		
-		// when 
+		// when
 		Command command = builder.createCommand()
 										.setCommandType()
 										.setResult()
 										.setStatus().getCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getCommandType());
 		Assert.assertFalse(command.getStatus());
 		
 		Message message = (Message)command.getResult();
@@ -52,7 +52,7 @@ public class CommandBuildersTest {
 		Command command = commandBuilder.createCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.BAD_CONVERSION, command.getCommandType());
 		Assert.assertFalse(command.getStatus());
 			
 		Message message = (Message)command.getResult();
@@ -71,7 +71,7 @@ public class CommandBuildersTest {
 										.setStatus().getCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.GET_STATUS, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.GET_STATUS, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		Assert.assertNull(command.getResult());
 	}
@@ -86,7 +86,7 @@ public class CommandBuildersTest {
 		Command command = commandBuilder.createCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.GET_STATUS, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.GET_STATUS, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		Assert.assertNull(command.getResult());
 	}
@@ -103,7 +103,7 @@ public class CommandBuildersTest {
 										.setStatus().getCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.MY_STATUS, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.MY_STATUS, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		
 		DeviceStatus status =  (DeviceStatus)command.getResult();
@@ -121,7 +121,7 @@ public class CommandBuildersTest {
 		Command command = commandBuilder.createCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.MY_STATUS, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.MY_STATUS, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		
 		DeviceStatus status =  (DeviceStatus)command.getResult();
@@ -141,7 +141,7 @@ public class CommandBuildersTest {
 										.setStatus().getCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.HELLO, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.HELLO, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		
 		NewDevice device =  (NewDevice)command.getResult();
@@ -159,7 +159,7 @@ public class CommandBuildersTest {
 		Command command = commandBuilder.createCommand();
 		
 		// then
-		Assert.assertEquals(CommandType.HELLO, command.getEnumeratedCommandType());
+		Assert.assertEquals(CommandType.HELLO, command.getCommandType());
 		Assert.assertTrue(command.getStatus());
 		
 		NewDevice device =  (NewDevice)command.getResult();
