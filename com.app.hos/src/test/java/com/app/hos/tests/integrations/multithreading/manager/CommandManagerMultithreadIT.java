@@ -1,5 +1,6 @@
 package com.app.hos.tests.integrations.multithreading.manager;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -28,15 +29,16 @@ import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
-import com.app.hos.service.api.SystemFacade;
+import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
+import com.app.hos.tests.utils.MultithreadExecutor;
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
@@ -49,27 +51,28 @@ public class CommandManagerMultithreadIT {
 	private CommandManager commandManager;
 	
 	@Mock
-	private SystemFacade systemFacade;
+	private CommandsApi commandsApi;
 	
-	@Mock
+	@Autowired
 	private CommandFactory commandFactory;
-	
 	
 	@Before
     public void initMocks(){
 		MockitoAnnotations.initMocks(this);
-		
-		Mockito.doNothing().when(systemFacade).sendCommand(Mockito.anyString(), (Mockito.any(Command.class)));
+		Mockito.doNothing().when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
     }
 	
 
 	@Test
-	public void stage00_executeGetStatusCommandShouldReturnMyStatusCommand () throws NotExecutableCommandException {
-
+	public void test10_executeGetStatusCommandShouldReturnMyStatusCommand ()  {
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);
-
+		
+		// given
+		String connectionId = "connection_id";
 		Command command = commandFactory.get(CommandType.GET_STATUS);
 		CommandInfo cmdInfo = new CommandInfo("connection_id", command);
+		
+		// when
 		commandManager.executeCommand(cmdInfo);
 
 		boolean ended;
@@ -78,47 +81,67 @@ public class CommandManagerMultithreadIT {
 		} catch (InterruptedException e) {
 			ended = false;
 		}
-
+		
+		// then 
 		Assert.assertTrue(ended);
-		ArgumentCaptor<Command> commandCaptor = ArgumentCaptor.forClass(Command.class);
-		Mockito.verify(systemFacade, Mockito.times(1)).sendCommand(Mockito.anyString(), commandCaptor.capture());
-		Command sendCommand = commandCaptor.getValue();
-		Assert.assertTrue(sendCommand.getCommandType()==CommandType.MY_STATUS);
+		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
+		Mockito.verify(commandsApi, Mockito.times(1)).sendCommand(commandCaptor.capture());
+		
+		CommandInfo sndCmdInfo = commandCaptor.getValue();
+		Command sndCmd = sndCmdInfo.getCommand();
+		
+		Assert.assertEquals(connectionId, sndCmdInfo.getConnectionId());
+		Assert.assertEquals(sndCmd.getCommandType(),CommandType.MY_STATUS);
 	}
 	
-	@Test(expected = NotExecutableCommandException.class)
-	public void stage10_tryToExecuteNotExecutableCommandShouldThrowExecption() throws NotExecutableCommandException {
-		Command command = commandFactory.get(CommandType.HELLO);
-		CommandInfo cmdInfo = new CommandInfo("connection_id", command);
-		commandManager.executeCommand(cmdInfo);
-	}
-	
+
 	@Test
-	public void stage20_executeTwoCommandsShouldSendProperCommandAsResponse() throws NotExecutableCommandException {
-
-		CountDownLatch finished = prepareTestWithCountDownLatch(2);
+	public void test20_executeTwoCommandsShouldSendTwoCommandAsResponse() {
 		
-		Command command1 = commandFactory.get(CommandType.GET_STATUS);
-		Command command2 = commandFactory.get(CommandType.GET_STATUS);
-		CommandInfo cmdInfo1 = new CommandInfo("connection_id", command1);
-		CommandInfo cmdInfo2 = new CommandInfo("connection_id", command2);
-		commandManager.executeCommand(cmdInfo1);
-		commandManager.executeCommand(cmdInfo2);
+		// given
 		
+		List<Runnable> runnables = new LinkedList<>();
+		
+		Runnable thread1 = new Runnable() {
+			@Override
+			public void run() {
+				Command command = commandFactory.get(CommandType.GET_STATUS);
+				CommandInfo cmdInfo = new CommandInfo("connection_id_1", command);
+				commandManager.executeCommand(cmdInfo);
+			}
+		};
+		
+		runnables.add(thread1);
+		
+		Runnable thread2 = new Runnable() {
+			@Override
+			public void run() {
+				Command command = commandFactory.get(CommandType.GET_STATUS);
+				CommandInfo cmdInfo = new CommandInfo("connection_id_2", command);
+				commandManager.executeCommand(cmdInfo);
+			}
+		};
+		
+		runnables.add(thread2);
+		
+		// when 
 		boolean ended;
 		try {
-			ended = finished.await(2, TimeUnit.SECONDS);
+			MultithreadExecutor.assertConcurrent(runnables,1000);
+			ended = true;
 		} catch (InterruptedException e) {
 			ended = false;
 		}
 
+		// then
 		Assert.assertTrue(ended);
-		ArgumentCaptor<Command> commandCaptor = ArgumentCaptor.forClass(Command.class);
-		Mockito.verify(systemFacade, Mockito.times(2)).sendCommand(Mockito.anyString(), commandCaptor.capture());
+		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
+		Mockito.verify(commandsApi, Mockito.times(2)).sendCommand(commandCaptor.capture());
 		
-		List<Command> commands = commandCaptor.getAllValues();
-		Assert.assertTrue(commands.size() == 2);
-		Assert.assertTrue(commandCaptor.getValue().getCommandType()==CommandType.MY_STATUS);
+		List<CommandInfo> sendCommands = commandCaptor.getAllValues();
+		Assert.assertTrue(sendCommands.size() == 2);
+				
+		Assert.assertTrue(commandCaptor.getValue().getCommand().getCommandType()==CommandType.MY_STATUS);
 	}
 
 	private CountDownLatch prepareTestWithCountDownLatch(int commandsAmount) {
@@ -132,7 +155,7 @@ public class CommandManagerMultithreadIT {
 			    return null;
 			}
 			
-		}).when(systemFacade).sendCommand(Mockito.anyString(), (Mockito.any(Command.class)));
+		}).when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
 		
 		return finished;
 	}

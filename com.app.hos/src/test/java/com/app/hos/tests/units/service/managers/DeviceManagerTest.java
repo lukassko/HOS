@@ -1,88 +1,100 @@
 package com.app.hos.tests.units.service.managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-
-import javax.persistence.NoResultException;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.ip.IpHeaders;
-import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.persistance.custom.DateTime;
-import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.utils.Utils;
 
-@Ignore("run only one integration test")
 public class DeviceManagerTest {
 	
-	@Autowired
 	@InjectMocks
-	private DeviceManager manager;
+	private DeviceManager manager = new DeviceManager();
 	
 	@Mock
 	private DeviceRepository deviceRepository;
 	
-	private static MessageHeaders headers;
-	private static Device device;
-	private static Connection connection;
-
-	@BeforeClass
-	public static void prepareDataForTests() {
-		Map<String,Object> headerMap = new HashMap<String, Object>();
-		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.12:3456:123:asd:dsa:213");
-		headerMap.put(IpHeaders.IP_ADDRESS,"192.168.0.12");
-		headerMap.put(IpHeaders.REMOTE_PORT,3456);
-		headerMap.put(IpHeaders.HOSTNAME,"localhost");
-		headers = new MessageHeaders(headerMap);
-		device = new Device("Device1", "123123123",new DeviceTypeEntity(DeviceType.PHONE));
-		connection= new Connection("192.168.0.12:3456:123:asd:dsa:213", 
-				"localhost", "192.168.0.12", 3456, new DateTime());
-		device.setConnection(connection);
-	}
-	
 	@Before
     public void setUpTest() {
         MockitoAnnotations.initMocks(this);
-        manager.openDeviceConnection(headers, device.getName(), device.getSerial(),DeviceType.PHONE);
     }
 	
 	@Test
-	public void createDeviceMethodShouldThrowNoResultExceptionWhileFindingDeviceAndCallSaveMethod() {
-		Mockito.doThrow(new NoResultException()).when(deviceRepository).find(Mockito.anyInt());
-        Mockito.doNothing().when(deviceRepository).save(Mockito.any(Device.class));
-		Mockito.verify(deviceRepository, Mockito.times(1)).save(Mockito.any(Device.class));
-	}
-
-	
-	@Test
-	public void getDeviceStatusesWhenNoDatainDbShouldReturnEmptyMap () {
-        Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-		Map<Device, DeviceStatus> statuses = manager.getConnectedDevices();
+	public void getDeviceStatusesMethodShouldReturnEmptyListWhenNoDataInDb () {
+		// given
+		String serial = "serial";
+		Device device = new Device("name", serial, new DeviceTypeEntity(DeviceType.PHONE));
+		when(deviceRepository.find(anyString())).thenReturn(device);
+		
+		// when
+		List<DeviceStatus> statuses = manager.getDeviceStatuses(serial, new DateTime(), new DateTime());
+		
+		// then
 		Assert.assertTrue(statuses.isEmpty());
 	}
+
+	@Test
+	public void getDeviceStatusesMethodShouldReturnProperList () {
+		// given
+		long firstTime = 1529668800;
+		long currenttTime = firstTime;
+		String serial = "serial";
+		
+		List<DeviceStatus> statuses = new LinkedList<>();
+		Device device = new Device("name", serial, new DeviceTypeEntity(DeviceType.PHONE));
+		
+		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+		currenttTime = firstTime + 2000;
+		
+		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+		currenttTime = firstTime + 6000;
+		
+		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+		currenttTime = firstTime + 10000;
+		
+		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+		currenttTime = firstTime + 12000;
+		
+		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
+		device.setDeviceStatuses(statuses);
+		
+		when(deviceRepository.find(serial)).thenReturn(device);
+
+		// when
+		List<DeviceStatus> foundStatuses = manager.getDeviceStatuses(serial, new DateTime(firstTime + 3000), new DateTime(currenttTime));
+		
+		// then
+		Assert.assertEquals(3, foundStatuses.size());
+	}
 	
 	@Test
-	public void getDeviceStatusesShouldCallForAllDeviceDb () {
-        Mockito.when(deviceRepository.findAll()).thenReturn(new ArrayList<Device>());
-        manager.getConnectedDevices();
-        Mockito.verify(deviceRepository, Mockito.times(1)).findAll();
+	public void getConnectedDevicesMethodShouldReturnEmptyMapWhenNoDataInDb () {
+		// given
+		when(deviceRepository.findAll()).thenReturn(new LinkedList<>());
+		
+		// when
+		Map<Device, DeviceStatus> connectedDevices = manager.getConnectedDevices();
+		
+		// then
+		Assert.assertTrue(connectedDevices.isEmpty());
 	}
+
 
 }
 

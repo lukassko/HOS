@@ -80,7 +80,7 @@ public class DeviceManagerMultithreadIT {
 		callables.add(callable);
 		
 		try {
-			com.app.hos.tests.utils.Utils.assertConcurrent(callables,1000);
+			com.app.hos.tests.utils.MultithreadExecutor.assertConcurrent(callables,1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -163,7 +163,7 @@ public class DeviceManagerMultithreadIT {
 		callables.add(callable);
 		
 		try {
-			com.app.hos.tests.utils.Utils.assertConcurrent(callables,1000);
+			com.app.hos.tests.utils.MultithreadExecutor.assertConcurrent(callables,1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -211,7 +211,7 @@ public class DeviceManagerMultithreadIT {
 		callables.add(callable);
 		
 		try {
-			com.app.hos.tests.utils.Utils.assertConcurrent(callables,1000);
+			com.app.hos.tests.utils.MultithreadExecutor.assertConcurrent(callables,1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -15,6 +15,7 @@ import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.utils.Utils;
 import com.app.hos.utils.json.JsonConverter;
 
 public class DevieceStatusesTest {
@@ -23,31 +24,49 @@ public class DevieceStatusesTest {
 
 	@BeforeClass
 	public static void prepareDataTest () {
-		Connection connection = new Connection("192.168.0.21:23451-09:oa9:sd1", 
-    			"localhost1", "192.168.0.21", 23451, new DateTime());
-		Device testDevice = new Device("Device1", "98547kjyy1", new DeviceTypeEntity(DeviceType.PHONE));
+
+		Connection connection = new Connection.Builder().connectionId("192.168.0.21:23451-09:oa9:sd1")
+														.hostname("localhost")
+														.ip("192.168.0.21")
+														.remotePort(23451)
+														.connectionTime(new DateTime())
+														.build();
+
+		Device device = new Device("Device1", "98547kjyy1", new DeviceTypeEntity(DeviceType.PHONE));
+		
 		connection.setId(1);
-		testDevice.setId(1);
-		connection.setDevice(testDevice);
-		testDevice.setConnection(connection);
+		device.setId(1);
+		
+		connection.setDevice(device);
+		device.setConnection(connection);
+		
 		List<DeviceStatus> statuses = new LinkedList<DeviceStatus>();
-		DeviceStatus testStatus = new DeviceStatus(new DateTime(),34.5, 65.9);
+		DeviceStatus testStatus = new DeviceStatus(new DateTime(),Utils.generateRandomDouble(),Utils.generateRandomDouble());
 		statuses.add(testStatus);
-		testDevice.setDeviceStatuses(statuses);
-		deviceStatuses.put(testDevice, testStatus);
+		device.setDeviceStatuses(statuses);
+		
+		deviceStatuses.put(device, testStatus);
 	
-		connection = new Connection("192.168.0.22:23452-09:oa9:sd1", 
-    			"localhost2", "192.168.0.22", 23452, new DateTime());
-		testDevice = new Device("Device2", "98547kjyy12",new DeviceTypeEntity(DeviceType.PHONE));
+		connection = new Connection.Builder().connectionId("192.168.0.22:23452-09:oa9:sd1")
+												.hostname("localhost2")
+												.ip("192.168.0.22")
+												.remotePort(23452)
+												.connectionTime(new DateTime())
+												.build();
+
+		device = new Device("Device2", "98547kjyy12",new DeviceTypeEntity(DeviceType.PHONE));
+		
 		connection.setId(2);
-		testDevice.setId(2);
-		connection.setDevice(testDevice);
-		testDevice.setConnection(connection);
+		device.setId(2);
+		
+		connection.setDevice(device);
+		device.setConnection(connection);
 		
 		statuses = new LinkedList<DeviceStatus>();
 		statuses.add(testStatus);
-		testDevice.setDeviceStatuses(statuses);
-		deviceStatuses.put(testDevice, testStatus);
+		device.setDeviceStatuses(statuses);
+		
+		deviceStatuses.put(device, testStatus);
 	}
 	
 	@Test
@@ -64,7 +83,7 @@ public class DevieceStatusesTest {
 		    nullkey.put(statuses.getKey(), null);
 		    break;
 		}
-		String json = JsonConverter.getJson(nullkey);
+	//	String json = JsonConverter.getJson(nullkey);
 	}
 	
 	@Test

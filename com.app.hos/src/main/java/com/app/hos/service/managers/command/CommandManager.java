@@ -41,21 +41,21 @@ public class CommandManager {
 	
 	class FutureCommandCallback<V> extends FutureTask<V> {
 		
-		private CommandInfo command;
+		private CommandInfo commandInfo;
 		
 		public FutureCommandCallback(Callable<V> callable) {
 			super(callable);
-			this.command = ((FutureCommandDecorator)callable).getCommand();
+			this.commandInfo = ((FutureCommandDecorator)callable).getCommand();
 		}
 		
 		public void done() {
 			try {
-				this.command = (CommandInfo)get();
+				this.commandInfo = (CommandInfo)get();
 			} catch (Exception e) {
-				this.command.getCommand().setResult(new Message(e.getMessage()));
-				this.command.getCommand().setStatus(false);
+				this.commandInfo.getCommand().setResult(new Message(e.getMessage()));
+				this.commandInfo.getCommand().setStatus(false);
 			}
-			commandsApi.sendCommand(command);
+			commandsApi.sendCommand(commandInfo);
 		}
 	}
 

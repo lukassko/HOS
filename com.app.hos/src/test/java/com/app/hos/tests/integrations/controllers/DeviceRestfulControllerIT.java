@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.config.init.InitializeDatabaseState;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.device.DeviceStatus;
@@ -39,9 +38,6 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @WebAppConfiguration
 public class DeviceRestfulControllerIT {
-	
-	@Autowired
-	private InitializeDatabaseState initializer;
 	
 	private MockMvc mockMvc;
 	

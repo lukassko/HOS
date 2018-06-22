@@ -37,6 +37,7 @@ import com.app.hos.service.websocket.WebSocketServerEndpoint;
 import com.app.hos.service.websocket.command.WebCommandType;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
 import com.app.hos.service.websocket.command.future.FutureWebCommandFactory;
+import com.app.hos.tests.utils.MultithreadExecutor;
 import com.app.hos.tests.utils.Utils;
 import com.app.hos.tests.utils.WebCommandSimulation;
 import com.app.hos.utils.json.JsonConverter;
@@ -160,7 +161,7 @@ public class WebCommandManagerMultithreadIT {
 		callables.add(callable);
 		
 		try {
-			Utils.assertConcurrent(callables,3500);
+			MultithreadExecutor.assertConcurrent(callables,3500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
