@@ -7,13 +7,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageHeaders;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.result.NewDevice;
 
 /*
@@ -33,13 +31,14 @@ public class ConnectionAspect extends Logger {
 		super(repository);
 	}
 	
-	@Pointcut("execution(* com.app.hos.service.managers.DeviceManager.openDeviceConnection(..)) && args(connectionId,device)")
-	public void newConnectionPointcut(MessageHeaders headers, Command command) {}
+	// TODO: Class without interface to create Dynamic PRoxy
+	//@Pointcut("execution(* com.app.hos.service.managers.DeviceManager.openDeviceConnection(..)) && args(connectionId,newDevice)")
+	public void newConnectionPointcut(String connectionId, NewDevice newDevice) {}
 	
 	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
-	@Before("newConnectionPointcut(connectionId,device)")
+	//@Before("newConnectionPointcut(connectionId,newDevice)")
 	public void newConnectionPointcutImpl(JoinPoint point,String connectionId, NewDevice device) {
 		logAndSaveMessage(point, Level.INFO, device.getSerialId(), getConnectionLog(ConnectionEvent.OPEN,device));
 	}

@@ -91,7 +91,6 @@ public class WebCommandManagerMultithreadIT {
 	
 	@Test
 	public void stage00_checkIfPowerMockReturnProperObjectFromStaticFactoryMethod() throws NotExecutableCommandException {
-		//Callable<WebCommand> testCommand = FutureWebCommandFactory.getCommand(command);
 		Callable<WebCommand> testCommand = futureWebCommandFactory.get(command);
 		Assert.assertNotNull(testCommand);
 		Assert.assertTrue(testCommand == testExecutableCommand);
@@ -128,40 +127,43 @@ public class WebCommandManagerMultithreadIT {
 
 		CountDownLatch finished = prepareTestWithCountDownLatch(3);
 		
-		List<Callable<Void>> callables = new LinkedList<Callable<Void>>();
+		List<Runnable> runnables = new LinkedList<>();
 				
-		Callable<Void> callable = new Callable<Void>() {
-			public Void call() throws Exception {
-				String message = JsonConverter.getJson(command);
-				serverEndpoint.onMessage(Utils.getSessionTest(), message);
-				return null;
+		Runnable runnable = new Runnable() {
+			public void run() {
+				try {
+					String message = JsonConverter.getJson(command);
+					serverEndpoint.onMessage(Utils.getSessionTest(), message);
+				} catch (IOException e) {}
 			}
 		};
 		
-		callables.add(callable);
+		runnables.add(runnable);
 		
-		callable = new Callable<Void>() {
-			public Void call() throws Exception {
-				String message = JsonConverter.getJson(command);
-				serverEndpoint.onMessage(Utils.getSessionTest(), message);
-				return null;
+		runnable = new Runnable() {
+			public void run() {
+				try {
+					String message = JsonConverter.getJson(command);
+					serverEndpoint.onMessage(Utils.getSessionTest(), message);
+				} catch (IOException e) {}
 			}
 		};
 		
-		callables.add(callable);
+		runnables.add(runnable);
 		
-		callable = new Callable<Void>() {
-			public Void call() throws Exception {
-				String message = JsonConverter.getJson(command);
-				serverEndpoint.onMessage(Utils.getSessionTest(), message);
-				return null;
+		runnable = new Runnable() {
+			public void run() {
+				try {
+					String message = JsonConverter.getJson(command);
+					serverEndpoint.onMessage(Utils.getSessionTest(), message);
+				} catch (IOException e) {}
 			}
 		};
 		
-		callables.add(callable);
+		runnables.add(runnable);
 		
 		try {
-			MultithreadExecutor.assertConcurrent(callables,3500);
+			MultithreadExecutor.assertConcurrent(runnables,3500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -30,7 +30,6 @@ import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.service.api.CommandsApi;
-import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.Command;
@@ -41,7 +40,7 @@ import com.app.hos.tests.utils.MultithreadExecutor;
 //@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class, ApplicationContextConfig.class})
+@ContextConfiguration(classes = {MysqlPersistanceConfig.class,  ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CommandManagerMultithreadIT {
@@ -62,7 +61,6 @@ public class CommandManagerMultithreadIT {
 		Mockito.doNothing().when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
     }
 	
-
 	@Test
 	public void test10_executeGetStatusCommandShouldReturnMyStatusCommand ()  {
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);

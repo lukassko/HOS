@@ -38,9 +38,10 @@ import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
 		classes = {
@@ -86,6 +87,7 @@ public class DeviceRepositoryMultithreadIT {
 												.device(device)
 												.build();
 		device.setConnection(connection);
+		deviceRepository.save(device);
 		
     	for (int x = 0; x < threadCount; x++) {
     		Callable<Void> callable = new Callable<Void>() {
@@ -96,7 +98,8 @@ public class DeviceRepositoryMultithreadIT {
 					    @Override
 					    public Void doInTransaction(TransactionStatus status) {
 					    	Device device = deviceRepository.find(serial);
-							device.setName("thread_" + Thread.currentThread().getName());
+					    	if (device != null)
+					    		device.setName("thread_" + Thread.currentThread().getName());
 							return null;
 					    }
 					});
@@ -125,6 +128,6 @@ public class DeviceRepositoryMultithreadIT {
     	Assert.assertTrue(exceptions.isEmpty());
     	Assert.assertEquals(1, devices.size());
     	Device selectedDevice = devices.get(0);
-    	Assert.assertTrue(selectedDevice.getName().matches("thread_(.*)"));
+    	Assert.assertTrue(selectedDevice.getName().matches("(.*)thread_(.*)"));
     }    
 }
