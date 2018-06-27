@@ -14,13 +14,15 @@ import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.decorators.FutureCommandDecorator;
 import com.app.hos.share.command.future.FutureCommandFactory;
 import com.app.hos.share.command.result.Message;
+import com.app.hos.utils.Utils;
 
 @Service
 public class CommandManager {
 
-	private final int THREAD_COUNT = 4;
+	private final int THREAD_COUNT = Integer.getInteger(Utils.getSystemProperty("thread-per-executor"));
 	
-	private FutureCommandFactory futureCommandFactory = new FutureCommandFactory();
+	@Autowired
+	private FutureCommandFactory futureCommandFactory;
 	
 	@Autowired
 	private CommandsApi commandsApi;

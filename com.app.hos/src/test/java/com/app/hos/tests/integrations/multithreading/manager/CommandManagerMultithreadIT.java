@@ -15,7 +15,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -26,9 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.config.ApplicationContextConfig;
-import com.app.hos.config.AspectConfig;
-import com.app.hos.config.repository.MysqlPersistanceConfig;
-import com.app.hos.config.repository.SqlitePersistanceConfig;
 import com.app.hos.service.api.CommandsApi;
 import com.app.hos.service.managers.command.CommandManager;
 import com.app.hos.share.command.CommandInfo;
@@ -37,10 +34,10 @@ import com.app.hos.share.command.builder_v2.CommandFactory;
 import com.app.hos.share.command.type.CommandType;
 import com.app.hos.tests.utils.MultithreadExecutor;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MysqlPersistanceConfig.class,  ApplicationContextConfig.class})
+@ContextConfiguration(classes = {ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CommandManagerMultithreadIT {
@@ -58,11 +55,11 @@ public class CommandManagerMultithreadIT {
 	@Before
     public void initMocks(){
 		MockitoAnnotations.initMocks(this);
-		Mockito.doNothing().when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
+		doNothing().when(commandsApi).sendCommand(any(CommandInfo.class));
     }
 	
 	@Test
-	public void test10_executeGetStatusCommandShouldReturnMyStatusCommand ()  {
+	public void test10_executeGetStatusCommandShouldReturnSendStatusCommand ()  {
 		CountDownLatch finished = prepareTestWithCountDownLatch(1);
 		
 		// given
@@ -83,21 +80,61 @@ public class CommandManagerMultithreadIT {
 		// then 
 		Assert.assertTrue(ended);
 		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
-		Mockito.verify(commandsApi, Mockito.times(1)).sendCommand(commandCaptor.capture());
+		verify(commandsApi, times(1)).sendCommand(commandCaptor.capture());
 		
 		CommandInfo sndCmdInfo = commandCaptor.getValue();
 		Command sndCmd = sndCmdInfo.getCommand();
 		
 		Assert.assertEquals(connectionId, sndCmdInfo.getConnectionId());
-		Assert.assertEquals(sndCmd.getCommandType(),CommandType.MY_STATUS);
+		Assert.assertEquals(CommandType.GET_STATUS,sndCmd.getCommandType());
 	}
 	
-
 	@Test
-	public void test20_executeTwoCommandsShouldSendTwoCommandAsResponse() {
+	public void test11_executeGetStatusCommandWthMultithreadExecutorShouldSendGetStatusCommand ()  {
 		
 		// given
+		String connectionId = "connection_id";
+		List<Runnable> runnables = new LinkedList<>();
+		Runnable thread = new Runnable() {
+			@Override
+			public void run() {
+				
+				Command command = commandFactory.get(CommandType.GET_STATUS);
+				CommandInfo cmdInfo = new CommandInfo("connection_id", command);
+				commandManager.executeCommand(cmdInfo);
+			}
+		};
 		
+		runnables.add(thread);
+		
+		// when 
+		boolean ended;
+		try {
+			MultithreadExecutor.assertConcurrent(runnables,1000);
+			ended = true;
+		} catch (InterruptedException e) {
+			ended = false;
+		}
+		
+		// then
+		Assert.assertTrue(ended);
+		
+		// then 
+
+		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
+		verify(commandsApi, timeout(1000).times(1)).sendCommand(commandCaptor.capture());
+		
+		CommandInfo sndCmdInfo = commandCaptor.getValue();
+		Command sndCmd = sndCmdInfo.getCommand();
+		
+		Assert.assertEquals(connectionId, sndCmdInfo.getConnectionId());
+		Assert.assertEquals(CommandType.GET_STATUS,sndCmd.getCommandType());
+	}
+	
+	@Test
+	public void test20_executeTwoCommandsShouldSendTwoCommandAsResponse() {
+
+		// given
 		List<Runnable> runnables = new LinkedList<>();
 		
 		Runnable thread1 = new Runnable() {
@@ -134,26 +171,25 @@ public class CommandManagerMultithreadIT {
 		// then
 		Assert.assertTrue(ended);
 		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
-		Mockito.verify(commandsApi, Mockito.times(2)).sendCommand(commandCaptor.capture());
+		verify(commandsApi, timeout(1000).times(2)).sendCommand(commandCaptor.capture());
 		
 		List<CommandInfo> sendCommands = commandCaptor.getAllValues();
 		Assert.assertTrue(sendCommands.size() == 2);
-				
-		Assert.assertTrue(commandCaptor.getValue().getCommand().getCommandType()==CommandType.MY_STATUS);
+		Assert.assertEquals(CommandType.GET_STATUS, commandCaptor.getValue().getCommand().getCommandType());	
 	}
 
 	private CountDownLatch prepareTestWithCountDownLatch(int commandsAmount) {
 		
-		final CountDownLatch finished = new CountDownLatch(1);
+		final CountDownLatch finished = new CountDownLatch(commandsAmount);
 
-		Mockito.doAnswer(new Answer<Object>() {
+		doAnswer(new Answer<Object>() {
 			
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				finished.countDown();
 			    return null;
 			}
 			
-		}).when(commandsApi).sendCommand(Mockito.any(CommandInfo.class));
+		}).when(commandsApi).sendCommand(any(CommandInfo.class));
 		
 		return finished;
 	}

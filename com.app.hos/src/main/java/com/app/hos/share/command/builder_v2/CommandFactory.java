@@ -52,6 +52,7 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 		builders.put(key, value);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void register(String packageToScan) {
 		List<String> factories = ReflectionUtils.scanForAnnotation(CommandDescriptor.class,packageToScan);
@@ -61,6 +62,7 @@ public class CommandFactory implements AbstractMapFactory<CommandType,Class<? ex
 				CommandDescriptor annotation = facotryClazz.getAnnotation(CommandDescriptor.class);
 				CommandType commandType = annotation.type();
 				CommandTypeEntity commandTypeEntity = new CommandTypeEntity(commandType);
+				this.add(commandType,(Class<? extends AbstractCommandBuilder>)facotryClazz);
 				DeviceType [] devicesType = annotation.device();
 				for (DeviceType deviceType : devicesType) {
 					DeviceTypeEntity deviceTypeEntity;

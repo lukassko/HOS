@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
@@ -18,6 +19,7 @@ import com.app.hos.share.command.result.NewDevice;
  *  Log information about new and closed connections
  */
 @Aspect
+@Component
 public class ConnectionAspect extends Logger {
 	
 	@Autowired
@@ -31,16 +33,15 @@ public class ConnectionAspect extends Logger {
 		super(repository);
 	}
 	
-	// TODO: Class without interface to create Dynamic PRoxy
-	//@Pointcut("execution(* com.app.hos.service.managers.DeviceManager.openDeviceConnection(..)) && args(connectionId,newDevice)")
+	@Pointcut("execution(* com.app.hos.service.managers.DeviceManager.openDeviceConnection(..)) && args(connectionId,newDevice)")
 	public void newConnectionPointcut(String connectionId, NewDevice newDevice) {}
 	
 	@Pointcut("execution(* com.app.hos.service.api.SystemFacade.closeConnection(..)) && args(connectionId)")
 	public void closeConnectionPointcut(String connectionId) {}
 
-	//@Before("newConnectionPointcut(connectionId,newDevice)")
-	public void newConnectionPointcutImpl(JoinPoint point,String connectionId, NewDevice device) {
-		logAndSaveMessage(point, Level.INFO, device.getSerialId(), getConnectionLog(ConnectionEvent.OPEN,device));
+	@Before("newConnectionPointcut(connectionId,newDevice)")
+	public void newConnectionPointcutImpl(JoinPoint point,String connectionId, NewDevice newDevice) {
+		logAndSaveMessage(point, Level.INFO, newDevice.getSerialId(), getConnectionLog(ConnectionEvent.OPEN,newDevice));
 	}
 
 	@Before("closeConnectionPointcut(connectionId)")

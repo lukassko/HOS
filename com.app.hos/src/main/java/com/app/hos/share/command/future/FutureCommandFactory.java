@@ -52,6 +52,7 @@ public class FutureCommandFactory
 	@Override
 	public void register(String path) {
 		List<String> commands =  ReflectionUtils.scanForAnnotation(FutureCommand.class,path);
+		
 		for(String command : commands) {
 			try {
 				Class<?> clazz = ReflectionUtils.getClass(command);
@@ -60,7 +61,9 @@ public class FutureCommandFactory
 				String beanName = clazz.getSimpleName();
 				ReflectionUtils.addObjectToContext(clazz, "prototype");
 				add(type,beanName);
-			} catch (BeansException e) {}
+			} catch (BeansException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }

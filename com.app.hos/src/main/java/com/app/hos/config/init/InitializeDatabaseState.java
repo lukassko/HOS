@@ -21,7 +21,7 @@ import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.share.command.type.DeviceType;
 
-@Component
+//@Component
 //@Profile({"!web-integration-test", "!integration-test"})
 @Profile("!web-integration-test")
 public class InitializeDatabaseState implements ApplicationListener<ContextRefreshedEvent>, Ordered {

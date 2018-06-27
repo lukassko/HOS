@@ -3,7 +3,6 @@ package com.app.hos.config.init;
 import java.util.concurrent.Callable;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,6 +13,7 @@ import com.app.hos.service.AbstractMapFactory;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandler;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandlerInfo;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
+import com.app.hos.share.command.CommandInfo;
 import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
 import com.app.hos.share.command.builder_v2.Command;
 import com.app.hos.share.command.type.CommandType;
@@ -36,7 +36,7 @@ public class PostContextLoader implements ApplicationListener<ContextRefreshedEv
 	
 	@Autowired
 	//@Qualifier("futureCommandFactory")
-	private AbstractMapFactory<Object,String, Callable<Command>> futureCommandFactory;
+	private AbstractMapFactory<Object,String, Callable<CommandInfo>> futureCommandFactory;
 	
 	@Override
 	public int getOrder() {

@@ -1,6 +1,5 @@
 package com.app.hos.utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -14,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @SuppressWarnings("restriction")
 public class Utils {
 
+	private static final String propertyFilePath = "system/config.properties";
 	private static Properties properties = new Properties();
 
 	static {
@@ -21,15 +21,15 @@ public class Utils {
 	}
 	
 	private static void loadResources() {
-		InputStream input = null;
+		InputStream stream = null;
 		try {
-			input =  new FileInputStream("config.properties");
-			properties.load(input);
+			stream = Utils.class.getClassLoader().getResourceAsStream(propertyFilePath);
+			properties.load(stream);
 		} catch (IOException e) {/* maybe log to console when file not found on system start */} 
 		finally {
-			if (input != null) {
+			if (stream != null) {
 				try {
-					input.close();
+					stream.close();
 				} catch (IOException e) {}
 			}
 		};
