@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.logging.Level;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,15 +19,14 @@ public class Log  {
 	@GeneratedValue
 	private Integer id;
 
-	//@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="time")
 	private Date time;
-
-	@Column(name="level")
-	private String level;
 	
 	@Column(name="serial")
 	private String serial;
+	
+	@Column(name="level")
+	private String level;
 	
 	@Column(name="message")
 	private String message;
@@ -71,4 +71,8 @@ public class Log  {
 		return message;
 	}
 
+	@Embeddable
+	public class DeviceLogTime {
+		
+	}
 }

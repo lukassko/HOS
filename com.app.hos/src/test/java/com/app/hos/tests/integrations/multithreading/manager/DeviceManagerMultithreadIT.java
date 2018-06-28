@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.app.hos.config.ApplicationContextConfig;
 import com.app.hos.config.AspectConfig;
 import com.app.hos.config.repository.MysqlPersistanceConfig;
 import com.app.hos.config.repository.SqlitePersistanceConfig;
@@ -28,28 +31,66 @@ import com.app.hos.share.command.type.DeviceType;
 import com.app.hos.tests.utils.MultithreadExecutor;
 import com.app.hos.utils.Utils;
 
-@Ignore("run only one integration test")
+//@Ignore("run only one integration test")
+@WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MysqlPersistanceConfig.class, SqlitePersistanceConfig.class, AspectConfig.class})
+@ContextConfiguration(classes = {ApplicationContextConfig.class})
 @ActiveProfiles("integration-test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeviceManagerMultithreadIT {
 	
 	@Autowired
-	private DeviceManager manager;
-	
-	private static final double DELTA = 1e-15;
+	private DeviceManager deviceManager;
 	
 	@Test
-	public void stage10_connectMultipleDeviceAndCheckIfAllWasSaved() {
-
+	public void stage05_connectMultipleDeviceAndCheckIfAllWasSaved() {
+		
+		// given
+		Set<Device> devices = deviceManager.getConnectedDevices().keySet();
+		Assert.assertEquals(0, devices.size());
+		
 		List<Runnable> runnables = new LinkedList<>();
 		
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
-				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
+				NewDevice device = new NewDevice("serial_1", "name_1", DeviceType.SERVER, "192:168:0:1", 2221);
+				deviceManager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
+			}
+		};
+		
+		runnables.add(runnable);
+		
+		// when 
+		boolean ended;
+		try {
+			MultithreadExecutor.assertConcurrent(runnables,1000);
+			ended = true;
+		} catch (InterruptedException e) {
+			ended = false;
+		}
+		
+		// then
+		Assert.assertTrue(ended);
+		Assert.assertTrue(ended);
+		devices = deviceManager.getConnectedDevices().keySet();
+		Assert.assertEquals(1, devices.size());
+	}
+	
+	//@Test
+	public void stage10_connectMultipleDeviceAndCheckIfAllWasSaved() {
+		
+		// given
+		Set<Device> devices = deviceManager.getConnectedDevices().keySet();
+		//Assert.assertEquals(1, devices.size());
+		
+		List<Runnable> runnables = new LinkedList<>();
+		
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				NewDevice device = new NewDevice("serial_1", "name_1", DeviceType.SERVER, "192:168:0:1", 2221);
+				deviceManager.openDeviceConnection("192.168.0.1:2221:123:asd:dsa:1", device);
 			}
 		};
 
@@ -57,8 +98,8 @@ public class DeviceManagerMultithreadIT {
 		
 		runnable = new Runnable() {
 			public void run()  {
-				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
-				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
+				NewDevice device = new NewDevice("serial_2", "name_2", DeviceType.SERVER, "192:168:0:2", 2222);
+				deviceManager.openDeviceConnection("192.168.0.2:2222:123:asd:dsa:2", device);
 			}
 		};
 		
@@ -66,30 +107,39 @@ public class DeviceManagerMultithreadIT {
 		
 		runnable = new Runnable() {
 			public void run() {
-				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
-				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
+				NewDevice device = new NewDevice("serial_3", "name_3", DeviceType.SERVER, "192:168:0:3", 2223);
+				deviceManager.openDeviceConnection("192.168.0.3:2223:123:asd:dsa:3", device);
 			}
 		};
 		
 		runnables.add(runnable);
 		
+		// when 
+		boolean ended;
 		try {
 			MultithreadExecutor.assertConcurrent(runnables,1000);
+			ended = true;
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			ended = false;
 		}
-		Set<Device> devices = manager.getConnectedDevices().keySet();
-		Assert.assertEquals(3, devices.size());
+		
+		// then
+		Assert.assertTrue(ended);
+		Assert.assertTrue(ended);
+		devices = deviceManager.getConnectedDevices().keySet();
+		Assert.assertEquals(4, devices.size());
 	}
 	
-	@Test
+	//@Test
 	public void stage20_addMultiStatusToDevicesAndCheckIfAllWereSaved() {
+		
+		// given
 		List<Runnable> runnables = new LinkedList<>();
 		
 		Runnable runnable = new Runnable() {
 			public void run() {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_1", status);
+				deviceManager.addDeviceStatus("serial_device_1", status);
 			}
 		};
 		
@@ -98,7 +148,7 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run(){
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_1", status);
+				deviceManager.addDeviceStatus("serial_device_1", status);
 			}
 		};
 		
@@ -107,7 +157,7 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run()  {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_1", status);
+				deviceManager.addDeviceStatus("serial_device_1", status);
 			}
 		};
 		
@@ -116,7 +166,7 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run() {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_2", status);
+				deviceManager.addDeviceStatus("serial_device_2", status);
 			}
 		};
 		
@@ -125,7 +175,7 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run() {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_2", status);
+				deviceManager.addDeviceStatus("serial_device_2", status);
 			}
 		};
 		
@@ -134,7 +184,7 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run() {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_3", status);
+				deviceManager.addDeviceStatus("serial_device_3", status);
 			}
 		};
 		
@@ -143,78 +193,31 @@ public class DeviceManagerMultithreadIT {
 		runnable = new Runnable() {
 			public void run() {
 				DeviceStatus status = new DeviceStatus(new DateTime(), Utils.generateRandomDouble(), Utils.generateRandomDouble());
-				manager.addDeviceStatus("serial_device_3", status);
+				deviceManager.addDeviceStatus("serial_device_3", status);
 			}
 		};
 		
 		runnables.add(runnable);
 		
+		// when 
+		boolean ended;
 		try {
 			MultithreadExecutor.assertConcurrent(runnables,1000);
+			ended = true;
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			ended = false;
 		}
-		
-		Set<Device> devices = manager.getConnectedDevices().keySet();
+			
+		// then
+		Assert.assertTrue(ended);
+		Set<Device> devices = deviceManager.getConnectedDevices().keySet();
 		Assert.assertEquals(3, devices.size());
 		
-		List<DeviceStatus> statuses = manager.getDeviceStatuses("serial_device_1", new DateTime(0), new DateTime());
+		List<DeviceStatus> statuses = deviceManager.getDeviceStatuses("serial_device_1", new DateTime(0), new DateTime());
 		Assert.assertEquals(3, statuses.size());
 		
-		statuses = manager.getDeviceStatuses("serial_device_2", new DateTime(0), new DateTime());
+		statuses = deviceManager.getDeviceStatuses("serial_device_2", new DateTime(0), new DateTime());
 		Assert.assertEquals(2, statuses.size());
 		
 	}
-	
-	@Test
-	public void stage30_connectDeviceAndAddStatusToOthersShouldAddDatatoDb() {
-		
-		try {
-			Thread.sleep(1000); // wait some time to increase DateTime in database for new DeviceStatus
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		} 
-		
-		List<Runnable> runnables = new LinkedList<>();
-		
-		Runnable callable = new Runnable() {
-			public void run()  {
-				DeviceStatus status = new DeviceStatus(new DateTime(), 13.12, 65.23);
-				manager.addDeviceStatus("serial_device_2", status);
-			}
-		};
-		
-		runnables.add(callable);
-		
-		callable = new Runnable() {
-			public void run()  {
-				NewDevice device = new NewDevice("serial", "name", DeviceType.SERVER, "192:168:0:1", 2222);
-				manager.openDeviceConnection("192.168.0.1:1111:123:asd:dsa:213", device);
-			}
-		};
-		
-		runnables.add(callable);
-		
-		try {
-			MultithreadExecutor.assertConcurrent(runnables,1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		Map<Device,DeviceStatus> deviceStatuses = manager.getConnectedDevices();
-		Set<Device> devices = deviceStatuses.keySet();
-		Assert.assertEquals(4, devices.size());
-		
-		Device device = null;
-		for (Device dev : devices) 
-			if (dev.getSerial().equals("serial_device_2"))
-				device =  dev;
-		Assert.assertNotNull(device);
-		DeviceStatus status = deviceStatuses.get(device);
-		Assert.assertNotNull(status);
-		Assert.assertEquals(13.12, status.getRamUsage(),DELTA);
-		Assert.assertEquals(65.23, status.getCpuUsage(),DELTA);
-		
-	}
-
 }

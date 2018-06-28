@@ -19,7 +19,7 @@ import com.app.hos.utils.Utils;
 @Service
 public class CommandManager {
 
-	private final int THREAD_COUNT = Integer.getInteger(Utils.getSystemProperty("thread-per-executor"));
+	private final int THREAD_COUNT = 4; //Integer.getInteger(Utils.getSystemProperty("thread-per-executor"));
 	
 	@Autowired
 	private FutureCommandFactory futureCommandFactory;

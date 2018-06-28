@@ -21,14 +21,7 @@ public class ConnectionManager {
 	private ConnectionRepository connectionRepository;
 
 	public Connection findConnection(String connectionId) {
-		Connection connection;
-		try {
-			connection = connectionRepository.find(connectionId);
-		} catch (IllegalArgumentException e) {
-			// no device find
-			connection = null;
-		}
-		return connection;
+		return connectionRepository.find(connectionId);
 	}
 	
 	public Collection<HistoryConnection> findAllHistoryConnectionsByDeviceId(int id) {

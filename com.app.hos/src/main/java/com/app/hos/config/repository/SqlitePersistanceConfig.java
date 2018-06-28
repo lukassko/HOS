@@ -55,10 +55,12 @@ public class SqlitePersistanceConfig {
 	   dataSource.setUrl(env.getProperty("sqlite.jdbc.url"));
 	   dataSource.setUsername(env.getProperty("sqlite.jdbc.user"));
 	   dataSource.setPassword(env.getProperty("sqlite.jdbc.pass"));
-	   //dataSource.setInitialSize(Integer.parseInt(env.getProperty("sqlite.hibernate.initial_size")));
-	   //dataSource.setMaxActive(Integer.parseInt(env.getProperty("sqlite.hibernate.max_active")));
-	   //dataSource.setMaxIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.max_idle")));
-	   //dataSource.setMinIdle(Integer.parseInt(env.getProperty("sqlite.hibernate.min_idle")));
+	   
+	   //dataSource.setInitialSize(2);
+	   //dataSource.setMaxActive(2);
+	   //dataSource.setMaxIdle(1);
+	   //dataSource.setMinIdle(0);
+	   
 	   return dataSource;
 	}
 	 
@@ -74,6 +76,8 @@ public class SqlitePersistanceConfig {
 	         {
 	            setProperty("hibernate.hbm2ddl.auto",
 	              env.getProperty("sqlite.hibernate.hbm2ddl.auto"));
+	            setProperty("hibernate.show_sql", 
+	  	              env.getProperty("sqlite.hibernate.show_sql"));
 	            setProperty("hibernate.hbm2ddl.import_files",
 		  	      env.getProperty("sqlite.hibernate.hbm2ddl.import_files"));
 	            setProperty("hibernate.dialect",

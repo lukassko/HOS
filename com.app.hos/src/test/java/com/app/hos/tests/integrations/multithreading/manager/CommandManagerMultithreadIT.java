@@ -118,9 +118,6 @@ public class CommandManagerMultithreadIT {
 		
 		// then
 		Assert.assertTrue(ended);
-		
-		// then 
-
 		ArgumentCaptor<CommandInfo> commandCaptor = ArgumentCaptor.forClass(CommandInfo.class);
 		verify(commandsApi, timeout(1000).times(1)).sendCommand(commandCaptor.capture());
 		

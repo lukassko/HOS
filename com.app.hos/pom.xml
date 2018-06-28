@@ -20,6 +20,7 @@
   	<gson.version>2.8.0</gson.version>
   	<test.junit.version>4.12</test.junit.version>
   	<test.spring.version>4.3.8.RELEASE</test.spring.version>
+  	<log4j.version>1.2.17</log4j.version>
   	<httpunit.version>1.5.4</httpunit.version>
   	<mockito.version>1.9.5</mockito.version>
   	<powermock.version>1.7.3</powermock.version>
@@ -31,7 +32,7 @@
   	<stomp.version>2.3.3</stomp.version>
   	<sockjs.version>1.0.2</sockjs.version>
   	<hsqldb.version>2.3.4</hsqldb.version>
-  	<sqlite.version>3.16.1</sqlite.version>
+  	<sqlite.version>3.23.1</sqlite.version>
   	<aop.version>4.3.8.RELEASE</aop.version>
   	<aspectjrt.version>1.7.0</aspectjrt.version>
   	<aspectjweaver.version>1.7.0</aspectjweaver.version>
@@ -135,7 +136,13 @@
 		<version>1.2.6</version>
 		<scope>test</scope>
 	</dependency>
-		
+	
+	<!-- Logging dependencies -->
+	<dependency>
+	    <groupId>log4j</groupId>
+	    <artifactId>log4j</artifactId>
+	    <version>${log4j.version}</version>
+	</dependency>
 	
 	<!-- Spring MVC dependencies -->
 	<dependency>

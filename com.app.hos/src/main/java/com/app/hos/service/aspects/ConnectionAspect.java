@@ -7,8 +7,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
@@ -19,7 +17,6 @@ import com.app.hos.share.command.result.NewDevice;
  *  Log information about new and closed connections
  */
 @Aspect
-@Component
 public class ConnectionAspect extends Logger {
 	
 	@Autowired

@@ -42,7 +42,6 @@ public class DeviceManager {
 			connection.setDevice(dev);
 			deviceRepository.save(dev);
 		}
-	
 	}
 
 	public Map<Device, DeviceStatus> getConnectedDevices() {
