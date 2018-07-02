@@ -5,13 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import com.app.hos.server.connection.TcpConnection;
+
 public class ConnectionWorker implements Runnable {
 
 	//private final CommandsApi commandsApi = ReflectionUtils.getObjectFromContext(CommandsApi.class);
 	
-	private final Connection connection;
+	private final TcpConnection connection;
 	
-	public ConnectionWorker (Connection connection) {
+	public ConnectionWorker (TcpConnection connection) {
 		this.connection = connection;
 	}
 	

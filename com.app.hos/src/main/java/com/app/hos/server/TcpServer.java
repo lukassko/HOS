@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
 public class TcpServer  {
@@ -22,7 +23,7 @@ public class TcpServer  {
 	
 	private final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(serversThredsCount);
 	
-	private Map<String,Connection> activeConnections = new HashMap<>();
+	private Map<String,TcpConnection> activeConnections = new HashMap<>();
 	
 	public TcpServer(int port) {
 		this.port = port;
@@ -54,9 +55,9 @@ public class TcpServer  {
 			while (!isStopped()) {
 	            try {
 					Socket clientSocket = server.accept();
-					Connection connection = new Connection(clientSocket);
+					TcpConnection connection = new TcpConnection(clientSocket);
 					activeConnections.put(connection.getConnectionId(), connection);
-					clientProcessingPool.submit(new MessageWorker(connection));
+					//clientProcessingPool.submit(new MessageWorker(connection));
 				} catch (IOException e) {
 					if (isStopped()) {
 						break;
