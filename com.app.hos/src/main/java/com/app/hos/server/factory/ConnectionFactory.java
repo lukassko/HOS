@@ -4,5 +4,5 @@ import com.app.hos.server.connection.Connection;
 
 public interface ConnectionFactory {
 
-	public Connection getConnection();
+	public Connection getConnection(String connectionId);
 }
