@@ -40,17 +40,23 @@ public class TcpConnection implements Connection {
 	@Override
 	public String getConnectionId() {
 		StringBuilder connctionidBuilder = new StringBuilder();
-		connctionidBuilder.append(socket.getInetAddress().toString());
-		connctionidBuilder.append(socket.getPort());
-		connctionidBuilder.append(socket.getLocalPort());
+		connctionidBuilder.append(socket.getInetAddress().toString()+":");
+		connctionidBuilder.append(socket.getPort()+"-");
+		connctionidBuilder.append(socket.getLocalPort()+":");
 		connctionidBuilder.append(socket.getPort());
 		return connctionidBuilder.toString();
 	}
 
-
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
 	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return "TcpConnection ["+ this.getConnectionId() +"]";
+	}
+
 }
