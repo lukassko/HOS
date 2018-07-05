@@ -1,21 +1,26 @@
 package com.app.hos.server.factory;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.net.SocketServer;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
+import com.app.hos.server.TcpListener;
+import com.app.hos.server.TcpMessageMapper;
 import com.app.hos.server.connection.Connection;
+import com.app.hos.server.connection.TcpConnection;
 
 public class TcpServer implements ConnectionFactory, Runnable {
 
-	private final int port;
+	private final int portNumber;
 	
-	private SocketServer socketServer;
+	private volatile ServerSocket serverSocket;
 	
 	private final Map<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
 	
@@ -29,13 +34,36 @@ public class TcpServer implements ConnectionFactory, Runnable {
 	
 	private Deserializer<?> deserializer;
 	
-	public TcpServer (int port) {
-		this.port = port;
+	private TcpMessageMapper mapper;
+	
+	private TcpListener listener;
+	
+	public TcpServer (int portNumber) {
+		this.portNumber = portNumber;
 	}
 
 	@Override
 	public void run() {
-		
+		if (this.listener == null) {
+			// TODO:
+			//	throw exception
+		}
+		try {
+			ServerSocket theServerSocket = new ServerSocket(portNumber);
+			while (true) {
+				Socket socket;
+				if (theServerSocket == null) {
+					throw new IOException("Server socket close");
+				} else {
+					socket = theServerSocket.accept();
+				}
+				TcpConnection tcpConnection = new TcpConnection(socket);
+				initializeConnection(tcpConnection);
+				// publish connection open event
+			}
+		} catch (IOException e) {
+			
+		}
 	}
 
 	@Override
@@ -53,6 +81,18 @@ public class TcpServer implements ConnectionFactory, Runnable {
 	}
 	
 	public void stop() {
+		if (this.serverSocket == null) {
+			return;
+		}
+		try {
+			this.serverSocket.close();
+		} catch (IOException e) {
+		}
+		this.serverSocket = null;
+		closeActiveConnections();
+	}
+	
+	private void closeActiveConnections() {
 		if (this.active) {
 			this.active = false;
 			synchronized(this.connections) {
@@ -60,7 +100,15 @@ public class TcpServer implements ConnectionFactory, Runnable {
 			}
 		}
 	}
-
+	
+	private void initializeConnection(TcpConnection connection) {
+		connection.setListener(this.listener);
+		connection.setMapper(this.mapper);
+		connection.setSerializer(this.serializer);
+		connection.setDeserializer(this.deserializer);
+		addConnetion(connection);
+	}
+	
 	private void addConnetion(Connection connection) {
 		synchronized(this.connections) {
 			if (!this.active) {

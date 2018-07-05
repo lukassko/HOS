@@ -2,7 +2,7 @@ package com.app.hos.server.connection;
 
 import java.io.IOException;
 
-import com.app.hos.share.command.builder_v2.Command;
+import org.springframework.messaging.Message;
 
 public interface Connection extends Runnable {
 
@@ -10,7 +10,7 @@ public interface Connection extends Runnable {
 	
 	boolean isOpen();
 	
-	void send(Command command) throws IOException;
+	void send(Message<?>  message) throws IOException;
 	
 	SocketInfo getSocketInfo();
 	

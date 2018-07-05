@@ -1,14 +1,30 @@
 package com.app.hos.server.connection;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 
-import com.app.hos.share.command.builder_v2.Command;
+import org.springframework.core.serializer.Deserializer;
+import org.springframework.core.serializer.Serializer;
+import org.springframework.messaging.Message;
+
+import com.app.hos.server.TcpMessageMapper;
+import com.app.hos.server.TcpListener;
 
 public class TcpConnection implements Connection {
 
 	private Socket socket;
 
+	private TcpListener listener;
+	
+	private OutputStream socketOutputStream;
+	
+	private TcpMessageMapper mapper;
+	
+	private Deserializer<?> deserializer;
+	
+	private Serializer<?> serializer;
+	
 	public TcpConnection(Socket socket) {
 		this.socket = socket;
 	}
@@ -16,7 +32,6 @@ public class TcpConnection implements Connection {
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -26,9 +41,8 @@ public class TcpConnection implements Connection {
 	}
 
 	@Override
-	public void send(Command command) throws IOException {
+	public synchronized void send(Message<?>  message) throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -52,8 +66,38 @@ public class TcpConnection implements Connection {
 		// TODO Auto-generated method stub
 	}
 	
-	
-	
+	public TcpListener getListener() {
+		return listener;
+	}
+
+	public void setListener(TcpListener listener) {
+		this.listener = listener;
+	}
+
+	public TcpMessageMapper getMapper() {
+		return mapper;
+	}
+
+	public void setMapper(TcpMessageMapper mapper) {
+		this.mapper = mapper;
+	}
+
+	public Deserializer<?> getDeserializer() {
+		return deserializer;
+	}
+
+	public void setDeserializer(Deserializer<?> deserializer) {
+		this.deserializer = deserializer;
+	}
+
+	public Serializer<?> getSerializer() {
+		return serializer;
+	}
+
+	public void setSerializer(Serializer<?> serializer) {
+		this.serializer = serializer;
+	}
+
 	@Override
 	public String toString() {
 		return "TcpConnection ["+ this.getConnectionId() +"]";
