@@ -10,10 +10,12 @@ public interface Connection extends Runnable {
 	
 	boolean isOpen();
 	
-	void send(Message<?>  message) throws IOException;
+	void send(Message<?> message) throws IOException;
 	
-	SocketInfo getSocketInfo();
+	public SocketInfo getSocketInfo();
 	
 	public String getConnectionId();
+	
+	public Object getPayload() throws IOException;
 	
 }

@@ -1,6 +1,6 @@
 package com.app.hos.server.event;
 
-public class TcpOpenConnectionEvent extends TcpEvent {
+public class TcpOpenConnectionEvent extends TcpConnectionEvent {
 
 	private static final long serialVersionUID = 1L;
 

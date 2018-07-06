@@ -1,8 +1,10 @@
 package com.app.hos.server.connection;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
@@ -25,19 +27,25 @@ public class TcpConnection implements Connection {
 	
 	private Serializer<?> serializer;
 	
-	public TcpConnection(Socket socket) {
-		this.socket = socket;
+	public TcpConnection(SocketAttributes socketAttributes) {
+		this.socket = socketAttributes.socket;
+	}
+	
+	private InputStream inputStream() throws IOException {
+		return this.socket.getInputStream();
 	}
 	
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+		}
 	}
 
 	@Override
 	public boolean isOpen() {
-		// TODO Auto-generated method stub
-		return false;
+		return !this.socket.isClosed();
 	}
 
 	@Override
@@ -51,6 +59,11 @@ public class TcpConnection implements Connection {
 		return null;
 	}
 
+	@Override
+	public Object getPayload() throws IOException {
+		return this.deserializer.deserialize(inputStream());
+	}
+	
 	@Override
 	public String getConnectionId() {
 		StringBuilder connctionidBuilder = new StringBuilder();
@@ -101,6 +114,55 @@ public class TcpConnection implements Connection {
 	@Override
 	public String toString() {
 		return "TcpConnection ["+ this.getConnectionId() +"]";
+	}
+
+	public static class SocketAttributes {
+		
+		private Socket socket;
+		
+		private int receiveBufferSize;
+		
+		private int sendBufferSize;
+		
+		private int timeout = -1;
+		
+		private boolean keepAlive;
+
+		public SocketAttributes socket(Socket socket) {
+			this.socket = socket;
+			return this;
+		}
+
+		public SocketAttributes receiveBufferSize(int receiveBufferSize) {
+			this.receiveBufferSize = receiveBufferSize;
+			return this;
+		}
+
+		public SocketAttributes sendBufferSize(int sendBufferSize) {
+			this.sendBufferSize = sendBufferSize;
+			return this;
+		}
+
+		public SocketAttributes keepAlive(boolean keepAlive) {
+			this.keepAlive = keepAlive;
+			return this;
+		}
+		
+		public SocketAttributes keepAlive(int timeout) {
+			this.timeout = timeout;
+			return this;
+		}
+
+		public TcpConnection build () throws SocketException {
+			if(sendBufferSize >= 0) 
+				this.socket.setSoTimeout(timeout);
+			if(receiveBufferSize > 0) 
+				this.socket.setReceiveBufferSize(receiveBufferSize);
+			if(sendBufferSize > 0) 
+				this.socket.setSendBufferSize(sendBufferSize);
+			socket.setKeepAlive(this.keepAlive);
+			return new TcpConnection(this);
+		}
 	}
 
 }

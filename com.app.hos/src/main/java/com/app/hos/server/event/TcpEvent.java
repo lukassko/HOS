@@ -2,23 +2,31 @@ package com.app.hos.server.event;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.app.hos.server.connection.Connection;
 
 public abstract class TcpEvent extends ApplicationEvent {
 
 	private static final long serialVersionUID = 1L;
 
+	private final Throwable cause;
+
 	public TcpEvent(Object source) {
 		super(source);
-	}
-	
-	public String getConnectionId () {
-		return ((Connection)this.getSource()).getConnectionId();
+		this.cause = null;
 	}
 
+	public TcpEvent(Object source, Throwable cause) {
+		super(source);
+		this.cause = cause;
+	}
+	
+	public Throwable getCause() {
+		return cause;
+	}
+	
 	@Override
 	public String toString() {
-		return "TcpEvent [source=" + source + "]";
+		return "TcpEvent [source=" + this.getSource() +
+				(this.cause == null ? "" : ", cause=" + this.cause) + "]";
 	}
 
 }
