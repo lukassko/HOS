@@ -6,15 +6,19 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 import org.springframework.messaging.Message;
 
 import com.app.hos.server.TcpMessageMapper;
+import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.TcpListener;
 
 public class TcpConnection implements Connection {
 
+	private ApplicationEventPublisher applicationEventPublisher;
+	
 	private Socket socket;
 
 	private TcpListener listener;
@@ -111,11 +115,23 @@ public class TcpConnection implements Connection {
 		this.serializer = serializer;
 	}
 
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
 	@Override
 	public String toString() {
 		return "TcpConnection ["+ this.getConnectionId() +"]";
 	}
 
+	private void doPublishEvent(TcpEvent event) {
+		if (this.applicationEventPublisher == null) {
+			// log worning
+		} else {
+			this.applicationEventPublisher.publishEvent(event);
+		}
+	}
+	
 	public static class SocketAttributes {
 		
 		private Socket socket;

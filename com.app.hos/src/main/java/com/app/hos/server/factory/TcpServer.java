@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
@@ -20,6 +21,9 @@ import com.app.hos.server.TcpListener;
 import com.app.hos.server.TcpMessageMapper;
 import com.app.hos.server.connection.Connection;
 import com.app.hos.server.connection.TcpConnection;
+import com.app.hos.server.event.TcpEvent;
+import com.app.hos.server.event.TcpEventType;
+import com.app.hos.server.event.TcpServerExceptionEvent;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
 
 public class TcpServer implements Server, ConnectionFactory, Runnable {
@@ -39,6 +43,8 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 	private volatile Serializer<?> serializer;
 	
 	private volatile Deserializer<?> deserializer  = new ByteArrayDeserializer();
+	
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	private TcpMessageMapper mapper;
 	
@@ -77,8 +83,9 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 				}
 				// publish connection open event
 			}
-		} catch (IOException e) {
-			publishServerEvent(e);
+		} catch (IOException cause) {
+			TcpEvent event = TcpEventType.EXCEPTION.create(cause);
+			publishServerEvent(event);
 		} finally {
 			this.stop();
 		}
@@ -148,6 +155,7 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 		connection.setMapper(this.mapper);
 		connection.setSerializer(this.serializer);
 		connection.setDeserializer(this.deserializer);
+		connection.setApplicationEventPublisher(applicationEventPublisher);
 		addConnetion(connection);
 	}
 	
@@ -175,32 +183,37 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 		return this.connectionExecutor;
 	}
 	
-	private void publishServerEvent(Throwable cause) {
-		// TODO: implement
+	private void publishServerEvent(TcpEvent event) {
+		if (this.applicationEventPublisher == null) {
+			// log worning
+		} else {
+			this.applicationEventPublisher.publishEvent(event);
+		}
 	}
 
 	@Override
-	public void setMapper(Object mapper) {
-		// TODO Auto-generated method stub
-		
+	public void setMapper(TcpMessageMapper mapper) {
+		this.mapper = mapper;
 	}
 
 	@Override
 	public void setSerializer(Serializer<?> serializer) {
-		// TODO Auto-generated method stub
-		
+		this.serializer = serializer;
 	}
 
 	@Override
 	public void setDeserializer(Deserializer<?> deserializer) {
-		// TODO Auto-generated method stub
-		
+		this.deserializer = deserializer;
 	}
 
 	@Override
 	public void setListener(TcpListener listener) {
-		// TODO Auto-generated method stub
-		
+		this.listener = listener;
+	}
+
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 	
 }

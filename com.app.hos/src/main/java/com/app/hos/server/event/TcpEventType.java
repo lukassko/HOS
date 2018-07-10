@@ -4,15 +4,10 @@ import com.app.hos.server.connection.Connection;
 
 public enum TcpEventType implements EventFactory {
 
-	//OPEN_CONNECTION((connection) -> new TcpOpenConnectionEvent(connection));
-	
-	OPEN_CONNECTION(new EventFactory() {
-		@Override
-		public TcpEvent create(Connection connection) {
-			return new TcpOpenConnectionEvent(connection);
-		}
-	});
-	
+	OPEN_CONNECTION((connection, throwable) -> new TcpOpenConnectionEvent(connection)),
+	CLOSE_CONNECTION((connection, throwable) -> new TcpCloseConnectionEvent(connection)),
+	EXCEPTION((connection, throwable) -> new TcpServerExceptionEvent(connection,throwable));
+
 	private TcpEventType(EventFactory factory) {
 		this.factory = factory;
 	}
@@ -20,7 +15,7 @@ public enum TcpEventType implements EventFactory {
 	private EventFactory factory;
 	
 	@Override
-	public TcpEvent create(Connection connection) {
-		return factory.create(connection);
+	public TcpEvent create(Connection connection, Throwable throwable) {
+		return factory.create(connection,throwable);
 	}
 }
