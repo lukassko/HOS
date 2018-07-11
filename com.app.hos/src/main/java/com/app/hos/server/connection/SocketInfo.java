@@ -5,30 +5,42 @@ import java.net.Socket;
 
 public class SocketInfo {
 
-	private final Socket socket;
+	private int port;
 	
-	public SocketInfo(Socket socket) {
-		this.socket = socket;	
+	private int localPort;
+	
+	private InetAddress address;
+	
+	private InetAddress localAddress;
+	
+	private String connectionId;
+		
+	public SocketInfo(String connectionId, Socket socket) {
+		this.port = socket.getPort();
+		this.localPort = socket.getLocalPort();
+		this.address = socket.getInetAddress();
+		this.localAddress = socket.getLocalAddress();
+		this.connectionId = connectionId;
 	}
 	
 	public int getPort() {
-		return this.socket.getPort();
+		return this.port;
 	}
 	
 	public int getLocalPort() {
-		return this.socket.getLocalPort();
+		return this.localPort;
 	}
 	
 	public InetAddress getInetAddress () {
-		return this.socket.getInetAddress();
+		return this.address;
 	}
 	
 	public InetAddress getLocalAddress () {
-		return this.socket.getLocalAddress();
+		return this.localAddress;
 	}
-	
-	public boolean isConnected() {
-		return this.socket.isConnected();
+
+	public String getConnectionId() {
+		return connectionId;
 	}
 
 }

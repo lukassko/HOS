@@ -3,6 +3,7 @@ package com.app.hos.server.factory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,10 +24,9 @@ import com.app.hos.server.connection.Connection;
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventType;
-import com.app.hos.server.event.TcpServerExceptionEvent;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
 
-public class TcpServer implements Server, ConnectionFactory, Runnable {
+public class TcpServer implements Server, ConnectionFactory,TcpServerListener, Runnable {
 
 	private final int portNumber;
 	
@@ -76,15 +76,16 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 					try {
 						TcpConnection tcpConnection = createConnection(socket);
 						initializeConnection(tcpConnection);
+						TcpEvent event = TcpEventType.OPEN_CONNECTION.create(tcpConnection);
+						publishServerEvent(event);
 					} catch (SocketException e) {
 						// log: failed to create and configure a TcpConnection for the new socket
 						socket.close();
 					}
 				}
-				// publish connection open event
 			}
-		} catch (IOException cause) {
-			TcpEvent event = TcpEventType.EXCEPTION.create(cause);
+		} catch (IOException e) {
+			TcpEvent event = TcpEventType.EXCEPTION.create(this,e);
 			publishServerEvent(event);
 		} finally {
 			this.stop();
@@ -214,6 +215,21 @@ public class TcpServer implements Server, ConnectionFactory, Runnable {
 	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
+	@Override
+	public int getPort() {
+		return this.serverSocket.getLocalPort();
+	}
+
+	@Override
+	public SocketAddress getSocketAddress() {
+		return this.serverSocket.getLocalSocketAddress();
+	}
+
+	@Override
+	public boolean isListening() {
+		return this.isActive();
 	}
 	
 }

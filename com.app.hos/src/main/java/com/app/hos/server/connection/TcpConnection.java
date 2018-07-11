@@ -17,22 +17,28 @@ import com.app.hos.server.TcpListener;
 
 public class TcpConnection implements Connection {
 
-	private ApplicationEventPublisher applicationEventPublisher;
+	private volatile ApplicationEventPublisher applicationEventPublisher;
 	
-	private Socket socket;
+	private final Socket socket;
 
-	private TcpListener listener;
+	private volatile TcpListener listener;
 	
-	private OutputStream socketOutputStream;
+	private volatile OutputStream socketOutputStream;
 	
-	private TcpMessageMapper mapper;
+	private volatile TcpMessageMapper mapper;
 	
-	private Deserializer<?> deserializer;
+	private volatile Deserializer<?> deserializer;
 	
-	private Serializer<?> serializer;
+	private volatile Serializer<?> serializer;
+	
+	private final SocketInfo socketInfo;
+	
+	private final String connectionId;
 	
 	public TcpConnection(SocketAttributes socketAttributes) {
 		this.socket = socketAttributes.socket;
+		this.connectionId = getConnectionId(this.socket);
+		this.socketInfo = new SocketInfo(this.connectionId, this.socket);
 	}
 	
 	private InputStream inputStream() throws IOException {
@@ -70,12 +76,7 @@ public class TcpConnection implements Connection {
 	
 	@Override
 	public String getConnectionId() {
-		StringBuilder connctionidBuilder = new StringBuilder();
-		connctionidBuilder.append(socket.getInetAddress().toString()+":");
-		connctionidBuilder.append(socket.getPort()+"-");
-		connctionidBuilder.append(socket.getLocalPort()+":");
-		connctionidBuilder.append(socket.getPort());
-		return connctionidBuilder.toString();
+		return this.connectionId;
 	}
 
 	@Override
@@ -130,6 +131,15 @@ public class TcpConnection implements Connection {
 		} else {
 			this.applicationEventPublisher.publishEvent(event);
 		}
+	}
+	
+	private String getConnectionId(Socket socket) {
+		StringBuilder connctionidBuilder = new StringBuilder();
+		connctionidBuilder.append(socket.getInetAddress().toString()+":");
+		connctionidBuilder.append(socket.getPort()+"-");
+		connctionidBuilder.append(socket.getLocalPort()+":");
+		connctionidBuilder.append(socket.getPort());
+		return connctionidBuilder.toString();
 	}
 	
 	public static class SocketAttributes {

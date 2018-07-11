@@ -1,7 +1,5 @@
 package com.app.hos.server.event;
 
-import com.app.hos.server.connection.Connection;
-
 public enum TcpEventType implements EventFactory {
 
 	OPEN_CONNECTION((connection, throwable) -> new TcpOpenConnectionEvent(connection)),
@@ -15,7 +13,7 @@ public enum TcpEventType implements EventFactory {
 	private EventFactory factory;
 	
 	@Override
-	public TcpEvent create(Connection connection, Throwable throwable) {
-		return factory.create(connection,throwable);
+	public TcpEvent create(Object cause, Throwable throwable) {
+		return factory.create(cause,throwable);
 	}
 }
