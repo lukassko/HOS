@@ -1,5 +1,6 @@
 package com.app.hos.server.connection;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,8 +12,11 @@ import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 import org.springframework.messaging.Message;
 
-import com.app.hos.server.TcpMessageMapper;
 import com.app.hos.server.event.TcpEvent;
+import com.app.hos.server.event.TcpEventTypeFactory;
+import com.app.hos.server.event.source.TcpConnectionEventSource;
+import com.app.hos.server.event.source.TcpServerEventSource;
+import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.TcpListener;
 
 public class TcpConnection implements Connection {
@@ -49,6 +53,7 @@ public class TcpConnection implements Connection {
 	public void close() {
 		try {
 			this.socket.close();
+			// remove from sever 
 		} catch (IOException e) {
 		}
 	}
@@ -58,15 +63,48 @@ public class TcpConnection implements Connection {
 		return !this.socket.isClosed();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized void send(Message<?>  message) throws IOException {
-		// TODO Auto-generated method stub
+	public synchronized void send(Message<?>  message) throws Exception {
+		if (this.socketOutputStream == null) {
+			this.socketOutputStream = new BufferedOutputStream(this.socket.getOutputStream());
+		}
+		Object object = this.mapper.fromMessage(message);
+		try {
+			((Serializer<Object>)serializer).serialize(object, this.socketOutputStream);
+			this.socketOutputStream.flush();
+		} catch(Exception e) {
+			TcpConnectionEventSource eventSource = new TcpConnectionEventSource(this.socketInfo, e);
+			TcpEvent event = TcpEventTypeFactory.SERVER_EXCEPTION.create(eventSource);
+			doPublishEvent(event);
+			close();
+			throw e;
+		}
 	}
 
 	@Override
+	public void run() {
+		boolean run = true;
+		while(run) {
+			Message<?> message = null;
+			try {
+				message = this.mapper.toMessage(this);
+			} catch (Exception e) {
+				// TODO: publish exception event
+				run = false;
+			}
+			if (run && message != null) {
+				if (this.listener == null) {
+					// throw exception
+				}
+				listener.onMessage(message);
+			}
+		}
+	}
+	
+	@Override
 	public SocketInfo getSocketInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.socketInfo;
 	}
 
 	@Override
@@ -79,11 +117,6 @@ public class TcpConnection implements Connection {
 		return this.connectionId;
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-	}
-	
 	public TcpListener getListener() {
 		return listener;
 	}

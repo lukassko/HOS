@@ -13,21 +13,28 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
 import com.app.hos.server.TcpListener;
-import com.app.hos.server.TcpMessageMapper;
 import com.app.hos.server.connection.Connection;
+import com.app.hos.server.connection.SocketInfo;
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpEvent;
-import com.app.hos.server.event.TcpEventType;
+import com.app.hos.server.event.TcpEventTypeFactory;
+import com.app.hos.server.event.source.TcpConnectionEventSource;
+import com.app.hos.server.event.source.TcpServerEventSource;
+import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
 
 public class TcpServer implements Server, ConnectionFactory,TcpServerListener, Runnable {
 
+	private final Logger logger = Logger.getLogger(getClass().getName());
+	
 	private final int portNumber;
 	
 	private volatile ServerSocket serverSocket;
@@ -76,17 +83,16 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 					try {
 						TcpConnection tcpConnection = createConnection(socket);
 						initializeConnection(tcpConnection);
-						TcpEvent event = TcpEventType.OPEN_CONNECTION.create(tcpConnection);
-						publishServerEvent(event);
+						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
 					} catch (SocketException e) {
-						// log: failed to create and configure a TcpConnection for the new socket
+						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
+								+ socket.getInetAddress().getHostAddress() + ":" + socket.getPort(), e);
 						socket.close();
 					}
 				}
 			}
 		} catch (IOException e) {
-			TcpEvent event = TcpEventType.EXCEPTION.create(this,e);
-			publishServerEvent(event);
+			publishServerExceptionEvent(e);
 		} finally {
 			this.stop();
 		}
@@ -172,7 +178,7 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 	
 	private Executor getTaskExecutor() {
 		if (!this.active) {
-			throw new RuntimeException("Connection Factory not started"); // TODO
+			throw new RuntimeException("Connection Factory not started");
 		}
 		if (this.connectionExecutor == null) {
 			synchronized(this.monitor) {
@@ -184,9 +190,21 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 		return this.connectionExecutor;
 	}
 	
+	private void publishOpenConnectionEvent(SocketInfo socketInfo) {
+		TcpConnectionEventSource eventSource = new TcpConnectionEventSource(socketInfo);
+		TcpEvent event = TcpEventTypeFactory.OPEN_CONNECTION.create(eventSource);
+		publishServerEvent(event);
+	}
+	
+	private void publishServerExceptionEvent(Throwable cause) {
+		TcpServerEventSource eventSource = new TcpServerEventSource(this, cause);
+		TcpEvent event = TcpEventTypeFactory.SERVER_EXCEPTION.create(eventSource);
+		publishServerEvent(event);
+	}
+	
 	private void publishServerEvent(TcpEvent event) {
 		if (this.applicationEventPublisher == null) {
-			// log worning
+			this.logger.warning("No ApplicationEventPublisher to publish event " + event.toString());
 		} else {
 			this.applicationEventPublisher.publishEvent(event);
 		}
@@ -230,6 +248,11 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 	@Override
 	public boolean isListening() {
 		return this.isActive();
+	}
+
+	@Override
+	public String toString() {
+		return "TcpServer [portNumber=" + this.portNumber + ", serverSocket=" + this.serverSocket.getInetAddress() + "]";
 	}
 	
 }

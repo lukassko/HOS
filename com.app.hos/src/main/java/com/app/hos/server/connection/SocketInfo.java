@@ -5,22 +5,29 @@ import java.net.Socket;
 
 public class SocketInfo {
 
-	private int port;
+	private final int port;
 	
-	private int localPort;
+	private final int localPort;
 	
-	private InetAddress address;
+	private final InetAddress address;
 	
-	private InetAddress localAddress;
+	private final InetAddress localAddress;
 	
-	private String connectionId;
+	private final String connectionId;
 		
+	private final String hostName;
+	
 	public SocketInfo(String connectionId, Socket socket) {
 		this.port = socket.getPort();
 		this.localPort = socket.getLocalPort();
 		this.address = socket.getInetAddress();
 		this.localAddress = socket.getLocalAddress();
+		this.hostName = address.getHostName();
 		this.connectionId = connectionId;
+	}
+	
+	public String getHostName() {
+		return this.hostName;
 	}
 	
 	public int getPort() {
@@ -43,4 +50,11 @@ public class SocketInfo {
 		return connectionId;
 	}
 
+	@Override
+	public String toString() {
+		return "SocketInfo [port=" + port + ", localPort=" + localPort + ", address=" + address + ", localAddress="
+				+ localAddress + ", connectionId=" + connectionId + "]";
+	}
+
+	
 }

@@ -5,7 +5,7 @@ import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
 import com.app.hos.server.TcpListener;
-import com.app.hos.server.TcpMessageMapper;
+import com.app.hos.server.messaging.TcpMessageMapper;
 
 public interface Server {
 
