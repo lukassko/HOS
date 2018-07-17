@@ -31,7 +31,7 @@ import com.app.hos.server.event.source.TcpServerEventSource;
 import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
 
-public class TcpServer implements Server, ConnectionFactory,TcpServerListener, Runnable {
+public class TcpServer implements Server, ConnectionContainer, TcpServerListener, Runnable {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 	
@@ -65,8 +65,8 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 	@Override
 	public void run() {
 		if (this.listener == null) {
-			// TODO:
-			//	throw exception
+			logger.info(this + " No listener bound to server connection factory; will not read; exiting...");
+			return;
 		}
 		try {
 			ServerSocket theServerSocket = new ServerSocket(portNumber);
@@ -163,19 +163,10 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 		connection.setSerializer(this.serializer);
 		connection.setDeserializer(this.deserializer);
 		connection.setApplicationEventPublisher(applicationEventPublisher);
-		addConnetion(connection);
+		connection.setTcpConnectionContainer(this);
+		addNewConnection(connection);
 	}
-	
-	private void addConnetion(Connection connection) {
-		synchronized(this.connections) {
-			if (!this.active) {
-				connection.close();
-				return;
-			}
-			this.connections.put(connection.getConnectionId(), connection);
-		}
-	}
-	
+
 	private Executor getTaskExecutor() {
 		if (!this.active) {
 			throw new RuntimeException("Connection Factory not started");
@@ -253,6 +244,24 @@ public class TcpServer implements Server, ConnectionFactory,TcpServerListener, R
 	@Override
 	public String toString() {
 		return "TcpServer [portNumber=" + this.portNumber + ", serverSocket=" + this.serverSocket.getInetAddress() + "]";
+	}
+
+	@Override
+	public void addNewConnection(Connection connection) {
+		synchronized(this.connections) {
+			if (!this.active) {
+				connection.close();
+				return;
+			}
+			this.connections.put(connection.getConnectionId(), connection);
+		}
+	}
+
+	@Override
+	public void removeDeadConnection(Connection connection) {
+		synchronized(this.connections) {
+			this.connections.remove(connection.getConnectionId());
+		}
 	}
 	
 }

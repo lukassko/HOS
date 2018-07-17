@@ -7,7 +7,7 @@ import org.springframework.core.serializer.Serializer;
 import com.app.hos.server.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 
-public interface Server {
+public interface Server extends ConnectionFactory {
 
 	public void start();
 	

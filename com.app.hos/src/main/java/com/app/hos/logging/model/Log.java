@@ -15,6 +15,8 @@ import javax.persistence.Table;
 @Entity
 public class Log  {
 	
+	// TODO: Transaction deadlock due to creating next connection for incrementing entity id (executing in separate transaction)
+	// TODO: change policy to generate id
 	@Id
 	@GeneratedValue
 	private Integer id;

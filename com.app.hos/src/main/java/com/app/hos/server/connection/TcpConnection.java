@@ -15,7 +15,7 @@ import org.springframework.messaging.Message;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventTypeFactory;
 import com.app.hos.server.event.source.TcpConnectionEventSource;
-import com.app.hos.server.event.source.TcpServerEventSource;
+import com.app.hos.server.factory.ConnectionContainer;
 import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.TcpListener;
 
@@ -35,6 +35,8 @@ public class TcpConnection implements Connection {
 	
 	private volatile Serializer<?> serializer;
 	
+	private volatile ConnectionContainer tcpConnectionContainer;
+	
 	private final SocketInfo socketInfo;
 	
 	private final String connectionId;
@@ -52,8 +54,8 @@ public class TcpConnection implements Connection {
 	@Override
 	public void close() {
 		try {
+			tcpConnectionContainer.removeDeadConnection(this);
 			this.socket.close();
-			// remove from sever 
 		} catch (IOException e) {
 		}
 	}
@@ -74,14 +76,18 @@ public class TcpConnection implements Connection {
 			((Serializer<Object>)serializer).serialize(object, this.socketOutputStream);
 			this.socketOutputStream.flush();
 		} catch(Exception e) {
-			TcpConnectionEventSource eventSource = new TcpConnectionEventSource(this.socketInfo, e);
-			TcpEvent event = TcpEventTypeFactory.SERVER_EXCEPTION.create(eventSource);
-			doPublishEvent(event);
+			publishConnectionExceptionEvent(e);
 			close();
 			throw e;
 		}
 	}
 
+	private void publishConnectionExceptionEvent(Throwable cause) {
+		TcpConnectionEventSource eventSource = new TcpConnectionEventSource(this.socketInfo,cause);
+		TcpEvent event = TcpEventTypeFactory.CONNECTION_EXCEPTION.create(eventSource);
+		doPublishEvent(event);
+	}
+	
 	@Override
 	public void run() {
 		boolean run = true;
@@ -147,6 +153,14 @@ public class TcpConnection implements Connection {
 
 	public void setSerializer(Serializer<?> serializer) {
 		this.serializer = serializer;
+	}
+	
+	public ConnectionContainer getTcpConnectionContainer() {
+		return tcpConnectionContainer;
+	}
+
+	public void setTcpConnectionContainer(ConnectionContainer tcpConnectionContainer) {
+		this.tcpConnectionContainer = tcpConnectionContainer;
 	}
 
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
