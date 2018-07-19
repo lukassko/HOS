@@ -1,14 +1,14 @@
 package com.app.hos.server.config;
 
-import com.app.hos.server.TcpReceivingMessageHandler;
+import com.app.hos.server.TcpReceivingMessageAdapter;
 import com.app.hos.server.factory.Server;
 
-public class TcpReceivingChannelAdapterFactoryBean extends AbstractFactoryBean<TcpReceivingMessageHandler> {
+public class TcpReceivingChannelAdapterFactoryBean extends AbstractFactoryBean<TcpReceivingMessageAdapter> {
 	
-	private final TcpReceivingMessageHandler channelAdapter;
+	private final TcpReceivingMessageAdapter channelAdapter;
 	
 	public TcpReceivingChannelAdapterFactoryBean(Server server) {
-		this.channelAdapter = new TcpReceivingMessageHandler();
+		this.channelAdapter = new TcpReceivingMessageAdapter();
 		this.channelAdapter.setConnectionFactory(server);
 	}
 

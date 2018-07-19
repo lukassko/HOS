@@ -3,9 +3,9 @@ package com.app.hos.server.config;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
-import com.app.hos.server.TcpListener;
 import com.app.hos.server.factory.Server;
 import com.app.hos.server.factory.TcpServer;
+import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 
 public class TcpServerConnectionFactoryBean extends AbstractFactoryBean<Server> {

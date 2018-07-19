@@ -5,10 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,26 +16,23 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
-import com.app.hos.server.TcpListener;
-import com.app.hos.server.connection.Connection;
 import com.app.hos.server.connection.SocketInfo;
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventTypeFactory;
 import com.app.hos.server.event.source.TcpConnectionEventSource;
 import com.app.hos.server.event.source.TcpServerEventSource;
+import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
 
-public class TcpServer implements Server, ConnectionContainer, TcpServerListener, Runnable {
+public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 	
 	private final int portNumber;
 	
 	private volatile ServerSocket serverSocket;
-	
-	private final Map<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
 	
 	private final Object monitor = new Object();
 	
@@ -53,6 +46,8 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 	
 	private ApplicationEventPublisher applicationEventPublisher;
 	
+	private ConnectionFactory connectionFactory;
+	
 	private TcpMessageMapper mapper;
 	
 	private TcpListener listener;
@@ -64,8 +59,8 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 	@SuppressWarnings("resource")
 	@Override
 	public void run() {
-		if (this.listener == null) {
-			logger.info(this + " No listener bound to server connection factory; will not read; exiting...");
+		if (this.connectionFactory == null) {
+			logger.info(this + " No connection factory bound to server; will not read; exiting...");
 			return;
 		}
 		try {
@@ -83,6 +78,7 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 					try {
 						TcpConnection tcpConnection = createConnection(socket);
 						initializeConnection(tcpConnection);
+						this.connectionFactory.addConnection(tcpConnection);
 						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
 					} catch (SocketException e) {
 						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
@@ -98,11 +94,6 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 		}
 	}
 
-	@Override
-	public Connection getConnection(String connectionId) {
-		return this.connections.get(connectionId);
-	}
-	
 	public boolean isActive() {
 		return active;
 	}
@@ -130,14 +121,7 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 	}
 	
 	private void closeActiveConnections() {
-		synchronized(this.connections) {
-			Iterator<Entry<String,Connection>> iterator= this.connections.entrySet().iterator();
-			while(iterator.hasNext()) {
-				Connection connection = iterator.next().getValue();
-				connection.close();
-				iterator.remove();
-			}
-		}
+		this.connectionFactory.closeConnections();
 		synchronized(this.monitor) {
 			connectionExecutor.shutdown();
 			try {
@@ -163,8 +147,7 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 		connection.setSerializer(this.serializer);
 		connection.setDeserializer(this.deserializer);
 		connection.setApplicationEventPublisher(applicationEventPublisher);
-		connection.setTcpConnectionContainer(this);
-		addNewConnection(connection);
+		connection.setConnectionFactory(this.connectionFactory);
 	}
 
 	private Executor getTaskExecutor() {
@@ -215,6 +198,11 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 	public void setDeserializer(Deserializer<?> deserializer) {
 		this.deserializer = deserializer;
 	}
+	
+	@Override
+	public void setConnnectionFactory(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+	}
 
 	@Override
 	public void setListener(TcpListener listener) {
@@ -246,22 +234,4 @@ public class TcpServer implements Server, ConnectionContainer, TcpServerListener
 		return "TcpServer [portNumber=" + this.portNumber + ", serverSocket=" + this.serverSocket.getInetAddress() + "]";
 	}
 
-	@Override
-	public void addNewConnection(Connection connection) {
-		synchronized(this.connections) {
-			if (!this.active) {
-				connection.close();
-				return;
-			}
-			this.connections.put(connection.getConnectionId(), connection);
-		}
-	}
-
-	@Override
-	public void removeDeadConnection(Connection connection) {
-		synchronized(this.connections) {
-			this.connections.remove(connection.getConnectionId());
-		}
-	}
-	
 }

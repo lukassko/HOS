@@ -4,10 +4,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
-import com.app.hos.server.TcpListener;
+import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 
-public interface Server extends ConnectionFactory {
+public interface Server {
 
 	public void start();
 	
@@ -22,5 +22,7 @@ public interface Server extends ConnectionFactory {
 	public void setListener(TcpListener listener);
 	
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher);
+	
+	public void setConnnectionFactory(ConnectionFactory connectionFactory);
 	
 }

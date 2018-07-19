@@ -1,4 +1,4 @@
-package com.app.hos.server;
+package com.app.hos.server.handler;
 
 import org.springframework.messaging.Message;
 

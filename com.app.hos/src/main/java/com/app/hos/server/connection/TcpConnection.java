@@ -15,9 +15,9 @@ import org.springframework.messaging.Message;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventTypeFactory;
 import com.app.hos.server.event.source.TcpConnectionEventSource;
-import com.app.hos.server.factory.ConnectionContainer;
+import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
-import com.app.hos.server.TcpListener;
 
 public class TcpConnection implements Connection {
 
@@ -35,7 +35,7 @@ public class TcpConnection implements Connection {
 	
 	private volatile Serializer<?> serializer;
 	
-	private volatile ConnectionContainer tcpConnectionContainer;
+	private volatile ConnectionFactory connectionFactory;
 	
 	private final SocketInfo socketInfo;
 	
@@ -51,10 +51,10 @@ public class TcpConnection implements Connection {
 		return this.socket.getInputStream();
 	}
 	
+	// maybe should remove from connection factory too
 	@Override
 	public void close() {
 		try {
-			tcpConnectionContainer.removeDeadConnection(this);
 			this.socket.close();
 		} catch (IOException e) {
 		}
@@ -77,11 +77,16 @@ public class TcpConnection implements Connection {
 			this.socketOutputStream.flush();
 		} catch(Exception e) {
 			publishConnectionExceptionEvent(e);
-			close();
+			closeAndRemove();
 			throw e;
 		}
 	}
 
+	private void closeAndRemove() {
+		this.close();
+		this.connectionFactory.removeConnection(this);
+	}
+	
 	private void publishConnectionExceptionEvent(Throwable cause) {
 		TcpConnectionEventSource eventSource = new TcpConnectionEventSource(this.socketInfo,cause);
 		TcpEvent event = TcpEventTypeFactory.CONNECTION_EXCEPTION.create(eventSource);
@@ -155,12 +160,12 @@ public class TcpConnection implements Connection {
 		this.serializer = serializer;
 	}
 	
-	public ConnectionContainer getTcpConnectionContainer() {
-		return tcpConnectionContainer;
+	public ConnectionFactory getConnectionFactory() {
+		return connectionFactory;
 	}
 
-	public void setTcpConnectionContainer(ConnectionContainer tcpConnectionContainer) {
-		this.tcpConnectionContainer = tcpConnectionContainer;
+	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
 	}
 
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
