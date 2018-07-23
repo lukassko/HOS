@@ -11,5 +11,5 @@ public interface ConnectionFactory {
 	public void removeConnection(Connection connection);
 	
 	public void closeConnections();
-	
+
 }

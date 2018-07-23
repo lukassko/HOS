@@ -1,9 +1,13 @@
 package com.app.hos.server.event;
 
-import com.app.hos.server.event.source.TcpEventSource;
-
+@FunctionalInterface
 public interface EventFactory {
 
-	public TcpEvent create(TcpEventSource source);
+	default TcpEvent create(Object source){
+		return this.create(source, null);
+	};
+	
+	TcpEvent create (Object source, Throwable cause);
+	//public TcpEvent create(TcpEventSource source);
 	
 }

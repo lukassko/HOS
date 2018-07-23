@@ -1,9 +1,12 @@
 package com.app.hos.server.handler;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.SmartLifecycle;
 
 public abstract class AbstractMessageHandler implements SmartLifecycle {
 
+	protected ApplicationEventPublisher applicationEventPublisher;
+	
 	private volatile boolean running;
 
 	@Override
@@ -26,4 +29,7 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 		// TODO Auto-generated method stub
 	}
 
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
 }

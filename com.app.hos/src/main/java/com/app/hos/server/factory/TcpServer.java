@@ -19,9 +19,7 @@ import org.springframework.core.serializer.Serializer;
 import com.app.hos.server.connection.SocketInfo;
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpEvent;
-import com.app.hos.server.event.TcpEventTypeFactory;
-import com.app.hos.server.event.source.TcpConnectionEventSource;
-import com.app.hos.server.event.source.TcpServerEventSource;
+import com.app.hos.server.event.TcpEventFactory;
 import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 import com.app.hos.server.serializer.ByteArrayDeserializer;
@@ -165,14 +163,12 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 	}
 	
 	private void publishOpenConnectionEvent(SocketInfo socketInfo) {
-		TcpConnectionEventSource eventSource = new TcpConnectionEventSource(socketInfo);
-		TcpEvent event = TcpEventTypeFactory.OPEN_CONNECTION.create(eventSource);
+		TcpEvent event = TcpEventFactory.OPEN_CONNECTION.create(socketInfo);
 		publishServerEvent(event);
 	}
 	
 	private void publishServerExceptionEvent(Throwable cause) {
-		TcpServerEventSource eventSource = new TcpServerEventSource(this, cause);
-		TcpEvent event = TcpEventTypeFactory.SERVER_EXCEPTION.create(eventSource);
+		TcpEvent event = TcpEventFactory.SERVER_EXCEPTION.create(this,cause);
 		publishServerEvent(event);
 	}
 	

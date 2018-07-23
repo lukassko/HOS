@@ -13,8 +13,7 @@ import org.springframework.core.serializer.Serializer;
 import org.springframework.messaging.Message;
 
 import com.app.hos.server.event.TcpEvent;
-import com.app.hos.server.event.TcpEventTypeFactory;
-import com.app.hos.server.event.source.TcpConnectionEventSource;
+import com.app.hos.server.event.TcpEventFactory;
 import com.app.hos.server.factory.ConnectionFactory;
 import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
@@ -88,8 +87,7 @@ public class TcpConnection implements Connection {
 	}
 	
 	private void publishConnectionExceptionEvent(Throwable cause) {
-		TcpConnectionEventSource eventSource = new TcpConnectionEventSource(this.socketInfo,cause);
-		TcpEvent event = TcpEventTypeFactory.CONNECTION_EXCEPTION.create(eventSource);
+		TcpEvent event = TcpEventFactory.CONNECTION_EXCEPTION.create(this.socketInfo,cause);
 		doPublishEvent(event);
 	}
 	
