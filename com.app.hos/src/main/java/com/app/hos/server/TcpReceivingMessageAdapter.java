@@ -1,16 +1,27 @@
 package com.app.hos.server;
 
+import java.util.logging.Logger;
+
 import org.springframework.messaging.Message;
 
 import com.app.hos.server.factory.Server;
 import com.app.hos.server.handler.AbstractMessageHandler;
+import com.app.hos.server.handler.MessageHandler;
 import com.app.hos.server.handler.TcpListener;
 
 public class TcpReceivingMessageAdapter extends AbstractMessageHandler implements TcpListener {
 
+	private final Logger logger = Logger.getLogger(getClass().getName());
+	
+	private MessageHandler messageHandler;
+	
 	@Override
 	public void onMessage(Message<?> message) {
-		// TODO Auto-generated method stub
+		if (messageHandler == null) {
+			logger.severe(this + " No MessageHandler bound to TcpReceivingMessageAdapter");
+			return;
+		}
+		messageHandler.processMessage(message);
 	}
 
 	public void setConnectionFactory(Server server) {
@@ -21,14 +32,23 @@ public class TcpReceivingMessageAdapter extends AbstractMessageHandler implement
 	public boolean isAutoStartup() {
 		return true;
 	}
-
+	
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		if (this.server != null) {
+			this.server.setListener(this);
+			this.server.start();
+		}
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		if (this.server != null) {
+			this.server.stop();
+		}
+	}
+	
+	public void setMessageHandler(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
 	}
 }

@@ -19,9 +19,10 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 		
 	private ConnectionFactory connectionFactory;
 
-	public void handleMessage(Message<?> message) {
+	public void handleMessage(Message<?> message) throws MessageHandlingException {
 		if (connectionFactory == null) {
-			// throw
+			logger.severe(this + " No connection factory bound to TcpSendingMessageAdapter");
+			return;
 		}
 		Connection connection = null;
 		String connectionId = (String)(message.getHeaders().get(IpHeaders.CONNECTION_ID));
@@ -39,7 +40,7 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 			MessageHandlingException messageHandlingException = new MessageHandlingException(message,
 					"Unable to find outbound socket");
 			publishNoConnectionEvent(messageHandlingException,connectionId);
-			throw  messageHandlingException;
+			throw messageHandlingException;
 		}
 	}
 	
@@ -49,12 +50,16 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 	
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		if (this.server != null) {
+			this.server.start();	
+		}
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		if (this.server != null) {
+			this.server.stop();	
+		}
 	}
 	
 	private void publishNoConnectionEvent(MessageHandlingException messageHandlingException, 

@@ -3,9 +3,16 @@ package com.app.hos.server.handler;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.SmartLifecycle;
 
+import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.factory.Server;
+
 public abstract class AbstractMessageHandler implements SmartLifecycle {
 
 	protected ApplicationEventPublisher applicationEventPublisher;
+	
+	protected Server server;
+	
+	protected ConnectionFactory connectionFacotry;
 	
 	private volatile boolean running;
 
@@ -31,5 +38,13 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+	
+	public void setServer(Server server) {
+		this.server = server;
+	}
+	
+	public void setConnectionFactory(ConnectionFactory connectionFacotry) {
+		this.connectionFacotry = connectionFacotry;
 	}
 }

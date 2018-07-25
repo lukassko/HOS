@@ -7,6 +7,6 @@ public interface TcpServerListener {
 	public int getPort();
 	
 	public SocketAddress getSocketAddress();
-	
+
 	public boolean isListening();
 }

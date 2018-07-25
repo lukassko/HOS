@@ -13,7 +13,7 @@ public class ObjectDeserializer implements Deserializer<Optional<Object>> {
 	@Override
 	public Optional<Object> deserialize(InputStream inputStream) throws IOException {
 		ByteArrayDeserializer deserializer = new ByteArrayDeserializer();
-		byte [] bytes = deserializer.deserialize(inputStream); 
+		byte [] bytes = deserializer.deserialize(inputStream);
 		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
 	    ObjectInputStream is = new ObjectInputStream(in);
 		Optional<Object> opt;

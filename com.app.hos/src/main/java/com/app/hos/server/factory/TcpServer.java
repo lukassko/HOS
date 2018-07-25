@@ -77,6 +77,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 						TcpConnection tcpConnection = createConnection(socket);
 						initializeConnection(tcpConnection);
 						this.connectionFactory.addConnection(tcpConnection);
+						getTaskExecutor().execute(tcpConnection);
 						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
 					} catch (SocketException e) {
 						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
@@ -115,10 +116,10 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		}
 		this.serverSocket = null;
 		this.active = false;
-		closeActiveConnections();
+		cleanUp();
 	}
 	
-	private void closeActiveConnections() {
+	private void cleanUp() {
 		this.connectionFactory.closeConnections();
 		synchronized(this.monitor) {
 			connectionExecutor.shutdown();

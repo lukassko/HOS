@@ -17,6 +17,10 @@ public enum TcpEventFactory implements EventFactory {
 		TcpConnectionEventSource eventSource = new TcpConnectionEventSource((SocketInfo)source,cause);
 		return new TcpOpenConnectionEvent(eventSource);
 	}),
+	CLOSE_CONNECTION((source, cause) -> {
+		TcpConnectionEventSource eventSource = new TcpConnectionEventSource((SocketInfo)source,cause);
+		return new TcpCloseConnectionEvent(eventSource);
+	}),
 	SERVER_EXCEPTION((source, cause) -> {
 		TcpServerEventSource eventSource = new TcpServerEventSource((TcpServerListener)source,cause);
 		return new TcpServerExceptionEvent(eventSource);

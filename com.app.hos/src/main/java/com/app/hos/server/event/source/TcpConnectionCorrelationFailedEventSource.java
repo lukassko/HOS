@@ -20,7 +20,6 @@ public class TcpConnectionCorrelationFailedEventSource extends TcpEventSource {
 	
 	@Override
 	public String toString() {
-		return null;
-		//return "TcpServerEventSource [server=" + server + (throwable == null ? "" : ", cause=" + throwable) + "]";
+		return "TcpConnectionCorrelationFailedEventSource [connectionId=" + this.connectionId + "]";
 	}
 }

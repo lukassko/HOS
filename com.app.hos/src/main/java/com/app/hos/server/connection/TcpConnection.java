@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Deserializer;
@@ -20,6 +21,8 @@ import com.app.hos.server.messaging.TcpMessageMapper;
 
 public class TcpConnection implements Connection {
 
+	private final Logger logger = Logger.getLogger(getClass().getName());
+	
 	private volatile ApplicationEventPublisher applicationEventPublisher;
 	
 	private final Socket socket;
@@ -49,12 +52,12 @@ public class TcpConnection implements Connection {
 	private InputStream inputStream() throws IOException {
 		return this.socket.getInputStream();
 	}
-	
-	// maybe should remove from connection factory too
+
 	@Override
 	public void close() {
 		try {
 			this.socket.close();
+			publishCloseConnectionEvent();
 		} catch (IOException e) {
 		}
 	}
@@ -76,16 +79,21 @@ public class TcpConnection implements Connection {
 			this.socketOutputStream.flush();
 		} catch(Exception e) {
 			publishConnectionExceptionEvent(e);
-			closeAndRemove();
+			removeConnection();
 			throw e;
 		}
 	}
-
-	private void closeAndRemove() {
+	
+	private void removeConnection() {
 		this.close();
 		this.connectionFactory.removeConnection(this);
 	}
 	
+	private void publishCloseConnectionEvent() {
+		TcpEvent event = TcpEventFactory.CLOSE_CONNECTION.create(this.socketInfo);
+		doPublishEvent(event);
+	}
+		
 	private void publishConnectionExceptionEvent(Throwable cause) {
 		TcpEvent event = TcpEventFactory.CONNECTION_EXCEPTION.create(this.socketInfo,cause);
 		doPublishEvent(event);
@@ -99,12 +107,14 @@ public class TcpConnection implements Connection {
 			try {
 				message = this.mapper.toMessage(this);
 			} catch (Exception e) {
-				// TODO: publish exception event
+				publishConnectionExceptionEvent(e);
+				removeConnection();
 				run = false;
 			}
 			if (run && message != null) {
 				if (this.listener == null) {
-					// throw exception
+					logger.severe(this + " No TcpListener registered with connection: " + this.connectionId + 
+							" - Received message " + message);
 				}
 				listener.onMessage(message);
 			}
@@ -177,7 +187,7 @@ public class TcpConnection implements Connection {
 
 	private void doPublishEvent(TcpEvent event) {
 		if (this.applicationEventPublisher == null) {
-			// log worning
+			logger.severe(this + "No ApplicationEventPublisher associated with the connection " + this.connectionId);
 		} else {
 			this.applicationEventPublisher.publishEvent(event);
 		}
@@ -200,7 +210,7 @@ public class TcpConnection implements Connection {
 		
 		private int sendBufferSize;
 		
-		private int timeout = -1;
+		private int timeout;
 		
 		private boolean keepAlive;
 
@@ -230,7 +240,7 @@ public class TcpConnection implements Connection {
 		}
 
 		public TcpConnection build () throws SocketException {
-			if(sendBufferSize >= 0) 
+			if(sendBufferSize > 0) 
 				this.socket.setSoTimeout(timeout);
 			if(receiveBufferSize > 0) 
 				this.socket.setReceiveBufferSize(receiveBufferSize);
