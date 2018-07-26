@@ -28,6 +28,8 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 	
+	private ServerSocket theServerSocket;
+	
 	private final int portNumber;
 	
 	private volatile ServerSocket serverSocket;
@@ -54,7 +56,6 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		this.portNumber = portNumber;
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void run() {
 		if (this.connectionFactory == null) {
@@ -62,14 +63,9 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 			return;
 		}
 		try {
-			ServerSocket theServerSocket = new ServerSocket(portNumber);
+			this.serverSocket = this.getServerSocket();
 			while (true) {
-				Socket socket;
-				if (theServerSocket == null) {
-					throw new IOException("Server socket close");
-				} else {
-					socket = theServerSocket.accept();
-				}
+				Socket socket= theServerSocket.accept();
 				if (!isActive()) {
 					socket.close();
 				} else {
@@ -134,6 +130,15 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 				this.connectionExecutor = null;
 			}
 		}
+	}
+	
+	private ServerSocket getServerSocket() throws IOException {
+		synchronized(this.monitor) {
+			if (this.serverSocket == null) {
+				this.serverSocket = new ServerSocket(this.portNumber);
+			}
+		}
+		return this.serverSocket;
 	}
 	
 	private TcpConnection createConnection(Socket socket) throws SocketException {
