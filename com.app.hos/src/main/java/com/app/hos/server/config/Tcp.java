@@ -1,6 +1,6 @@
 package com.app.hos.server.config;
 
-import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.Server;
 
 public final class Tcp {
@@ -13,7 +13,7 @@ public final class Tcp {
 		return new TcpReceivingChannelAdapterFactoryBean(server);
 	}
 	
-	public static TcpSendingChannelAdapterFactoryBean sendingAdapter(ConnectionFactory connetionFacotry) {
+	public static TcpSendingChannelAdapterFactoryBean sendingAdapter(ConnectionManager connetionFacotry) {
 		return new TcpSendingChannelAdapterFactoryBean(connetionFacotry);
 	}
 }

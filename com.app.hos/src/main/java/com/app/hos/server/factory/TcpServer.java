@@ -5,10 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,16 +23,12 @@ import com.app.hos.server.serializer.ByteArrayDeserializer;
 public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
-	
-	private ServerSocket theServerSocket;
-	
+		
 	private final int portNumber;
 	
 	private volatile ServerSocket serverSocket;
 	
 	private final Object monitor = new Object();
-	
-	private volatile ExecutorService connectionExecutor;
 	
 	private volatile boolean active;
 
@@ -44,13 +36,17 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 	
 	private volatile Deserializer<?> deserializer  = new ByteArrayDeserializer();
 	
-	private ApplicationEventPublisher applicationEventPublisher;
+	private volatile ApplicationEventPublisher applicationEventPublisher;
 	
-	private ConnectionFactory connectionFactory;
+	private volatile ConnectionManager connectionManager;
 	
-	private TcpMessageMapper mapper;
+	private volatile TcpMessageMapper mapper;
 	
-	private TcpListener listener;
+	private volatile TcpListener listener;
+	
+	private volatile SocketFactory socketFactory = new TcpSocketFactory();
+	
+	private volatile ThreadsExecutor threadsExecutor = new TcpThreadsExecutor();
 	
 	public TcpServer (int portNumber) {
 		this.portNumber = portNumber;
@@ -58,22 +54,21 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	@Override
 	public void run() {
-		if (this.connectionFactory == null) {
-			logger.info(this + " No connection factory bound to server; will not read; exiting...");
+		if (this.connectionManager == null) {
+			logger.info(this + " No connection manager bound to the server; will not read; exiting...");
 			return;
 		}
 		try {
-			this.serverSocket = this.getServerSocket();
+			this.serverSocket = this.socketFactory.getServerSocket(this.portNumber);
 			while (true) {
-				Socket socket= theServerSocket.accept();
+				Socket socket= serverSocket.accept();
 				if (!isActive()) {
 					socket.close();
 				} else {
 					try {
-						TcpConnection tcpConnection = createConnection(socket);
+						TcpConnection tcpConnection = (TcpConnection)this.connectionManager.createConnection(socket);
 						initializeConnection(tcpConnection);
-						this.connectionFactory.addConnection(tcpConnection);
-						getTaskExecutor().execute(tcpConnection);
+						execute(tcpConnection);
 						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
 					} catch (SocketException e) {
 						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
@@ -97,7 +92,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		if (!this.active) {
 			synchronized (monitor) {
 				this.active = true;
-				getTaskExecutor().execute(this);
+				execute(this);
 			}
 		}
 	}
@@ -116,56 +111,24 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 	}
 	
 	private void cleanUp() {
-		this.connectionFactory.closeConnections();
-		synchronized(this.monitor) {
-			connectionExecutor.shutdown();
-			try {
-				if (!connectionExecutor.awaitTermination(10, TimeUnit.SECONDS)) {
-					connectionExecutor.shutdownNow();
-					connectionExecutor.awaitTermination(10, TimeUnit.SECONDS);
-				}
-			} catch (InterruptedException e) {
-				connectionExecutor.shutdownNow();
-			} finally {
-				this.connectionExecutor = null;
-			}
-		}
+		this.connectionManager.closeConnections();
+		this.threadsExecutor.stop();
 	}
-	
-	private ServerSocket getServerSocket() throws IOException {
-		synchronized(this.monitor) {
-			if (this.serverSocket == null) {
-				this.serverSocket = new ServerSocket(this.portNumber);
-			}
-		}
-		return this.serverSocket;
-	}
-	
-	private TcpConnection createConnection(Socket socket) throws SocketException {
-		return new TcpConnection.SocketAttributes().socket(socket).build();
-	}
-	
+
 	private void initializeConnection(TcpConnection connection) {
 		connection.setListener(this.listener);
 		connection.setMapper(this.mapper);
 		connection.setSerializer(this.serializer);
 		connection.setDeserializer(this.deserializer);
 		connection.setApplicationEventPublisher(applicationEventPublisher);
-		connection.setConnectionFactory(this.connectionFactory);
+		connection.setConnectionFactory(this.connectionManager);
 	}
 
-	private Executor getTaskExecutor() {
+	private void execute(Runnable runnable) {
 		if (!this.active) {
 			throw new RuntimeException("Connection Factory not started");
 		}
-		if (this.connectionExecutor == null) {
-			synchronized(this.monitor) {
-				if (this.connectionExecutor == null) {
-					this.connectionExecutor = Executors.newCachedThreadPool();
-				}
-			}
-		}
-		return this.connectionExecutor;
+		this.threadsExecutor.execute(runnable);
 	}
 	
 	private void publishOpenConnectionEvent(SocketInfo socketInfo) {
@@ -202,10 +165,15 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 	}
 	
 	@Override
-	public void setConnnectionFactory(ConnectionFactory connectionFactory) {
-		this.connectionFactory = connectionFactory;
+	public void setConnnectionManager(ConnectionManager connectionFactory) {
+		this.connectionManager = connectionFactory;
 	}
 
+	@Override
+	public void setSocketFactory(SocketFactory socketFactory) {
+		this.socketFactory = socketFactory;
+	}
+	
 	@Override
 	public void setListener(TcpListener listener) {
 		this.listener = listener;
@@ -214,6 +182,11 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
+	@Override
+	public void setThreadsExecutor(ThreadsExecutor threadsExecutor) {
+		this.threadsExecutor = threadsExecutor;
 	}
 
 	@Override

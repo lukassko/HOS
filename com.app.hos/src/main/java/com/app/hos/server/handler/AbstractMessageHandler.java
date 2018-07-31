@@ -3,7 +3,7 @@ package com.app.hos.server.handler;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.SmartLifecycle;
 
-import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.Server;
 
 public abstract class AbstractMessageHandler implements SmartLifecycle {
@@ -12,7 +12,7 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 	
 	protected Server server;
 	
-	protected ConnectionFactory connectionFacotry;
+	protected ConnectionManager connectionFacotry;
 	
 	private volatile boolean running;
 
@@ -44,7 +44,7 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 		this.server = server;
 	}
 	
-	public void setConnectionFactory(ConnectionFactory connectionFacotry) {
+	public void setConnectionFactory(ConnectionManager connectionFacotry) {
 		this.connectionFacotry = connectionFacotry;
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.messaging.MessageHandlingException;
 import com.app.hos.server.connection.Connection;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventFactory;
-import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.handler.AbstractMessageHandler;
 import com.app.hos.server.messaging.IpHeaders;
 
@@ -17,7 +17,7 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 		
-	private ConnectionFactory connectionFactory;
+	private ConnectionManager connectionFactory;
 
 	public void handleMessage(Message<?> message) throws MessageHandlingException {
 		if (connectionFactory == null) {

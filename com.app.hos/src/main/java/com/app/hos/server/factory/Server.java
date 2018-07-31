@@ -25,6 +25,9 @@ public interface Server {
 	
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher);
 	
-	public void setConnnectionFactory(ConnectionFactory connectionFactory);
+	public void setConnnectionManager(ConnectionManager connectionFactory);
 	
+	public void setSocketFactory(SocketFactory socketFactory);
+	
+	public void setThreadsExecutor(ThreadsExecutor threadsExecutor);
 }

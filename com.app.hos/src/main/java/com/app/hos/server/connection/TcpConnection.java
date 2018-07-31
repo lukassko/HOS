@@ -15,7 +15,7 @@ import org.springframework.messaging.Message;
 
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventFactory;
-import com.app.hos.server.factory.ConnectionFactory;
+import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.messaging.TcpMessageMapper;
 
@@ -37,13 +37,13 @@ public class TcpConnection implements Connection {
 	
 	private volatile Serializer<?> serializer;
 	
-	private volatile ConnectionFactory connectionFactory;
+	private volatile ConnectionManager connectionFactory;
 	
 	private final SocketInfo socketInfo;
 	
 	private final String connectionId;
 	
-	public TcpConnection(SocketAttributes socketAttributes) {
+	public TcpConnection(ConnectionBuilder socketAttributes) {
 		this.socket = socketAttributes.socket;
 		this.connectionId = getConnectionId(this.socket);
 		this.socketInfo = new SocketInfo(this.connectionId, this.socket);
@@ -86,7 +86,7 @@ public class TcpConnection implements Connection {
 	
 	private void removeConnection() {
 		this.close();
-		this.connectionFactory.removeConnection(this);
+		this.connectionFactory.removeConnection(this.connectionId);
 	}
 	
 	private void publishCloseConnectionEvent() {
@@ -168,11 +168,11 @@ public class TcpConnection implements Connection {
 		this.serializer = serializer;
 	}
 	
-	public ConnectionFactory getConnectionFactory() {
+	public ConnectionManager getConnectionFactory() {
 		return connectionFactory;
 	}
 
-	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+	public void setConnectionFactory(ConnectionManager connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}
 
@@ -202,7 +202,7 @@ public class TcpConnection implements Connection {
 		return connctionidBuilder.toString();
 	}
 	
-	public static class SocketAttributes {
+	public static class ConnectionBuilder {
 		
 		private Socket socket;
 		
@@ -214,27 +214,27 @@ public class TcpConnection implements Connection {
 		
 		private boolean keepAlive;
 
-		public SocketAttributes socket(Socket socket) {
+		public ConnectionBuilder socket(Socket socket) {
 			this.socket = socket;
 			return this;
 		}
 
-		public SocketAttributes receiveBufferSize(int receiveBufferSize) {
+		public ConnectionBuilder receiveBufferSize(int receiveBufferSize) {
 			this.receiveBufferSize = receiveBufferSize;
 			return this;
 		}
 
-		public SocketAttributes sendBufferSize(int sendBufferSize) {
+		public ConnectionBuilder sendBufferSize(int sendBufferSize) {
 			this.sendBufferSize = sendBufferSize;
 			return this;
 		}
 
-		public SocketAttributes keepAlive(boolean keepAlive) {
+		public ConnectionBuilder keepAlive(boolean keepAlive) {
 			this.keepAlive = keepAlive;
 			return this;
 		}
 		
-		public SocketAttributes keepAlive(int timeout) {
+		public ConnectionBuilder keepAlive(int timeout) {
 			this.timeout = timeout;
 			return this;
 		}
