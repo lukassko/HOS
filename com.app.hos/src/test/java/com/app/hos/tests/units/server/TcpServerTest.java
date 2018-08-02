@@ -2,43 +2,44 @@ package com.app.hos.tests.units.server;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.concurrent.ExecutorService;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
 
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.context.ApplicationEventPublisher;
 
+import com.app.hos.server.connection.TcpConnection;
+import com.app.hos.server.event.TcpOpenConnectionEvent;
 import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.SocketFactory;
 import com.app.hos.server.factory.TcpServer;
-import com.app.hos.server.factory.ThreadsExecutor;
+import com.app.hos.server.factory.TcpThreadsExecutor;
 import com.app.hos.server.handler.TcpListener;
+import com.app.hos.tests.utils.MultithreadExecutor;
 
-@RunWith(PowerMockRunner.class)
 public class TcpServerTest {
 
 	@Rule
     public MockitoRule rule = MockitoJUnit.rule();
 	
-	private TcpServer spyServer ;
-	
+	private TcpServer tcpServer ;
+
 	@Mock
-	private ExecutorService executorService;
-	
-	@Mock
-	private ServerSocket serverSocket;
+	private ServerSocket mockedServerSocket;
 	
 	@Mock
 	private ConnectionManager connectionManager;
@@ -53,42 +54,82 @@ public class TcpServerTest {
 	private TcpListener tcpListener;
 	
 	@Mock
-	private ThreadsExecutor threadsExecutor;
+	private TcpThreadsExecutor threadsExecutor;
 	
-	private Thread serverThread;
 	
 	@Before
-	public void startServer() {
-		TcpServer tcpServer = new TcpServerBuilder(0)
+	public void prepareServer() throws IOException {
+		this.tcpServer = new TcpServerBuilder(0)
 									.withApplicationEventPublisher(applicationEventPublisher)
 									.withConnnectionManager(connectionManager)
 									.withSocketFactory(socketFactory)
 									.withListener(tcpListener)
 									.withThreadsExecutor(threadsExecutor)
 									.build();
-		
-		this.spyServer = Mockito.spy(tcpServer);
-		this.spyServer.start();
-	}
-	
-	@After
-	public void closeServer() {
-		serverThread.interrupt();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
-	public void serverShouldAcceptIncomingConnectionAndAddConnectionToConnectionManagerTest() throws Exception {
+	public void serverShouldAcceptIncomingConnectionAndAddConnectionToConnectionManagerAndExecuteConnectionThread() throws IOException {
 		// given
-		
-			// dependencies
-		//doNothing().when(executorService).execute(any());
-
-			// object itself
-		//doReturn(executorService).when(tcpServer).getT
+		initMocks();
+		Socket mockedSocket = mock(Socket.class);
+		when(mockedServerSocket.accept()).thenReturn(mockedSocket).thenThrow(IOException.class); // throw exception (second iteration will end server thread)
 		
 		// when 
+		startServerThreadWith(noConcurrency());
 		
+		// then
+		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpOpenConnectionEvent.class));
+		verify(connectionManager,times(1)).createConnection(isA(Socket.class));
+		verify(threadsExecutor,times(1)).execute(isA(TcpConnection.class));
+	}
+	
+	@Test
+	public void whenStopServerDuringAcceptingNewConnectionServerShouldCloseAlreadyCreatedSocketAndCloseAllConnections() throws IOException {
+		// given
+		initMocks();
+		
+		// when
+		// do answer and stop when accepting connection
+		
+		// then
+		// check if socket.close() was called
+	}
+	
+	@Test
+	public void whenStopServerDuringConnectionInitializationServerShouldThrowExcecption() {
+		// given
+
+		// when
+
 		// then
 	}
 	
+	private void initMocks() throws IOException {
+		TcpConnection mockedConnection = mock(TcpConnection.class);	
+		when(socketFactory.getServerSocket(anyInt())).thenReturn(mockedServerSocket);
+		when(connectionManager.createConnection(any(Socket.class))).thenReturn(mockedConnection);
+	}
+
+	private void startServerThreadWith(List<Runnable> threads) {
+		
+		List<Runnable> runnables = new LinkedList<>();
+		runnables.add(tcpServer);
+		runnables.addAll(threads);
+		
+		doAnswer(new Answer<Void>() {
+		    public Void answer(InvocationOnMock invocation) throws InterruptedException {
+		    	MultithreadExecutor.assertConcurrent(runnables, 10);
+		        return null;
+		     }
+		 }).when(threadsExecutor).execute(tcpServer);
+		
+		
+		tcpServer.start();
+	}
+	
+	private List<Runnable> noConcurrency() {
+		return new LinkedList<>();
+	}
 }

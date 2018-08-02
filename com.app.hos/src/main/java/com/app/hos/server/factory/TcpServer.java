@@ -58,9 +58,13 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 			logger.info(this + " No connection manager bound to the server; will not read; exiting...");
 			return;
 		}
+		Thread.currentThread().setName("tcp-server-thread");
 		try {
 			this.serverSocket = this.socketFactory.getServerSocket(this.portNumber);
 			while (true) {
+				if (serverSocket == null) {
+					throw new IOException(this + " stopped before accept");
+				} 
 				Socket socket= serverSocket.accept();
 				if (!isActive()) {
 					socket.close();
@@ -68,7 +72,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 					try {
 						TcpConnection tcpConnection = (TcpConnection)this.connectionManager.createConnection(socket);
 						initializeConnection(tcpConnection);
-						execute(tcpConnection);
+						executeSocketThread(tcpConnection);
 						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
 					} catch (SocketException e) {
 						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
@@ -92,7 +96,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		if (!this.active) {
 			synchronized (monitor) {
 				this.active = true;
-				execute(this);
+				executeSocketThread(this);
 			}
 		}
 	}
@@ -101,12 +105,13 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		if (this.serverSocket == null) {
 			return;
 		}
+		this.active = false;
 		try {
-			this.serverSocket.close();
+			// when method 'accept' is called and waiting for connection, cause SocketException
+			this.serverSocket.close(); 
 		} catch (IOException e) {
 		}
 		this.serverSocket = null;
-		this.active = false;
 		cleanUp();
 	}
 	
@@ -124,7 +129,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		connection.setConnectionFactory(this.connectionManager);
 	}
 
-	private void execute(Runnable runnable) {
+	private void executeSocketThread(Runnable runnable) {
 		if (!this.active) {
 			throw new RuntimeException("Connection Factory not started");
 		}

@@ -8,7 +8,7 @@ public class TcpThreadsExecutor implements ThreadsExecutor {
 
 	private volatile ExecutorService connectionExecutor;
 	
-	private Object monitor;
+	private Object monitor = new Object();
 	
 	// double check locking pattern
 	private ExecutorService getTaskExecutor() {

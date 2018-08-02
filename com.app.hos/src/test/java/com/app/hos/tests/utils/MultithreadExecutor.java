@@ -28,6 +28,7 @@ public class MultithreadExecutor {
 	                        afterInitBlocker.await();
 	                        submittedTestRunnable.run();
 	                    } catch (final Throwable e) {
+	                    	e.printStackTrace();
 	                        exceptions.add(e);
 	                    } finally {
 	                        allDone.countDown();
