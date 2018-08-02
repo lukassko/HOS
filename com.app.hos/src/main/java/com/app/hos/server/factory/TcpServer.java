@@ -211,7 +211,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	@Override
 	public String toString() {
-		return "TcpServer [portNumber=" + this.portNumber + ", serverSocket=" + this.serverSocket.getInetAddress() + "]";
+		return "TcpServer [portNumber=" + this.portNumber + "]";
 	}
 
 }

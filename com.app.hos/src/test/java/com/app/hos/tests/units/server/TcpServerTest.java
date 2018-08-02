@@ -1,14 +1,11 @@
 package com.app.hos.tests.units.server;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpOpenConnectionEvent;
+import com.app.hos.server.event.TcpServerExceptionEvent;
 import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.SocketFactory;
 import com.app.hos.server.factory.TcpServer;
@@ -77,7 +75,7 @@ public class TcpServerTest {
 		when(mockedServerSocket.accept()).thenReturn(mockedSocket).thenThrow(IOException.class); // throw exception (second iteration will end server thread)
 		
 		// when 
-		startServerThreadWith(noConcurrency());
+		startServerThreadWith(noOtherConcurrency());
 		
 		// then
 		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpOpenConnectionEvent.class));
@@ -89,21 +87,47 @@ public class TcpServerTest {
 	public void whenStopServerDuringAcceptingNewConnectionServerShouldCloseAlreadyCreatedSocketAndCloseAllConnections() throws IOException {
 		// given
 		initMocks();
+		Socket mockedSocket = mock(Socket.class);
+
+		doAnswer(new Answer<Socket>() {
+		    public Socket answer(InvocationOnMock invocation) throws InterruptedException {
+		    	tcpServer.stop();
+		        return mockedSocket;
+		     }
+		 }).when(mockedServerSocket).accept();
 		
 		// when
-		// do answer and stop when accepting connection
+		startServerThreadWith(noOtherConcurrency());
 		
 		// then
-		// check if socket.close() was called
+		verify(mockedSocket,times(1)).close();
+		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpServerExceptionEvent.class));
+		verify(connectionManager,times(0)).createConnection(isA(Socket.class));
+		verify(connectionManager,times(1)).closeConnections();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
-	public void whenStopServerDuringConnectionInitializationServerShouldThrowExcecption() {
+	public void whenStopServerDuringConnectionInitializationServerShouldThrowExcecption() throws IOException {
 		// given
+		initMocks();
+		Socket mockedSocket = mock(Socket.class);
+		when(mockedServerSocket.accept()).thenReturn(mockedSocket).thenThrow(IOException.class); // throw exception (second iteration will end server thread)
 
+		doAnswer(new Answer<Void>() {
+		    public Void answer(InvocationOnMock invocation) throws InterruptedException {
+		    	tcpServer.stop();
+		        return null;
+		     }
+		 }).when(threadsExecutor).execute(any());
+		
 		// when
-
+		startServerThreadWith(noOtherConcurrency());
+		
 		// then
+		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpOpenConnectionEvent.class));
+		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpServerExceptionEvent.class));
+		verify(connectionManager,times(1)).closeConnections();
 	}
 	
 	private void initMocks() throws IOException {
@@ -129,7 +153,7 @@ public class TcpServerTest {
 		tcpServer.start();
 	}
 	
-	private List<Runnable> noConcurrency() {
+	private List<Runnable> noOtherConcurrency() {
 		return new LinkedList<>();
 	}
 }
