@@ -11,7 +11,7 @@ import org.hibernate.annotations.Type;
 
 import com.app.hos.persistance.custom.DateTime;
 import com.app.hos.persistance.models.BaseEntity;
-import com.app.hos.share.command.result.Result;
+import com.app.hos.service.command.result.Result;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

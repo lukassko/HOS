@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.command.CommandTypeEntity;
-import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.service.command.type.DeviceType;
 
 @Table(name = "device_type")
 @Entity

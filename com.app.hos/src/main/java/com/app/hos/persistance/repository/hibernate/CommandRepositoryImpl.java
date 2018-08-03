@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.app.hos.persistance.models.command.CommandTypeEntity;
 import com.app.hos.persistance.repository.CommandRepository;
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.service.command.type.CommandType;
 
 @Repository
 public class CommandRepositoryImpl implements CommandRepository {

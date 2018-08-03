@@ -1,7 +1,7 @@
 package com.app.hos.persistance.repository;
 
 import com.app.hos.persistance.models.command.CommandTypeEntity;
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.service.command.type.CommandType;
 
 public interface CommandRepository {
 	

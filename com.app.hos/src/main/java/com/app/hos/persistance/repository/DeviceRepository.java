@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
-import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.service.command.type.DeviceType;
 
 public interface DeviceRepository {
 

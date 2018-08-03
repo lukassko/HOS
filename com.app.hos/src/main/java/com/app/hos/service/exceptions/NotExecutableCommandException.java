@@ -1,6 +1,6 @@
 package com.app.hos.service.exceptions;
 
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.service.command.type.CommandType;
 
 public class NotExecutableCommandException extends HOSException {
 

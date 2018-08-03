@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
-import com.app.hos.share.command.type.CommandType;
+import com.app.hos.service.command.type.CommandType;
 
 @Table(name = "commands_type")
 @Entity

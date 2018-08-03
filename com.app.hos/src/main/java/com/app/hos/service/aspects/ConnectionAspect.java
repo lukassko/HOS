@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.app.hos.logging.repository.LoggingRepository;
 import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
+import com.app.hos.service.command.result.NewDevice;
 import com.app.hos.service.managers.DeviceManager;
-import com.app.hos.share.command.result.NewDevice;
 
 /*
  *  Log information about new and closed connections

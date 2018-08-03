@@ -17,15 +17,15 @@ import com.app.hos.persistance.models.connection.Connection;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.service.AbstractMapFactory;
+import com.app.hos.service.command.CommandInfo;
+import com.app.hos.service.command.builder_v2.AbstractCommandBuilder;
+import com.app.hos.service.command.builder_v2.Command;
+import com.app.hos.service.command.type.CommandType;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
 import com.app.hos.service.integration.server.Server;
 import com.app.hos.service.managers.ConnectionManager;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.service.managers.command.CommandManager;
-import com.app.hos.share.command.CommandInfo;
-import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
-import com.app.hos.share.command.builder_v2.Command;
-import com.app.hos.share.command.type.CommandType;
 import com.app.hos.utils.ReflectionUtils;
 
 @Service

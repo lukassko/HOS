@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,14 +68,15 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 				if (!isActive()) {
 					socket.close();
 				} else {
+					socket.getInetAddress();
 					try {
 						TcpConnection tcpConnection = (TcpConnection)this.connectionManager.createConnection(socket);
 						initializeConnection(tcpConnection);
 						executeSocketThread(tcpConnection);
 						publishOpenConnectionEvent(tcpConnection.getSocketInfo());
-					} catch (SocketException e) {
+					} catch (Exception e) {
 						this.logger.log(Level.SEVERE, "Failed to create and configure a TcpConnection for the new socket: "
-								+ socket.getInetAddress().getHostAddress() + ":" + socket.getPort(), e);
+								+ socket.getInetAddress() + ":" + socket.getPort(), e);
 						socket.close();
 					}
 				}
@@ -131,7 +131,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 
 	private void executeSocketThread(Runnable runnable) {
 		if (!this.active) {
-			throw new RuntimeException("Connection Factory not started");
+			throw new RuntimeException("TcpServer is not active");
 		}
 		this.threadsExecutor.execute(runnable);
 	}

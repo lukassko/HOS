@@ -10,13 +10,13 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import com.app.hos.service.AbstractMapFactory;
+import com.app.hos.service.command.CommandInfo;
+import com.app.hos.service.command.builder_v2.AbstractCommandBuilder;
+import com.app.hos.service.command.builder_v2.Command;
+import com.app.hos.service.command.type.CommandType;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandler;
 import com.app.hos.service.exceptions.handler.HOSExceptionHandlerInfo;
 import com.app.hos.service.websocket.command.builder_v2.WebCommand;
-import com.app.hos.share.command.CommandInfo;
-import com.app.hos.share.command.builder_v2.AbstractCommandBuilder;
-import com.app.hos.share.command.builder_v2.Command;
-import com.app.hos.share.command.type.CommandType;
 
 @Profile("!web-integration-test")
 @Component

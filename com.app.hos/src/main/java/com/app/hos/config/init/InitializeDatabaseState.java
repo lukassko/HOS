@@ -8,7 +8,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.hos.persistance.custom.DateTime;
@@ -19,7 +18,8 @@ import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.DeviceRepository;
 import com.app.hos.persistance.repository.UserRepository;
-import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.service.command.type.DeviceType;
+import com.app.hos.utils.Utils;
 
 //@Component
 //@Profile({"!web-integration-test", "!integration-test"})
@@ -108,8 +108,8 @@ public class InitializeDatabaseState implements ApplicationListener<ContextRefre
 		long timestamp = new DateTime().getTimestamp();
 		for (int i = 0; i < size; i++) {
 			statuses.add(new DeviceStatus(new DateTime(timestamp), 
-								com.app.hos.utils.Utils.generateRandomDouble(), 
-									com.app.hos.utils.Utils.generateRandomDouble()));
+					Utils.generateRandomDouble(), 
+					Utils.generateRandomDouble()));
 			timestamp = timestamp - DIFF;
 		}
 		return statuses;

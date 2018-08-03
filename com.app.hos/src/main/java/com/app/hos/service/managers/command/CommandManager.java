@@ -9,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.api.CommandsApi;
+import com.app.hos.service.command.CommandInfo;
+import com.app.hos.service.command.decorators.FutureCommandDecorator;
+import com.app.hos.service.command.future.FutureCommandFactory;
+import com.app.hos.service.command.result.Message;
 import com.app.hos.service.exceptions.NotExecutableCommandException;
-import com.app.hos.share.command.CommandInfo;
-import com.app.hos.share.command.decorators.FutureCommandDecorator;
-import com.app.hos.share.command.future.FutureCommandFactory;
-import com.app.hos.share.command.result.Message;
-import com.app.hos.utils.Utils;
 
 @Service
 public class CommandManager {

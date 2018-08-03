@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.persistence.NoResultException;
 
-import com.app.hos.share.command.result.NewDevice;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +19,7 @@ import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceStatus;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
+import com.app.hos.service.command.result.NewDevice;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
 @Service

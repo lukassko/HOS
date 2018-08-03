@@ -14,7 +14,7 @@ import com.app.hos.persistance.models.BaseEntity;
 import com.app.hos.persistance.models.device.Device;
 import com.app.hos.persistance.models.device.DeviceTypeEntity;
 import com.app.hos.persistance.repository.DeviceRepository;
-import com.app.hos.share.command.type.DeviceType;
+import com.app.hos.service.command.type.DeviceType;
 
 @Repository
 public class DeviceRepositoryImpl implements DeviceRepository {
