@@ -37,7 +37,7 @@ public class TcpConnection implements Connection {
 	
 	private volatile Serializer<?> serializer;
 	
-	private volatile ConnectionManager connectionFactory;
+	private volatile ConnectionManager connectionManager;
 	
 	private final SocketInfo socketInfo;
 	
@@ -56,7 +56,8 @@ public class TcpConnection implements Connection {
 	@Override
 	public void close() {
 		try {
-			this.socket.close();
+			this.socket.close(); // this cause SocketException when InputStream is blocked for reading
+			// this.socket.shutdownInput();
 			publishCloseConnectionEvent();
 		} catch (IOException e) {
 		}
@@ -79,14 +80,14 @@ public class TcpConnection implements Connection {
 			this.socketOutputStream.flush();
 		} catch(Exception e) {
 			publishConnectionExceptionEvent(e);
-			removeConnection();
+			removeAndCloseConnection();
 			throw e;
 		}
 	}
 	
-	private void removeConnection() {
+	private void removeAndCloseConnection() {
 		this.close();
-		this.connectionFactory.removeConnection(this.connectionId);
+		this.connectionManager.removeConnection(this.connectionId);
 	}
 	
 	private void publishCloseConnectionEvent() {
@@ -108,7 +109,7 @@ public class TcpConnection implements Connection {
 				message = this.mapper.toMessage(this);
 			} catch (Exception e) {
 				publishConnectionExceptionEvent(e);
-				removeConnection();
+				removeAndCloseConnection();
 				run = false;
 			}
 			if (run && message != null) {
@@ -168,12 +169,12 @@ public class TcpConnection implements Connection {
 		this.serializer = serializer;
 	}
 	
-	public ConnectionManager getConnectionFactory() {
-		return connectionFactory;
+	public ConnectionManager getConnectionManager() {
+		return connectionManager;
 	}
 
-	public void setConnectionFactory(ConnectionManager connectionFactory) {
-		this.connectionFactory = connectionFactory;
+	public void setConnectionManager(ConnectionManager connectionFactory) {
+		this.connectionManager = connectionFactory;
 	}
 
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {

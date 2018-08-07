@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,6 +69,11 @@ public class TcpServerTest {
 									.build();
 	}
 
+	@After
+	public void stopServer() {
+		this.tcpServer.stop();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void serverShouldAcceptIncomingConnectionAndAddConnectionToConnectionManagerAndExecuteConnectionThread() throws IOException {

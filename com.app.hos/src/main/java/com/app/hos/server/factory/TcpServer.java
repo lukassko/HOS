@@ -126,7 +126,7 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		connection.setSerializer(this.serializer);
 		connection.setDeserializer(this.deserializer);
 		connection.setApplicationEventPublisher(applicationEventPublisher);
-		connection.setConnectionFactory(this.connectionManager);
+		connection.setConnectionManager(this.connectionManager);
 	}
 
 	private void executeSocketThread(Runnable runnable) {
