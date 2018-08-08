@@ -1,4 +1,4 @@
-package com.app.hos.server.factory;
+package com.app.hos.server.handler;
 
 public interface ThreadsExecutor {
 

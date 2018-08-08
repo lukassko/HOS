@@ -46,14 +46,12 @@ public class LoginServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext (this);
 	}
 	
-	// change level to public for unit testing
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/security/login.jsp");
 		dispatcher.forward(request, response); 
 	}
 	
-	// change level to public for unit testing
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		

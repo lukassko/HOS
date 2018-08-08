@@ -10,22 +10,37 @@ public enum TcpEventFactory implements EventFactory {
 
 	//CLOSE_CONNECTION(TcpCloseConnectionEvent::new),
 	CONNECTION_EXCEPTION((source, cause) -> {
+		if (!(source instanceof SocketInfo)) {
+			throw new IllegalArgumentException("Source for CONNECTION_EXCEPTION must be SocketInfo instance");
+		}
 		TcpConnectionEventSource eventSource = new TcpConnectionEventSource((SocketInfo)source,cause);
 		return new TcpConnectionExceptionEvent(eventSource);
 	}),
 	OPEN_CONNECTION((source, cause) -> {
+		if (!(source instanceof SocketInfo)) {
+			throw new IllegalArgumentException("Source for OPEN_CONNECTION must be SocketInfo instance");
+		}
 		TcpConnectionEventSource eventSource = new TcpConnectionEventSource((SocketInfo)source,cause);
 		return new TcpOpenConnectionEvent(eventSource);
 	}),
 	CLOSE_CONNECTION((source, cause) -> {
+		if (!(source instanceof SocketInfo)) {
+			throw new IllegalArgumentException("Source for CLOSE_CONNECTION must be SocketInfo instance");
+		}
 		TcpConnectionEventSource eventSource = new TcpConnectionEventSource((SocketInfo)source,cause);
 		return new TcpCloseConnectionEvent(eventSource);
 	}),
 	SERVER_EXCEPTION((source, cause) -> {
+		if (!(source instanceof TcpServerListener)) {
+			throw new IllegalArgumentException("Source for SERVER_EXCEPTION must be TcpServerListener instance");
+		}
 		TcpServerEventSource eventSource = new TcpServerEventSource((TcpServerListener)source,cause);
 		return new TcpServerExceptionEvent(eventSource);
 	}),
 	CORRELATION_CONNECTION_EXCEPTION((source, cause) -> {
+		if (!(source instanceof String)) {
+			throw new IllegalArgumentException("Source for CORRELATION_CONNECTION_EXCEPTION must be String instance");
+		}
 		TcpConnectionCorrelationFailedEventSource eventSource = new TcpConnectionCorrelationFailedEventSource((String)source,cause);
 		return new TcpConnectionCorrelationFailedEvent(eventSource);
 	});

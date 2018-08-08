@@ -56,9 +56,11 @@ public class TcpConnectionManager implements ConnectionManager {
 	public void closeConnection(String connectionId) {
 		synchronized(this.connections) {
 			Connection connection = this.connections.get(connectionId);
-			connection.close();
-			this.connections.remove(connectionId);
+			if (connection != null) {
+				connection.close();
+				this.connections.remove(connectionId);
+			}
+
 		}
 	}
-
 }

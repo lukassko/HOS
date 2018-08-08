@@ -1,22 +1,19 @@
 package com.app.hos.server.connection;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.serializer.Serializer;
 import org.springframework.messaging.Message;
@@ -105,22 +102,37 @@ public class TcpConnectionTest {
 		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpConnectionExceptionEvent.class));
 	}
 	
-	//@Test
-	public void whenSendingMessageWithoutErrorsTheOutpuStreamShouldBeFlushed() {
+	@Test
+	public void whenSendingMessageWithoutErrorsTheOutpuStreamShouldBeFlushed() throws Exception {
 		// given
+		Message<?> mockedMessage = mock(Message.class);
+		OutputStream outStream = mock(OutputStream.class);
+		when(mockedSocket.getOutputStream()).thenReturn(outStream);
+		when(mapper.fromMessage(any())).thenReturn(new Object());
 		
 		// when
-
+		tcpConnection.send(mockedMessage);
+		
 		// then
+		verify(outStream,times(1)).flush();
 	}
 	
-	//@Test
-	public void whenSendingMessageCauseExceptionTheConnectionShouldBeClose() {
+	@Test(expected = IOException.class)
+	public void whenSerializingMessageCauseExceptionTheConnectionShouldBeClose() throws Exception {
 		// given
+		Message<?> mockedMessage = mock(Message.class);
+		OutputStream outStream = mock(OutputStream.class);
+		when(mockedSocket.getOutputStream()).thenReturn(outStream);
+		when(mapper.fromMessage(any())).thenReturn(new Object());
+		
+		doThrow(IOException.class).when(serializer).serialize(any(), isA(OutputStream.class));
 		
 		// when
-
+		tcpConnection.send(mockedMessage);
+		
 		// then
+		verify(connectionManager,times(1)).removeConnection(any());
+		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpConnectionExceptionEvent.class));
 	}
 	
 	//@Test
