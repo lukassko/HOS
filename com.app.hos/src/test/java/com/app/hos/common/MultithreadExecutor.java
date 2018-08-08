@@ -42,7 +42,7 @@ public class MultithreadExecutor {
 	        										allExecutorThreadsReady.await(runnables.size() * 10, TimeUnit.MILLISECONDS));
 	        // start all test runners
 	        afterInitBlocker.countDown();
-	        Assert.assertTrue("Test timeout! More than" + maxTimeoutSeconds + "seconds", allDone.await(maxTimeoutSeconds, TimeUnit.SECONDS));
+	        Assert.assertTrue("Test timeout! More than " + maxTimeoutSeconds + " seconds", allDone.await(maxTimeoutSeconds, TimeUnit.SECONDS));
 	    } finally {
 	        threadPool.shutdownNow();
 	    }

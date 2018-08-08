@@ -43,7 +43,7 @@ public class TcpConnection implements Connection {
 	
 	private final String connectionId;
 	
-	public TcpConnection(ConnectionBuilder socketAttributes) {
+	private TcpConnection(ConnectionBuilder socketAttributes) {
 		this.socket = socketAttributes.socket;
 		this.connectionId = getConnectionId(this.socket);
 		this.socketInfo = new SocketInfo(this.connectionId, this.socket);
@@ -196,10 +196,10 @@ public class TcpConnection implements Connection {
 	
 	private String getConnectionId(Socket socket) {
 		StringBuilder connctionidBuilder = new StringBuilder();
-		connctionidBuilder.append(socket.getInetAddress().toString()+":");
+		connctionidBuilder.append(socket.getInetAddress()+":");
 		connctionidBuilder.append(socket.getPort()+"-");
-		connctionidBuilder.append(socket.getLocalPort()+":");
-		connctionidBuilder.append(socket.getPort());
+		connctionidBuilder.append(socket.getLocalAddress()+":");
+		connctionidBuilder.append(socket.getLocalPort());
 		return connctionidBuilder.toString();
 	}
 	
