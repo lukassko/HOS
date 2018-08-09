@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.repository.UserRepository;
+import com.app.hos.persistance.repository.Users;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -37,5 +38,11 @@ public class UserRepositoryImpl implements UserRepository {
 		query.setParameter("name", name);
 		
 		return (User) query.getSingleResult();
+	}
+
+	@Override
+	public Users findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

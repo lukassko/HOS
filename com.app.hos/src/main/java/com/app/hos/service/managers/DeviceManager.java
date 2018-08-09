@@ -31,7 +31,7 @@ public class DeviceManager {
 
 	public void openDeviceConnection(String connectionId, NewDevice newDevice) {
 		Connection connection = createConnection(connectionId,newDevice);
-		Device device = deviceRepository.find(newDevice.getSerialId());
+		Device device = deviceRepository.findBySerial(newDevice.getSerialId());
 		if (device != null) {
 			device.setConnection(connection);
 			connection.setDevice(device);
@@ -55,7 +55,7 @@ public class DeviceManager {
 	public List<DeviceStatus> getDeviceStatuses(String serial, DateTime from, DateTime to) {
 		List<DeviceStatus> sortedStatus = new LinkedList<DeviceStatus>();
 		try {
-			List<DeviceStatus> statuses = deviceRepository.find(serial).getDeviceStatuses();
+			List<DeviceStatus> statuses = deviceRepository.findBySerial(serial).getDeviceStatuses();
 			statuses.forEach(status -> {
 				DateTime date = status.getTime();
 				if (date.compareTo(from) >= 0 && date.compareTo(to) <= 0) 
@@ -81,7 +81,7 @@ public class DeviceManager {
 	}
 	
 	public Device findDevice(String serial) {
-		return deviceRepository.find(serial);
+		return deviceRepository.findBySerial(serial);
 	}
 	
 	public Device findDeviceByConnection(String connectionId) {

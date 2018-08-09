@@ -48,7 +48,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	@Override
-	public Device find(String serial) {
+	public Device findBySerial(String serial) {
 		try {
 			TypedQuery<Device> query = manager.createQuery("SELECT d FROM Device d WHERE d.serial = :serial", Device.class);
 			return query.setParameter("serial", serial).getSingleResult();

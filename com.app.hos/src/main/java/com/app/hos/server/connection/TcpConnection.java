@@ -121,7 +121,7 @@ public class TcpConnection implements Connection {
 			}
 		}
 	}
-	
+
 	@Override
 	public SocketInfo getSocketInfo() {
 		return this.socketInfo;
@@ -181,10 +181,6 @@ public class TcpConnection implements Connection {
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
-	@Override
-	public String toString() {
-		return "TcpConnection ["+ this.getConnectionId() +"]";
-	}
 
 	private void doPublishEvent(TcpEvent event) {
 		if (this.applicationEventPublisher == null) {
@@ -201,6 +197,36 @@ public class TcpConnection implements Connection {
 		connctionidBuilder.append(socket.getLocalAddress()+":");
 		connctionidBuilder.append(socket.getLocalPort());
 		return connctionidBuilder.toString();
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((socketInfo == null) ? 0 : socketInfo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TcpConnection other = (TcpConnection) obj;
+		if (socketInfo == null) {
+			if (other.socketInfo != null)
+				return false;
+		} else if (!socketInfo.equals(other.socketInfo))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "TcpConnection ["+ this.getConnectionId() +"]";
 	}
 	
 	public static class ConnectionBuilder {

@@ -12,6 +12,7 @@ public interface ConnectionRepository {
 	
 	public void save(HistoryConnection connection);
 	
+	// TODO consider to separate repository
 	public List<HistoryConnection> findHistoryConnectionsForDevice(int id); 
 	
 	public List<HistoryConnection> findHistoryConnectionsForPeriod(DateTime from, DateTime to); 

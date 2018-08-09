@@ -92,7 +92,7 @@ public class ConnectionRepositoryIT {
 	@Test(expected=PersistenceException.class)
 	public void test20_saveHistoryConnectionWithInvalidConnectionTimeShouldThrowException () {
 		// given
-		Device device = deviceRepository.find("serial_10"); // device from previous test
+		Device device = deviceRepository.findBySerial("serial_10"); // device from previous test
 		Connection connection = new Connection.Builder()
 												.connectionId("connection_id_20")
 												.connectionTime(null)
@@ -117,7 +117,7 @@ public class ConnectionRepositoryIT {
 		long timestamp = 1528996492;
 		DateTime from = new DateTime(timestamp);
 		DateTime to = new DateTime(timestamp + 100);
-		Device device = deviceRepository.find("serial_10"); // device from previous test
+		Device device = deviceRepository.findBySerial("serial_10"); // device from previous test
 		Connection connection = new Connection.Builder()
 												.connectionId("connection_id_20")
 												.connectionTime(from)

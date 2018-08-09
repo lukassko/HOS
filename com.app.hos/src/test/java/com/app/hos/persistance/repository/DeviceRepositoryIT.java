@@ -184,7 +184,7 @@ public class DeviceRepositoryIT {
 		deviceRepository.save(device);
 		
 			// these select are not from cache		
-		Device foundBySerial = deviceRepository.find(serial);
+		Device foundBySerial = deviceRepository.findBySerial(serial);
 		Device foundByConnection = deviceRepository.findByConnection(connectionId);
 		List<Device> foundAll = deviceRepository.findAll();
 		
@@ -203,7 +203,7 @@ public class DeviceRepositoryIT {
 	public void test20_removeDeviceShouldRemoveEntityFromDb() {
 		// given
 			// find device from previous test
-		Device device = deviceRepository.find("serial_10");
+		Device device = deviceRepository.findBySerial("serial_10");
 
 		// when
 		deviceRepository.remove(device);
@@ -217,7 +217,7 @@ public class DeviceRepositoryIT {
 	public void test30_findNonExistingDeviceShouldReturnNull() {
 		// given
 		// when
-		Device foundBySerial = deviceRepository.find("non_existsing_serial");
+		Device foundBySerial = deviceRepository.findBySerial("non_existsing_serial");
 		Device foundByConnection = deviceRepository.findByConnection("non_existsing_connection");
 		
 		// then

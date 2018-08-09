@@ -163,7 +163,7 @@ public class DeviceManagerIT {
 		DeviceStatus status = new DeviceStatus(new DateTime(),0.39, 38.41);
 		Thread.sleep(1600);
 		manager.addDeviceStatus("serial_device_1", status);
-		Device device = deviceRepository.find("serial_device_1");
+		Device device = deviceRepository.findBySerial("serial_device_1");
 		Assert.assertNotNull(device);
 		latestStauses.put(device, status);
 		
@@ -171,7 +171,7 @@ public class DeviceManagerIT {
 		status = new DeviceStatus(new DateTime(),0.39, 38.41);
 		Thread.sleep(1400);
 		manager.addDeviceStatus("serial_device_2",status);
-		device = deviceRepository.find("serial_device_2");
+		device = deviceRepository.findBySerial("serial_device_2");
 		Assert.assertNotNull(device);
 		latestStauses.put(device, status);
 		
@@ -179,7 +179,7 @@ public class DeviceManagerIT {
 		status = new DeviceStatus(new DateTime(),32.33, 28.46);
 		Thread.sleep(2400);
 		manager.addDeviceStatus("serial_device_3", status);
-		device = deviceRepository.find("serial_device_3");
+		device = deviceRepository.findBySerial("serial_device_3");
 		Assert.assertNotNull(device);
 		latestStauses.put(device, status);
 		
@@ -226,7 +226,7 @@ public class DeviceManagerIT {
 	
 	@Test
 	public void stage60_newConnectionForDeviceInDbShouldUpdateConnectionsParams () {	
-		Device oldConnectedDevice = deviceRepository.find("serial_device_1");
+		Device oldConnectedDevice = deviceRepository.findBySerial("serial_device_1");
 		
 		Map<String,Object> headerMap = new HashMap<String, Object>();
 		headerMap.put(IpHeaders.CONNECTION_ID,"192.168.0.122:13020:123:asd:dsa:213");
@@ -237,7 +237,7 @@ public class DeviceManagerIT {
 		
 		manager.openDeviceConnection("connectionId", new NewDevice(device.getSerial(), device.getName(), DeviceType.PHONE, "ip", 123));
 		
-		Device newConnectedDevice = deviceRepository.find("serial_device_1");
+		Device newConnectedDevice = deviceRepository.findBySerial("serial_device_1");
 		Connection oldConnection = oldConnectedDevice.getConnection();
 		Connection newConnection = newConnectedDevice.getConnection();
 		

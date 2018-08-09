@@ -41,7 +41,7 @@ public class DeviceManagerTest {
 		// given
 		String serial = "serial";
 		Device device = new Device("name", serial, new DeviceTypeEntity(DeviceType.PHONE));
-		when(deviceRepository.find(anyString())).thenReturn(device);
+		when(deviceRepository.findBySerial(anyString())).thenReturn(device);
 		
 		// when
 		List<DeviceStatus> statuses = manager.getDeviceStatuses(serial, new DateTime(), new DateTime());
@@ -75,7 +75,7 @@ public class DeviceManagerTest {
 		statuses.add(new DeviceStatus(new DateTime(currenttTime), Utils.generateRandomDouble(), Utils.generateRandomDouble()));
 		device.setDeviceStatuses(statuses);
 		
-		when(deviceRepository.find(serial)).thenReturn(device);
+		when(deviceRepository.findBySerial(serial)).thenReturn(device);
 
 		// when
 		List<DeviceStatus> foundStatuses = manager.getDeviceStatuses(serial, new DateTime(firstTime + 3000), new DateTime(currenttTime));

@@ -97,7 +97,7 @@ public class DeviceRepositoryMultithreadIT {
 					transactionTemplate.execute(new TransactionCallback<Void>() {
 					    @Override
 					    public Void doInTransaction(TransactionStatus status) {
-					    	Device device = deviceRepository.find(serial);
+					    	Device device = deviceRepository.findBySerial(serial);
 					    	if (device != null)
 					    		device.setName("thread_" + Thread.currentThread().getName());
 							return null;

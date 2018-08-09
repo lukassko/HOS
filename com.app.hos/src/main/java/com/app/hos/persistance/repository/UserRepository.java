@@ -9,4 +9,6 @@ public interface UserRepository {
 	public User find(int id);
 	
 	public User findByName(String userName);
+	
+	public Users findAll();
 }

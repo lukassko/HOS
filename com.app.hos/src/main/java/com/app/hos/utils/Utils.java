@@ -63,6 +63,10 @@ public class Utils {
 		return generated /100;
 	}
     
+    public static int generateRandomInteger() { 
+		return ThreadLocalRandom.current().nextInt();
+	}
+    
     public static String getHostName() {
     	try {
     		InetAddress localMachine = java.net.InetAddress.getLocalHost();
