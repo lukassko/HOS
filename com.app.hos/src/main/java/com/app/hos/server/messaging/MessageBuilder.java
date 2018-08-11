@@ -24,6 +24,11 @@ public class MessageBuilder<T> {
 	public static <T> MessageBuilder<T> withPayload(T payload) {
 		return new MessageBuilder<T>(payload);
 	}
+
+	public MessageBuilder<T> setMessageHeaders(Map<String,Object> messageHeaders) {
+		messageHeaderAccessor.copyHeadersIfAbsent(messageHeaders);
+		return this;
+	}
 	
 	public MessageBuilder<T> setMessageHeaders(MessageHeaders messageHeaders) {
 		MessageHeaders originalMessageHeaders = messageHeaderAccessor.getMessageHeaders();

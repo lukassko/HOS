@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.GenericMessage;
 
 import static org.mockito.Mockito.*;
 
@@ -19,7 +20,7 @@ public class TcpMessageMapperTest {
 	private TcpMessageMapper messageMapper = new TcpMessageMapper();
 		
 	@Test
-	public void passingConnectionToMessageMapperShouldReturnProperMessage() throws Exception {
+	public void passingConnectionToMessageMapperShouldReturnProperMessagePayload() throws Exception {
 		// given
 		Connection connection = mock(Connection.class);
 		SocketInfo socketInfo = mock(SocketInfo.class);
@@ -36,10 +37,22 @@ public class TcpMessageMapperTest {
 		Message<?> message = messageMapper.toMessage(connection);
 		
 		// then
-		MessageHeaders messageHeaders = message.getHeaders();
 		Object messagePayload = message.getPayload();
 		
-		assertTrue(messagePayload = payload);
+		assertTrue(messagePayload == payload);
+	}
+	
+	@Test
+	public void gettingPayloadFromMessageShouldReturnProperObject() throws Exception {
+		// given
+		Object payload = new Object();
+		Message<Object> message = new GenericMessage<>(payload);
+		
+		// when
+		Object receivedPayload = messageMapper.fromMessage(message);
+		
+		// then
+		assertTrue(receivedPayload == payload);
 	}
 }
 
