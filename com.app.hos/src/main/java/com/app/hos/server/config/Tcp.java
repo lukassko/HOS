@@ -13,7 +13,7 @@ public final class Tcp {
 		return new TcpReceivingChannelAdapterFactoryBean(server);
 	}
 	
-	public static TcpSendingChannelAdapterFactoryBean sendingAdapter(ConnectionManager connetionFacotry) {
-		return new TcpSendingChannelAdapterFactoryBean(connetionFacotry);
+	public static TcpSendingChannelAdapterFactoryBean sendingAdapter(Server server,ConnectionManager connectionManager) {
+		return new TcpSendingChannelAdapterFactoryBean(server,connectionManager);
 	}
 }

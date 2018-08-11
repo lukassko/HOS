@@ -9,18 +9,20 @@ import org.springframework.messaging.MessageHandlingException;
 import com.app.hos.server.connection.Connection;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventFactory;
-import com.app.hos.server.factory.ConnectionManager;
+import com.app.hos.server.factory.Server;
 import com.app.hos.server.handler.AbstractMessageHandler;
 import com.app.hos.server.messaging.IpHeaders;
 
 public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
-		
-	private ConnectionManager connectionFactory;
-
+	
+	public TcpSendingMessageAdapter(Server server) {
+		super(server);
+	}
+	
 	public void handleMessage(Message<?> message) throws MessageHandlingException {
-		if (connectionFactory == null) {
+		if (connectionManager == null) {
 			logger.severe(this + " No connection factory bound to TcpSendingMessageAdapter");
 			return;
 		}
@@ -45,7 +47,7 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 	}
 	
 	private Connection getConnection(String connectionId) {
-		return this.connectionFactory.getConnection(connectionId);
+		return this.connectionManager.getConnection(connectionId);
 	}
 	
 	@Override

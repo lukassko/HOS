@@ -1,24 +1,23 @@
 package com.app.hos.server.messaging;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.messaging.support.MessageHeaderAccessor;
 
 public class MessageBuilder<T> {
 
 	private final T payload;
 	
-	private MessageHeaderAccessor messageHeaderAccessor;
+	private Map<String,Object> headers;
 	
 	/**
 	 * Private constructor to be invoked from the static factory methods only.
 	 */
 	private MessageBuilder(T payload) {
 		this.payload = payload;
-		this.messageHeaderAccessor = new MessageHeaderAccessor();
+		this.headers = new HashMap<>();
 	}
 	
 	public static <T> MessageBuilder<T> withPayload(T payload) {
@@ -26,37 +25,27 @@ public class MessageBuilder<T> {
 	}
 
 	public MessageBuilder<T> setMessageHeaders(Map<String,Object> messageHeaders) {
-		messageHeaderAccessor.copyHeadersIfAbsent(messageHeaders);
-		return this;
-	}
-	
-	public MessageBuilder<T> setMessageHeaders(MessageHeaders messageHeaders) {
-		MessageHeaders originalMessageHeaders = messageHeaderAccessor.getMessageHeaders();
-		messageHeaders.forEach(originalMessageHeaders::putIfAbsent);
-		return this;
-	}
-	
-	public MessageBuilder<T> copyHeaders(Map<String,?> headersToCopy) {
-		messageHeaderAccessor.copyHeaders(headersToCopy);
-		return this;
-	}
-	
-	public MessageBuilder<T> setHeader(String headerName, Object headerValue) {
-		messageHeaderAccessor.setHeader(headerName, headerValue);
+		this.headers = messageHeaders;
 		return this;
 	}
 	
 	public MessageBuilder<T> setHeaderIfAbsent(String headerName, Object headerValue) {
-		messageHeaderAccessor.setHeaderIfAbsent(headerName, headerValue);
+		if (!this.headers.containsKey(headerName))
+			this.headers.put(headerName, headerValue);
 		return this;
 	}
 	
-	public MessageBuilder<T> removeHeader(String headerName) {
-		messageHeaderAccessor.removeHeader(headerName);
+	public MessageBuilder<T> addHeader(String header, T value) {
+		this.headers.put(header, value);
+		return this;
+	}
+	
+	public MessageBuilder<T> removeHeader(String header) {
+		this.headers.remove(header);
 		return this;
 	}
 
 	public Message<T> build () {
-		return new GenericMessage<T>(this.payload, this.messageHeaderAccessor.toMap());
+		return new GenericMessage<T>(this.payload, this.headers);
 	}
 }

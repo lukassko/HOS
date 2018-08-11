@@ -12,10 +12,14 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 	
 	protected Server server;
 	
-	protected ConnectionManager connectionFacotry;
+	protected ConnectionManager connectionManager;
 	
 	private volatile boolean running;
-
+	
+	public AbstractMessageHandler(Server server) {
+		this.server = server;
+	}
+	
 	@Override
 	public boolean isRunning() {
 		return this.running;
@@ -44,7 +48,7 @@ public abstract class AbstractMessageHandler implements SmartLifecycle {
 		this.server = server;
 	}
 	
-	public void setConnectionFactory(ConnectionManager connectionFacotry) {
-		this.connectionFacotry = connectionFacotry;
+	public void setConnectionManager(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
 	}
 }

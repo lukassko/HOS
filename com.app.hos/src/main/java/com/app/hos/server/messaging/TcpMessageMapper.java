@@ -18,11 +18,11 @@ public class TcpMessageMapper implements InboundMessageMapper<Connection>,
 		Object payload = connection.getPayload();
 
 		return MessageBuilder.withPayload(payload)
-				.setMessageHeaders(getHeaders(socketInfo))
+				.setMessageHeaders(getStandardHeaders(socketInfo))
 		        .build();
 	}
 
-	private Map<String, Object> getHeaders(SocketInfo socketInfo) {
+	private Map<String, Object> getStandardHeaders(SocketInfo socketInfo) {
 		Map<String, Object> headers = new HashMap<>();
 		headers.put(IpHeaders.HOSTNAME, socketInfo.getHostName());
 		headers.put(IpHeaders.IP_ADDRESS, socketInfo.getInetAddress());

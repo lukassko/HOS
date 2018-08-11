@@ -11,9 +11,14 @@ import com.app.hos.server.handler.TcpListener;
 
 public class TcpReceivingMessageAdapter extends AbstractMessageHandler implements TcpListener {
 
+
 	private final Logger logger = Logger.getLogger(getClass().getName());
 	
 	private MessageHandler messageHandler;
+	
+	public TcpReceivingMessageAdapter(Server server) {
+		super(server);
+	}
 	
 	@Override
 	public void onMessage(Message<?> message) {
