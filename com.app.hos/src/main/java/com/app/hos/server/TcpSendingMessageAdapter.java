@@ -23,7 +23,7 @@ public class TcpSendingMessageAdapter extends AbstractMessageHandler {
 	
 	public void handleMessage(Message<?> message) throws MessageHandlingException {
 		if (connectionManager == null) {
-			logger.severe(this + " No connection factory bound to TcpSendingMessageAdapter");
+			logger.severe(this + " No connection manager bound to TcpSendingMessageAdapter");
 			return;
 		}
 		Connection connection = null;

@@ -1,7 +1,5 @@
 package com.app.hos.server;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,10 +13,13 @@ import org.springframework.messaging.MessageHandlingException;
 
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+
 import com.app.hos.server.connection.Connection;
 import com.app.hos.server.event.TcpConnectionCorrelationFailedEvent;
 import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.Server;
+import com.app.hos.server.messaging.IpHeaders;
 
 public class TcpSendingMessageAdapterTest {
 	@Rule
@@ -39,7 +40,7 @@ public class TcpSendingMessageAdapterTest {
 	public void prepareAdapter() {
 		adapter = new TcpSendingMessageAdapter(server);
 		adapter.setApplicationEventPublisher(applicationEventPublisher);
-		doNothing().when(applicationEventPublisher).publishEvent(any());
+		adapter.setConnectionManager(connectionManager);
 	}
 	
 	@Test(expected = MessageHandlingException.class)
@@ -50,6 +51,7 @@ public class TcpSendingMessageAdapterTest {
 		
 		when(connectionManager.getConnection(anyString())).thenReturn(null);
 		doReturn(messageHeaders).when(message).getHeaders();
+		doReturn("connection_id").when(messageHeaders).get(IpHeaders.CONNECTION_ID);
 		
 		// when
 		adapter.handleMessage(message);
@@ -67,28 +69,33 @@ public class TcpSendingMessageAdapterTest {
 		
 		when(connectionManager.getConnection(anyString())).thenReturn(connection);	
 		doReturn(messageHeaders).when(message).getHeaders();
+		doReturn("connection_id").when(messageHeaders).get(IpHeaders.CONNECTION_ID);
 				
 		// when
 		adapter.handleMessage(message);
 				
 		// then
+		verify(connection,times(1)).send(message);
 	}
 	
 	@Test
 	public void sendingMessageWithValidConnenectionShouldCloseConnectionWhenErrorOccureOndConnectioSendMethod() 
 			throws Exception {
 		// given
-		Connection connection = mock(Connection.class);
 		Message<?> message = mock(Message.class);
 		MessageHeaders messageHeaders = mock(MessageHeaders.class);
-		
-		when(connectionManager.getConnection(anyString())).thenReturn(connection);
+		Connection connection = mock(Connection.class);
+			
+		when(connectionManager.getConnection(anyString())).thenReturn(connection);	
 		doReturn(messageHeaders).when(message).getHeaders();
-				
+		doReturn("connection_id").when(messageHeaders).get(IpHeaders.CONNECTION_ID);
+		doThrow(IOException.class).when(connection).send(message);
+						
 		// when
 		adapter.handleMessage(message);
-				
+					
 		// then
+		verify(connection,times(1)).close();
 	}
 
 }
