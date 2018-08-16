@@ -48,7 +48,7 @@ public class TcpConnectionManagerTest {
 		// when
 		Connection connection = connectionManager.createConnection(socket);
 		String connectionId = connection.getConnectionId();
-		connectionManager.removeConnection(connectionId);
+		connectionManager.closeConnection(connectionId);
 		
 		// then
 		assertNull(connectionManager.getConnection(connectionId));

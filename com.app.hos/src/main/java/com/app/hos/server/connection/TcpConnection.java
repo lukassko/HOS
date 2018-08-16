@@ -55,11 +55,14 @@ public class TcpConnection implements Connection {
 
 	@Override
 	public void close() {
-		try {
-			this.socket.close(); // this cause SocketException when InputStream is blocked for reading
-			// this.socket.shutdownInput();
-			publishCloseConnectionEvent();
-		} catch (IOException e) {
+		if(isOpen()) {
+			try {
+				this.socket.close(); // this cause SocketException when InputStream is blocked for reading
+				// this.socket.shutdownInput();
+				publishCloseConnectionEvent();
+			} catch (IOException e) {
+				throw new RuntimeException(e.getMessage());
+			}
 		}
 	}
 
@@ -80,16 +83,16 @@ public class TcpConnection implements Connection {
 			this.socketOutputStream.flush();
 		} catch(Exception e) {
 			publishConnectionExceptionEvent(e);
-			removeAndCloseConnection();
+			removeConnection();
 			throw e;
 		}
 	}
 	
-	private void removeAndCloseConnection() {
-		this.close();
-		this.connectionManager.removeConnection(this.connectionId);
+	private void removeConnection() {
+		close();
+		connectionManager.closeConnection(this.connectionId);
 	}
-	
+
 	private void publishCloseConnectionEvent() {
 		TcpEvent event = TcpEventFactory.CLOSE_CONNECTION.create(this.socketInfo);
 		doPublishEvent(event);
@@ -109,7 +112,7 @@ public class TcpConnection implements Connection {
 				message = this.mapper.toMessage(this);
 			} catch (Exception e) {
 				publishConnectionExceptionEvent(e);
-				removeAndCloseConnection();
+				removeConnection();
 				run = false;
 			}
 			if (run && message != null) {
@@ -186,6 +189,7 @@ public class TcpConnection implements Connection {
 		if (this.applicationEventPublisher == null) {
 			logger.severe(this + "No ApplicationEventPublisher associated with the connection " + this.connectionId);
 		} else {
+			System.out.println("doPublishEvent " + event.toString());
 			this.applicationEventPublisher.publishEvent(event);
 		}
 	}

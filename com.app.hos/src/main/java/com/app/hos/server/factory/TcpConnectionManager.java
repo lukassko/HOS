@@ -2,6 +2,7 @@ package com.app.hos.server.factory;
 
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,18 +27,17 @@ public class TcpConnectionManager implements ConnectionManager {
 	public Connection getConnection(String connectionId) {
 		return this.connections.get(connectionId);
 	}
+	
+
+	@Override
+	public Collection<Connection> getConnections() {
+		return this.connections.values();
+	}
 
 	@Override
 	public void addConnection(Connection connection) {
 		synchronized(this.connections) {
 			this.connections.put(connection.getConnectionId(), connection);
-		}
-	}
-
-	@Override
-	public void removeConnection(String connectionId) {
-		synchronized(this.connections) {
-			this.connections.remove(connectionId);
 		}
 	}
 
@@ -60,7 +60,7 @@ public class TcpConnectionManager implements ConnectionManager {
 				connection.close();
 				this.connections.remove(connectionId);
 			}
-
 		}
 	}
+
 }

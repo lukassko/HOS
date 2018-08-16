@@ -7,6 +7,7 @@ import com.app.hos.server.factory.SocketFactory;
 import com.app.hos.server.factory.TcpServer;
 import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.handler.ThreadsExecutor;
+import com.app.hos.server.messaging.TcpMessageMapper;
 
 public class TcpServerBuilder {
 
@@ -38,6 +39,11 @@ public class TcpServerBuilder {
 	
 	public TcpServerBuilder withThreadsExecutor(ThreadsExecutor threadsExecutor) {
 		this.server.setThreadsExecutor(threadsExecutor);
+		return this;
+	}
+	
+	public TcpServerBuilder withMessageMapper(TcpMessageMapper mapper) {
+		this.server.setMapper(mapper);
 		return this;
 	}
 	

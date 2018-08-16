@@ -98,7 +98,7 @@ public class TcpConnectionTest {
 		startConnectionThreadWith(noOtherConcurrency());
 				
 		// then
-		verify(connectionManager,times(1)).removeConnection(any());
+		verify(connectionManager,times(1)).closeConnection(any());
 		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpConnectionExceptionEvent.class));
 	}
 	
@@ -131,7 +131,7 @@ public class TcpConnectionTest {
 		tcpConnection.send(mockedMessage);
 		
 		// then
-		verify(connectionManager,times(1)).removeConnection(any());
+		verify(connectionManager,times(1)).closeConnection(any());
 		verify(applicationEventPublisher,times(1)).publishEvent(isA(TcpConnectionExceptionEvent.class));
 	}
 	
