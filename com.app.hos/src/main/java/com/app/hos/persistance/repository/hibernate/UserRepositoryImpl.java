@@ -42,7 +42,6 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public Users findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return new UsersRepositoryImpl(manager);
 	}
 }

@@ -2,7 +2,6 @@ package com.app.hos.persistance.repository;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -12,6 +11,10 @@ import com.app.hos.persistance.models.user.User;
 import com.app.hos.persistance.models.user.Role.UserRole;
 import com.app.hos.persistance.repository.UserRepository;
 import com.app.hos.utils.security.SecurityUtils;
+
+import static org.junit.Assert.*;
+
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -28,13 +31,13 @@ import org.junit.runners.MethodSorters;
 @Transactional
 public class UserRepositoryIT {
 
-
 	@Autowired
     private UserRepository userRepository;
 	
-	@Rollback(false)
+	//@Rollback(false)
     @Test
     public void stage10_saveOneUserAndCheckIfWasSavedTest() {
+		// given
     	User user = new User();
     	user.setName("admin");
     	user.setHash(SecurityUtils.getRandomAsString());
@@ -50,12 +53,51 @@ public class UserRepositoryIT {
     	Assert.assertTrue(role2.getUsers().size() == 1);
     	Assert.assertTrue(user.getRoles().size() == 2);
     	
+    	// when
     	userRepository.save(user);
     	
+    	// then
     	Assert.assertEquals(user, userRepository.find(1));
     	Assert.assertEquals(user, userRepository.findByName("admin"));
     	Assert.assertEquals(2, userRepository.findByName("admin").getRoles().size());
-    	Assert.assertTrue(user.compareRoles(userRepository.findByName("admin")));
     }
-    
+ 
+	@Test
+	public void stage20_selectMultiUsersShouldReturnProperUsersList() throws Exception {
+		// given
+		User user = new User();
+    	user.setName("user_1");
+    	user.setHash(SecurityUtils.getRandomAsString());
+		user.setSalt(SecurityUtils.getRandomAsString());
+    	Role role = new Role(UserRole.USER);
+    	user.addRole(role);
+    	
+    	userRepository.save(user);
+    	
+    	user = new User();
+    	user.setName("admin_1");
+    	user.setHash(SecurityUtils.getRandomAsString());
+		user.setSalt(SecurityUtils.getRandomAsString());
+    	role = new Role(UserRole.ADMIN);
+    	user.addRole(role);
+    	
+    	userRepository.save(user);
+    	
+    	user = new User();
+    	user.setName("admin_2");
+    	user.setHash(SecurityUtils.getRandomAsString());
+		user.setSalt(SecurityUtils.getRandomAsString());
+    	role = new Role(UserRole.ADMIN);
+    	user.addRole(role);
+    	
+    	userRepository.save(user);
+    	
+		// when
+    	List<User> allUsers = userRepository.findAll().getAsLIst();
+    	List<User> admins = userRepository.findAll().hasRole(UserRole.ADMIN).getAsLIst();
+    	
+		// then
+    	assertEquals(2, admins.size());
+    	assertEquals(3, allUsers.size());
+	}
 }

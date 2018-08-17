@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.app.hos.common.MultithreadExecutor;
-import com.app.hos.common.TestUtils;
 import com.app.hos.config.ApplicationContextConfig;
 
 import com.app.hos.persistance.custom.DateTime;
@@ -28,7 +27,7 @@ import com.app.hos.service.command.type.DeviceType;
 import com.app.hos.service.managers.DeviceManager;
 import com.app.hos.utils.Utils;
 
-//@Ignore("run only one integration test")
+@Ignore("run only one integration test")
 @WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationContextConfig.class})
