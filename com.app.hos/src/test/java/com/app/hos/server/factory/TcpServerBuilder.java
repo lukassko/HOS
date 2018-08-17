@@ -1,6 +1,8 @@
 package com.app.hos.server.factory;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.serializer.Deserializer;
+import org.springframework.core.serializer.Serializer;
 
 import com.app.hos.server.factory.ConnectionManager;
 import com.app.hos.server.factory.SocketFactory;
@@ -44,6 +46,16 @@ public class TcpServerBuilder {
 	
 	public TcpServerBuilder withMessageMapper(TcpMessageMapper mapper) {
 		this.server.setMapper(mapper);
+		return this;
+	}
+	
+	public TcpServerBuilder withSerializer(Serializer<?> serializer) {
+		this.server.setSerializer(serializer);
+		return this;
+	}
+	
+	public TcpServerBuilder withDeserializer(Deserializer<?> deserializer) {
+		this.server.setDeserializer(deserializer);
 		return this;
 	}
 	

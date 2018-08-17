@@ -105,6 +105,7 @@ public class TcpConnection implements Connection {
 	
 	@Override
 	public void run() {
+		Thread.currentThread().setName("tcp-connection-thread-" + connectionId);
 		boolean run = true;
 		while(run) {
 			Message<?> message = null;
@@ -189,7 +190,6 @@ public class TcpConnection implements Connection {
 		if (this.applicationEventPublisher == null) {
 			logger.severe(this + "No ApplicationEventPublisher associated with the connection " + this.connectionId);
 		} else {
-			System.out.println("doPublishEvent " + event.toString());
 			this.applicationEventPublisher.publishEvent(event);
 		}
 	}

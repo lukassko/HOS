@@ -35,7 +35,7 @@ public class MessageBuilder<T> {
 		return this;
 	}
 	
-	public MessageBuilder<T> addHeader(String header, T value) {
+	public MessageBuilder<T> addHeader(String header, Object value) {
 		this.headers.put(header, value);
 		return this;
 	}

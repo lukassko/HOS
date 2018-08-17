@@ -15,7 +15,6 @@ import com.app.hos.server.connection.SocketInfo;
 import com.app.hos.server.connection.TcpConnection;
 import com.app.hos.server.event.TcpEvent;
 import com.app.hos.server.event.TcpEventFactory;
-import com.app.hos.server.event.TcpOpenConnectionEvent;
 import com.app.hos.server.handler.TcpListener;
 import com.app.hos.server.handler.TcpThreadsExecutor;
 import com.app.hos.server.handler.ThreadsExecutor;
@@ -153,7 +152,6 @@ public class TcpServer implements Server, TcpServerListener, Runnable {
 		if (this.applicationEventPublisher == null) {
 			this.logger.warning("No ApplicationEventPublisher to publish event " + event.toString());
 		} else {
-			System.out.println("publishServerEvent " + event.toString() + " -" + (event instanceof TcpOpenConnectionEvent));
 			this.applicationEventPublisher.publishEvent(event);
 		}
 	}

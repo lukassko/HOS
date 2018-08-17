@@ -17,5 +17,4 @@ public class ByteArrayDeserializer implements Deserializer<byte[]> {
 	    }
 		return buffer.toByteArray();
 	}
-
 }
