@@ -103,7 +103,7 @@ public class TcpServerIT {
 		this.tcpServer.stop();
 	}
 	
-	//@Test
+	@Test
 	public void serverShouldAcceptIncomingConnectionAndCloseConnectionWhenServerStop() throws Exception {
 		Socket clientSocket = null;
 		try {
@@ -113,6 +113,9 @@ public class TcpServerIT {
 
 			doAnswer(
 				invocation -> {
+					Object[] args = invocation.getArguments();
+					TcpEvent event = (TcpEvent) args[0];
+					logger.info(event.toString());
 					afterOpenConnection.countDown();
 					finished.countDown();
 					return null;
@@ -196,7 +199,7 @@ public class TcpServerIT {
 			serializer.serialize(getPayload(), clientSocket.getOutputStream());
 			
 			// verify tcpListener was called
-			verify(messageHandler, times(1)).processMessage(messageCaptor.capture());
+			verify(messageHandler, timeout(1000).times(1)).processMessage(messageCaptor.capture());
 			
 			// verify received message
 			Message<?> receivedMessage = messageCaptor.getValue();
@@ -212,7 +215,7 @@ public class TcpServerIT {
 			// verify connection is not available on server
 			assertFalse(connection.isOpen());
 			assertNull(connectionManager.getConnection(connectionId));
-			
+
 		} finally {
 			clientSocket.close();
 		}

@@ -6,7 +6,6 @@ import org.springframework.messaging.MessageHandlingException;
 import org.springframework.stereotype.Service;
 
 import com.app.hos.service.api.CommandsApi;
-import com.app.hos.service.api.SystemFacade;
 import com.app.hos.service.command.builder_v2.Command;
 import com.app.hos.service.exceptions.handler.ExceptionUtils;
 
