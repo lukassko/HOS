@@ -34,7 +34,7 @@ public class Role extends BaseEntity {
 	}
 	
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-	private Set<User> users;
+	private Set<User> users = new HashSet<>();
 
 	public UserRole getUserRole() {
 		return role;
@@ -45,9 +45,6 @@ public class Role extends BaseEntity {
 	}
 
 	public Set<User> getUsers() {
-		if (this.users == null) {
-			this.users = new HashSet<>();
-		}
 		return this.users;
 	}
 

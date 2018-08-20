@@ -61,7 +61,7 @@ public class UserRepositoryIT {
     	Assert.assertEquals(user, userRepository.findByName("admin"));
     	Assert.assertEquals(2, userRepository.findByName("admin").getRoles().size());
     }
- 
+    
 	@Test
 	public void stage20_selectMultiUsersShouldReturnProperUsersList() throws Exception {
 		// given
