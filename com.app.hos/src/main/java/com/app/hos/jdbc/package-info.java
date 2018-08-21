@@ -1,6 +1,6 @@
 /**
  * 
- * Package provide own implementation of JDBC driver for MySql database
+ * Package provide own implementation of JDBC connection pool
  * 
  */
 /**
