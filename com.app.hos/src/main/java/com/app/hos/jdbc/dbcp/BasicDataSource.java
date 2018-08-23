@@ -2,30 +2,52 @@ package com.app.hos.jdbc.dbcp;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
 public class BasicDataSource implements DataSource{
 
-	private String driverClassName;
+	private final Logger logger = Logger.getLogger(getClass().getName());
 	
-	private String url;
+	private ClassLoader driverClassLoader;
+	
+	private volatile String driverClassName;
+	
+	private volatile String url;
+	
+	private volatile String user;
+	
+	private volatile String password;
+	
+	private Properties connectionProperties = new Properties();
+	
+	private final Object monitor = new Object();
 	
 	static {
 		// Attempt to prevent deadlocks
 		DriverManager.getDrivers();
 	}
 	
-	public synchronized void setDriverClassName(final String driverClassName) {
+	public void setDriverClassName(final String driverClassName) {
     	this.driverClassName = driverClassName;
 	}
 	
-	public synchronized void setUrl(final String url) {
+	public void setUrl(final String url) {
         this.url = url;
+    }
+	
+	public void setUser(final String user) {
+    	this.user = user;
+	}
+	
+	public void setPassword(final String password) {
+        this.password = password;
     }
 	
 	@Override
@@ -80,6 +102,62 @@ public class BasicDataSource implements DataSource{
 	public Connection getConnection(String username, String password) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private DataSource createDataSource() throws SQLException {
+
+		synchronized (monitor) {
+			ConnectionFactory driverConnectionFactory = createConnectionFactory();
+			return null;
+		}
+	}
+	
+	private ConnectionFactory createConnectionFactory() throws SQLException {
+		Driver driverToUse = null;
+		Class<?> driverFromCL = null;
+		if (driverClassName != null) {
+			try {
+				try {
+					if (driverClassLoader != null) {
+						driverFromCL = Class.forName(driverClassName, true, driverClassLoader);
+					} else {
+						driverFromCL = Class.forName(driverClassName);
+					}
+				} catch (ClassNotFoundException e) {
+					driverFromCL = Thread.currentThread().getContextClassLoader().loadClass(driverClassName);
+				}
+			} catch (Exception e) {
+				String message = "Cannot load JDBC driver class'" + driverClassName + "'";
+				logger.severe(message);
+				throw new SQLException(message, e);
+			}
+		}
+		try {
+			if (driverFromCL == null) {
+				driverToUse = DriverManager.getDriver(url);
+			} else {
+				driverToUse = (Driver)driverFromCL.newInstance();
+				if (!driverToUse.acceptsURL(url)) {
+					throw new SQLException("No suitable driver");
+				}
+			}
+		} catch (Exception e) {
+			String message = "Cannot create JDBC driver for URL '" + url + "'";
+			logger.severe(message);
+			throw new SQLException(message, e);
+		}
+
+		if (user != null) {
+			connectionProperties.put("user", user);
+		} else {
+			logger.info("DBCP DataSource configured without a 'username'");
+		}
+		if (password != null) {
+			connectionProperties.put("password", password);
+		} else {
+			logger.info("DBCP DataSource configured without a 'password'");
+		}
+		return new DriverConnectionFactory(driverToUse, url, connectionProperties);
 	}
 
 }
