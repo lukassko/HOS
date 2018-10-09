@@ -11,7 +11,12 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-public class BasicDataSource implements DataSource{
+import com.app.hos.jdbc.dbcp.connection.ConnectionFactory;
+import com.app.hos.jdbc.dbcp.connection.DriverConnectionFactory;
+import com.app.hos.jdbc.dbcp.pool.GenericObjectPool;
+import com.app.hos.jdbc.dbcp.pool.PoolableConnectionFactory;
+
+public class BasicDataSource implements DataSource {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 	
@@ -105,11 +110,16 @@ public class BasicDataSource implements DataSource{
 	}
 	
 	private DataSource createDataSource() throws SQLException {
-
 		synchronized (monitor) {
 			ConnectionFactory driverConnectionFactory = createConnectionFactory();
+			PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(driverConnectionFactory);
+			createConnectionPool(poolableConnectionFactory);
 			return null;
 		}
+	}
+	
+	private void createConnectionPool(final PoolableConnectionFactory factory) {
+
 	}
 	
 	private ConnectionFactory createConnectionFactory() throws SQLException {

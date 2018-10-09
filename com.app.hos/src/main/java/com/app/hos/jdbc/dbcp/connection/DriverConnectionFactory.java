@@ -1,4 +1,4 @@
-package com.app.hos.jdbc.dbcp;
+package com.app.hos.jdbc.dbcp.connection;
 
 import java.sql.Connection;
 import java.sql.Driver;
