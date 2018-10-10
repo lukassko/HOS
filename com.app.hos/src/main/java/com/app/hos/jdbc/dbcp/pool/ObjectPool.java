@@ -4,11 +4,11 @@ import java.io.Closeable;
 
 public interface ObjectPool<T> extends Closeable {
 
-	T get();
+	T borrowObject();
 	
 	void returnObject(T object);
 	
-	void add(T object);
+	void addObject(T object);
 	
 	void invalidate(T object);
 	

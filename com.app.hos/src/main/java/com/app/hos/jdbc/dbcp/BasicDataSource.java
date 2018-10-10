@@ -14,11 +14,16 @@ import javax.sql.DataSource;
 import com.app.hos.jdbc.dbcp.connection.ConnectionFactory;
 import com.app.hos.jdbc.dbcp.connection.DriverConnectionFactory;
 import com.app.hos.jdbc.dbcp.pool.GenericObjectPool;
+import com.app.hos.jdbc.dbcp.pool.PoolableConnection;
 import com.app.hos.jdbc.dbcp.pool.PoolableConnectionFactory;
 
 public class BasicDataSource implements DataSource {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
+	
+	private volatile GenericObjectPool<PoolableConnection> connectionPool;
+	
+	private volatile DataSource dateSource;
 	
 	private ClassLoader driverClassLoader;
 	
@@ -113,15 +118,13 @@ public class BasicDataSource implements DataSource {
 		synchronized (monitor) {
 			ConnectionFactory driverConnectionFactory = createConnectionFactory();
 			PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(driverConnectionFactory);
-			createConnectionPool(poolableConnectionFactory);
-			return null;
+			this.connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
+			poolableConnectionFactory.setPool(connectionPool);	
+			this.dateSource = new PoolingDataSource<>(connectionPool);
+			return this.dateSource;
 		}
 	}
-	
-	private void createConnectionPool(final PoolableConnectionFactory factory) {
 
-	}
-	
 	private ConnectionFactory createConnectionFactory() throws SQLException {
 		Driver driverToUse = null;
 		Class<?> driverFromCL = null;

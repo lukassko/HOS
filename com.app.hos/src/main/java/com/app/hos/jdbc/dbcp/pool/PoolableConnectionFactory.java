@@ -13,6 +13,10 @@ public class PoolableConnectionFactory implements PooledObjectFactory<PoolableCo
 	public PoolableConnectionFactory (ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}
+
+	public void setPool (ObjectPool<PoolableConnection> pool) {
+		this.pool = pool;
+	}
 	
 	@Override
 	public PooledObject<PoolableConnection> makeObject() throws Exception {

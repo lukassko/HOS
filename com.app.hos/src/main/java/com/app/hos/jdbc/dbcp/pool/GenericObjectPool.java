@@ -3,6 +3,7 @@ package com.app.hos.jdbc.dbcp.pool;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GenericObjectPool<T> implements ObjectPool<T> {
@@ -11,18 +12,23 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	
 	private int minIdle;
 	
-	private PooledObjectFactory<T> factory;
+	private final PooledObjectFactory<T> factory;
 	
-	private Map<Integer,PooledObject<T>> allObjects;
+	private final Map<Integer,PooledObject<T>> allObjects;
+	
+	private final LinkedBlockingDeque<PooledObject<T>> idleObjects;
 	
 	private AtomicInteger createCount;
 	
 	private Object monitor;
 	
+	private volatile boolean isClosed = false;
+	
 	public GenericObjectPool(PooledObjectFactory<T> factory) {
 		this.factory = factory;
 		this.maxIdle = 8;
 		this.minIdle = 0;
+		this.idleObjects = new LinkedBlockingDeque<>();
 		this.allObjects = new ConcurrentHashMap<>();
 		this.createCount = new AtomicInteger();
 		this.monitor = new Object();
@@ -35,8 +41,8 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	}
 
 	@Override
-	public T get() {
-		// TODO Auto-generated method stub
+	public T borrowObject() {
+		this.assertOpen();
 		return null;
 	}
 
@@ -47,8 +53,11 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	}
 
 	@Override
-	public void add(T object) {
-		// TODO Auto-generated method stub
+	public void addObject(T object) {
+		assertOpen();
+		if (this.factory == null) {
+			throw new IllegalStateException("Cannot add objects without a factory.");
+		}
 
 	}
 
@@ -70,4 +79,25 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		return 0;
 	}
 
+	public boolean isClosed() {
+		return this.isClosed;
+	}
+	
+	private void assertOpen() {
+		if (this.isClosed()) {
+			throw new IllegalStateException("Connection pool is closed");
+		}
+	}
+	
+	public static class IdentityWrapper<T> {
+		private final T instance;
+		
+		public IdentityWrapper(T instance) {
+			this.instance = instance;
+		}
+		
+		public T getObject() {
+            return this.instance;
+        }
+	}
 }
