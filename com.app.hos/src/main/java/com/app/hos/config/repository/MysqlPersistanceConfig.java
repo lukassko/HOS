@@ -19,7 +19,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//@Profile("!web-integration-test")
 @Configuration
 @PropertySource({ "classpath:persistance/properties/mysql.properties" })
 @ComponentScan("com.app.hos.persistance.*")

@@ -47,6 +47,9 @@
   	<libsass.plugin.version>0.2.8-libsass_3.4.4</libsass.plugin.version>
   	<springsecurity.version>5.0.3.RELEASE</springsecurity.version>
   	<guava.version>20.0</guava.version>
+  	<mongodb.driver.version>3.8.2</mongodb.driver.version>
+  	<mongodb.spring-data.version>2.1.1.RELEASE</mongodb.spring-data.version>
+  	
   	<!-- JAVA compiler version -->
   	<maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -277,7 +280,19 @@
 	   <version>${mysql.version}</version>
 	   <scope>runtime</scope>
 	</dependency>
-	
+	<!-- MongoDB dependencies -->
+	<dependency>
+		<groupId>org.mongodb</groupId>
+		<artifactId>mongo-java-driver</artifactId>
+		<version>${mongodb.driver.version}</version>  
+	</dependency>
+		
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-mongodb</artifactId>
+		<version>${mongodb.spring-data.version}</version>
+	</dependency>
+		
 	<!-- Tomcat dependencies -->
 	<dependency> 
 	    <groupId>org.apache.tomcat</groupId>
