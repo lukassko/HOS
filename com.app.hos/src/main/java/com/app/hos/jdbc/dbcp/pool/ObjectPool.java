@@ -4,7 +4,7 @@ import java.io.Closeable;
 
 public interface ObjectPool<T> extends Closeable {
 
-	T borrowObject();
+	T borrowObject() throws Exception;
 	
 	void returnObject(T object);
 	
