@@ -1,6 +1,7 @@
 package com.app.hos.jdbc.dbcp.pool;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,9 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	
 	private long makingObjectCount;
 	
-	private Object createObjectLock;
+	private final Object evictionLock = new Object();
+	
+	private final Object createObjectLock = new Object();
 	
 	private volatile boolean isClosed = false;
 	
@@ -41,7 +44,16 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		this.idleObjects = new LinkedBlockingDeque<>();
 		this.allObjects = new ConcurrentHashMap<>();
 		this.createdObjectCount = new AtomicInteger();
-		this.createObjectLock = new Object();
+	}
+	
+	public void evict() {
+		this.assertOpen();
+		if (this.idleObjects.size() > 0) {
+			PooledObject<T> p = null;
+			synchronized (this.evictionLock) {
+				
+			}
+		}
 	}
 	
 	@Override
@@ -84,26 +96,23 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 					throw new NoSuchElementException("Pool exhausetd");
 				}
 			} while (p == null);
-			
-			
-			return null;
 		}
-		
 	}
 
 	@Override
 	public void returnObject(T object) {
-		// TODO Auto-generated method stub
+		PooledObject<T> p = this.allObjects.get(new IdentityWrapper<T>(object));
 
 	}
 
 	@Override
-	public void addObject(T object) {
+	public void addObject(T object) throws Exception {
 		assertOpen();
 		if (this.factory == null) {
 			throw new IllegalStateException("Cannot add objects without a factory.");
 		}
-
+		PooledObject<T> p = this.create();
+		this.idleObjects.add(p);
 	}
 
 	@Override
@@ -183,7 +192,24 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		}
 	}
 	
-	public static class IdentityWrapper<T> {
+	class EvictionIterator implements Iterator<PooledObject<T>> {
+
+		private final Iterator<PooledObject<T>> idleObjectIterator = GenericObjectPool.this.idleObjects.iterator();
+		
+		@Override
+		public boolean hasNext() {
+			return this.idleObjectIterator.hasNext();
+		}
+
+		@Override
+		public PooledObject<T> next() {
+			return this.idleObjectIterator.next();
+		}
+		
+	}
+	
+	static class IdentityWrapper<T> {
+		
 		private final T instance;
 		
 		public IdentityWrapper(T instance) {
@@ -193,5 +219,25 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		public T getObject() {
             return this.instance;
         }
+		
+		public int hashCode() {
+			return System.identityHashCode(this.instance);
+		}
+		
+		public boolean equals(Object other) {
+			return other instanceof GenericObjectPool.IdentityWrapper 
+						&& ((GenericObjectPool.IdentityWrapper)other).instance == this.instance;
+		}
+	}
+	
+	class Evictor implements Runnable {
+
+		Evictor () {}
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }

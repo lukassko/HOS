@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import com.app.hos.jdbc.dbcp.connection.DelegatingConnection;
 
-public class PoolableConnection extends DelegatingConnection<Connection>{
+public class PoolableConnection extends DelegatingConnection<Connection> {
 
 	private final ObjectPool<PoolableConnection> pool;
 	

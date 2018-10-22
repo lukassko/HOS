@@ -8,7 +8,7 @@ public interface ObjectPool<T> extends Closeable {
 	
 	void returnObject(T object);
 	
-	void addObject(T object);
+	void addObject(T object) throws Exception;
 	
 	void invalidate(T object);
 	
