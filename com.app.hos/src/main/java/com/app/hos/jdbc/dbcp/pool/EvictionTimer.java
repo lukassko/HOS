@@ -1,9 +1,7 @@
 package com.app.hos.jdbc.dbcp.pool;
 
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 class EvictionTimer {
 

@@ -30,8 +30,7 @@ public class PoolableConnectionFactory implements PooledObjectFactory<PoolableCo
 
 	@Override
 	public void destryObject(PooledObject<PoolableConnection> object) throws Exception {
-		// TODO Auto-generated method stub
-		
+		object.getObject().close();
 	}
 
 }

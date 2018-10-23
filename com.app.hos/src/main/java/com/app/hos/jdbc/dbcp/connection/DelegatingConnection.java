@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -15,15 +16,22 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class DelegatingConnection<C extends Connection> implements Connection{
+import com.app.hos.jdbc.dbcp.pool.AbandonedTrace;
 
+public class DelegatingConnection<C extends Connection> extends AbandonedTrace implements Connection{
+
+	private volatile boolean closed;
+	
 	private final C connection;
 	
 	public DelegatingConnection(C connection) {
+		super();
 		this.connection = connection;
 	}
 	
@@ -89,10 +97,49 @@ public class DelegatingConnection<C extends Connection> implements Connection{
 
 	@Override
 	public void close() throws SQLException {
-		// TODO Auto-generated method stub
-		
+		if (!this.closed) {
+			try {
+				passivate();
+			} finally {
+				if (this.connection != null) {
+					boolean isClosed;
+					try {
+						isClosed = this.connection.isClosed();
+					} catch (SQLException e) {
+						isClosed = false;
+					}
+					try {
+						if (!isClosed) {
+							this.connection.close();
+						}
+					} finally {
+						closed = true;
+					}
+				} else {
+					this.closed = true;
+				}
+			}
+		}
 	}
 
+	// close all open Statements and ResultSets
+	// these class extends AbandonedTrace
+	private void passivate () throws SQLException {
+		List<AbandonedTrace> traces = this.getTrace();
+		if (traces.size() > 0) {
+			Iterator<AbandonedTrace> iterator = traces.iterator();
+			while(iterator.hasNext()) {
+				AbandonedTrace trace = iterator.next();
+				if (trace instanceof Statement) {
+					((Statement)trace).close();
+				} else if (trace instanceof ResultSet) {
+					((ResultSet)trace).close();
+				}
+			}
+			this.clearTrace();
+		}
+	}
+	
 	@Override
 	public boolean isClosed() throws SQLException {
 		// TODO Auto-generated method stub
