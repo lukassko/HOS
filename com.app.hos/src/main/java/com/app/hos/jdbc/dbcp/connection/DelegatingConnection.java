@@ -24,6 +24,12 @@ import java.util.concurrent.Executor;
 
 import com.app.hos.jdbc.dbcp.pool.AbandonedTrace;
 
+/**
+ * 
+ * Delegates call to Connection class
+ * Adapter pattern for Connection
+ * 
+ */
 public class DelegatingConnection<C extends Connection> extends AbandonedTrace implements Connection{
 
 	private volatile boolean closed;
@@ -33,6 +39,10 @@ public class DelegatingConnection<C extends Connection> extends AbandonedTrace i
 	public DelegatingConnection(C connection) {
 		super();
 		this.connection = connection;
+	}
+	
+	public C getDelegateInternal () {
+		return this.connection;
 	}
 	
 	@Override

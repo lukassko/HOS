@@ -11,4 +11,8 @@ public interface PooledObject<T> extends Comparable<T>{
 	void deallocate();
 	
 	void use();
+	
+	long getCreateTime();
+	
+	void markReturning();
 }

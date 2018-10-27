@@ -9,6 +9,8 @@ import java.util.List;
 
 public class AbandonedTrace {
 
+	private volatile long lastUsedMillis = 0;
+	
 	private final List<WeakReference<AbandonedTrace>> traceList = new LinkedList<>();
 	
 	public AbandonedTrace () {}
@@ -17,6 +19,14 @@ public class AbandonedTrace {
 		parent.addTrace(this);
 	}
 	
+    public long getLastUsed() {
+        return lastUsedMillis;
+    }
+
+    protected void setLastUsed() {
+        lastUsedMillis = System.currentTimeMillis();
+    }
+
 	protected void addTrace(AbandonedTrace trace) {
 		synchronized (this.traceList) {
 			this.traceList.add(new WeakReference<AbandonedTrace>(trace));
@@ -40,7 +50,7 @@ public class AbandonedTrace {
 			while(iterator.hasNext()) {
 				AbandonedTrace trace = iterator.next().get();
 				if (trace == null) {
-					iterator.remove(); // GC do not remove yet
+					iterator.remove();
 				} else {
 					result.add(trace);
 				}

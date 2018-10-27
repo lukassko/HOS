@@ -39,6 +39,10 @@ public class BasicDataSource implements DataSource {
 	
 	private final Object monitor = new Object();
 	
+	private String validationQuery;
+	
+	private int validationQueryTimeout;
+	
 	static {
 		// Attempt to prevent deadlocks
 		DriverManager.getDrivers();
@@ -117,7 +121,7 @@ public class BasicDataSource implements DataSource {
 	private DataSource createDataSource() throws SQLException {
 		synchronized (monitor) {
 			ConnectionFactory driverConnectionFactory = createConnectionFactory();
-			PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(driverConnectionFactory);
+			PoolableConnectionFactory poolableConnectionFactory = createPoolableConnectionFactory(driverConnectionFactory);
 			this.connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
 			poolableConnectionFactory.setPool(connectionPool);	
 			this.dateSource = new PoolingDataSource<>(connectionPool);
@@ -125,6 +129,14 @@ public class BasicDataSource implements DataSource {
 		}
 	}
 
+	private PoolableConnectionFactory createPoolableConnectionFactory (ConnectionFactory factory) {
+		PoolableConnectionFactory connectionFactory = new PoolableConnectionFactory(factory);
+		// set properties there
+		connectionFactory.setValidationQuery(validationQuery);
+		connectionFactory.setValidationQueryTimeout(validationQueryTimeout);
+		
+		return connectionFactory;
+	}
 	private ConnectionFactory createConnectionFactory() throws SQLException {
 		Driver driverToUse = null;
 		Class<?> driverFromCL = null;

@@ -102,9 +102,17 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	@Override
 	public void returnObject(T object) {
 		PooledObject<T> p = this.allObjects.get(new IdentityWrapper<T>(object));
-
+		if (p == null) {
+			throw new IllegalStateException("Returned object is not a part of this pool");
+		} else {
+			markReturningState(p);
+		}
 	}
 
+	private void markReturningState(PooledObject<T> pooledObject) {
+		
+	}
+	
 	@Override
 	public void addObject(T object) throws Exception {
 		assertOpen();
@@ -208,6 +216,12 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		
 	}
 	
+	/**
+	 * 
+	 * Wrapper class for objects stored in pool, use as key for map with objects
+	 *
+	 * @param <T>
+	 */
 	static class IdentityWrapper<T> {
 		
 		private final T instance;

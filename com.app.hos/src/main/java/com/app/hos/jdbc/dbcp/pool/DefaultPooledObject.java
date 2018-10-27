@@ -4,11 +4,14 @@ public class DefaultPooledObject<T> implements PooledObject<T> {
 
 	private final T object;
 	
+	private final long createTime;
+	
 	private PooledObjectState state;
 	
 	public DefaultPooledObject(T object) {
 		this.object = object;
 		this.state = PooledObjectState.IDLE;
+		this.createTime = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -43,7 +46,15 @@ public class DefaultPooledObject<T> implements PooledObject<T> {
 	@Override
 	public void use() {
 		// TODO Auto-generated method stub
-		
 	}
 
+	@Override
+	public long getCreateTime() {
+		return this.getCreateTime();
+	}
+
+	@Override
+	public synchronized void markReturning() {
+		this.state = PooledObjectState.RETURNING;
+	}
 }
