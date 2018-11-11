@@ -25,10 +25,8 @@ import java.util.concurrent.Executor;
 import com.app.hos.jdbc.dbcp.pool.AbandonedTrace;
 
 /**
- * 
  * Delegates call to Connection class
  * Adapter pattern for Connection
- * 
  */
 public class DelegatingConnection<C extends Connection> extends AbandonedTrace implements Connection{
 
@@ -41,8 +39,106 @@ public class DelegatingConnection<C extends Connection> extends AbandonedTrace i
 		this.connection = connection;
 	}
 	
-	public C getDelegateInternal () {
+	protected C getDelegateInternal () {
 		return this.connection;
+	}
+	
+	 /**
+     * If my underlying Connection is not a DelegatingConnection, returns it, otherwise recursively
+     * invokes this method on my delegate. This method is useful when you may have nested DelegatingConnections, 
+     * and you want to make sure to obtain a "genuine" Connection.
+     *
+     * @return innermost delegate.
+     */
+	protected Connection getInnermostDelegate() {
+		Connection c = connection;
+		while(c != null && c instanceof DelegatingConnection) {
+			c = ((DelegatingConnection<?>) c).getDelegateInternal();
+			if (this == c) {
+				return null;
+			}
+		}
+		return c;
+	}
+	
+	
+	@Override
+    public void close() throws SQLException {
+        if (!closed) {
+            closeInternal();
+        }
+    }
+	
+	protected boolean isClosedInternal () {
+		return this.closed;
+	}
+	
+	protected void setClosedInternal (boolean closed) {
+		this.closed = closed;
+	}
+	
+	protected  void closeInternal() throws SQLException {
+		if (!this.closed) {
+			try {
+				passivate();
+			} finally {
+				if (this.connection != null) {
+					boolean isClosed;
+					try {
+						isClosed = this.connection.isClosed();
+					} catch (SQLException e) {
+						isClosed = false;
+					}
+					try {
+						if (!isClosed) {
+							this.connection.close();
+						}
+					} finally {
+						closed = true;
+					}
+				} else {
+					this.closed = true;
+				}
+			}
+		}
+	}
+
+	// close all open Statements and ResultSets opened by this connection
+	// those class extends AbandonedTrace
+	protected void passivate () throws SQLException {
+		List<AbandonedTrace> traces = this.getTrace();
+		if (traces.size() > 0) {
+			Iterator<AbandonedTrace> iterator = traces.iterator();
+			while(iterator.hasNext()) {
+				AbandonedTrace trace = iterator.next();
+				if (trace instanceof Statement) {
+					((Statement)trace).close();
+				} else if (trace instanceof ResultSet) {
+					((ResultSet)trace).close();
+				}
+			}
+			this.clearTrace();
+		}
+	}
+	
+	private void checkOpen() throws SQLException {
+		if (closed) {
+			if (connection != null) {
+				throw new SQLException("Connection " + connection.toString() + " is closed.");
+			}
+			throw new SQLException("Connection is null.");
+		}
+	}
+	
+	protected void handleException(final SQLException e) throws SQLException {
+        throw e;
+    }
+	
+	@Override
+	public String toString() {
+		
+		// TODO
+		return null;
 	}
 	
 	@Override
@@ -59,7 +155,8 @@ public class DelegatingConnection<C extends Connection> extends AbandonedTrace i
 
 	@Override
 	public Statement createStatement() throws SQLException {
-		// TODO Auto-generated method stub
+		checkOpen();
+		// TODO create DelegateStatement
 		return null;
 	}
 
@@ -106,51 +203,6 @@ public class DelegatingConnection<C extends Connection> extends AbandonedTrace i
 	}
 
 	@Override
-	public void close() throws SQLException {
-		if (!this.closed) {
-			try {
-				passivate();
-			} finally {
-				if (this.connection != null) {
-					boolean isClosed;
-					try {
-						isClosed = this.connection.isClosed();
-					} catch (SQLException e) {
-						isClosed = false;
-					}
-					try {
-						if (!isClosed) {
-							this.connection.close();
-						}
-					} finally {
-						closed = true;
-					}
-				} else {
-					this.closed = true;
-				}
-			}
-		}
-	}
-
-	// close all open Statements and ResultSets
-	// these class extends AbandonedTrace
-	private void passivate () throws SQLException {
-		List<AbandonedTrace> traces = this.getTrace();
-		if (traces.size() > 0) {
-			Iterator<AbandonedTrace> iterator = traces.iterator();
-			while(iterator.hasNext()) {
-				AbandonedTrace trace = iterator.next();
-				if (trace instanceof Statement) {
-					((Statement)trace).close();
-				} else if (trace instanceof ResultSet) {
-					((ResultSet)trace).close();
-				}
-			}
-			this.clearTrace();
-		}
-	}
-	
-	@Override
 	public boolean isClosed() throws SQLException {
 		// TODO Auto-generated method stub
 		return false;
@@ -182,8 +234,13 @@ public class DelegatingConnection<C extends Connection> extends AbandonedTrace i
 
 	@Override
 	public String getCatalog() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		checkOpen();
+		try {
+			return this.connection.getCatalog();
+		} catch (SQLException e) {
+			handleException(e);
+			return null;
+		}
 	}
 
 	@Override

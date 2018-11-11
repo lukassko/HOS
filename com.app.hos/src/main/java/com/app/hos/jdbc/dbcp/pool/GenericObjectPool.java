@@ -27,7 +27,7 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	
 	private final LinkedBlockingDeque<PooledObject<T>> idleObjects;
 	
-	private AtomicInteger createdObjectCount;
+	private AtomicInteger totalCreatedCount;
 	
 	private long makingObjectCount;
 	
@@ -37,13 +37,15 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	
 	private volatile boolean isClosed = false;
 	
+	private final Object closeLock = new Object();
+	
 	public GenericObjectPool(PooledObjectFactory<T> factory) {
 		this.factory = factory;
 		this.maxIdle = 8;
 		this.minIdle = 0;
 		this.idleObjects = new LinkedBlockingDeque<>();
 		this.allObjects = new ConcurrentHashMap<>();
-		this.createdObjectCount = new AtomicInteger();
+		this.totalCreatedCount = new AtomicInteger();
 	}
 	
 	public void evict() {
@@ -55,13 +57,44 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 			}
 		}
 	}
+		
+	private void destroy(PooledObject<T> toDestroy) throws Exception {
+		toDestroy.invalidate();
+		this.idleObjects.remove(toDestroy);
+		this.allObjects.remove(new IdentityWrapper<T>(toDestroy.getObject()));
+		try {
+			this.factory.destroyObject(toDestroy);
+		} finally {
+			this.totalCreatedCount.decrementAndGet();
+		}
+	}
 	
 	@Override
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
-
+		if (!this.isClosed()) {
+			synchronized (this.closeLock) {
+				if (!this.isClosed()) {
+					this.isClosed = true;
+					this.clear();
+				}
+			}
+		}
 	}
 
+	/**
+	 * Remove idle connections
+	 */
+	private void clear() {
+		for (PooledObject<T> p = (PooledObject<T>)this.idleObjects.poll(); p != null; p = (PooledObject<T>)this.idleObjects.poll()) {
+			try {
+				this.destroy(p);
+			} catch (Exception e) {
+				/// swallow
+			}
+			
+		}
+	}
+	
 	@Override
 	public T borrowObject() throws Exception {
 		this.assertOpen();
@@ -100,7 +133,7 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	}
 
 	@Override
-	public void returnObject(T object) {
+	public void returnObject(T object) throws Exception {
 		PooledObject<T> p = this.allObjects.get(new IdentityWrapper<T>(object));
 		if (p == null) {
 			throw new IllegalStateException("Returned object is not a part of this pool");
@@ -124,7 +157,7 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	}
 
 	@Override
-	public void invalidate(T object) {
+	public void invalidateObject(T object) {
 		// TODO Auto-generated method stub
 
 	}
@@ -149,9 +182,9 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		boolean creating = true;
 		while(creating) {
 			synchronized (createObjectLock) {
-				long cc = this.createdObjectCount.incrementAndGet();
+				long cc = this.totalCreatedCount.incrementAndGet();
 				if (cc > this.localMaxTotal) {
-					this.createdObjectCount.decrementAndGet();
+					this.totalCreatedCount.decrementAndGet();
 					if (this.makingObjectCount == 0L) {
 						creating = false;
 					} else {
@@ -173,7 +206,7 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 				p1 = this.factory.makeObject();
 				objectMake = false;
 			} catch (Throwable t) {
-				this.createdObjectCount.decrementAndGet();
+				this.totalCreatedCount.decrementAndGet();
 				throw t;
 			} finally {
 				if (objectMake) {
