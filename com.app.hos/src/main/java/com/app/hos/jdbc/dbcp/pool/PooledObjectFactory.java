@@ -10,5 +10,5 @@ public interface PooledObjectFactory <T> {
 	
 	void activateObject(PooledObject<T> object) throws Exception;
 	
-	void validateObject(PooledObject<T> object);
+	boolean validateObject(PooledObject<T> object);
 }

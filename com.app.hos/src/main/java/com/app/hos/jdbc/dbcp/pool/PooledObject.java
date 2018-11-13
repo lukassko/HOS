@@ -6,9 +6,9 @@ public interface PooledObject<T> extends Comparable<T>{
 	
 	void invalidate();
 	
-	void allocate();
+	boolean allocate();
 	
-	void deallocate();
+	boolean deallocate();
 	
 	void use();
 	

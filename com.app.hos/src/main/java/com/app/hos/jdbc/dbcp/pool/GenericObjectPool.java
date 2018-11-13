@@ -91,7 +91,6 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 			} catch (Exception e) {
 				/// swallow
 			}
-			
 		}
 	}
 	
@@ -139,6 +138,58 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 			throw new IllegalStateException("Returned object is not a part of this pool");
 		} else {
 			markReturningState(p);
+			if (!this.factory.validateObject(p)) {
+				this.destroy(p);
+				
+				// TODO ensureIdle
+				
+			} else {
+				try {
+					this.factory.passivateObject(p);
+				} catch (Exception e) {
+					this.destroy(p);
+					return;
+				}
+				// passivate object
+				
+				if (!p.deallocate()) {
+					throw new IllegalStateException("Object has already been returned to this pool or is invalid"); 
+				} else {
+					if (this.isClosed || (this.maxIdle > -1 && this.maxIdle <= this.idleObjects.size())) {
+						this.destroy(p);
+					} else {
+						this.idleObjects.addLast(p);
+						if(this.isClosed()) {
+                            this.clear();
+                        }
+					}
+				}
+			}
+		}
+	}
+	
+	public void preparePool() throws Exception {
+		if(this.minIdle >= 1) {
+			this.ensureMinIdle();
+		}
+	}
+	
+	private void ensureMinIdle() throws Exception {
+		this.ensureIdle(this.minIdle);
+	}
+	
+	private void ensureIdle(int idleCount) throws Exception {
+		if (idleCount >= 1 && !this.isClosed) {
+			while (this.idleObjects.size() < idleCount) {
+				PooledObject<T> p = this.create();
+				if (p == null) {
+					break;
+				}
+				this.idleObjects.add(p);
+			}
+			if (this.isClosed()) {
+				this.clear();
+			}
 		}
 	}
 
@@ -250,10 +301,7 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 	}
 	
 	/**
-	 * 
 	 * Wrapper class for objects stored in pool, use as key for map with objects
-	 *
-	 * @param <T>
 	 */
 	static class IdentityWrapper<T> {
 		
@@ -277,6 +325,9 @@ public class GenericObjectPool<T> implements ObjectPool<T> {
 		}
 	}
 	
+	/**
+	 *  Scheduled thread to evict pool from inactive and broken connection
+	 */
 	class Evictor implements Runnable {
 
 		Evictor () {}

@@ -31,16 +31,18 @@ public class DefaultPooledObject<T> implements PooledObject<T> {
 	}
 
 	@Override
-	public void allocate() {
+	public boolean allocate() {
 		if (this.state == PooledObjectState.IDLE) {
 			this.state = PooledObjectState.ALLOCATED;
 		}
+		// TODO change state
+		return false;
 	}
 
 	@Override
-	public void deallocate() {
+	public boolean deallocate() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override

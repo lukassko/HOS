@@ -60,10 +60,12 @@ public class PoolableConnection extends DelegatingConnection<Connection> {
 		} catch (SQLException e) {
 			try {
 				pool.invalidateObject(this); // remove from pool
-			} catch (Exception ie) {
+			} catch (IllegalStateException ise) {
+				// probably pool is closed
 				passivateAdnClose();
+			} catch (Exception ie) {
+				// DO NOTHING, exception will be thrown
 			}
-			
 			throw new SQLException("Cannot close connection (isClosed throw exception", e);
 		}
 		
@@ -72,18 +74,23 @@ public class PoolableConnection extends DelegatingConnection<Connection> {
 			// must destroy this proxy
 			try {
 				this.pool.invalidateObject(this);
-			} catch (Exception ie) {
+			} catch (IllegalStateException ise) {
+				// probably pool is closed
 				passivateAdnClose();
+			} catch (Exception e) {
+				throw new SQLException("Cannot close connection (invalidate object failed)", e);
 			}
 		} else {
 			// Normal close: return proxy to pool
 			try {
 				this.pool.returnObject(this);
+			} catch (IllegalStateException ise) {
+				// probably pool is closed
+				passivateAdnClose();
 			} catch (Exception e) {
-				
+				throw new SQLException("Cannot close connection (return to pool failed)", e);
 			}
 		}
-		
 	}
 	
 	private void passivateAdnClose() throws SQLException {

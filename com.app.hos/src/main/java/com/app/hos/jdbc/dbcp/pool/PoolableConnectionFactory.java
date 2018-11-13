@@ -27,6 +27,8 @@ public class PoolableConnectionFactory implements PooledObjectFactory<PoolableCo
 	
 	private int validationQueryTimeout;
 	
+	private boolean rollbackOnReturn = true;
+	
 	public PoolableConnectionFactory (ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}
@@ -51,11 +53,19 @@ public class PoolableConnectionFactory implements PooledObjectFactory<PoolableCo
 	}
 
 	/**
-	 *  close all related statements and results create by that connection
+	 *  Rollback transactions, close all related statements and results create by that connection
 	 */
 	@Override
-	public void passivateObject(PooledObject<PoolableConnection> object) throws Exception {
-		// TODO Auto-generated method stub
+	public void passivateObject(PooledObject<PoolableConnection> p) throws Exception {
+		validateLifeTime(p);
+		PoolableConnection conn = p.getObject();
+		if (this.rollbackOnReturn) {
+			if (!conn.getAutoCommit() && !conn.isReadOnly()) {
+				conn.rollback();
+			}
+		}
+		conn.clearWarnings();
+		conn.passivate();
 	}
 
 	@Override
@@ -87,8 +97,8 @@ public class PoolableConnectionFactory implements PooledObjectFactory<PoolableCo
 	 * validate if connection has not thrown a serious sql exception
 	 */
 	@Override
-	public void validateObject(PooledObject<PoolableConnection> object) {
-		// TODO Auto-generated method stub
+	public boolean validateObject(PooledObject<PoolableConnection> object) {
+		return false;
 	}
 	
 	//  methods to set properties
